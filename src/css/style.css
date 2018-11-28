@@ -1,0 +1,13 @@
+.add-form {
+    margin-top: 2em;
+}
+.form-row{
+    margin: 1em 0;
+}
+label, p {
+    font-weight: 500;
+}
+.isoColour, .isoColour:focus {
+    background-color: black;
+    color: white;
+}
