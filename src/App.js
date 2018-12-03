@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import Form from './Form.js';
 import Navigation from './Navigation.js'
 
 class App extends Component {
