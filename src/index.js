@@ -17,7 +17,7 @@ netlifyIdentity.init();
 
 const App = () => (
     <div className="container">
-        <div className="row">
+        <div className="col">
             <Router>
                 <div>
                     <AuthButton />
