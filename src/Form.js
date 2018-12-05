@@ -1,4 +1,7 @@
 import React from 'react';
+import DatePicker from "react-datepicker";
+import moment from 'moment';
+import "react-datepicker/dist/react-datepicker.css";
 import B24, { parse } from './B24.js';
 
 
@@ -27,17 +30,21 @@ export default class Form extends React.Component {
     constructor (props){
         super(props);
         this.handleChange = this.handleChange.bind(this);
+        this.handleDateChange = this.handleDateChange.bind(this);
+        this.state = { ...default_state };
         if (props.match.params.id) {
             new B24().get_task(props.match.params.id)
               .then(response => {
-                let parsed = parse(response);
-                console.log(parsed);
-                this.setState({ ...parsed });
+                const stateFromAPI = parse(response);
+                console.log(stateFromAPI);
+                this.setState({ ...stateFromAPI, task_id: props.match.params.id});
               });
-            this.state = {task_id: props.match.params.id};
-        } else {
-          this.state = { ...default_state };
         }
+    }
+    handleDateChange(date, prop_name) {
+      this.setState({
+        [prop_name]: date
+      });
     }
     handleChange(e) {
       this.setState({[e.target.id]: e.target.value});
@@ -57,7 +64,7 @@ export default class Form extends React.Component {
           .catch(() => this.setState({cert_created: 'failure'}))
         ;
       }
-      setTimeout(() => window.location.replace("/"), 4000);
+      // setTimeout(() => window.location.replace("/"), 4000);
     }
 
     notify() {
@@ -94,8 +101,8 @@ export default class Form extends React.Component {
     render() {
         return (
           <div className="form-place">
-            { (this.state.cert_created) ? this.notify(): ''}
-            { (this.state.cert_updated) ? this.notify(): ''}
+            {(this.state.cert_created) ? this.notify(): ''}
+            {(this.state.cert_updated) ? this.notify(): ''}
             <form onSubmit={(e) => this.handleCert(e)}>
                 <div className="form-row">
                   <div className="col">
@@ -103,9 +110,9 @@ export default class Form extends React.Component {
                       <label htmlFor="applicantName">
                         Name of applicant
                       </label>
-                      <input required
+                      <input type="text" required
                         className="form-control form-control-lg"
-                        name="applicantName" id="applicantName"
+                        id="applicantName"
                         aria-describedby="applicantHelp"
                         placeholder="SHANGHAI XM GROUP LTD"
                         value={this.state.applicantName}
@@ -255,7 +262,7 @@ export default class Form extends React.Component {
                   <p>Material needed:</p>
                 </div>
                 <div className="col-md-3">
-                  <input className="form-control" required
+                  <input className="form-control" type="text" required
                   id="materialNeeded"
                   value={this.state.materialNeeded}
                   onChange={this.handleChange}/>
@@ -281,11 +288,11 @@ export default class Form extends React.Component {
                   <p>to be sent on:</p>
                 </div>
                 <div className="col-md-3">
-                  <input className="form-control" required
-                    type="date"
-                    id="sentOn"
-                    value={this.state.sentOn}
-                    onChange={this.handleChange}/>
+                    <DatePicker className="form-control" required
+                      selected={this.state.sentOn}
+                      dateFormat="ddMMMyyyy"
+                      onChange={date => this.handleDateChange(date, 'sentOn')}
+                    />
                 </div>
               </div>
 
@@ -294,11 +301,11 @@ export default class Form extends React.Component {
                   <p>to be received on:</p>
                 </div>
                 <div className="col-md-3">
-                  <input className="form-control" required
-                  type="date"
-                  id="receivedOn"
-                  value={this.state.receivedOn}
-                  onChange={this.handleChange}/>
+                  <DatePicker className="form-control" required
+                    selected={this.state.receivedOn}
+                    dateFormat="ddMMMyyyy"
+                    onChange={date => this.handleDateChange(date, 'receivedOn')}
+                  />
                 </div>
               </div>
 
@@ -307,11 +314,11 @@ export default class Form extends React.Component {
                   <p>tests to be started on:</p>
                 </div>
                 <div className="col-md-3">
-                  <input className="form-control" required
-                  type="date"
-                  id="startedOn"
-                  value={this.state.startedOn}
-                  onChange={this.handleChange}/>
+                  <DatePicker className="form-control" required
+                    selected={this.state.startedOn}
+                    dateFormat="ddMMMyyyy"
+                    onChange={date => this.handleDateChange(date, 'startedOn')}
+                  />
                 </div>
               </div>
 
@@ -320,11 +327,11 @@ export default class Form extends React.Component {
                   <p>tests to be finished on:</p>
                 </div>
                 <div className="col-md-3">
-                  <input className="form-control" required
-                    type="date"
-                    id="finishedOn"
-                    value={this.state.finishedOn}
-                    onChange={this.handleChange}/>
+                <DatePicker className="form-control" required
+                    selected={this.state.finishedOn}
+                    dateFormat="ddMMMyyyy"
+                    onChange={date => this.handleDateChange(date, 'finishedOn')}
+                  />
                 </div>
               </div>
 
@@ -333,13 +340,14 @@ export default class Form extends React.Component {
                   <p>results to be received on:</p>
                 </div>
                 <div className="col-md-3">
-                  <input className="form-control" required
-                  type="date"
-                  id="resultsReceived"
-                  value={this.state.resultsReceived}
-                  onChange={this.handleChange}/>
+                <DatePicker className="form-control" required
+                    selected={this.state.resultsReceived}
+                    dateFormat="ddMMMyyyy"
+                    onChange={date => this.handleDateChange(date, 'resultsReceived')}
+                  />
                 </div>
               </div>
+
               <div className="form-group row">
                 <div className="row col-4 offset-4">
                   <button type="submit"

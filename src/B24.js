@@ -1,5 +1,6 @@
 import axios from 'axios';
 import qs from 'qs';
+import moment from 'moment';
 
 function parse(response) {
     const prop_map = {
@@ -29,29 +30,41 @@ function parse(response) {
                         .replace(/\[B\]|\[\/CODE\]/gi, '')
                         .split(':parameter_separator:');
 
+    const dates = ['sentOn', 'receivedOn', 'startedOn', 'finishedOn', 'resultsReceived'];
     description.forEach(prop => {
-      const [prop_name, prop_value] = prop.split('::prop_value_separator:')
-      newState[prop_map[prop_name]] = prop_value.trim()
+      const [prop_name, prop_value] = prop.split('::prop_value_separator:');
+      if (dates.includes(prop_map[prop_name])) {
+          newState[prop_map[prop_name]] = new Date(prop_value.trim());
+        } else {
+            newState[prop_map[prop_name]] = prop_value.trim();
+      }
     });
 
     return newState;
 };
 
 class B24 {
-    creator_id = 5;
-    webhook_key = 'wcdzeq70ot8krh1p';
+    creator_id = process.env.REACT_APP_B24_USER_ID;
+    webhook_key = process.env.REACT_APP_B24_WEBHOOK_KEY;
+    main_url = process.env.REACT_APP_B24_MAIN_URL;
     default_params = {
         CREATED_BY: this.creator_id,
-        AUDITORS: [5],
+        AUDITORS: [5, 19],
         UF_CRM_TASK: ['CO_6295'],
         RESPONSIBLE_ID: 5,
         TAGS: ['certification']
     }
-    main_url_part = 'https://xmtextiles.bitrix24.ru/rest';
 
-    formTaskFields = (state) => ({
+    formTaskFields = (state) => {
+        const sentOn = moment(state.sentOn).format("DDMMMYYYY");
+        const receivedOn = moment(state.receivedOn).format("DDMMMYYYY");
+        const startedOn = moment(state.startedOn).format("DDMMMYYYY");
+        const finishedOn = moment(state.finishedOn).format("DDMMMYYYY");
+        const resultsReceived = moment(state.resultsReceived).format("DDMMMYYYY");
+
+        return {
             TITLE: `${state.rollNumber}_AITEX - ${state.iso} ${state.colour} - ${state.article} ` +
-                `${state.applicantName} (to send ${state.startedOn} - plan ${state.finishedOn} )`,
+                `${state.applicantName} (to send ${sentOn} - plan ${finishedOn} )`,
             DESCRIPTION: `[B]Applicant name:[/B][CODE]${state.applicantName}[/CODE]` +
                 `[B]Product:[/B][CODE]${state.product}[/CODE]` +
                 `[B]Code:[/B][CODE]${state.code}[/CODE]` +
@@ -65,19 +78,20 @@ class B24 {
                 `[B]Testing company:[/B][CODE]${state.tester}[/CODE]` +
                 `[B]Material needed:[/B][CODE]${state.materialNeeded}[/CODE]` +
                 `[B]Testing time, days:[/B][CODE]${state.testingTime}[/CODE]` +
-                `[B]to be sent on:[/B][CODE]${state.sentOn}[/CODE]` +
-                `[B]to be received on:[/B][CODE]${state.receivedOn}[/CODE]` +
-                `[B]tests to be started on:[/B][CODE]${state.startedOn}[/CODE]` +
-                `[B]tests to be finished on:[/B][CODE]${state.finishedOn}[/CODE]` +
-                `[B]results to be received on:[/B][CODE]${state.resultsReceived}[/CODE]`,
+                `[B]to be sent on:[/B][CODE]${sentOn}[/CODE]` +
+                `[B]to be received on:[/B][CODE]${receivedOn}[/CODE]` +
+                `[B]tests to be started on:[/B][CODE]${startedOn}[/CODE]` +
+                `[B]tests to be finished on:[/B][CODE]${finishedOn}[/CODE]` +
+                `[B]results to be received on:[/B][CODE]${resultsReceived}[/CODE]`,
                 ...this.default_params
-    });
+        }
+    };
     
     create_task(state) {
         const data = Object.assign({}, this.formTaskFields(state))
         return axios({
             method: 'post',
-            url: `${this.main_url_part}/${this.creator_id}/${this.webhook_key}/task.item.add/`,
+            url: `${this.main_url}/${this.creator_id}/${this.webhook_key}/task.item.add/`,
             headers: { 'content-type': 'application/x-www-form-urlencoded' },
             data: qs.stringify([data])
         });
@@ -87,7 +101,7 @@ class B24 {
         const data = Object.assign({}, this.formTaskFields(state))
         return axios({
             method: 'post',
-            url: `${this.main_url_part}/${this.creator_id}/${this.webhook_key}/task.item.update/`,
+            url: `${this.main_url}/${this.creator_id}/${this.webhook_key}/task.item.update/`,
             headers: { 'content-type': 'application/x-www-form-urlencoded' },
             data: qs.stringify([state.task_id, data])
         });
@@ -104,7 +118,7 @@ class B24 {
         };
         return axios({
             method: 'get',
-            url: `${this.main_url_part}/${this.creator_id}/${this.webhook_key}/task.item.list?` + qs.stringify(params),
+            url: `${this.main_url}/${this.creator_id}/${this.webhook_key}/task.item.list?` + qs.stringify(params),
         })
     }
     get_task(id = null) {
@@ -113,7 +127,7 @@ class B24 {
         }
         return axios({
             method: 'get',
-            url: `${this.main_url_part}/${this.creator_id}/${this.webhook_key}/task.item.getdata?ID=${id}`,
+            url: `${this.main_url}/${this.creator_id}/${this.webhook_key}/task.item.getdata?ID=${id}`,
         })
     }
 }

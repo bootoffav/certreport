@@ -8,10 +8,6 @@ const Task = (props) =>
         <td>{props.position}</td>
         <td>{props.data.RESPONSIBLE_NAME}</td>
         <td>
-            {/* <a target="_blank" rel="noopener noreferrer"
-            href={`https://xmtextiles.bitrix24.ru/workgroups/group/21/tasks/task/view/${props.data.ID}/`}>
-            {props.data.TITLE}
-            </a> */}
             <a href={`/edit/${props.data.ID}`}>{props.data.TITLE}</a>
         </td>
         <td>
