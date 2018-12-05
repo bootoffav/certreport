@@ -1,63 +1,97 @@
 import axios from 'axios';
 import qs from 'qs';
 
-const creator_id = 5;
-const webhook_key = 'wcdzeq70ot8krh1p';
+function parse(response) {
+    const prop_map = {
+      'Applicant name': 'applicantName',
+      'Product': 'product',
+      'Code': 'code',
+      'Article': 'article',
+      'Colour': 'colour',
+      'Length of sample, meters': 'length',
+      'Width of sample, meters': 'width',
+      'Part number': 'partNumber',
+      'Roll number': 'rollNumber',
+      'ISO': 'iso',
+      'Testing company': 'tester',
+      'Material needed': 'materialNeeded',
+      'Testing time, days': 'testingTime',
+      'to be sent on': 'sentOn',
+      'to be received on': 'receivedOn',
+      'tests to be started on': 'startedOn',
+      'tests to be finished on': 'finishedOn',
+      'results to be received on': 'resultsReceived'
+    }
+    const newState = {};
+    let description = response.data.result.DESCRIPTION
+                        .replace(/\[\/CODE\]\[B\]/gi, ':parameter_separator:')
+                        .replace(/\[\/B\]\[CODE\]/gi, ':prop_value_separator:')
+                        .replace(/\[B\]|\[\/CODE\]/gi, '')
+                        .split(':parameter_separator:');
+
+    description.forEach(prop => {
+      const [prop_name, prop_value] = prop.split('::prop_value_separator:')
+      newState[prop_map[prop_name]] = prop_value.trim()
+    });
+
+    return newState;
+};
 
 class B24 {
-    constructor (){
-        this.main_url_part = 'https://xmtextiles.bitrix24.ru/rest';
-        this.default_params = {
-            CREATED_BY: creator_id,
-            AUDITORS: [5],
-            UF_CRM_TASK: ['CO_6295'],
-            RESPONSIBLE_ID: 5,
-            TAGS: ['certification']
-        }
+    creator_id = 5;
+    webhook_key = 'wcdzeq70ot8krh1p';
+    default_params = {
+        CREATED_BY: this.creator_id,
+        AUDITORS: [5],
+        UF_CRM_TASK: ['CO_6295'],
+        RESPONSIBLE_ID: 5,
+        TAGS: ['certification']
     }
+    main_url_part = 'https://xmtextiles.bitrix24.ru/rest';
 
     formTaskFields = (state) => ({
-            TITLE: `${state.rollNumber} AITEX - ${state.colour} ${state.iso} - ${state.article} ` +
-                `${state.applicantName} (to send ${state.startedOn} - plan${state.finishedOn} )`,
-            DESCRIPTION: `Applicant name: ${state.applicantName}\n` +
-                `Product: ${state.product}\n` +
-                `Code: ${state.code}\n` +
-                `Article: ${state.article}\n` +
-                `Colour: ${state.colour}\n` +
-                `Length of sample, meters: ${state.length}\n` +
-                `Width of sample, meters: ${state.width}\n` +
-                `Part number: ${state.partNumber}\n` +
-                `Roll number: ${state.rollNumber}\n` +
-                `ISO: ${state.iso}\n` +
-                `Testing company:${state.tester}`,
+            TITLE: `${state.rollNumber}_AITEX - ${state.iso} ${state.colour} - ${state.article} ` +
+                `${state.applicantName} (to send ${state.startedOn} - plan ${state.finishedOn} )`,
+            DESCRIPTION: `[B]Applicant name:[/B][CODE]${state.applicantName}[/CODE]` +
+                `[B]Product:[/B][CODE]${state.product}[/CODE]` +
+                `[B]Code:[/B][CODE]${state.code}[/CODE]` +
+                `[B]Article:[/B][CODE]${state.article}[/CODE]` +
+                `[B]Colour:[/B][CODE]${state.colour}[/CODE]` +
+                `[B]Length of sample, meters:[/B][CODE]${state.length}[/CODE]` +
+                `[B]Width of sample, meters:[/B][CODE]${state.width}[/CODE]` +
+                `[B]Part number:[/B][CODE]${state.partNumber}[/CODE]` +
+                `[B]Roll number:[/B][CODE]${state.rollNumber}[/CODE]` +
+                `[B]ISO:[/B][CODE]${state.iso}[/CODE]` +
+                `[B]Testing company:[/B][CODE]${state.tester}[/CODE]` +
+                `[B]Material needed:[/B][CODE]${state.materialNeeded}[/CODE]` +
+                `[B]Testing time, days:[/B][CODE]${state.testingTime}[/CODE]` +
+                `[B]to be sent on:[/B][CODE]${state.sentOn}[/CODE]` +
+                `[B]to be received on:[/B][CODE]${state.receivedOn}[/CODE]` +
+                `[B]tests to be started on:[/B][CODE]${state.startedOn}[/CODE]` +
+                `[B]tests to be finished on:[/B][CODE]${state.finishedOn}[/CODE]` +
+                `[B]results to be received on:[/B][CODE]${state.resultsReceived}[/CODE]`,
                 ...this.default_params
     });
     
     create_task(state) {
-        const data = Object.create({}, this.formTaskFields(state))
-
-        axios({
+        const data = Object.assign({}, this.formTaskFields(state))
+        return axios({
             method: 'post',
-            url: `${this.main_url_part}/${creator_id}/${webhook_key}/task.item.add/`,
+            url: `${this.main_url_part}/${this.creator_id}/${this.webhook_key}/task.item.add/`,
             headers: { 'content-type': 'application/x-www-form-urlencoded' },
             data: qs.stringify([data])
-        }).then(response => console.log)
-          .catch(err => console.log);
+        });
     }
-
 
     update_task(state) {
         const data = Object.assign({}, this.formTaskFields(state))
-        axios({
+        return axios({
             method: 'post',
-            url: `${this.main_url_part}/${creator_id}/${webhook_key}/task.item.update/`,
+            url: `${this.main_url_part}/${this.creator_id}/${this.webhook_key}/task.item.update/`,
             headers: { 'content-type': 'application/x-www-form-urlencoded' },
             data: qs.stringify([state.task_id, data])
-        }).then(response => console.log)
-          .catch(err => console.log);
+        });
     }
-
-
 
     get_tasks() {
         const params = {
@@ -70,9 +104,8 @@ class B24 {
         };
         return axios({
             method: 'get',
-            url: `${this.main_url_part}/${creator_id}/${webhook_key}/task.item.list?` + qs.stringify(params),
+            url: `${this.main_url_part}/${this.creator_id}/${this.webhook_key}/task.item.list?` + qs.stringify(params),
         })
-        //   .catch(response => console.log(response));
     }
     get_task(id = null) {
         if (id === null) {
@@ -80,9 +113,10 @@ class B24 {
         }
         return axios({
             method: 'get',
-            url: `${this.main_url_part}/${creator_id}/${webhook_key}/task.item.getdata?ID=${id}`,
+            url: `${this.main_url_part}/${this.creator_id}/${this.webhook_key}/task.item.getdata?ID=${id}`,
         })
     }
 }
 
 export default B24;
+export { parse };
