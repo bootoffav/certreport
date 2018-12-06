@@ -3,6 +3,7 @@ import DatePicker from "react-datepicker";
 import moment from 'moment';
 import "react-datepicker/dist/react-datepicker.css";
 import B24, { parse } from './B24.js';
+import Notification from './Notification.js';
 
 
 const default_state = {
@@ -36,7 +37,6 @@ export default class Form extends React.Component {
             new B24().get_task(props.match.params.id)
               .then(response => {
                 const stateFromAPI = parse(response);
-                console.log(stateFromAPI);
                 this.setState({ ...stateFromAPI, task_id: props.match.params.id});
               });
         }
@@ -55,54 +55,26 @@ export default class Form extends React.Component {
         const b24 = new B24();
         (this.state.task_id)
         ? b24.update_task(this.state)
-          .then(() => this.setState({cert_updated: 'success'}))
-          .catch(() => this.setState({cert_updated: 'failure'}))
+          .then(() => this.setState({request_status: 'success'}))
+          .catch(() => this.setState({request_status: 'failure'}))
         : b24.create_task(this.state)
-          .then(() => {
-            this.setState({cert_created: 'success'});
-          })
-          .catch(() => this.setState({cert_created: 'failure'}))
+          .then(() => this.setState({request_status: 'success'}))
+          .catch(() => this.setState({request_status: 'failure'}))
         ;
       }
       // setTimeout(() => window.location.replace("/"), 4000);
     }
 
-    notify() {
-      if (this.state.cert_updated !== undefined) {
-        return (this.state.cert_updated === 'success')
-        ?
-            <div className="alert alert-success" role="alert">
-              <h4 className="alert-heading">Certificate status successfully updated!</h4>
-              <p>You are being redirected to dashboard!</p>
-            </div>
-        :
-            <div className="alert alert-danger" role="alert">
-              <h4 className="alert-heading">Certification update failed!</h4>
-              <p>Try to update a bit later!</p>
-            </div>;
-      }
-
-      if (this.state.cert_created !== undefined) {
-        return (this.state.cert_created === 'success')
-        ?
-            <div className="alert alert-success" role="alert">
-              <h4 className="alert-heading">Certification task successfully created!</h4>
-              <p>You are being redirected to dashboard!</p>
-            </div>
-        :
-            <div className="alert alert-danger" role="alert">
-              <h4 className="alert-heading">Certification task creation failed!</h4>
-              <p>Try to update a bit later!</p>
-            </div>;
-      }
-
-    }
-
     render() {
         return (
           <div className="form-place">
-            {(this.state.cert_created) ? this.notify(): ''}
-            {(this.state.cert_updated) ? this.notify(): ''}
+            {(this.state.request_status)
+              ? 
+                <Notification
+                  result={this.state.request_status}
+                />
+              : ''}
+
             <form onSubmit={(e) => this.handleCert(e)}>
                 <div className="form-row">
                   <div className="col">
