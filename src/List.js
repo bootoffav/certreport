@@ -45,8 +45,10 @@ export default class List extends React.Component {
               })}
             </tbody>
           </table>
-        : <div style={{marginTop: '10em'}}>
-            <Loader className="spiner spiner-place" type="ThreeDots" height="80" width="500"/>
-          </div>;
+        : <div className="loader-place row align-items-center">
+                <div className="col row justify-content-center">
+                    <Loader type="ThreeDots" height="80" width="200"/>
+                </div>
+          </div>
     }
 }

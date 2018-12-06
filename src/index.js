@@ -28,10 +28,14 @@ function Navigation() {
     <div className="col">
       <Router>
           <div>
-            <nav className="navbar navbar-expand-lg navbar-light bg-light">
-              <Link className="navbar-brand" to="/">Cert Report</Link>
-              <Link to="/add">Add cert</Link>
-            </nav>
+            <ul className="nav nav-pills nav-fill justify-content-center">
+              <li className="nav-item">
+                <Link className="nav-link" to="/">List</Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/add">Add cert</Link>
+              </li>
+            </ul>
             <Route exact path="/" component={List} />
             <Route exact path="/add" component={Form} />
             <Route exact path="/edit/:id" component={Form} />

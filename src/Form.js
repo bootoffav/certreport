@@ -1,6 +1,5 @@
 import React from 'react';
 import DatePicker from "react-datepicker";
-import moment from 'moment';
 import "react-datepicker/dist/react-datepicker.css";
 import B24, { parse } from './B24.js';
 import Notification from './Notification.js';
@@ -32,14 +31,16 @@ export default class Form extends React.Component {
         super(props);
         this.handleChange = this.handleChange.bind(this);
         this.handleDateChange = this.handleDateChange.bind(this);
-        this.state = { ...default_state };
         if (props.match.params.id) {
-            new B24().get_task(props.match.params.id)
-              .then(response => {
-                const stateFromAPI = parse(response);
-                this.setState({ ...stateFromAPI, task_id: props.match.params.id});
-              });
+          this.state = {};
+          new B24().get_task(props.match.params.id)
+          .then(response => {
+            const stateFromAPI = parse(response);
+            this.setState({ ...stateFromAPI, task_id: props.match.params.id});
+          });
+          return;
         }
+        this.state = { ...default_state };
     }
     handleDateChange(date, prop_name) {
       this.setState({
