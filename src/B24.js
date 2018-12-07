@@ -14,7 +14,7 @@ function parse(response) {
       'Part number': 'partNumber',
       'Roll number': 'rollNumber',
       'ISO': 'iso',
-      'Testing company': 'tester',
+      'Testing company': 'testingCompany',
       'Material needed': 'materialNeeded',
       'Testing time, days': 'testingTime',
       'to be sent on': 'sentOn',
@@ -23,23 +23,43 @@ function parse(response) {
       'tests to be finished on': 'finishedOn',
       'results to be received on': 'resultsReceived'
     }
+
+    const parseSelectable = iso => {
+        const ret_iso = [];
+        iso.split(',').forEach(value => {
+            const standard = value.trim()
+            ret_iso.push({
+                value: standard,
+                label: standard,
+                id: standard
+            });
+        });
+        return ret_iso;
+    }
+    // console.log(response.data.result.DESCRIPTION);
     const newState = {};
     let description = response.data.result.DESCRIPTION
-                        .replace(/\[\/CODE\]\[B\]/gi, ':parameter_separator:')
-                        .replace(/\[\/B\]\[CODE\]/gi, ':prop_value_separator:')
-                        .replace(/\[B\]|\[\/CODE\]/gi, '')
-                        .split(':parameter_separator:');
+                        // .replace(/\n/gi, ':parameter_separator:')
+                        .replace(/\[\/B\]/gi, ':prop_value_separator:')
+                        .replace(/\[B\]|/gi, '')
+                        .split('\n');
+    // console.log(description);
 
     const dates = ['sentOn', 'receivedOn', 'startedOn', 'finishedOn', 'resultsReceived'];
+    
     description.forEach(prop => {
       const [prop_name, prop_value] = prop.split('::prop_value_separator:');
+    //   console.log(prop_name, ':', prop_value);
       if (dates.includes(prop_map[prop_name])) {
-          newState[prop_map[prop_name]] = new Date(prop_value.trim());
-        } else {
+        newState[prop_map[prop_name]] = new Date(prop_value.trim());
+      }
+      else if (prop_map[prop_name] === 'iso' || prop_map[prop_name] === 'testingCompany') {
+          newState[prop_map[prop_name]] = parseSelectable(prop_value.trim())
+      } else {
             newState[prop_map[prop_name]] = prop_value.trim();
       }
     });
-
+    
     return newState;
 };
 
@@ -75,7 +95,7 @@ class B24 {
                 `[B]Part number:[/B][CODE]${state.partNumber}[/CODE]` +
                 `[B]Roll number:[/B][CODE]${state.rollNumber}[/CODE]` +
                 `[B]ISO:[/B][CODE]${state.iso}[/CODE]` +
-                `[B]Testing company:[/B][CODE]${state.tester}[/CODE]` +
+                `[B]Testing company:[/B][CODE]${state.testingCompany}[/CODE]` +
                 `[B]Material needed:[/B][CODE]${state.materialNeeded}[/CODE]` +
                 `[B]Testing time, days:[/B][CODE]${state.testingTime}[/CODE]` +
                 `[B]to be sent on:[/B][CODE]${sentOn}[/CODE]` +

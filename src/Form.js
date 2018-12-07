@@ -3,6 +3,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import B24, { parse } from './B24.js';
 import Notification from './Notification.js';
+import Select from 'react-select';
 
 
 const default_state = {
@@ -15,7 +16,7 @@ const default_state = {
   width: 1.5,
   partNumber: 'partNumber 1493',
   rollNumber: 'rollNumber 1395',
-  tester: `AITEX Headquarters
+  testingCompany: `AITEX Headquarters
 Plaza Emilio Sala 1, 03801 Alcoy (Alicante) Spain.
 Tel.: +34 965 542 200
 Fax.: +34 965 543 494
@@ -42,14 +43,17 @@ export default class Form extends React.Component {
         }
         this.state = { ...default_state };
     }
+    get_pdf = () => alert('yet to be implemented soon')
+
     handleDateChange(date, prop_name) {
       this.setState({
         [prop_name]: date
       });
     }
-    handleChange(e) {
-      this.setState({[e.target.id]: e.target.value});
-    }
+
+    handleSelectChange = (selectedOption) => this.setState({ [selectedOption[0].id]: selectedOption });
+    handleChange = (e) => this.setState({[e.target.id]: e.target.value});
+
     handleCert (e){
       e.preventDefault();
       if (window.confirm('Are you sure?')) {
@@ -80,11 +84,9 @@ export default class Form extends React.Component {
                 <div className="form-row">
                   <div className="col">
                     <div className="form-group">
-                      <label htmlFor="applicantName">
                         Name of applicant
-                      </label>
                       <input type="text" required
-                        className="form-control form-control-lg"
+                        className="form-control"
                         id="applicantName"
                         aria-describedby="applicantHelp"
                         placeholder="SHANGHAI XM GROUP LTD"
@@ -100,9 +102,7 @@ export default class Form extends React.Component {
                 <div className="form-row"> {/* Product, Code, Article, Colour */}
                   <div className="col-4">
                     <div className="form-group">
-                      <label htmlFor="product">
                         Product
-                      </label>
                       <input required
                         className="form-control"
                         id="product"
@@ -117,9 +117,7 @@ export default class Form extends React.Component {
                   </div>
                   <div className="col">
                     <div className="form-group">
-                      <label htmlFor="code">
                         Code
-                      </label>
                       <input required
                         className="form-control"
                         id="code"
@@ -134,7 +132,7 @@ export default class Form extends React.Component {
                   </div>
                   <div className="col">
                     <div className="form-group">
-                      <label htmlFor="article">Article</label>
+                      Article
                       <input required
                         className="form-control"
                         id="article"
@@ -149,7 +147,7 @@ export default class Form extends React.Component {
                   </div>
                   <div className="col">
                     <div className="form-group">
-                      <label htmlFor="article">Colour</label>
+                      Colour
                       <input required
                         className="form-control"
                         id="colour"
@@ -160,11 +158,18 @@ export default class Form extends React.Component {
                       />
                     </div>
                   </div>
+                  <div className="col-md-2">
+                  Material needed:
+                    <input className="form-control" type="text" required
+                    id="materialNeeded"
+                    value={this.state.materialNeeded}
+                    onChange={this.handleChange}/>
+                  </div>
               </div> {/* Product, Code, Article, Colour */}
               <div className="form-row">
                 <div className="col-md-3">
                   <div className="form-group">
-                    <label htmlFor="article">Length of sample, meters</label>
+                    Length of sample, meters
                     <input required
                       type="number"
                       className="form-control"
@@ -176,7 +181,7 @@ export default class Form extends React.Component {
                 </div>
                 <div className="col-md-3">
                   <div className="form-group">
-                    <label htmlFor="article">Width of sample, meters</label>
+                    Width of sample, meters
                     <input required
                       type="number"
                       className="form-control"
@@ -188,7 +193,7 @@ export default class Form extends React.Component {
                 </div>
                 <div className="col-md-3">
                   <div className="form-group">
-                    <label htmlFor="article">Part Number</label>
+                    Part Number
                     <input required
                       className="form-control"
                       id="partNumber"
@@ -199,7 +204,7 @@ export default class Form extends React.Component {
                 </div>
                 <div className="col-md-3">
                   <div className="form-group">
-                    <label htmlFor="article">Roll number</label>
+                    Roll number
                     <input required
                       className="form-control"
                       id="rollNumber"
@@ -209,44 +214,45 @@ export default class Form extends React.Component {
                   </div>
                 </div>
               </div>
-              <div className="form-row">
+              <div className="form-group row">
                 <div className="col-md-3">
-                  <div className="form-group">
-                    <label htmlFor="iso">ISO</label>
-                    <input required
-                      className="form-control isoColour"
-                      id="iso"
-                      value={this.state.iso}
-                      onChange={this.handleChange}
-                    />
-                  </div>
-                </div>
-                <div className="col-md-6">
-                  <label htmlFor="tester">Tester company address</label>
-                  <textarea className="form-control" id="tester" rows="5" cols="150" required
-                    value={this.state.tester}
-                    onChange={this.handleChange}
+                  Standards
+                  <Select
+                    isMulti
+                    required
+                    value={this.state.iso}
+                    onChange={this.handleSelectChange}
+                    id="iso"
+                    options={[
+                      {value: 'ISO 17893', label: 'ISO 17893', id: 'iso'},
+                      {value: 'EN 11611', label: 'EN 11611', id: 'iso'},
+                      {value: 'EN 11612', label: 'EN 11612', id: 'iso'},
+                      {value: 'EN 1149-3', label: 'ISO 1149-3', id: 'iso'}
+                    ]}
                   />
                 </div>
-              </div>
+              <div className="col-md-3">
+                <div className="form-group">
+                  Testing company
+                  {/* <textarea className="form-control" id="tester" rows="5" cols="150" required
+                    value={this.state.tester}
+                    onChange={this.handleChange}
+                  /> */}
+                  <Select
+                      isMulti
+                      value={this.state.testingCompany}
+                      onChange={this.handleSelectChange}
+                      id="testingCompany"
+                      options={[
+                        {value: 'Aitex Headquarters (Spain)', label: 'Aitex Headquarters (Spain)', id: 'testingCompany'},
+                        {value: 'AITEX SHANGHAI OFFICE', label: 'AITEX SHANGHAI OFFICE', id: 'testingCompany'}
+                      ]}
+                    />
+                </div>
+                </div>
 
-              <div className="form-group row">
                 <div className="col-md-2">
-                  <p>Material needed:</p>
-                </div>
-                <div className="col-md-3">
-                  <input className="form-control" type="text" required
-                  id="materialNeeded"
-                  value={this.state.materialNeeded}
-                  onChange={this.handleChange}/>
-                </div>
-              </div>
-
-              <div className="form-group row">
-                <div className="col-md-2">
-                  <p>testing time, days:</p>
-                </div>
-                <div className="col-md-3">
+                  Days:
                   <input required
                   className="form-control"
                   type="number"
@@ -256,76 +262,72 @@ export default class Form extends React.Component {
                 </div>
               </div>
 
-              <div className="form-group row">
-                <div className="col-md-2">
-                  <p>to be sent on:</p>
+              <div className="form-row">
+                <div className="col">
+                  <div className="form-group">
+                    Sent on:
+                        <DatePicker className="form-control" required
+                          selected={this.state.sentOn}
+                          dateFormat="ddMMMyyyy"
+                          onChange={date => this.handleDateChange(date, 'sentOn')}
+                          />
+                  </div>
                 </div>
-                <div className="col-md-3">
+                <div className="col">
+                  <div className="form-group">
+                  Received on:
                     <DatePicker className="form-control" required
-                      selected={this.state.sentOn}
+                      selected={this.state.receivedOn}
                       dateFormat="ddMMMyyyy"
-                      onChange={date => this.handleDateChange(date, 'sentOn')}
-                    />
+                      onChange={date => this.handleDateChange(date, 'receivedOn')}
+                      />
+                  </div>
+                </div>
+
+                <div className="col">
+                  <div className="form-group">
+                    Started on:
+                      <DatePicker className="form-control" required
+                        selected={this.state.startedOn}
+                        dateFormat="ddMMMyyyy"
+                        onChange={date => this.handleDateChange(date, 'startedOn')}
+                      />
+                  </div>
+                </div>
+
+                <div className="col">
+                  <div className="form-group">
+                    Finished on:
+                    <DatePicker className="form-control" required
+                        selected={this.state.finishedOn}
+                        dateFormat="ddMMMyyyy"
+                        onChange={date => this.handleDateChange(date, 'finishedOn')}
+                      />
+                  </div>
+                </div>
+
+                <div className="col">
+                  <div className="form-group">
+                    results to be received on:
+                    <DatePicker className="form-control" required
+                        selected={this.state.resultsReceived}
+                        dateFormat="ddMMMyyyy"
+                        onChange={date => this.handleDateChange(date, 'resultsReceived')}
+                        />
+                  </div>
                 </div>
               </div>
 
               <div className="form-group row">
-                <div className="col-md-2">
-                  <p>to be received on:</p>
-                </div>
-                <div className="col-md-3">
-                  <DatePicker className="form-control" required
-                    selected={this.state.receivedOn}
-                    dateFormat="ddMMMyyyy"
-                    onChange={date => this.handleDateChange(date, 'receivedOn')}
-                  />
-                </div>
-              </div>
-
-              <div className="form-group row">
-                <div className="col-md-2">
-                  <p>tests to be started on:</p>
-                </div>
-                <div className="col-md-3">
-                  <DatePicker className="form-control" required
-                    selected={this.state.startedOn}
-                    dateFormat="ddMMMyyyy"
-                    onChange={date => this.handleDateChange(date, 'startedOn')}
-                  />
-                </div>
-              </div>
-
-              <div className="form-group row">
-                <div className="col-md-2">
-                  <p>tests to be finished on:</p>
-                </div>
-                <div className="col-md-3">
-                <DatePicker className="form-control" required
-                    selected={this.state.finishedOn}
-                    dateFormat="ddMMMyyyy"
-                    onChange={date => this.handleDateChange(date, 'finishedOn')}
-                  />
-                </div>
-              </div>
-
-              <div className="form-group row">
-                <div className="col-md-2">
-                  <p>results to be received on:</p>
-                </div>
-                <div className="col-md-3">
-                <DatePicker className="form-control" required
-                    selected={this.state.resultsReceived}
-                    dateFormat="ddMMMyyyy"
-                    onChange={date => this.handleDateChange(date, 'resultsReceived')}
-                  />
-                </div>
-              </div>
-
-              <div className="form-group row">
-                <div className="row col-4 offset-4">
+                <div className="col">
                   <button type="submit"
                     className="btn btn-danger btn-block"
                   >Create / Update</button>
+                </div>
+                <div className="col">
+                  <button className="btn btn-info btn-block"
+                    onClick={this.get_pdf}
+                  >Get .PDF</button>
                 </div>
               </div>
           </form>
