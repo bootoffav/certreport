@@ -2,7 +2,10 @@ import axios from 'axios';
 import qs from 'qs';
 import moment from 'moment';
 
-function parse(response) {
+function parse(description) {
+    if (description.indexOf(':[/B]') === -1) {
+        return null; // is not valid for parsing
+    }
     const prop_map = {
       'Applicant name': 'applicantName',
       'Product': 'product',
@@ -24,37 +27,32 @@ function parse(response) {
       'results to be received on': 'resultsReceived'
     }
 
-    const parseSelectable = iso => {
+    const parseSelectable = (prop_name, selectee) => {
         const ret_iso = [];
-        iso.split(',').forEach(value => {
-            const standard = value.trim()
+        selectee.split(',').forEach(value => {
+            const standard = value.trim();
             ret_iso.push({
                 value: standard,
                 label: standard,
-                id: standard
+                id: prop_name
             });
         });
         return ret_iso;
     }
-    // console.log(response.data.result.DESCRIPTION);
     const newState = {};
-    let description = response.data.result.DESCRIPTION
-                        // .replace(/\n/gi, ':parameter_separator:')
-                        .replace(/\[\/B\]/gi, ':prop_value_separator:')
-                        .replace(/\[B\]|/gi, '')
-                        .split('\n');
-    // console.log(description);
-
+    description = description
+                    .replace(/\[\/B\]/gi, ':prop_value_separator:')
+                    .replace(/\[B\]|/gi, '')
+                    .split('\n');
     const dates = ['sentOn', 'receivedOn', 'startedOn', 'finishedOn', 'resultsReceived'];
     
     description.forEach(prop => {
       const [prop_name, prop_value] = prop.split('::prop_value_separator:');
-    //   console.log(prop_name, ':', prop_value);
       if (dates.includes(prop_map[prop_name])) {
         newState[prop_map[prop_name]] = new Date(prop_value.trim());
       }
       else if (prop_map[prop_name] === 'iso' || prop_map[prop_name] === 'testingCompany') {
-          newState[prop_map[prop_name]] = parseSelectable(prop_value.trim())
+          newState[prop_map[prop_name]] = parseSelectable(prop_map[prop_name], prop_value.trim())
       } else {
             newState[prop_map[prop_name]] = prop_value.trim();
       }
@@ -81,34 +79,36 @@ class B24 {
         const startedOn = moment(state.startedOn).format("DDMMMYYYY");
         const finishedOn = moment(state.finishedOn).format("DDMMMYYYY");
         const resultsReceived = moment(state.resultsReceived).format("DDMMMYYYY");
+        const iso = state.iso.map(standard => standard.value).join(', ');
+        const testingCompany = state.testingCompany.map(company => company.value).join(', ');
 
         return {
-            TITLE: `${state.rollNumber}_AITEX - ${state.iso} ${state.colour} - ${state.article} ` +
+            TITLE: `${state.rollNumber}_AITEX - ${iso} ${state.colour} - ${state.article} ` +
                 `${state.applicantName} (to send ${sentOn} - plan ${finishedOn} )`,
-            DESCRIPTION: `[B]Applicant name:[/B][CODE]${state.applicantName}[/CODE]` +
-                `[B]Product:[/B][CODE]${state.product}[/CODE]` +
-                `[B]Code:[/B][CODE]${state.code}[/CODE]` +
-                `[B]Article:[/B][CODE]${state.article}[/CODE]` +
-                `[B]Colour:[/B][CODE]${state.colour}[/CODE]` +
-                `[B]Length of sample, meters:[/B][CODE]${state.length}[/CODE]` +
-                `[B]Width of sample, meters:[/B][CODE]${state.width}[/CODE]` +
-                `[B]Part number:[/B][CODE]${state.partNumber}[/CODE]` +
-                `[B]Roll number:[/B][CODE]${state.rollNumber}[/CODE]` +
-                `[B]ISO:[/B][CODE]${state.iso}[/CODE]` +
-                `[B]Testing company:[/B][CODE]${state.testingCompany}[/CODE]` +
-                `[B]Material needed:[/B][CODE]${state.materialNeeded}[/CODE]` +
-                `[B]Testing time, days:[/B][CODE]${state.testingTime}[/CODE]` +
-                `[B]to be sent on:[/B][CODE]${sentOn}[/CODE]` +
-                `[B]to be received on:[/B][CODE]${receivedOn}[/CODE]` +
-                `[B]tests to be started on:[/B][CODE]${startedOn}[/CODE]` +
-                `[B]tests to be finished on:[/B][CODE]${finishedOn}[/CODE]` +
-                `[B]results to be received on:[/B][CODE]${resultsReceived}[/CODE]`,
+            DESCRIPTION: `[B]Applicant name:[/B] ${state.applicantName}\n` +
+                `[B]Product:[/B] ${state.product}\n` +
+                `[B]Code:[/B] ${state.code}\n` +
+                `[B]Article:[/B] ${state.article}\n` +
+                `[B]Colour:[/B] ${state.colour}\n` +
+                `[B]Length of sample, meters:[/B] ${state.length}\n` +
+                `[B]Width of sample, meters:[/B] ${state.width}\n` +
+                `[B]Part number:[/B] ${state.partNumber}\n` +
+                `[B]Roll number:[/B] ${state.rollNumber}\n` +
+                `[B]ISO:[/B] ${iso}\n` +
+                `[B]Testing company:[/B] ${testingCompany}\n` +
+                `[B]Material needed:[/B] ${state.materialNeeded}\n` +
+                `[B]Testing time, days:[/B] ${state.testingTime}\n` +
+                `[B]to be sent on:[/B] ${sentOn}\n` +
+                `[B]to be received on:[/B] ${receivedOn}\n` +
+                `[B]tests to be started on:[/B] ${startedOn}\n` +
+                `[B]tests to be finished on:[/B] ${finishedOn}\n` +
+                `[B]results to be received on:[/B] ${resultsReceived}`,
                 ...this.default_params
         }
     };
     
     create_task(state) {
-        const data = Object.assign({}, this.formTaskFields(state))
+        const data = Object.assign({}, this.formTaskFields(state));
         return axios({
             method: 'post',
             url: `${this.main_url}/${this.creator_id}/${this.webhook_key}/task.item.add/`,
@@ -117,13 +117,16 @@ class B24 {
         });
     }
 
-    update_task(state) {
-        const data = Object.assign({}, this.formTaskFields(state))
+    update_task(state, task_id = null) {
+        if (task_id === null) {
+            throw new Error('task id is not defined');
+        }
+        const data = Object.assign({}, this.formTaskFields(state));
         return axios({
             method: 'post',
             url: `${this.main_url}/${this.creator_id}/${this.webhook_key}/task.item.update/`,
             headers: { 'content-type': 'application/x-www-form-urlencoded' },
-            data: qs.stringify([state.task_id, data])
+            data: qs.stringify([task_id, data])
         });
     }
 
@@ -141,14 +144,21 @@ class B24 {
             url: `${this.main_url}/${this.creator_id}/${this.webhook_key}/task.item.list?` + qs.stringify(params),
         })
     }
-    get_task(id = null) {
+    async get_task(id = null) {
         if (id === null) {
             throw new Error('id is not defined');
         }
-        return axios({
+        const response = await axios({
             method: 'get',
             url: `${this.main_url}/${this.creator_id}/${this.webhook_key}/task.item.getdata?ID=${id}`,
-        })
+        });
+
+        if (response.data.result) {
+            var task = {...response.data.result};
+            task.state = parse(response.data.result.DESCRIPTION);
+        }
+
+        return task;
     }
 }
 

@@ -1,29 +1,85 @@
 import React from 'react';
 import Loader from 'react-loader-spinner';
+import moment from 'moment';
 import B24 from './B24.js';
 import './css/style.css';
 
-const Task = (props) =>
-    <tr>
-        <td>{props.position}</td>
-        <td>{props.data.RESPONSIBLE_NAME}</td>
-        <td>
-            <a href={`/edit/${props.data.ID}`}>{props.data.TITLE}</a>
-        </td>
-        <td>
-            <a target="_blank" rel="noopener noreferrer"
-            href={`https://xmtextiles.bitrix24.ru/workgroups/group/21/tasks/task/view/${props.data.ID}/`}>
-            B24 link</a>
-        </td>
-    </tr>;
+class Task extends React.Component {
+    constructor(props) {
+        super(props);
+        this.props = props;
+        this.state = {};
+    }
+    componentDidMount() {
+      const b24 = new B24();
+      const response = (async () => await b24.get_task(this.props.task.ID))();
+      response.then(task => {
+        if (task.state) {
+          this.setState({...task.state});
+        } else {
+          this.setState({
+            article: '-',
+            iso: [],
+            resultsReceived: '-',
+            sentOn: '-'
+          });
+        }
+      });
+    }
+    waiter = () => <Loader type="Circles" color="#996C96" height="30" width="30"/>;
+  
+    render() {
+      return (
+        <tr>
+          <td>{this.props.position}</td>
+          <td>N/A yet</td>
+          <td>
+              <a href={`/edit/${this.props.task.ID}`}>{this.props.task.TITLE}</a>
+          </td>
+          <td>
+              <a target="_blank" rel="noopener noreferrer"
+              href={`https://xmtextiles.bitrix24.ru/workgroups/group/21/tasks/task/view/${this.props.task.ID}/`}>link</a>
+          </td>
+          <td>
+              {this.state.sentOn
+              ? (this.state.sentOn === '-') ? '-' : moment(this.state.sentOn).format("DD MMM YYYY")
+              : this.waiter()}
+          </td>
+          <td>{ this.state.resultsReceived
+            ?  (this.state.resultsReceived === '-') ? '-' : moment(this.state.resultsReceived).format("DD MMM YYYY")
+            : this.waiter() }
+          </td>
+          <td />
+          <td />
+          <td>
+            {this.state.article
+              ? this.state.article
+              : this.waiter()}
+          </td>
+          <td>
+            {(this.state.iso)
+             ? this.state.iso.map(el => el.value).join(', ')
+             : this.waiter()
+            }
+          </td>
+        </tr>
+      );
+    }
+}
 
 const ListHeader = () => 
     <thead>
         <tr>
             <th scope="col">#</th>
-            <th scope="col">Responsible Employee</th>
+            <th scope="col">Serial Number</th>
             <th scope="col">Task name</th>
             <th scope="col">B24 Link</th>
+            <th scope="col">Created On</th>
+            <th scope="col">Готовность</th>
+            <th scope="col">Test-report</th>
+            <th scope="col">Cert</th>
+            <th scope="col">Ткань</th>
+            <th scope="col">Стандарт</th>
         </tr>
     </thead>
 
@@ -40,9 +96,7 @@ export default class List extends React.Component {
         ? <table className="table">
             <ListHeader />
             <tbody>
-              {this.state.tasks.map(task => {
-                  return <Task key={task.ID} data={task} position={position++}/>;
-              })}
+              {this.state.tasks.map(task => <Task key={task.ID} task={task} position={position++}/>)}
             </tbody>
           </table>
         : <div className="loader-place row align-items-center">

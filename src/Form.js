@@ -1,12 +1,13 @@
 import React from 'react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import B24, { parse } from './B24.js';
-import Notification from './Notification.js';
 import Select from 'react-select';
+import B24 from './B24.js';
+import Notification from './Notification.js';
+import handlePDF from './PDF.js';
 
 
-const default_state = {
+const init_state = {
   applicantName: 'SHANGHAI XM GROUP LTD',
   product: '60% Modacrylic, 39%Cotton, 1%AS 280gsm',
   code: '60MA/39C/1AS-280 FR-Knit',
@@ -16,34 +17,51 @@ const default_state = {
   width: 1.5,
   partNumber: 'partNumber 1493',
   rollNumber: 'rollNumber 1395',
-  testingCompany: `AITEX Headquarters
-Plaza Emilio Sala 1, 03801 Alcoy (Alicante) Spain.
-Tel.: +34 965 542 200
-Fax.: +34 965 543 494
-Attn.: Ms Marian Domingo`,
+  testingCompany: `Aitex Headquarters (Spain)`,
+// Plaza Emilio Sala 1, 03801 Alcoy (Alicante) Spain.
+// Tel.: +34 965 542 200
+// Fax.: +34 965 543 494
+// Attn.: Ms Marian Domingo`,
   materialNeeded: '1 lineal meters',
   testingTime: 21,
   iso: 'ISO 17493',
-}
+};
+
+const empty_state = {
+  applicantName: '',
+  product: '',
+  code: '',
+  article: '',
+  colour: '',
+  length: 1,
+  width: 1.5,
+  partNumber: '',
+  rollNumber: '',
+  testingCompany: ``,
+  materialNeeded: '',
+  testingTime: 21,
+  iso: ''
+};
 
 
 export default class Form extends React.Component {
     constructor (props){
         super(props);
+        this.task_id = props.match.params.id ? props.match.params.id : null;
         this.handleChange = this.handleChange.bind(this);
         this.handleDateChange = this.handleDateChange.bind(this);
-        if (props.match.params.id) {
-          this.state = {};
-          new B24().get_task(props.match.params.id)
-          .then(response => {
-            const stateFromAPI = parse(response);
-            this.setState({ ...stateFromAPI, task_id: props.match.params.id});
-          });
-          return;
-        }
-        this.state = { ...default_state };
+        this.state = {...empty_state};
     }
-    get_pdf = () => alert('yet to be implemented soon')
+
+    componentDidMount() {
+      if (this.task_id) {
+        new B24().get_task(this.task_id).then(task => {
+          this.setState({...task.state});
+        });
+      } else {
+        this.setState({ ...init_state })
+      }
+    }
 
     handleDateChange(date, prop_name) {
       this.setState({
@@ -51,15 +69,22 @@ export default class Form extends React.Component {
       });
     }
 
-    handleSelectChange = (selectedOption) => this.setState({ [selectedOption[0].id]: selectedOption });
+    handleSelectChange = (selectedOption, id) => {
+      console.log(selectedOption);
+      if (selectedOption) {
+        this.setState({ [id]: selectedOption });
+      } else {
+        this.setState({ id: selectedOption });
+      }
+    }
     handleChange = (e) => this.setState({[e.target.id]: e.target.value});
 
     handleCert (e){
       e.preventDefault();
       if (window.confirm('Are you sure?')) {
         const b24 = new B24();
-        (this.state.task_id)
-        ? b24.update_task(this.state)
+        (this.task_id)
+        ? b24.update_task(this.state, this.task_id)
           .then(() => this.setState({request_status: 'success'}))
           .catch(() => this.setState({request_status: 'failure'}))
         : b24.create_task(this.state)
@@ -79,7 +104,6 @@ export default class Form extends React.Component {
                   result={this.state.request_status}
                 />
               : ''}
-
             <form onSubmit={(e) => this.handleCert(e)}>
                 <div className="form-row">
                   <div className="col">
@@ -221,7 +245,7 @@ export default class Form extends React.Component {
                     isMulti
                     required
                     value={this.state.iso}
-                    onChange={this.handleSelectChange}
+                    onChange={e => this.handleSelectChange(e, 'iso')}
                     id="iso"
                     options={[
                       {value: 'ISO 17893', label: 'ISO 17893', id: 'iso'},
@@ -234,14 +258,10 @@ export default class Form extends React.Component {
               <div className="col-md-3">
                 <div className="form-group">
                   Testing company
-                  {/* <textarea className="form-control" id="tester" rows="5" cols="150" required
-                    value={this.state.tester}
-                    onChange={this.handleChange}
-                  /> */}
                   <Select
                       isMulti
                       value={this.state.testingCompany}
-                      onChange={this.handleSelectChange}
+                      onChange={e => this.handleSelectChange(e, 'testingCompany')}
                       id="testingCompany"
                       options={[
                         {value: 'Aitex Headquarters (Spain)', label: 'Aitex Headquarters (Spain)', id: 'testingCompany'},
@@ -308,7 +328,7 @@ export default class Form extends React.Component {
 
                 <div className="col">
                   <div className="form-group">
-                    results to be received on:
+                    Results to be received on:
                     <DatePicker className="form-control" required
                         selected={this.state.resultsReceived}
                         dateFormat="ddMMMyyyy"
@@ -317,7 +337,6 @@ export default class Form extends React.Component {
                   </div>
                 </div>
               </div>
-
               <div className="form-group row">
                 <div className="col">
                   <button type="submit"
@@ -326,7 +345,7 @@ export default class Form extends React.Component {
                 </div>
                 <div className="col">
                   <button className="btn btn-info btn-block"
-                    onClick={this.get_pdf}
+                    onClick={handlePDF}
                   >Get .PDF</button>
                 </div>
               </div>
