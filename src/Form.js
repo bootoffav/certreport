@@ -5,6 +5,7 @@ import Select from 'react-select';
 import B24 from './B24.js';
 import Notification from './Notification.js';
 import handlePDF from './PDF.js';
+import SerialNumber from './SerialNumber.js';
 
 
 const init_state = {
@@ -17,14 +18,14 @@ const init_state = {
   width: 1.5,
   partNumber: 'partNumber 1493',
   rollNumber: 'rollNumber 1395',
-  testingCompany: `Aitex Headquarters (Spain)`,
+  testingCompany: [],
 // Plaza Emilio Sala 1, 03801 Alcoy (Alicante) Spain.
 // Tel.: +34 965 542 200
 // Fax.: +34 965 543 494
 // Attn.: Ms Marian Domingo`,
   materialNeeded: '1 lineal meters',
   testingTime: 21,
-  iso: 'ISO 17493',
+  iso: [],
 };
 
 const empty_state = {
@@ -37,10 +38,10 @@ const empty_state = {
   width: 1.5,
   partNumber: '',
   rollNumber: '',
-  testingCompany: ``,
+  testingCompany: [],
   materialNeeded: '',
   testingTime: 21,
-  iso: ''
+  iso: []
 };
 
 
@@ -48,8 +49,6 @@ export default class Form extends React.Component {
     constructor (props){
         super(props);
         this.task_id = props.match.params.id ? props.match.params.id : null;
-        this.handleChange = this.handleChange.bind(this);
-        this.handleDateChange = this.handleDateChange.bind(this);
         this.state = {...empty_state};
     }
 
@@ -63,21 +62,17 @@ export default class Form extends React.Component {
       }
     }
 
-    handleDateChange(date, prop_name) {
+    handleDateChange = (date, prop_name) =>
       this.setState({
         [prop_name]: date
       });
-    }
 
-    handleSelectChange = (selectedOption, id) => {
-      console.log(selectedOption);
-      if (selectedOption) {
-        this.setState({ [id]: selectedOption });
-      } else {
-        this.setState({ id: selectedOption });
-      }
-    }
-    handleChange = (e) => this.setState({[e.target.id]: e.target.value});
+    handleSelectChange = (selectedOption, id) => 
+      (selectedOption)
+      ? this.setState({ [id]: selectedOption })
+      : this.setState({ id: selectedOption });
+
+    handleChange = e => this.setState({[e.target.id]: e.target.value});
 
     handleCert (e){
       e.preventDefault();
@@ -85,23 +80,29 @@ export default class Form extends React.Component {
         const b24 = new B24();
         (this.task_id)
         ? b24.update_task(this.state, this.task_id)
-          .then(() => this.setState({request_status: 'success'}))
+          .then(() => this.afterSuccessfulSubmit())
           .catch(() => this.setState({request_status: 'failure'}))
         : b24.create_task(this.state)
-          .then(() => this.setState({request_status: 'success'}))
+          .then(() => this.afterSuccessfulSubmit())
           .catch(() => this.setState({request_status: 'failure'}))
         ;
       }
-      // setTimeout(() => window.location.replace("/"), 4000);
+      setTimeout(() => window.location.replace("/"), 4000);
+    }
+
+    afterSuccessfulSubmit() {
+      this.setState({request_status: 'success'});
+      SerialNumber.update(Number(this.state.serialNumber) + 1);
     }
 
     render() {
+      const request_status = this.state.request_status;
         return (
           <div className="form-place">
             {(this.state.request_status)
               ? 
                 <Notification
-                  result={this.state.request_status}
+                  result={request_status}
                 />
               : ''}
             <form onSubmit={(e) => this.handleCert(e)}>
@@ -269,18 +270,22 @@ export default class Form extends React.Component {
                       ]}
                     />
                 </div>
-                </div>
-
-                <div className="col-md-2">
-                  Days:
-                  <input required
-                  className="form-control"
-                  type="number"
-                  id="testingTime"
-                  value={this.state.testingTime}
-                  onChange={this.handleChange}/>
-                </div>
               </div>
+              <div className="col-md-2">
+                Days:
+                <input required
+                className="form-control"
+                type="number"
+                id="testingTime"
+                value={this.state.testingTime}
+                onChange={this.handleChange}/>
+              </div>
+              <SerialNumber serialNumber={this.state.serialNumber || 0}
+                            handleChange={this.handleChange}
+                            handleInit={v => this.setState({serialNumber: v})}
+                            url={this.props.match.url}
+              />
+            </div>
 
               <div className="form-row">
                 <div className="col">

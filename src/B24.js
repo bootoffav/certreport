@@ -12,6 +12,7 @@ function parse(description) {
       'Code': 'code',
       'Article': 'article',
       'Colour': 'colour',
+      'Serial number': 'serialNumber',
       'Length of sample, meters': 'length',
       'Width of sample, meters': 'width',
       'Part number': 'partNumber',
@@ -90,6 +91,7 @@ class B24 {
                 `[B]Code:[/B] ${state.code}\n` +
                 `[B]Article:[/B] ${state.article}\n` +
                 `[B]Colour:[/B] ${state.colour}\n` +
+                `[B]Serial number:[/B] ${state.serialNumber}\n` +
                 `[B]Length of sample, meters:[/B] ${state.length}\n` +
                 `[B]Width of sample, meters:[/B] ${state.width}\n` +
                 `[B]Part number:[/B] ${state.partNumber}\n` +

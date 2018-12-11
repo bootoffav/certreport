@@ -1,12 +1,7 @@
 import React from 'react';
 
-class Notification extends React.Component {
-  constructor(props) {
-    super(props);
-    this.result = props.result;
-  }
-  render() {
-    return (this.result === 'success')
+const Notification = props =>
+    props.result === 'success'
     ?
       <div className="alert alert-success" role="alert">
         <h4 className="alert-heading">Success!</h4>
@@ -16,7 +11,6 @@ class Notification extends React.Component {
       <div className="alert alert-danger" role="alert">
         <h4 className="alert-heading">Failure</h4>
         <p>Try to update a bit later!</p>
-      </div>;
-    }
-}
+      </div>
+
 export default Notification;
