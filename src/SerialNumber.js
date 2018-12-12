@@ -25,6 +25,7 @@ class SerialNumber extends React.Component {
         className="form-control"
         type="number"
         id="serialNumber"
+        placeholder="Loading ..."
         value={this.props.serialNumber}
         onChange={this.props.handleChange}/>
       </div>

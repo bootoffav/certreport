@@ -38,6 +38,7 @@ const empty_state = {
   width: 1.5,
   partNumber: '',
   rollNumber: '',
+  serialNumber: '',
   testingCompany: [],
   materialNeeded: '',
   testingTime: 21,
@@ -80,21 +81,30 @@ export default class Form extends React.Component {
         const b24 = new B24();
         (this.task_id)
         ? b24.update_task(this.state, this.task_id)
-          .then(() => this.afterSuccessfulSubmit())
-          .catch(() => this.setState({request_status: 'failure'}))
+          .then(
+            () => this.afterSuccessfulSubmit(),
+            () => this.afterUnsuccessfulSubmit()
+          )
         : b24.create_task(this.state)
-          .then(() => this.afterSuccessfulSubmit())
-          .catch(() => this.setState({request_status: 'failure'}))
-        ;
+          .then(
+            () => this.afterSuccessfulSubmit(),
+            () => this.afterUnsuccessfulSubmit()
+          )
       }
-      setTimeout(() => window.location.replace("/"), 4000);
     }
 
     afterSuccessfulSubmit() {
       this.setState({request_status: 'success'});
       SerialNumber.update(Number(this.state.serialNumber) + 1);
+      setTimeout(() => window.location.replace("/"), 4000);
     }
 
+    afterUnsuccessfulSubmit() {
+      this.setState({request_status: 'failure'})
+      setTimeout(() => this.setState({
+        request_status: ''
+      }), 3000);
+    }
     render() {
       const request_status = this.state.request_status;
         return (
@@ -280,7 +290,7 @@ export default class Form extends React.Component {
                 value={this.state.testingTime}
                 onChange={this.handleChange}/>
               </div>
-              <SerialNumber serialNumber={this.state.serialNumber || 0}
+              <SerialNumber serialNumber={this.state.serialNumber}
                             handleChange={this.handleChange}
                             handleInit={v => this.setState({serialNumber: v})}
                             url={this.props.match.url}

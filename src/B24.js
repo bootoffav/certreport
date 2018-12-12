@@ -29,22 +29,24 @@ function parse(description) {
     }
 
     const parseSelectable = (prop_name, selectee) => {
-        const ret_iso = [];
+      const selected = [];
+      if (selectee !== '') {
         selectee.split(',').forEach(value => {
-            const standard = value.trim();
-            ret_iso.push({
-                value: standard,
-                label: standard,
-                id: prop_name
-            });
+          const standard = value.trim();
+          selected.push({
+            value: standard,
+            label: standard,
+            id: prop_name
+          });
         });
-        return ret_iso;
+      }
+      return selected;
     }
     const newState = {};
     description = description
-                    .replace(/\[\/B\]/gi, ':prop_value_separator:')
-                    .replace(/\[B\]|/gi, '')
-                    .split('\n');
+        .replace(/\[\/B\]/gi, ':prop_value_separator:')
+        .replace(/\[B\]|/gi, '')
+        .split('\n');
     const dates = ['sentOn', 'receivedOn', 'startedOn', 'finishedOn', 'resultsReceived'];
     
     description.forEach(prop => {
@@ -53,12 +55,11 @@ function parse(description) {
         newState[prop_map[prop_name]] = new Date(prop_value.trim());
       }
       else if (prop_map[prop_name] === 'iso' || prop_map[prop_name] === 'testingCompany') {
-          newState[prop_map[prop_name]] = parseSelectable(prop_map[prop_name], prop_value.trim())
+        newState[prop_map[prop_name]] = parseSelectable(prop_map[prop_name], prop_value.trim())
       } else {
-            newState[prop_map[prop_name]] = prop_value.trim();
+        newState[prop_map[prop_name]] = prop_value.trim();
       }
     });
-    
     return newState;
 };
 
