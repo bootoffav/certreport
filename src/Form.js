@@ -2,7 +2,7 @@ import React from 'react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select';
-import B24 from './B24.js';
+import B24, { parseSelectable } from './B24.js';
 import Notification from './Notification.js';
 import handlePDF from './PDF.js';
 import SerialNumber from './SerialNumber.js';
@@ -56,6 +56,9 @@ export default class Form extends React.Component {
     componentDidMount() {
       if (this.task_id) {
         new B24().get_task(this.task_id).then(task => {
+          this.setState({ testingCompanyNonConverted: task.state.testingCompany, isoNonConverted: task.state.iso});
+          task.state.testingCompany = parseSelectable('testingCompany', task.state.testingCompany);
+          task.state.iso = parseSelectable('iso', task.state.iso);
           this.setState({...task.state});
         });
       } else {
@@ -343,7 +346,7 @@ export default class Form extends React.Component {
 
                 <div className="col">
                   <div className="form-group">
-                    Results to be received on:
+                    Results received on:
                     <DatePicker className="form-control" required
                         selected={this.state.resultsReceived}
                         dateFormat="ddMMMyyyy"
@@ -360,7 +363,7 @@ export default class Form extends React.Component {
                 </div>
                 <div className="col">
                   <button className="btn btn-info btn-block"
-                    onClick={handlePDF}
+                    onClick={(e) => handlePDF(e, this.state)}
                   >Get .PDF</button>
                 </div>
               </div>

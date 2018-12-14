@@ -2,6 +2,22 @@ import axios from 'axios';
 import qs from 'qs';
 import moment from 'moment';
 
+const parseSelectable = (prop_name, selectee) => {
+    const selected = [];
+    if (selectee !== '') {
+      selectee.split(',').forEach(value => {
+        const standard = value.trim();
+        selected.push({
+          value: standard,
+          label: standard,
+          id: prop_name
+        });
+      });
+    }
+    return selected;
+  }
+
+
 function parse(description) {
     if (description.indexOf(':[/B]') === -1) {
         return null; // is not valid for parsing
@@ -28,20 +44,6 @@ function parse(description) {
       'results to be received on': 'resultsReceived'
     }
 
-    const parseSelectable = (prop_name, selectee) => {
-      const selected = [];
-      if (selectee !== '') {
-        selectee.split(',').forEach(value => {
-          const standard = value.trim();
-          selected.push({
-            value: standard,
-            label: standard,
-            id: prop_name
-          });
-        });
-      }
-      return selected;
-    }
     const newState = {};
     description = description
         .replace(/\[\/B\]/gi, ':prop_value_separator:')
@@ -54,9 +56,10 @@ function parse(description) {
       if (dates.includes(prop_map[prop_name])) {
         newState[prop_map[prop_name]] = new Date(prop_value.trim());
       }
-      else if (prop_map[prop_name] === 'iso' || prop_map[prop_name] === 'testingCompany') {
-        newState[prop_map[prop_name]] = parseSelectable(prop_map[prop_name], prop_value.trim())
-      } else {
+    //   else if (prop_map[prop_name] === 'iso' || prop_map[prop_name] === 'testingCompany') {
+    //     newState[prop_map[prop_name]] = parseSelectable(prop_map[prop_name], prop_value.trim())
+    //   } 
+      else {
         newState[prop_map[prop_name]] = prop_value.trim();
       }
     });
@@ -166,4 +169,4 @@ class B24 {
 }
 
 export default B24;
-export { parse };
+export { parse, parseSelectable };

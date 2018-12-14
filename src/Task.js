@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import Loader from 'react-loader-spinner';
-import B24 from './B24.js';
+import B24, { parseSelectable } from './B24.js';
 
 export default class Task extends React.Component {
   constructor(props) {
@@ -14,6 +14,8 @@ export default class Task extends React.Component {
     const response = (async () => await b24.get_task(this.props.task.ID))();
     response.then(task => {
       if (task.state) {
+        task.state.testingCompany = parseSelectable('testingCompany', task.state.testingCompany);
+        task.state.iso = parseSelectable('iso', task.state.iso);
         this.setState({...task.state});
       } else {
         this.setState({
