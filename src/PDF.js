@@ -1,4 +1,5 @@
 import * as jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 import m from 'moment';
 
 function handlePDF(e, state) {
