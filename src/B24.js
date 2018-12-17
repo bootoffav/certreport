@@ -2,21 +2,6 @@ import axios from 'axios';
 import qs from 'qs';
 import moment from 'moment';
 
-const parseSelectable = (prop_name, selectee) => {
-    const selected = [];
-    if (selectee !== '') {
-      selectee.split(',').forEach(value => {
-        const standard = value.trim();
-        selected.push({
-          value: standard,
-          label: standard,
-          id: prop_name
-        });
-      });
-    }
-    return selected;
-  }
-
 
 function parse(description) {
     if (description.indexOf(':[/B]') === -1) {
@@ -49,19 +34,10 @@ function parse(description) {
         .replace(/\[\/B\]/gi, ':prop_value_separator:')
         .replace(/\[B\]|/gi, '')
         .split('\n');
-    const dates = ['sentOn', 'receivedOn', 'startedOn', 'finishedOn', 'resultsReceived'];
-    
+
     description.forEach(prop => {
       const [prop_name, prop_value] = prop.split('::prop_value_separator:');
-      if (dates.includes(prop_map[prop_name])) {
-        newState[prop_map[prop_name]] = new Date(prop_value.trim());
-      }
-    //   else if (prop_map[prop_name] === 'iso' || prop_map[prop_name] === 'testingCompany') {
-    //     newState[prop_map[prop_name]] = parseSelectable(prop_map[prop_name], prop_value.trim())
-    //   } 
-      else {
-        newState[prop_map[prop_name]] = prop_value.trim();
-      }
+      newState[prop_map[prop_name]] = prop_value.trim();
     });
     return newState;
 };
@@ -78,18 +54,13 @@ class B24 {
         TAGS: ['certification']
     }
 
-    formTaskFields = (state) => {
-        const sentOn = moment(state.sentOn).format("DDMMMYYYY");
-        const receivedOn = moment(state.receivedOn).format("DDMMMYYYY");
-        const startedOn = moment(state.startedOn).format("DDMMMYYYY");
-        const finishedOn = moment(state.finishedOn).format("DDMMMYYYY");
-        const resultsReceived = moment(state.resultsReceived).format("DDMMMYYYY");
-        const iso = state.iso.map(standard => standard.value).join(', ');
-        const testingCompany = state.testingCompany.map(company => company.value).join(', ');
+    formTaskFields = state => {
+        const formatDate = date => moment(date).format("DDMMMYYYY");
+        const formatSelectee = selectee => selectee.map(item => item.value).join(', ');
 
         return {
-            TITLE: `${state.rollNumber}_AITEX - ${iso} ${state.colour} - ${state.article} ` +
-                `${state.applicantName} (to send ${sentOn} - plan ${finishedOn} )`,
+            TITLE: `${state.rollNumber}_AITEX - ${formatSelectee(state.iso)} ${state.colour} - ${state.article} ` +
+                `${state.applicantName} (to send ${formatDate(state.sentOn)} - plan ${formatDate(state.finishedOn)} )`,
             DESCRIPTION: `[B]Applicant name:[/B] ${state.applicantName}\n` +
                 `[B]Product:[/B] ${state.product}\n` +
                 `[B]Code:[/B] ${state.code}\n` +
@@ -100,15 +71,15 @@ class B24 {
                 `[B]Width of sample, meters:[/B] ${state.width}\n` +
                 `[B]Part number:[/B] ${state.partNumber}\n` +
                 `[B]Roll number:[/B] ${state.rollNumber}\n` +
-                `[B]ISO:[/B] ${iso}\n` +
-                `[B]Testing company:[/B] ${testingCompany}\n` +
+                `[B]ISO:[/B] ${formatSelectee(state.iso)}\n` +
+                `[B]Testing company:[/B] ${formatSelectee(state.testingCompany)}\n` +
                 `[B]Material needed:[/B] ${state.materialNeeded}\n` +
                 `[B]Testing time, days:[/B] ${state.testingTime}\n` +
-                `[B]to be sent on:[/B] ${sentOn}\n` +
-                `[B]to be received on:[/B] ${receivedOn}\n` +
-                `[B]tests to be started on:[/B] ${startedOn}\n` +
-                `[B]tests to be finished on:[/B] ${finishedOn}\n` +
-                `[B]results to be received on:[/B] ${resultsReceived}`,
+                `[B]to be sent on:[/B] ${formatDate(state.sentOn)}\n` +
+                `[B]to be received on:[/B] ${formatDate(state.receivedOn)}\n` +
+                `[B]tests to be started on:[/B] ${formatDate(state.startedOn)}\n` +
+                `[B]tests to be finished on:[/B] ${formatDate(state.finishedOn)}\n` +
+                `[B]results to be received on:[/B] ${formatDate(state.resultsReceived)}`,
                 ...this.default_params
         }
     };
@@ -169,4 +140,4 @@ class B24 {
 }
 
 export default B24;
-export { parse, parseSelectable };
+export { parse };

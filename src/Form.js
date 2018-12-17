@@ -2,10 +2,12 @@ import React from 'react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select';
-import B24, { parseSelectable } from './B24.js';
+import B24 from './B24.js';
 import Notification from './Notification.js';
 import handlePDF from './PDF.js';
 import SerialNumber from './SerialNumber.js';
+import { parseSelectable, parseDates } from './Helpers.js';
+import m from 'moment';
 
 
 const init_state = {
@@ -45,21 +47,25 @@ const empty_state = {
   iso: []
 };
 
-
 export default class Form extends React.Component {
     constructor (props){
         super(props);
         this.task_id = props.match.params.id ? props.match.params.id : null;
-        this.state = {...empty_state};
+        this.state = { ...empty_state };
     }
 
     componentDidMount() {
       if (this.task_id) {
         new B24().get_task(this.task_id).then(task => {
-          this.setState({ testingCompanyNonConverted: task.state.testingCompany, isoNonConverted: task.state.iso});
-          task.state.testingCompany = parseSelectable('testingCompany', task.state.testingCompany);
-          task.state.iso = parseSelectable('iso', task.state.iso);
-          this.setState({...task.state});
+          console.log(parseDates(task.state));
+          this.setState({
+            ...task.state,
+            ...parseDates(task.state),
+            testingCompany_PDF: task.state.testingCompany,
+            iso_PDF: task.state.iso,
+            iso: parseSelectable('iso', task.state.iso),
+            testingCompany: parseSelectable('iso', task.state.testingCompany),
+          });
         });
       } else {
         this.setState({ ...init_state })
@@ -68,7 +74,7 @@ export default class Form extends React.Component {
 
     handleDateChange = (date, prop_name) =>
       this.setState({
-        [prop_name]: date
+        [prop_name]: m(date)
       });
 
     handleSelectChange = (selectedOption, id) => 
@@ -305,8 +311,8 @@ export default class Form extends React.Component {
                   <div className="form-group">
                     Sent on:
                         <DatePicker className="form-control" required
-                          selected={this.state.sentOn}
-                          dateFormat="ddMMMyyyy"
+                          selected={this.state.sentOn ? this.state.sentOn.toDate() : ''}
+                          dateFormat="dd.MM.yyyy"
                           onChange={date => this.handleDateChange(date, 'sentOn')}
                           />
                   </div>
@@ -315,8 +321,8 @@ export default class Form extends React.Component {
                   <div className="form-group">
                   Received on:
                     <DatePicker className="form-control" required
-                      selected={this.state.receivedOn}
-                      dateFormat="ddMMMyyyy"
+                      selected={this.state.receivedOn ? this.state.receivedOn.toDate() : ''}
+                      dateFormat="dd.MM.yyyy"
                       onChange={date => this.handleDateChange(date, 'receivedOn')}
                       />
                   </div>
@@ -326,8 +332,8 @@ export default class Form extends React.Component {
                   <div className="form-group">
                     Started on:
                       <DatePicker className="form-control" required
-                        selected={this.state.startedOn}
-                        dateFormat="ddMMMyyyy"
+                        selected={this.state.startedOn ? this.state.startedOn.toDate() : ''}
+                        dateFormat="dd.MM.yyyy"
                         onChange={date => this.handleDateChange(date, 'startedOn')}
                       />
                   </div>
@@ -337,8 +343,8 @@ export default class Form extends React.Component {
                   <div className="form-group">
                     Finished on:
                     <DatePicker className="form-control" required
-                        selected={this.state.finishedOn}
-                        dateFormat="ddMMMyyyy"
+                        selected={this.state.finishedOn ? this.state.finishedOn.toDate() : ''}
+                        dateFormat="dd.MM.yyyy"
                         onChange={date => this.handleDateChange(date, 'finishedOn')}
                       />
                   </div>
@@ -348,8 +354,8 @@ export default class Form extends React.Component {
                   <div className="form-group">
                     Results received on:
                     <DatePicker className="form-control" required
-                        selected={this.state.resultsReceived}
-                        dateFormat="ddMMMyyyy"
+                        selected={this.state.resultsReceived ? this.state.resultsReceived.toDate() : ''}
+                        dateFormat="dd.MM.yyyy"
                         onChange={date => this.handleDateChange(date, 'resultsReceived')}
                         />
                   </div>

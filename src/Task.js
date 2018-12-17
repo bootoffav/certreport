@@ -1,7 +1,9 @@
 import React from 'react';
-import moment from 'moment';
+// import moment from 'moment';
 import Loader from 'react-loader-spinner';
-import B24, { parseSelectable } from './B24.js';
+import B24 from './B24.js';
+import { parseSelectable, parseDates } from './Helpers.js';
+
 
 export default class Task extends React.Component {
   constructor(props) {
@@ -14,9 +16,11 @@ export default class Task extends React.Component {
     const response = (async () => await b24.get_task(this.props.task.ID))();
     response.then(task => {
       if (task.state) {
-        task.state.testingCompany = parseSelectable('testingCompany', task.state.testingCompany);
-        task.state.iso = parseSelectable('iso', task.state.iso);
-        this.setState({...task.state});
+        this.setState({
+          ...task.state,
+          ...parseDates(task.state),
+          iso: parseSelectable('iso', task.state.iso)
+        });
       } else {
         this.setState({
           article: '-',
@@ -34,8 +38,8 @@ export default class Task extends React.Component {
       <tr>
         <td>{this.props.position}</td>
         <td>{this.state.serialNumber}</td>
-        <td>
-            <a href={`/edit/${this.props.task.ID}`}>{this.props.task.TITLE}</a>
+        <td width="25%">
+            <a href={`/edit/${this.props.task.ID}`}>{this.props.task.TITLE.substr(0, 60)}...</a>
         </td>
         <td>
             <a target="_blank" rel="noopener noreferrer"
@@ -43,11 +47,11 @@ export default class Task extends React.Component {
         </td>
         <td>
             {this.state.sentOn
-            ? (this.state.sentOn === '-') ? '-' : moment(this.state.sentOn).format("DD MMM YYYY")
+            ? (this.state.sentOn === '-') ? '-' : this.state.sentOn.format("DDMMMYYYY")
             : this.waiter()}
         </td>
         <td>{ this.state.resultsReceived
-          ?  (this.state.resultsReceived === '-') ? '-' : moment(this.state.resultsReceived).format("DD MMM YYYY")
+          ?  (this.state.resultsReceived === '-') ? '-' : this.state.resultsReceived.format("DDMMMYYYY")
           : this.waiter() }
         </td>
         <td />

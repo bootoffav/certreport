@@ -1,6 +1,4 @@
 import * as jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
-import B24 from './B24.js';
 import m from 'moment';
 
 function handlePDF(e, state) {
@@ -40,8 +38,8 @@ function handlePDF(e, state) {
     };
 
   pdf.setFontSize(12);
-  pdf.text(`Standards: ${state.isoNonConverted}`, 15, 80);
-  pdf.text(`Testing company: ${state.testingCompanyNonConverted}`, 15, 85);
+  pdf.text(`Standards: ${state.iso_PDF}`, 15, 80);
+  pdf.text(`Testing company: ${state.testingCompany_PDF}`, 15, 85);
   pdf.text(`Materials needed: ${state.materialNeeded}`, 15, 90);
   pdf.text(`Testing Time: ${state.testingTime}`, 15, 95);
   pdf.text(`Sent on: ${m(state.sentOn).format("DD MMMM YYYY")}`, 15, 100);
