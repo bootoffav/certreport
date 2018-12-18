@@ -6,7 +6,7 @@ import B24 from './B24.js';
 import Notification from './Notification.js';
 import handlePDF from './PDF.js';
 import SerialNumber from './SerialNumber.js';
-import { parseSelectable, parseDates } from './Helpers.js';
+// import { parseSelectable, parseDates } from './Helpers.js';
 import m from 'moment';
 
 
@@ -48,24 +48,8 @@ const empty_state = {
 };
 
 export default class Form extends React.Component {
-    task_id = this.props.match.params.id ? this.props.match.params.id : null;
-    state = { ...empty_state };
-
-    componentDidMount = () => {
-      if (this.task_id) {
-        B24.get_task(this.task_id)
-          .then(task => this.setState({
-            ...task.state,
-            ...parseDates(task.state),
-            testingCompany_PDF: task.state.testingCompany,
-            iso_PDF: task.state.iso,
-            iso: parseSelectable('iso', task.state.iso),
-            testingCompany: parseSelectable('iso', task.state.testingCompany),
-          }));
-      // } else {
-        // this.setState({ ...init_state })
-      }
-    }
+    task_id = this.props.match.params.id || null;
+    state = this.props.location.state || { ...empty_state };
 
     handleDateChange = (date, prop_name) =>
       this.setState({
@@ -110,7 +94,7 @@ export default class Form extends React.Component {
       }), 3000);
     }
     render() {
-      const request_status = this.state.request_status;
+      const request_status = this.state.request_status || null;
         return (
           <div className="form-place">
             {(request_status)

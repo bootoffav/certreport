@@ -1,12 +1,11 @@
 import React from 'react';
 import B24 from './B24.js';
 import { parseSelectable, parseDates } from './Helpers.js';
-
+import { Link } from 'react-router-dom';
 
 export default class Task extends React.Component {
   constructor(props) {
       super(props);
-      this.props = props;
       this.state = {};
   }
   componentDidMount() {
@@ -35,8 +34,20 @@ export default class Task extends React.Component {
         <td>{this.props.position}</td>
         <td>{this.state.serialNumber}</td>
         <td width="30%">
-            <a href={`/edit/${this.props.task.ID}`}>{this.props.task.TITLE}</a><br />
-            {/* <a href={`https://xmtextiles.bitrix24.ru/workgroups/group/21/tasks/task/view/${this.props.task.ID}/`}>bitrix link</a> */}
+          {this.state.sentOn
+            ? <Link to={{
+              pathname: `/edit/${this.props.task.ID}`,
+              state: {
+                ...this.state,
+                finishedOn: this.state.finishedOn ? this.state.finishedOn.valueOf() : null,
+                sentOn: this.state.sentOn ? this.state.sentOn.valueOf() : null,
+                receivedOn: this.state.receivedOn ? this.state.receivedOn.valueOf() : null,
+                resultsReceived: this.state.resultsReceived ? this.state.resultsReceived.valueOf() : null,
+                startedOn: this.state.startedOn ? this.state.startedOn.valueOf() : null
+              }
+            }}
+            >{this.props.task.TITLE}</Link>
+            : <div className="loader"></div>}
         </td>
         <td>
             {this.state.sentOn

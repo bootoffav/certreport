@@ -8,7 +8,8 @@ const PickDate = props =>
       <DatePicker className="form-control" required
         selected={
           props.date
-          ? props.date.toDate()
+          // ? props.date.toDate()
+          ? new Date(props.date)
           : null
         }
         dateFormat="dd.MM.yyyy"
