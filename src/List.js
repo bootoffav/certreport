@@ -18,13 +18,12 @@ export default class List extends React.Component {
     render (){
         let position = 1;
         return (this.state.tasks)
-        ? <table className="table">
-            <thead>
+        ? <table className="table table-bordered">
+            <thead className="thead-light">
               <tr>
                   <th scope="col">#</th>
-                  <th scope="col">Serial Number</th>
+                  <th scope="col">##</th>
                   <th scope="col">Task name</th>
-                  <th scope="col">B24 Link</th>
                   <th scope="col">Created On</th>
                   <th scope="col">Готовность</th>
                   <th scope="col">Test-report</th>

@@ -3,6 +3,11 @@ import qs from 'qs';
 import moment from 'moment';
 
 
+const creator_id = process.env.REACT_APP_B24_USER_ID;
+const webhook_key = process.env.REACT_APP_B24_WEBHOOK_KEY;
+const main_url = process.env.REACT_APP_B24_MAIN_URL;
+
+
 function parse(description) {
     if (description.indexOf(':[/B]') === -1) {
         return null; // is not valid for parsing
@@ -43,9 +48,6 @@ function parse(description) {
 };
 
 class B24 {
-    creator_id = process.env.REACT_APP_B24_USER_ID;
-    webhook_key = process.env.REACT_APP_B24_WEBHOOK_KEY;
-    main_url = process.env.REACT_APP_B24_MAIN_URL;
     default_params = {
         CREATED_BY: this.creator_id,
         AUDITORS: [5, 19],
@@ -59,8 +61,8 @@ class B24 {
         const formatSelectee = selectee => selectee.map(item => item.value).join(', ');
 
         return {
-            TITLE: `${state.rollNumber}_AITEX - ${formatSelectee(state.iso)} ${state.colour} - ${state.article} ` +
-                `${state.applicantName} (to send ${formatDate(state.sentOn)} - plan ${formatDate(state.finishedOn)} )`,
+            TITLE: `${state.serailNumber}_AITEX - ${formatSelectee(state.iso)} ${state.colour} - ${state.article} ` +
+                `${state.applicantName} (send ${formatDate(state.sentOn)} - plan ${formatDate(state.resultsReceived)})`,
             DESCRIPTION: `[B]Applicant name:[/B] ${state.applicantName}\n` +
                 `[B]Product:[/B] ${state.product}\n` +
                 `[B]Code:[/B] ${state.code}\n` +
@@ -101,7 +103,7 @@ class B24 {
         const data = Object.assign({}, this.formTaskFields(state));
         return axios({
             method: 'post',
-            url: `${this.main_url}/${this.creator_id}/${this.webhook_key}/task.item.update/`,
+            url: `${main_url}/${creator_id}/${webhook_key}/task.item.update/`,
             headers: { 'content-type': 'application/x-www-form-urlencoded' },
             data: qs.stringify([task_id, data])
         });
@@ -118,20 +120,21 @@ class B24 {
         };
         return axios({
             method: 'get',
-            url: `${this.main_url}/${this.creator_id}/${this.webhook_key}/task.item.list?` + qs.stringify(params),
+            url: `${main_url}/${creator_id}/${webhook_key}/task.item.list?` + qs.stringify(params),
         })
     }
-    async get_task(id = null) {
+    static async get_task(id = null) {
+        let task;
         if (id === null) {
             throw new Error('id is not defined');
         }
         const response = await axios({
             method: 'get',
-            url: `${this.main_url}/${this.creator_id}/${this.webhook_key}/task.item.getdata?ID=${id}`,
+            url: `${main_url}/${creator_id}/${webhook_key}/task.item.getdata?ID=${id}`,
         });
 
         if (response.data.result) {
-            var task = {...response.data.result};
+            task = {...response.data.result};
             task.state = parse(response.data.result.DESCRIPTION);
         }
 
