@@ -1,6 +1,5 @@
 import React from 'react';
 import B24 from './B24.js';
-import { parseSelectable, parseDates } from './Helpers.js';
 import { Link } from 'react-router-dom';
 
 export default class Task extends React.Component {
@@ -12,11 +11,7 @@ export default class Task extends React.Component {
     B24.get_task(this.props.task.ID)
       .then(task => {
         if (task.state) {
-          this.setState({
-            ...task.state,
-            ...parseDates(task.state),
-            iso: parseSelectable('iso', task.state.iso)
-          });
+          this.setState({ ...task.state });
         } else {
           this.setState({
             article: '-',

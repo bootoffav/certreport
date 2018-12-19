@@ -1,51 +1,12 @@
 import axios from 'axios';
 import qs from 'qs';
 import moment from 'moment';
-
+import parse from './Helpers';
 
 const creator_id = process.env.REACT_APP_B24_USER_ID;
 const webhook_key = process.env.REACT_APP_B24_WEBHOOK_KEY;
 const main_url = process.env.REACT_APP_B24_MAIN_URL;
 
-
-function parse(description) {
-    if (description.indexOf(':[/B]') === -1) {
-        return null; // is not valid for parsing
-    }
-    const prop_map = {
-      'Applicant name': 'applicantName',
-      'Product': 'product',
-      'Code': 'code',
-      'Article': 'article',
-      'Colour': 'colour',
-      'Serial number': 'serialNumber',
-      'Length of sample, meters': 'length',
-      'Width of sample, meters': 'width',
-      'Part number': 'partNumber',
-      'Roll number': 'rollNumber',
-      'ISO': 'iso',
-      'Testing company': 'testingCompany',
-      'Material needed': 'materialNeeded',
-      'Testing time, days': 'testingTime',
-      'to be sent on': 'sentOn',
-      'to be received on': 'receivedOn',
-      'tests to be started on': 'startedOn',
-      'tests to be finished on': 'finishedOn',
-      'results to be received on': 'resultsReceived'
-    }
-
-    const newState = {};
-    description = description
-        .replace(/\[\/B\]/gi, ':prop_value_separator:')
-        .replace(/\[B\]|/gi, '')
-        .split('\n');
-
-    description.forEach(prop => {
-      const [prop_name, prop_value] = prop.split('::prop_value_separator:');
-      newState[prop_map[prop_name]] = prop_value.trim();
-    });
-    return newState;
-};
 
 class B24 {
     default_params = {
@@ -143,4 +104,3 @@ class B24 {
 }
 
 export default B24;
-export { parse };
