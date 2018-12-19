@@ -6,62 +6,67 @@ import parse from './Helpers';
 const creator_id = process.env.REACT_APP_B24_USER_ID;
 const webhook_key = process.env.REACT_APP_B24_WEBHOOK_KEY;
 const main_url = process.env.REACT_APP_B24_MAIN_URL;
+const auditors = process.env.REACT_APP_B24_AUDITORS.split(',');
 
 
 class B24 {
-    default_params = {
-        CREATED_BY: this.creator_id,
-        AUDITORS: [5, 19],
+    static default_params = {
+        CREATED_BY: creator_id,
+        AUDITORS: auditors,
         UF_CRM_TASK: ['CO_6295'],
         RESPONSIBLE_ID: 5,
-        TAGS: ['certification']
+        TAGS: ['certification'],
+        GROUP_ID: 21
     }
 
-    formTaskFields = state => {
-        const formatDate = date => moment(date).format("DDMMMYYYY");
-        const formatSelectee = selectee => selectee.map(item => item.value).join(', ');
+    static formTaskFields = state => {
+      const formatDate = date => moment(date).format("DDMMMYYYY");
+      const formatSelectee = selectee => selectee.map(item => item.value).join(', ');
 
-        return {
-            TITLE: `${state.serialNumber}_AITEX - ${formatSelectee(state.iso)} ${state.colour} - ${state.article} ` +
-                `${state.applicantName} (send ${formatDate(state.sentOn)} - plan ${formatDate(state.resultsReceived)})`,
-            DESCRIPTION: `[B]Applicant name:[/B] ${state.applicantName}\n` +
-                `[B]Product:[/B] ${state.product}\n` +
-                `[B]Code:[/B] ${state.code}\n` +
-                `[B]Article:[/B] ${state.article}\n` +
-                `[B]Colour:[/B] ${state.colour}\n` +
-                `[B]Serial number:[/B] ${state.serialNumber}\n` +
-                `[B]Length of sample, meters:[/B] ${state.length}\n` +
-                `[B]Width of sample, meters:[/B] ${state.width}\n` +
-                `[B]Part number:[/B] ${state.partNumber}\n` +
-                `[B]Roll number:[/B] ${state.rollNumber}\n` +
-                `[B]ISO:[/B] ${formatSelectee(state.iso)}\n` +
-                `[B]Testing company:[/B] ${formatSelectee(state.testingCompany)}\n` +
-                `[B]Material needed:[/B] ${state.materialNeeded}\n` +
-                `[B]Testing time, days:[/B] ${state.testingTime}\n` +
-                `[B]to be sent on:[/B] ${formatDate(state.sentOn)}\n` +
-                `[B]to be received on:[/B] ${formatDate(state.receivedOn)}\n` +
-                `[B]tests to be started on:[/B] ${formatDate(state.startedOn)}\n` +
-                `[B]tests to be finished on:[/B] ${formatDate(state.finishedOn)}\n` +
-                `[B]results to be received on:[/B] ${formatDate(state.resultsReceived)}`,
-                ...this.default_params
-        }
+      return {
+        ...B24.default_params,
+        TITLE: `${state.serialNumber}_AITEX - ${formatSelectee(state.standard)} ${state.colour} - ${state.article} ` +
+            `${state.applicantName} (send ${formatDate(state.sentOn)} - plan ${formatDate(state.resultsReceived)})`,
+        DESCRIPTION: `[B]Applicant name:[/B] ${state.applicantName}\n` +
+            `[B]Product:[/B] ${state.product}\n` +
+            `[B]Code:[/B] ${state.code}\n` +
+            `[B]Article:[/B] ${state.article}\n` +
+            `[B]Colour:[/B] ${state.colour}\n` +
+            `[B]Serial number:[/B] ${state.serialNumber}\n` +
+            `[B]Length of sample, meters:[/B] ${state.length}\n` +
+            `[B]Width of sample, meters:[/B] ${state.width}\n` +
+            `[B]Part number:[/B] ${state.partNumber}\n` +
+            `[B]Roll number:[/B] ${state.rollNumber}\n` +
+            `[B]Standard:[/B] ${formatSelectee(state.standard)}\n` +
+            `[B]Testing company:[/B] ${formatSelectee(state.testingCompany)}\n` +
+            `[B]Material needed:[/B] ${state.materialNeeded}\n` +
+            `[B]Testing time, days:[/B] ${state.testingTime}\n` +
+            `[B]to be sent on:[/B] ${formatDate(state.sentOn)}\n` +
+            `[B]to be received on:[/B] ${formatDate(state.receivedOn)}\n` +
+            `[B]tests to be started on:[/B] ${formatDate(state.startedOn)}\n` +
+            `[B]tests to be finished on:[/B] ${formatDate(state.finishedOn)}\n` +
+            `[B]results to be received on:[/B] ${formatDate(state.resultsReceived)}`,
+        DEADLINE: moment(state.resultsReceived).toISOString(),
+        UF_CRM_TASK: B24.default_params.UF_CRM_TASK.concat(state.brand.map(i => i.value))
+      }
     };
-    
-    create_task(state) {
-        const data = Object.assign({}, this.formTaskFields(state));
-        return axios({
-            method: 'post',
-            url: `${this.main_url}/${this.creator_id}/${this.webhook_key}/task.item.add/`,
-            headers: { 'content-type': 'application/x-www-form-urlencoded' },
-            data: qs.stringify([data])
-        });
+
+    static create_task = state => {
+      axios({
+          method: 'post',
+          url: `${main_url}/${creator_id}/${webhook_key}/task.item.add/`,
+          headers: { 'content-type': 'application/x-www-form-urlencoded' },
+          data: qs.stringify([
+            Object.assign({}, B24.formTaskFields(state))
+          ])
+      });
     }
 
-    update_task(state, task_id = null) {
+    static update_task(state, task_id = null) {
         if (task_id === null) {
             throw new Error('task id is not defined');
         }
-        const data = Object.assign({}, this.formTaskFields(state));
+        const data = Object.assign({}, B24.formTaskFields(state));
         return axios({
             method: 'post',
             url: `${main_url}/${creator_id}/${webhook_key}/task.item.update/`,
@@ -70,20 +75,20 @@ class B24 {
         });
     }
 
-    get_tasks() {
-        const params = {
+    static get_tasks = () =>
+      axios({
+        method: 'get',
+        url: `${main_url}/${creator_id}/${webhook_key}/task.item.list?` +
+          qs.stringify({
             ORDER: {
-                ID: 'desc'
+              ID: 'desc'
             },
             FILTER: {
-                TAG: 'certification'
+              TAG: 'certification'
             }
-        };
-        return axios({
-            method: 'get',
-            url: `${main_url}/${creator_id}/${webhook_key}/task.item.list?` + qs.stringify(params),
-        })
-    }
+          }),
+      });
+
     static async get_task(id = null) {
         let task;
         if (id === null) {
@@ -96,7 +101,10 @@ class B24 {
 
         if (response.data.result) {
             task = {...response.data.result};
-            task.state = parse(response.data.result.DESCRIPTION);
+            task.state = parse(
+              response.data.result.DESCRIPTION,
+              response.data.result.UF_CRM_TASK
+            );
         }
 
         return task;

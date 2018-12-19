@@ -7,6 +7,7 @@ import Notification from './Notification.js';
 import handlePDF from './PDF.js';
 import SerialNumber from './SerialNumber.js';
 import m from 'moment';
+import { select_options } from './Helpers';
 
 
 // const init_state = {
@@ -26,7 +27,7 @@ import m from 'moment';
 // // Attn.: Ms Marian Domingo`,
 //   materialNeeded: '1 lineal meters',
 //   testingTime: 21,
-//   iso: [],
+//   standard: [],
 // };
 
 const empty_state = {
@@ -40,10 +41,11 @@ const empty_state = {
   partNumber: '',
   rollNumber: '',
   serialNumber: '',
-  testingCompany: [],
   materialNeeded: '',
   testingTime: 21,
-  iso: []
+  standard: [],
+  testingCompany: [],
+  brand: []
 };
 
 export default class Form extends React.Component {
@@ -55,24 +57,23 @@ export default class Form extends React.Component {
         [prop_name]: m(date)
       });
 
-    handleSelectChange = (selectedOption, id) => 
-      (selectedOption)
-      ? this.setState({ [id]: selectedOption })
-      : this.setState({ id: selectedOption });
+    handleSelectChange = (selected, id) => 
+      (selected)
+      ? this.setState({ [id]: selected })
+      : this.setState({ id: selected });
 
     handleChange = e => this.setState({[e.target.id]: e.target.value});
 
     handleCert (e){
       e.preventDefault();
       if (window.confirm('Are you sure?')) {
-        const b24 = new B24();
         (this.task_id)
-        ? b24.update_task(this.state, this.task_id)
+        ? B24.update_task(this.state, this.task_id)
           .then(
             () => this.afterSuccessfulSubmit(),
             () => this.afterUnsuccessfulSubmit()
           )
-        : b24.create_task(this.state)
+        : B24.create_task(this.state)
           .then(
             () => this.afterSuccessfulSubmit(),
             () => this.afterUnsuccessfulSubmit()
@@ -105,35 +106,27 @@ export default class Form extends React.Component {
                   <div className="col">
                     <div className="form-group">
                       Testing company
-                      <Select isMulti value={this.state.testingCompany} onChange={e => this.handleSelectChange(e, 'testingCompany')} id="testingCompany"
-                        options={[
-                          {value: 'Aitex Headquarters (Spain)', label: 'Aitex Headquarters (Spain)', id: 'testingCompany'},
-                          {value: 'AITEX SHANGHAI OFFICE', label: 'AITEX SHANGHAI OFFICE', id: 'testingCompany'}
-                        ]}
+                      <Select value={this.state.testingCompany} onChange={e => this.handleSelectChange(e, 'testingCompany')}
+                        options={select_options.testingCompany}
                       />
                     </div>
                   </div>
                   <div className="col">
                     <div className="form-group">
                       Standards
-                      <Select isMulti required value={this.state.iso} onChange={e => this.handleSelectChange(e, 'iso')} id="iso"
-                        options={[
-                          {value: 'ISO 17893', label: 'ISO 17893', id: 'iso'},
-                          {value: 'EN 11611', label: 'EN 11611', id: 'iso'},
-                          {value: 'EN 11612', label: 'EN 11612', id: 'iso'},
-                          {value: 'EN 1149-3', label: 'ISO 1149-3', id: 'iso'}
-                        ]}
+                      <Select isMulti required value={this.state.standard} onChange={e => this.handleSelectChange(e, 'standard')}
+                        options={select_options.standard}
                       />
                     </div>
                   </div>
                 </div>
-                <div className="form-row"> {/* Product, Code, Article, Colour */}
+                <div className="form-row">
                   <BaseInput value={this.state.product} col='col-4' id='product' label='Product' handleChange={this.handleChange} />
                   <BaseInput value={this.state.code} id='code' label='Code' handleChange={this.handleChange} />
                   <BaseInput value={this.state.article} id='article' label='Article' handleChange={this.handleChange} />
                   <BaseInput value={this.state.colour} id='colour' label='Colour' handleChange={this.handleChange} />
                   <BaseInput value={this.state.materialNeeded} id='materialNeeded' label='Material needed' handleChange={this.handleChange} />
-                </div> {/* Product, Code, Article, Colour, Material Needed */}
+                </div>
                 <div className="form-row">
                   <BaseInput value={this.state.length} id='length' label='Sample length (m)' handleChange={this.handleChange} />
                   <BaseInput value={this.state.width} id='width' label='Sample width (m)' handleChange={this.handleChange} />
@@ -148,6 +141,14 @@ export default class Form extends React.Component {
 
                 </div>
               <div className="form-row">
+                <div className="col">
+                  <div className="form-group">
+                    Brand
+                    <Select isMulti value={this.state.brand} onChange={e => this.handleSelectChange(e, 'brand')}
+                      options={select_options.brand}
+                    />
+                  </div>
+                </div>
                 <PickDate date={this.state.sentOn} label='Sent on:'
                   handleChange={date => this.handleDateChange(date, 'sentOn')}/>
                 <PickDate date={this.state.receivedOn} label='Received on:'

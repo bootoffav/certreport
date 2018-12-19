@@ -39,7 +39,7 @@ function handlePDF(e, state) {
     };
 
   pdf.setFontSize(12);
-  pdf.text(`Standards: ${state.iso_orig}`, 15, 80);
+  pdf.text(`Standards: ${state.standard_orig}`, 15, 80);
   pdf.text(`Testing company: ${state.testingCompany_orig}`, 15, 85);
   pdf.text(`Materials needed: ${state.materialNeeded}`, 15, 90);
   pdf.text(`Testing Time: ${state.testingTime}`, 15, 95);

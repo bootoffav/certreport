@@ -10,7 +10,7 @@ export default class List extends React.Component {
       this.state = {};
     }
     componentDidMount() {
-      new B24().get_tasks().then(res => this.setState({
+      B24.get_tasks().then(res => this.setState({
           tasks: res.data.result
         })
       );
@@ -23,6 +23,7 @@ export default class List extends React.Component {
               <tr>
                   <th scope="col">#</th>
                   <th scope="col">##</th>
+                  <th scope="col">Brand</th>
                   <th scope="col">Task name</th>
                   <th scope="col">Created On</th>
                   <th scope="col">Готовность</th>

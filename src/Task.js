@@ -3,6 +3,7 @@ import B24 from './B24.js';
 import { Link } from 'react-router-dom';
 import Tooltip from 'rc-tooltip';
 import 'rc-tooltip/assets/bootstrap.css';
+import { select_options } from './Helpers';
 
 export default class Task extends React.Component {
   constructor(props) {
@@ -17,9 +18,10 @@ export default class Task extends React.Component {
         } else {
           this.setState({
             article: '-',
-            iso: [],
+            standard: [],
             resultsReceived: '-',
-            sentOn: '-'
+            sentOn: '-',
+            brand: []
           });
         }
       });
@@ -30,11 +32,16 @@ export default class Task extends React.Component {
       <tr>
         <td>{this.props.position}</td>
         <td>
-        <Tooltip placement="left" overlay={<span>B24 link</span>}>
-          <a href={`https://xmtextiles.bitrix24.ru/company/personal/user/460/tasks/task/view/${this.props.task.ID}/`}
-            target="_blank" rel="noopener noreferrer"
-          >{this.state.serialNumber}</a>
-        </Tooltip>
+          <Tooltip placement="left" overlay={<span>B24 link</span>}>
+            <a href={`https://xmtextiles.bitrix24.ru/company/personal/user/460/tasks/task/view/${this.props.task.ID}/`}
+              target="_blank" rel="noopener noreferrer"
+            >{this.state.serialNumber}</a>
+          </Tooltip>
+        </td>
+        <td>
+          {this.state.brand
+          ? this.state.brand.map(el => el.label).join(', ')
+          : <div className="loader"></div>}
         </td>
         <td width="30%">
           {this.state.sentOn
@@ -69,8 +76,8 @@ export default class Task extends React.Component {
             : <div className="loader"></div>}
         </td>
         <td>
-          {(this.state.iso)
-           ? this.state.iso.map(el => el.value).join(', ')
+          {(this.state.standard)
+           ? this.state.standard.map(el => el.value).join(', ')
            : <div className="loader"></div>}
         </td>
       </tr>

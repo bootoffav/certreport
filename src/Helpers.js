@@ -1,5 +1,24 @@
 import m from 'moment';
 
+const select_options = {
+  brand: [
+    {value: 'C_10033', label: 'XMT'},
+    {value: 'C_10035', label: 'XMF'},
+    {value: 'C_10037', label: 'XMS'},
+    {value: 'C_10041', label: 'XMG'}
+  ],
+  standard: [
+    {value: 'ISO 17893', label: 'ISO 17893'},
+    {value: 'EN 11611', label: 'EN 11611'},
+    {value: 'EN 11612', label: 'EN 11612'},
+    {value: 'EN 1149-3', label: 'ISO 1149-3'}
+  ],
+  testingCompany: [
+    {value: 'Aitex Headquarters (Spain)', label: 'Aitex Headquarters (Spain)'},
+    {value: 'AITEX SHANGHAI OFFICE', label: 'AITEX SHANGHAI OFFICE'}
+  ]
+};
+
 const parseDates = data => ({
   sentOn: m(data.sentOn, 'DDMMMYYYY'),
   receivedOn: m(data.receivedOn, 'DDMMMYYYY'),
@@ -12,18 +31,18 @@ const parseSelectable = (prop_name, selectee) => {
   const selected = [];
   if (selectee !== '') {
     selectee.split(',').forEach(value => {
-      const standard = value.trim();
+      value = value.trim();
       selected.push({
-        value: standard,
-        label: standard,
-        id: prop_name
+        value,
+        // label: value,
+        label: select_options[prop_name].find(el => el.value === value).label,
       });
     });
   }
   return selected;
 }
 
-function parse(description) {
+function parse(description, uf_crm_task) {
   if (description.indexOf(':[/B]') === -1) {
       return null; // is not valid for parsing
   }
@@ -38,7 +57,7 @@ function parse(description) {
     'Width of sample, meters': 'width',
     'Part number': 'partNumber',
     'Roll number': 'rollNumber',
-    'ISO': 'iso',
+    'Standard': 'standard',
     'Testing company': 'testingCompany',
     'Material needed': 'materialNeeded',
     'Testing time, days': 'testingTime',
@@ -60,12 +79,15 @@ function parse(description) {
     newState[prop_map[prop_name]] = prop_value.trim();
   });
 
-  newState.iso_orig = newState.iso;
+  newState.standard_orig = newState.standard;
   newState.testingCompany_orig = newState.testingCompany;
-  newState.iso = parseSelectable('iso', newState.iso)
-  newState.testingCompany = parseSelectable('iso', newState.testingCompany)
+  
+  newState.standard = parseSelectable('standard', newState.standard);
+  newState.testingCompany = parseSelectable('testingCompany', newState.testingCompany);
+  newState.brand = parseSelectable('brand', uf_crm_task.filter(v => v !== 'CO_6295').join(','));
 
   return Object.assign(newState, { ...parseDates(newState) });
 };
 
 export default parse;
+export { select_options };
