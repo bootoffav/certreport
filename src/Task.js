@@ -1,6 +1,8 @@
 import React from 'react';
 import B24 from './B24.js';
 import { Link } from 'react-router-dom';
+import Tooltip from 'rc-tooltip';
+import 'rc-tooltip/assets/bootstrap.css';
 
 export default class Task extends React.Component {
   constructor(props) {
@@ -27,7 +29,13 @@ export default class Task extends React.Component {
     return (
       <tr>
         <td>{this.props.position}</td>
-        <td>{this.state.serialNumber}</td>
+        <td>
+        <Tooltip placement="left" overlay={<span>B24 link</span>}>
+          <a href={`https://xmtextiles.bitrix24.ru/company/personal/user/460/tasks/task/view/${this.props.task.ID}/`}
+            target="_blank" rel="noopener noreferrer"
+          >{this.state.serialNumber}</a>
+        </Tooltip>
+        </td>
         <td width="30%">
           {this.state.sentOn
             ? <Link to={{

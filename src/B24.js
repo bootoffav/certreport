@@ -22,7 +22,7 @@ class B24 {
         const formatSelectee = selectee => selectee.map(item => item.value).join(', ');
 
         return {
-            TITLE: `${state.serailNumber}_AITEX - ${formatSelectee(state.iso)} ${state.colour} - ${state.article} ` +
+            TITLE: `${state.serialNumber}_AITEX - ${formatSelectee(state.iso)} ${state.colour} - ${state.article} ` +
                 `${state.applicantName} (send ${formatDate(state.sentOn)} - plan ${formatDate(state.resultsReceived)})`,
             DESCRIPTION: `[B]Applicant name:[/B] ${state.applicantName}\n` +
                 `[B]Product:[/B] ${state.product}\n` +

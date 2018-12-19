@@ -1,8 +1,8 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min';
+// import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
 import Form from './Form.js';
 import List from './List.js';
 import netlifyIdentity from 'netlify-identity-widget';
@@ -26,10 +26,10 @@ const Navigation = () =>
         <div>
           <ul className="nav nav-pills nav-fill justify-content-center">
             <li className="nav-item">
-              <Link className="nav-link" to="/">List</Link>
+              <NavLink exact className="nav-link" to="/">List</NavLink>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/add">Add cert</Link>
+              <NavLink exact className="nav-link" to="/add">Add cert</NavLink>
             </li>
           </ul>
           <Route exact path="/" component={List} />
