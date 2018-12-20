@@ -3,7 +3,6 @@ import B24 from './B24.js';
 import { Link } from 'react-router-dom';
 import Tooltip from 'rc-tooltip';
 import 'rc-tooltip/assets/bootstrap.css';
-import { select_options } from './Helpers';
 
 export default class Task extends React.Component {
   constructor(props) {

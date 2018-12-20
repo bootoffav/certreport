@@ -1,4 +1,3 @@
-import axios from 'axios';
 import qs from 'qs';
 import moment from 'moment';
 import parse from './Helpers';
@@ -21,7 +20,9 @@ class B24 {
 
     static formTaskFields = state => {
       const formatDate = date => moment(date).format("DDMMMYYYY");
-      const formatSelectee = selectee => selectee.map(item => item.value).join(', ');
+      const formatSelectee = selectee => Array.isArray(selectee)
+        ? selectee.map(item => item.value).join(', ')
+        : [selectee].map(item => item.value).join(', ')
 
       return {
         ...B24.default_params,
@@ -51,59 +52,55 @@ class B24 {
       }
     };
 
-    static create_task = state => {
-      axios({
+    static createTask = state => {
+      fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.add/`, {
           method: 'post',
-          url: `${main_url}/${creator_id}/${webhook_key}/task.item.add/`,
           headers: { 'content-type': 'application/x-www-form-urlencoded' },
-          data: qs.stringify([
+          body: qs.stringify([
             Object.assign({}, B24.formTaskFields(state))
           ])
       });
     }
 
-    static update_task(state, task_id = null) {
+    static updateTask(state, task_id = null) {
         if (task_id === null) {
             throw new Error('task id is not defined');
         }
-        const data = Object.assign({}, B24.formTaskFields(state));
-        return axios({
-            method: 'post',
-            url: `${main_url}/${creator_id}/${webhook_key}/task.item.update/`,
-            headers: { 'content-type': 'application/x-www-form-urlencoded' },
-            data: qs.stringify([task_id, data])
+        const task_data = Object.assign({}, B24.formTaskFields(state));
+        return fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.update/`, {
+          method: 'post',
+          headers: { 'content-type': 'application/x-www-form-urlencoded' },
+          body: qs.stringify([task_id, task_data])
         });
     }
 
     static get_tasks = () =>
-      axios({
-        method: 'get',
-        url: `${main_url}/${creator_id}/${webhook_key}/task.item.list?` +
-          qs.stringify({
-            ORDER: {
-              ID: 'desc'
-            },
-            FILTER: {
-              TAG: 'certification'
-            }
-          }),
-      });
+      fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.list?` +
+        qs.stringify({
+          ORDER: {
+            ID: 'desc'
+          },
+          FILTER: {
+            TAG: 'certification'
+          }
+        }))
+        .then(response => response.json())
+        .then(json => json.result)
+        // .catch(err => `Error: ${err}`);
 
     static async get_task(id = null) {
         let task;
         if (id === null) {
             throw new Error('id is not defined');
         }
-        const response = await axios({
-            method: 'get',
-            url: `${main_url}/${creator_id}/${webhook_key}/task.item.getdata?ID=${id}`,
-        });
+        const result = await fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.getdata?ID=${id}`)
+          .then(rsp=> rsp.json()).then(rsp => rsp.result);
 
-        if (response.data.result) {
-            task = {...response.data.result};
+        if (result) {
+            task = { ...result };
             task.state = parse(
-              response.data.result.DESCRIPTION,
-              response.data.result.UF_CRM_TASK
+              result.DESCRIPTION,
+              result.UF_CRM_TASK
             );
         }
 

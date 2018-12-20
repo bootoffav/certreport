@@ -45,7 +45,12 @@ const empty_state = {
   testingTime: 21,
   standard: [],
   testingCompany: [],
-  brand: []
+  brand: [],
+  sentOn: '',
+  receivedOn: '',
+  startedOn: '',
+  finishedOn: '',
+  resultsReceived: ''
 };
 
 export default class Form extends React.Component {
@@ -68,12 +73,12 @@ export default class Form extends React.Component {
       e.preventDefault();
       if (window.confirm('Are you sure?')) {
         (this.task_id)
-        ? B24.update_task(this.state, this.task_id)
+        ? B24.updateTask(this.state, this.task_id)
           .then(
             () => this.afterSuccessfulSubmit(),
             () => this.afterUnsuccessfulSubmit()
           )
-        : B24.create_task(this.state)
+        : B24.createTask(this.state)
           .then(
             () => this.afterSuccessfulSubmit(),
             () => this.afterUnsuccessfulSubmit()

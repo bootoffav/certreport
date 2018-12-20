@@ -1,4 +1,5 @@
 import * as jsPDF from 'jspdf';
+// eslint-disable-next-line
 import autoTable from 'jspdf-autotable';
 import m from 'moment';
 

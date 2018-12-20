@@ -10,10 +10,7 @@ export default class List extends React.Component {
       this.state = {};
     }
     componentDidMount() {
-      B24.get_tasks().then(res => this.setState({
-          tasks: res.data.result
-        })
-      );
+      B24.get_tasks().then(tasks => this.setState({ tasks }));
     }
     render (){
         let position = 1;
