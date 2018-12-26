@@ -1,5 +1,5 @@
 import React from 'react';
-import { PickDate, BaseInput } from "./FormFields.js";
+import { PickDate, BaseInput, Product } from "./FormFields.js";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select';
 import B24 from './B24.js';
@@ -57,6 +57,9 @@ export default class Form extends React.Component {
     task_id = this.props.match.params.id || null;
     state = this.props.location.state || { ...empty_state };
 
+    // async componentDidMount() {
+    // }
+
     handleDateChange = (date, prop_name) =>
       this.setState({
         [prop_name]: m(date)
@@ -111,7 +114,7 @@ export default class Form extends React.Component {
                   <div className="col">
                     <div className="form-group">
                       Testing company
-                      <Select value={this.state.testingCompany} onChange={e => this.handleSelectChange(e, 'testingCompany')}
+                      <Select required={true} value={this.state.testingCompany} onChange={e => this.handleSelectChange(e, 'testingCompany')}
                         options={select_options.testingCompany}
                       />
                     </div>
@@ -126,7 +129,13 @@ export default class Form extends React.Component {
                   </div>
                 </div>
                 <div className="form-row">
-                  <BaseInput value={this.state.product} col='col-4' id='product' label='Product' handleChange={this.handleChange} />
+                  {/* <BaseInput value={this.state.product} col='col-4' id='product' label='Product' handleChange={this.handleChange} /> */}
+                  <Product value={this.state.product} col="col-4"
+                    handleChange={this.handleSelectChange}
+                    handleSlaveChange={(article, code, brand) => {
+                      this.setState({ article, code, brand });
+                    }}
+                  />
                   <BaseInput value={this.state.code} id='code' label='Code' handleChange={this.handleChange} />
                   <BaseInput value={this.state.article} id='article' label='Article' handleChange={this.handleChange} />
                   <BaseInput value={this.state.colour} id='colour' label='Colour' handleChange={this.handleChange} />

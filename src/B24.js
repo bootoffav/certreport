@@ -77,10 +77,10 @@ class B24 {
     static get_tasks = () =>
       fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.list?` +
         qs.stringify({
-          ORDER: {
+          order: {
             ID: 'desc'
           },
-          FILTER: {
+          filter: {
             TAG: 'certification'
           }
         }))
@@ -106,6 +106,44 @@ class B24 {
 
         return task;
     }
+
+    static async get_products() {
+      let start = 0;
+      let res = [];
+
+      let step = json => {
+        start = json.next;
+        return json.result;
+      };
+
+      do {
+        res = res.concat(await fetch(`${main_url}/${creator_id}/${webhook_key}/crm.product.list?` +
+          qs.stringify({
+            order: {
+              NAME: 'ASC'
+            },
+            filter: {
+              SECTION_ID: 8568
+            },
+            // select: ['NAME', 'PRICE', 'CODE'],
+            start
+          }))
+        .then(response => response.json())
+        .then(step));
+      } while (start !== undefined);
+    
+      return res;
+  }
+  
+  static async get_product(id = null) {
+    if (id === null) {
+      throw Error('Product id is not proveded');
+    }
+
+    return await fetch(`${ main_url }/${ creator_id }/${ webhook_key }/crm.product.get?id=${ id }`)
+      .then(response => response.json())
+      .then(json => json.result);
+  }
 }
 
 export default B24;
