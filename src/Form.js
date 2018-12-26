@@ -1,5 +1,5 @@
 import React from 'react';
-import { PickDate, BaseInput, Product } from "./FormFields.js";
+import { PickDate, BaseInput, Article } from "./FormFields.js";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select';
 import B24 from './B24.js';
@@ -129,15 +129,14 @@ export default class Form extends React.Component {
                   </div>
                 </div>
                 <div className="form-row">
-                  {/* <BaseInput value={this.state.product} col='col-4' id='product' label='Product' handleChange={this.handleChange} /> */}
-                  <Product value={this.state.product} col="col-4"
+                  <Article value={this.state.article}
                     handleChange={this.handleSelectChange}
-                    handleSlaveChange={(article, code, brand) => {
-                      this.setState({ article, code, brand });
+                    handleSlaveChange={(product, code, brand) => {
+                      this.setState({ product, code, brand });
                     }}
                   />
+                  <BaseInput value={this.state.product} id='product' col="col-4" label='Product' handleChange={this.handleChange} />
                   <BaseInput value={this.state.code} id='code' label='Code' handleChange={this.handleChange} />
-                  <BaseInput value={this.state.article} id='article' label='Article' handleChange={this.handleChange} />
                   <BaseInput value={this.state.colour} id='colour' label='Colour' handleChange={this.handleChange} />
                   <BaseInput value={this.state.materialNeeded} id='materialNeeded' label='Material needed' handleChange={this.handleChange} />
                 </div>
@@ -158,7 +157,7 @@ export default class Form extends React.Component {
                 <div className="col">
                   <div className="form-group">
                     Brand
-                    <Select isMulti value={this.state.brand} onChange={e => this.handleSelectChange(e, 'brand')}
+                    <Select value={this.state.brand} onChange={e => this.handleSelectChange(e, 'brand')}
                       options={select_options.brand}
                     />
                   </div>

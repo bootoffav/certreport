@@ -31,19 +31,19 @@ const BaseInput = props =>
   </div>
 
 
-class Product extends React.Component {
+class Article extends React.Component {
   prop_map = {
     code: 'PROPERTY_380',
-    brand: 'PROPERTY_382',
     weight: 'PROPERTY_384',
-    article: 'PROPERTY_386'
+    product: 'PROPERTY_386',
+    brand: 'SECTION_ID'
   };
 
   brand_map = {
-    164: 'XMF',
-    166: 'XMG',
-    168: 'XMS',
-    170: 'XMT'
+    8568: 'XMF',
+    // 166: 'XMG',
+    // 168: 'XMS',
+    // 170: 'XMT'
   };
 
   options = [];
@@ -59,21 +59,20 @@ class Product extends React.Component {
     return (
     <div className={this.props.col || 'col'}>
       <div className="form-group">
-      Product
+      Article
       <Select value={this.props.value}
         onChange={
           async e => {
             let product = await B24.get_product(e.value);
             this.props.handleSlaveChange(
-              product[this.prop_map.article].value,
+              product[this.prop_map.product].value,
               product[this.prop_map.code].value,
-              // product[this.prop_map.weight].value,
               {
-                value: select_options.brand.find(el => el.label === this.brand_map[ product[this.prop_map.brand].value ]).value,
-                label: this.brand_map[ product[this.prop_map.brand].value ]
+                value: select_options.brand.find(el => el.label === this.brand_map[ product[this.prop_map.brand] ]).value,
+                label: this.brand_map[ product[this.prop_map.brand] ]
               }
             );
-            this.props.handleChange(e, 'product');
+            this.props.handleChange(e, 'article');
           }
         }
         options={this.options}
@@ -83,4 +82,4 @@ class Product extends React.Component {
   }
 }
 
-export { PickDate, BaseInput, Product };
+export { PickDate, BaseInput, Article };
