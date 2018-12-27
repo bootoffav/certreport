@@ -48,7 +48,7 @@ class B24 {
             `[B]tests to be finished on:[/B] ${formatDate(state.finishedOn)}\n` +
             `[B]results to be received on:[/B] ${formatDate(state.resultsReceived)}`,
         DEADLINE: moment(state.resultsReceived).toISOString(),
-        UF_CRM_TASK: B24.default_params.UF_CRM_TASK.concat(state.brand.map(i => i.value))
+        UF_CRM_TASK: B24.default_params.UF_CRM_TASK.concat(state.brand.value)
       }
     };
 
@@ -109,7 +109,7 @@ class B24 {
 
     static async get_products() {
       let start = 0;
-      let res = [];
+      let products = [];
 
       let step = json => {
         start = json.next;
@@ -117,7 +117,7 @@ class B24 {
       };
 
       do {
-        res = res.concat(await fetch(`${main_url}/${creator_id}/${webhook_key}/crm.product.list?` +
+        products = products.concat(await fetch(`${main_url}/${creator_id}/${webhook_key}/crm.product.list?` +
           qs.stringify({
             order: {
               NAME: 'ASC'
@@ -125,25 +125,60 @@ class B24 {
             filter: {
               SECTION_ID: 8568
             },
-            // select: ['NAME', 'PRICE', 'CODE'],
+            select: ['ID', 'NAME'],
             start
           }))
         .then(response => response.json())
         .then(step));
       } while (start !== undefined);
-    
-      return res;
+      
+      return products.map(product => ({
+        value: product.ID,
+        label: product.NAME
+      }));
   }
   
-  static async get_product(id = null) {
+  static get_product(id = null) {
     if (id === null) {
-      throw Error('Product id is not proveded');
+      throw Error('Product id is not provided');
     }
 
-    return await fetch(`${ main_url }/${ creator_id }/${ webhook_key }/crm.product.get?id=${ id }`)
+    return fetch(`${ main_url }/${ creator_id }/${ webhook_key }/crm.product.get?id=${ id }`)
       .then(response => response.json())
       .then(json => json.result);
   }
+}
+
+async function get_products() {
+  let start = 0;
+  let products = [];
+
+  let step = json => {
+    start = json.next;
+    return json.result;
+  };
+
+  do {
+    products = products.concat(await fetch(`${main_url}/${creator_id}/${webhook_key}/crm.product.list?` +
+      qs.stringify({
+        order: {
+          NAME: 'ASC'
+        },
+        filter: {
+          SECTION_ID: 8568
+        },
+        select: ['ID', 'NAME'],
+        start
+      }))
+    .then(response => response.json())
+    .then(step));
+  } while (start !== undefined);
+  
+  console.log(products);
+  return products.map(product => ({
+    value: product.ID,
+    label: product.NAME
+  }));
 }
 
 export default B24;

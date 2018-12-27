@@ -12,7 +12,7 @@ function handlePDF(e, state) {
   ];
 
   let rows = [
-    [1, state.product, state.code, state.article, state.colour,
+    [1, state.article, state.product, state.code, state.colour,
       state.length, state.width, state.partNumber, state.rollNumber],
     ];
 

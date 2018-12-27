@@ -2,7 +2,7 @@ import React from 'react';
 import DatePicker from "react-datepicker";
 import B24 from './B24';
 import Select from 'react-select';
-import { select_options } from './Helpers';
+import { select_options } from './Form';
 
 const PickDate = props =>
   <div className="col">
@@ -46,21 +46,22 @@ class Article extends React.Component {
     // 170: 'XMT'
   };
 
-  options = [];
-
   async componentDidMount() {
-    let products = await B24.get_products();
-    this.options = products.map(product => ({
-      value: product.ID,
-      label: product.NAME
-    }));
+    setTimeout(() => {
+      if (this.props.value !== '') {
+        let ind = select_options.article.findIndex(el => el.label === this.props.value.label);
+        this.setState({ 
+          value: select_options.article[ind]
+        });
+      }
+    }, 2000);
   }
   render() {
     return (
     <div className={this.props.col || 'col'}>
       <div className="form-group">
       Article
-      <Select value={this.props.value}
+      <Select value={{label: this.props.value, value: this.props.value}}
         onChange={
           async e => {
             let product = await B24.get_product(e.value);
@@ -72,10 +73,10 @@ class Article extends React.Component {
                 label: this.brand_map[ product[this.prop_map.brand] ]
               }
             );
-            this.props.handleChange(e, 'article');
+            this.props.handleChange(e.label, 'article');
           }
         }
-        options={this.options}
+        options={select_options.article}
       />
       </div>
     </div>);

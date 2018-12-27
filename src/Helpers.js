@@ -1,23 +1,6 @@
 import m from 'moment';
+import { select_options } from './Form';
 
-const select_options = {
-  brand: [
-    {value: 'C_10033', label: 'XMT'},
-    {value: 'C_10035', label: 'XMF'},
-    {value: 'C_10037', label: 'XMS'},
-    {value: 'C_10041', label: 'XMG'}
-  ],
-  standard: [
-    {value: 'ISO 17893', label: 'ISO 17893'},
-    {value: 'EN 11611', label: 'EN 11611'},
-    {value: 'EN 11612', label: 'EN 11612'},
-    {value: 'EN 1149-3', label: 'ISO 1149-3'}
-  ],
-  testingCompany: [
-    {value: 'Aitex Headquarters (Spain)', label: 'Aitex Headquarters (Spain)'},
-    {value: 'AITEX SHANGHAI OFFICE', label: 'AITEX SHANGHAI OFFICE'}
-  ]
-};
 
 const parseDates = data => ({
   sentOn: m(data.sentOn, 'DDMMMYYYY'),
@@ -81,13 +64,15 @@ function parse(description, uf_crm_task) {
 
   newState.standard_orig = newState.standard;
   newState.testingCompany_orig = newState.testingCompany;
+  newState.article_orig = newState.article;
   
   newState.standard = parseSelectable('standard', newState.standard);
   newState.testingCompany = parseSelectable('testingCompany', newState.testingCompany);
+  // debugger;
+  // newState.article = parseSelectable('article', newState.article);
   newState.brand = parseSelectable('brand', uf_crm_task.filter(v => v !== 'CO_6295').join(','));
 
   return Object.assign(newState, { ...parseDates(newState) });
 };
 
 export default parse;
-export { select_options };

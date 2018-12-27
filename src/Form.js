@@ -7,7 +7,6 @@ import Notification from './Notification.js';
 import handlePDF from './PDF.js';
 import SerialNumber from './SerialNumber.js';
 import m from 'moment';
-import { select_options } from './Helpers';
 
 
 // const init_state = {
@@ -29,6 +28,31 @@ import { select_options } from './Helpers';
 //   testingTime: 21,
 //   standard: [],
 // };
+
+let select_options = {};
+(async () => (
+  {
+    brand: [
+      {value: 'C_10033', label: 'XMT'},
+      {value: 'C_10035', label: 'XMF'},
+      {value: 'C_10037', label: 'XMS'},
+      {value: 'C_10041', label: 'XMG'}
+    ],
+    standard: [
+      {value: 'ISO 17893', label: 'ISO 17893'},
+      {value: 'EN 11611', label: 'EN 11611'},
+      {value: 'EN 11612', label: 'EN 11612'},
+      {value: 'EN 1149-3', label: 'ISO 1149-3'}
+    ],
+    testingCompany: [
+      {value: 'Aitex Headquarters (Spain)', label: 'Aitex Headquarters (Spain)'},
+      {value: 'AITEX SHANGHAI OFFICE', label: 'AITEX SHANGHAI OFFICE'}
+    ],
+    article: await B24.get_products()
+  }
+))().then(resp => select_options = resp);
+
+// setTimeout(() => console.log(select_options), 4000);
 
 const empty_state = {
   applicantName: '',
@@ -57,18 +81,16 @@ export default class Form extends React.Component {
     task_id = this.props.match.params.id || null;
     state = this.props.location.state || { ...empty_state };
 
-    // async componentDidMount() {
-    // }
-
     handleDateChange = (date, prop_name) =>
       this.setState({
         [prop_name]: m(date)
       });
 
-    handleSelectChange = (selected, id) => 
+    handleSelectChange = (selected, id) => {
       (selected)
       ? this.setState({ [id]: selected })
       : this.setState({ id: selected });
+    }
 
     handleChange = e => this.setState({[e.target.id]: e.target.value});
 
@@ -190,3 +212,5 @@ export default class Form extends React.Component {
         )
     }
 }
+
+export { select_options };
