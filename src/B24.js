@@ -149,36 +149,4 @@ class B24 {
   }
 }
 
-async function get_products() {
-  let start = 0;
-  let products = [];
-
-  let step = json => {
-    start = json.next;
-    return json.result;
-  };
-
-  do {
-    products = products.concat(await fetch(`${main_url}/${creator_id}/${webhook_key}/crm.product.list?` +
-      qs.stringify({
-        order: {
-          NAME: 'ASC'
-        },
-        filter: {
-          SECTION_ID: 8568
-        },
-        select: ['ID', 'NAME'],
-        start
-      }))
-    .then(response => response.json())
-    .then(step));
-  } while (start !== undefined);
-  
-  console.log(products);
-  return products.map(product => ({
-    value: product.ID,
-    label: product.NAME
-  }));
-}
-
 export default B24;

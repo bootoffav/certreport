@@ -66,7 +66,7 @@ class Article extends React.Component {
           async e => {
             let product = await B24.get_product(e.value);
             this.props.handleSlaveChange(
-              product[this.prop_map.product].value,
+              `${ product[this.prop_map.product].value } ${ product[this.prop_map.weight].value }`,
               product[this.prop_map.code].value,
               {
                 value: select_options.brand.find(el => el.label === this.brand_map[ product[this.prop_map.brand] ]).value,

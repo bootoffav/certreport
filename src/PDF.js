@@ -6,7 +6,7 @@ import m from 'moment';
 function handlePDF(e, state) {
   e.preventDefault();
   let thead = [
-    '#', 'Product', 'Code', 'Article',
+    '#', 'Article', 'Product', 'Code', 
     'Colour', 'Length of sample, meters',
     'Width of sample', 'Part number', 'Roll Number'
   ];
