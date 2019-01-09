@@ -52,8 +52,6 @@ let select_options = {};
   }
 ))().then(resp => select_options = resp);
 
-// setTimeout(() => console.log(select_options), 4000);
-
 const empty_state = {
   applicantName: '',
   product: '',
@@ -81,10 +79,23 @@ export default class Form extends React.Component {
     task_id = this.props.match.params.id || null;
     state = this.props.location.state || { ...empty_state };
 
-    handleDateChange = (date, prop_name) =>
-      this.setState({
-        [prop_name]: m(date)
-      });
+    handleDateChange = (date, prop_name) => {
+      date = m(date);
+      if (prop_name === 'sentOn') {
+        let receivedOn = date.clone().add(3, 'days');
+        let startedOn = receivedOn.clone().add(1, 'days');
+        let finishedOn = startedOn.clone().add(this.state.testingTime, 'days');
+        let resultsReceived = finishedOn.clone().add(1, 'days');
+        this.setState({
+          sentOn: date,
+          receivedOn, startedOn, finishedOn, resultsReceived
+        });
+      } else {
+        this.setState({
+          [prop_name]: date
+        });
+      }
+    }
 
     handleSelectChange = (selected, id) => {
       (selected)
