@@ -6,7 +6,7 @@ import Form from './Form.js';
 import List from './List.js';
 import netlifyIdentity from 'netlify-identity-widget';
 import './css/style.css';
-
+import { initApp } from './defaults';
 
 netlifyIdentity.init();
 netlifyIdentity.on('login', user => {
@@ -14,28 +14,37 @@ netlifyIdentity.on('login', user => {
   window.location.replace('/');
 });
 
-const App = () =>
-  <div className="container">
-    {netlifyIdentity.currentUser() ? <Navigation /> : netlifyIdentity.open('login')}
-  </div>
+
+function App() {
+  if (!netlifyIdentity.currentUser()) {
+    return <div>{ netlifyIdentity.open('login') }</div>;
+  }
+
+  initApp();
+  return (
+    <div className="container">
+      <Navigation />
+    </div>
+  )
+}
 
 const Navigation = () =>
   (<div className="col">
     <Router>
-        <div>
-          <ul className="nav nav-pills nav-fill justify-content-center">
-            <li className="nav-item">
-              <NavLink exact className="nav-link" to="/">List</NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink exact className="nav-link" to="/add">Add cert</NavLink>
-            </li>
-          </ul>
-          <Route exact path="/" component={List} />
-          <Route exact path="/add" component={Form} />
-          <Route exact path="/edit/:id" component={Form} />
-        </div>
+      <div>
+        <ul className="nav nav-pills nav-fill justify-content-center">
+          <li className="nav-item">
+            <NavLink exact className="nav-link" to="/">List</NavLink>
+          </li>
+          <li className="nav-item">
+            <NavLink exact className="nav-link" to="/add">Add cert</NavLink>
+          </li>
+        </ul>
+        <Route exact path="/" component={List} />
+        <Route exact path="/add" component={Form} />
+        <Route exact path="/edit/:id" component={Form} />
+      </div>
     </Router>
-  </div>)
+  </div>);
 
 ReactDOM.render(<App />, document.getElementById('root'));

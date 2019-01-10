@@ -7,73 +7,7 @@ import Notification from './Notification.js';
 import handlePDF from './PDF.js';
 import SerialNumber from './SerialNumber.js';
 import m from 'moment';
-
-
-// const init_state = {
-//   applicantName: 'SHANGHAI XM GROUP LTD',
-//   product: '60% Modacrylic, 39%Cotton, 1%AS 280gsm',
-//   code: '60MA/39C/1AS-280 FR-Knit',
-//   article: 'FR-Fleece-280',
-//   colour: 'Dark Navy',
-//   length: 1,
-//   width: 1.5,
-//   partNumber: '1493',
-//   rollNumber: '1395',
-//   testingCompany: [],
-// // Plaza Emilio Sala 1, 03801 Alcoy (Alicante) Spain.
-// // Tel.: +34 965 542 200
-// // Fax.: +34 965 543 494
-// // Attn.: Ms Marian Domingo`,
-//   materialNeeded: '1 lineal meters',
-//   testingTime: 21,
-//   standard: [],
-// };
-
-let select_options = {};
-(async () => (
-  {
-    brand: [
-      {value: 'C_10033', label: 'XMT'},
-      {value: 'C_10035', label: 'XMF'},
-      {value: 'C_10037', label: 'XMS'},
-      {value: 'C_10041', label: 'XMG'}
-    ],
-    standard: [
-      {value: 'ISO 17893', label: 'ISO 17893'},
-      {value: 'EN 11611', label: 'EN 11611'},
-      {value: 'EN 11612', label: 'EN 11612'},
-      {value: 'EN 1149-3', label: 'ISO 1149-3'}
-    ],
-    testingCompany: [
-      {value: 'Aitex Headquarters (Spain)', label: 'Aitex Headquarters (Spain)'},
-      {value: 'AITEX SHANGHAI OFFICE', label: 'AITEX SHANGHAI OFFICE'}
-    ],
-    article: await B24.get_products()
-  }
-))().then(resp => select_options = resp);
-
-const empty_state = {
-  applicantName: '',
-  product: '',
-  code: '',
-  article: '',
-  colour: '',
-  length: 1,
-  width: 1.5,
-  partNumber: '',
-  rollNumber: '',
-  serialNumber: '',
-  materialNeeded: '',
-  testingTime: 21,
-  standard: [],
-  testingCompany: [],
-  brand: [],
-  sentOn: '',
-  receivedOn: '',
-  startedOn: '',
-  finishedOn: '',
-  resultsReceived: ''
-};
+import { select_options, empty_state } from './defaults';
 
 export default class Form extends React.Component {
     task_id = this.props.match.params.id || null;

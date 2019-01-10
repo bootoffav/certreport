@@ -86,7 +86,6 @@ class B24 {
         }))
         .then(response => response.json())
         .then(json => json.result)
-        // .catch(err => `Error: ${err}`);
 
     static async get_task(id = null) {
         let task;

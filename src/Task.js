@@ -3,6 +3,7 @@ import B24 from './B24.js';
 import { Link } from 'react-router-dom';
 import Tooltip from 'rc-tooltip';
 import 'rc-tooltip/assets/bootstrap.css';
+import { empty_state } from './defaults';
 
 export default class Task extends React.Component {
   constructor(props) {
@@ -12,17 +13,7 @@ export default class Task extends React.Component {
   componentDidMount() {
     B24.get_task(this.props.task.ID)
       .then(task => {
-        if (task.state) {
-          this.setState({ ...task.state });
-        } else {
-          this.setState({
-            article: '-',
-            standard: [],
-            resultsReceived: '-',
-            sentOn: '-',
-            brand: []
-          });
-        }
+        task.state ? this.setState({ ...task.state }) : this.setState({ ...empty_state });
       });
   }
 
@@ -43,7 +34,7 @@ export default class Task extends React.Component {
           : <div className="loader"></div>}
         </td>
         <td width="30%">
-          {this.state.sentOn
+          {this.state.serialNumber
             ? <Link to={{
               pathname: `/edit/${this.props.task.ID}`,
               state: {
@@ -55,8 +46,12 @@ export default class Task extends React.Component {
                 startedOn: this.state.startedOn ? this.state.startedOn.valueOf() : null
               }
             }}
-            >{this.props.task.TITLE}</Link>
-            : <div className="loader"></div>}
+            >{ this.props.task.TITLE }</Link>
+            : <Link to={{
+              pathname: `/edit/${this.props.task.ID}`,
+              state: { ...this.state }
+            }}>{ this.props.task.TITLE }</Link>
+            }
         </td>
         <td>
             {this.state.sentOn
@@ -70,9 +65,7 @@ export default class Task extends React.Component {
         <td />
         <td />
         <td>
-          {this.state.article
-            ? this.state.article
-            : <div className="loader"></div>}
+          {this.state.article || <div className="loader"></div>}
         </td>
         <td>
           {(this.state.standard)
