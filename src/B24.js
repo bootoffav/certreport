@@ -1,6 +1,7 @@
 import qs from 'qs';
 import moment from 'moment';
 import parse from './Helpers';
+import { generatePDF } from './PDF';
 
 const creator_id = process.env.REACT_APP_B24_USER_ID;
 const webhook_key = process.env.REACT_APP_B24_WEBHOOK_KEY;
@@ -53,13 +54,29 @@ class B24 {
     };
 
     static createTask = state => {
-      fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.add/`, {
+
+      const attachPDF = taskId => {
+        fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.addfile/`, {
           method: 'post',
-          headers: { 'content-type': 'application/x-www-form-urlencoded' },
-          body: qs.stringify([
-            Object.assign({}, B24.formTaskFields(state))
-          ])
-      });
+          body: qs.stringify({
+            TASK_ID: taskId,
+            FILE: {
+              NAME: `${state.serialNumber} - ${state.applicantName}.pdf`,
+              CONTENT: btoa(generatePDF(state).output())
+            }
+          })
+        })
+      }
+
+      fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.add/`, {
+        method: 'post',
+        headers: { 'content-type': 'application/x-www-form-urlencoded' },
+        body: qs.stringify([
+          Object.assign({}, B24.formTaskFields(state))
+        ])
+      })
+        .then(r => r.json())
+        .then(response => attachPDF(response.result));
     }
 
     static updateTask(state, task_id = null) {

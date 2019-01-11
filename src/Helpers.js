@@ -10,14 +10,13 @@ const parseDates = data => ({
   resultsReceived: m(data.resultsReceived, 'DDMMMYYYY')
 });
 
-const parseSelectable = (prop_name, selectee) => {
+const convertToSelectable = (prop_name, selectee) => {
   const selected = [];
   if (selectee !== '') {
     selectee.split(',').forEach(value => {
       value = value.trim();
       selected.push({
         value,
-        // label: value,
         label: select_options[prop_name].find(el => el.value === value).label,
       });
     });
@@ -62,17 +61,16 @@ function parse(description, uf_crm_task) {
     newState[prop_map[prop_name]] = prop_value.trim();
   });
 
-  newState.standard_orig = newState.standard;
-  newState.testingCompany_orig = newState.testingCompany;
-  newState.article_orig = newState.article;
+  // newState.standard_orig = newState.standard;
+  // newState.testingCompany_orig = newState.testingCompany;
+  // newState.article_orig = newState.article;
   
-  newState.standard = parseSelectable('standard', newState.standard);
-  newState.testingCompany = parseSelectable('testingCompany', newState.testingCompany);
-  // debugger;
-  // newState.article = parseSelectable('article', newState.article);
-  newState.brand = parseSelectable('brand', uf_crm_task.filter(v => v !== 'CO_6295').join(','));
+  newState.standard = convertToSelectable('standard', newState.standard);
+  newState.testingCompany = convertToSelectable('testingCompany', newState.testingCompany);
+  newState.brand = convertToSelectable('brand', uf_crm_task.filter(v => v !== 'CO_6295').join(','));
 
   return Object.assign(newState, { ...parseDates(newState) });
 };
 
 export default parse;
+export { convertToSelectable };

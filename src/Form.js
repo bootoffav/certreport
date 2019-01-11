@@ -4,7 +4,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select';
 import B24 from './B24.js';
 import Notification from './Notification.js';
-import handlePDF from './PDF.js';
+import { getPDF } from './PDF.js';
 import SerialNumber from './SerialNumber.js';
 import m from 'moment';
 import { select_options, empty_state } from './defaults';
@@ -49,10 +49,10 @@ export default class Form extends React.Component {
             () => this.afterUnsuccessfulSubmit()
           )
         : B24.createTask(this.state)
-          .then(
-            () => this.afterSuccessfulSubmit(),
-            () => this.afterUnsuccessfulSubmit()
-          )
+          // .then(
+          //   () => this.afterSuccessfulSubmit(),
+          //   () => this.afterUnsuccessfulSubmit()
+          // )
       }
     }
 
@@ -148,7 +148,7 @@ export default class Form extends React.Component {
                 </div>
                 <div className="col">
                   <button className="btn btn-info btn-block"
-                    onClick={(e) => handlePDF(e, this.state)}
+                    onClick={(e) => getPDF(e, this.state)}
                   >Get .PDF</button>
                 </div>
               </div>
