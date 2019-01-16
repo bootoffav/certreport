@@ -34,7 +34,7 @@ export default class Form extends React.Component {
     handleSelectChange = (selected, id) => {
       (selected)
       ? this.setState({ [id]: selected })
-      : this.setState({ id: selected });
+      : this.setState({ id: [selected] });
     }
 
     handleChange = e => this.setState({[e.target.id]: e.target.value});
@@ -49,10 +49,10 @@ export default class Form extends React.Component {
             () => this.afterUnsuccessfulSubmit()
           )
         : B24.createTask(this.state)
-          // .then(
-          //   () => this.afterSuccessfulSubmit(),
-          //   () => this.afterUnsuccessfulSubmit()
-          // )
+          .then(
+            () => this.afterSuccessfulSubmit(),
+            () => this.afterUnsuccessfulSubmit()
+          )
       }
     }
 
@@ -81,7 +81,7 @@ export default class Form extends React.Component {
                   <div className="col">
                     <div className="form-group">
                       Testing company
-                      <Select required={true} value={this.state.testingCompany} onChange={e => this.handleSelectChange(e, 'testingCompany')}
+                      <Select required={true} value={this.state.testingCompany} onChange={e => this.handleSelectChange([e], 'testingCompany')}
                         options={select_options.testingCompany}
                       />
                     </div>
@@ -124,7 +124,7 @@ export default class Form extends React.Component {
                 <div className="col">
                   <div className="form-group">
                     Brand
-                    <Select value={this.state.brand} onChange={e => this.handleSelectChange(e, 'brand')}
+                    <Select value={this.state.brand} onChange={e => this.handleSelectChange([e], 'brand')}
                       options={select_options.brand}
                     />
                   </div>

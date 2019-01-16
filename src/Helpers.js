@@ -61,10 +61,6 @@ function parse(description, uf_crm_task) {
     newState[prop_map[prop_name]] = prop_value.trim();
   });
 
-  // newState.standard_orig = newState.standard;
-  // newState.testingCompany_orig = newState.testingCompany;
-  // newState.article_orig = newState.article;
-  
   newState.standard = convertToSelectable('standard', newState.standard);
   newState.testingCompany = convertToSelectable('testingCompany', newState.testingCompany);
   newState.brand = convertToSelectable('brand', uf_crm_task.filter(v => v !== 'CO_6295').join(','));

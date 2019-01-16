@@ -24,11 +24,12 @@ class B24 {
       const formatSelectee = selectee => Array.isArray(selectee)
         ? selectee.map(item => item.value).join(', ')
         : [selectee].map(item => item.value).join(', ')
-
-      return {
+      
+        return {
         ...B24.default_params,
-        TITLE: `${state.serialNumber}_AITEX - ${formatSelectee(state.standard)} ${state.colour} - ${state.article} ` +
-            `${state.applicantName} (send ${formatDate(state.sentOn)} - plan ${formatDate(state.resultsReceived)})`,
+        TITLE: `${state.serialNumber}_AITEX - ${formatSelectee(state.standard)} - ${state.article}, ${state.colour} ` +
+            `(send ${formatDate(state.sentOn)} - plan ${formatDate(state.resultsReceived)})`,
+            // `(send ${formatDate(state.sentOn)} - plan ${formatDate(state.resultsReceived)}) = ${state.price} €`,
         DESCRIPTION: `[B]Applicant name:[/B] ${state.applicantName}\n` +
             `[B]Product:[/B] ${state.product}\n` +
             `[B]Code:[/B] ${state.code}\n` +
@@ -49,7 +50,7 @@ class B24 {
             `[B]tests to be finished on:[/B] ${formatDate(state.finishedOn)}\n` +
             `[B]results to be received on:[/B] ${formatDate(state.resultsReceived)}`,
         DEADLINE: moment(state.resultsReceived).toISOString(),
-        UF_CRM_TASK: B24.default_params.UF_CRM_TASK.concat(state.brand.value)
+        UF_CRM_TASK: B24.default_params.UF_CRM_TASK.concat(state.brand[0].value)
       }
     };
 
@@ -68,7 +69,7 @@ class B24 {
         })
       }
 
-      fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.add/`, {
+      return fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.add/`, {
         method: 'post',
         headers: { 'content-type': 'application/x-www-form-urlencoded' },
         body: qs.stringify([
@@ -104,24 +105,44 @@ class B24 {
         .then(response => response.json())
         .then(json => json.result)
 
-    static async get_task(id = null) {
-        let task;
-        if (id === null) {
-            throw new Error('id is not defined');
-        }
-        const result = await fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.getdata?ID=${id}`)
-          .then(rsp=> rsp.json()).then(rsp => rsp.result);
+    // static async get_task(id = null) {
+    //     let task;
+    //     if (id === null) {
+    //         throw new Error('id is not defined');
+    //     }
+    //     const result = await fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.getdata?ID=${id}`)
+    //       .then(rsp=> rsp.json()).then(rsp => rsp.result);
 
-        if (result) {
-            task = { ...result };
+    //     if (result) {
+    //         task = { ...result };
+    //         task.state = parse(
+    //           result.DESCRIPTION,
+    //           result.UF_CRM_TASK
+    //         );
+    //     }
+
+    //     return task;
+    // }
+
+    static get_task(id = null) {
+      if (id === null) {
+        throw new Error('id is not defined');
+      }
+
+      return fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.getdata?ID=${id}`)
+        .then(rsp=> rsp.json())
+        .then(rsp => {
+          let task;
+          if (rsp.result) {
+            task = { ...rsp.result };
             task.state = parse(
-              result.DESCRIPTION,
-              result.UF_CRM_TASK
+              rsp.result.DESCRIPTION,
+              rsp.result.UF_CRM_TASK
             );
-        }
-
-        return task;
-    }
+          }
+          return task;
+        });
+  }
 
     static async get_products() {
       let start = 0;

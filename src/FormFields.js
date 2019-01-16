@@ -68,10 +68,10 @@ class Article extends React.Component {
             this.props.handleSlaveChange(
               `${ product[this.prop_map.product].value }, ${ product[this.prop_map.weight].value }`,
               product[this.prop_map.code].value,
-              {
+              [{
                 value: select_options.brand.find(el => el.label === this.brand_map[ product[this.prop_map.brand] ]).value,
                 label: this.brand_map[ product[this.prop_map.brand] ]
-              }
+              }]
             );
             this.props.handleChange(e.label, 'article');
           }

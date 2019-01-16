@@ -9,12 +9,22 @@ export default class Task extends React.Component {
   constructor(props) {
       super(props);
       this.state = {};
-  }
+      B24.get_task(this.props.task.ID)
+        .then(task => {
+          alert(1);
+          task.state ? this.setState({ ...task.state }) : this.setState({ ...empty_state });
+          console.log(this.state);
+        });
+    }
+
   componentDidMount() {
-    B24.get_task(this.props.task.ID)
-      .then(task => {
-        task.state ? this.setState({ ...task.state }) : this.setState({ ...empty_state });
-      });
+    // B24.get_task(this.props.task.ID)
+    //   .then(task => {
+    //     alert(1);
+    //     task.state ? this.setState({ ...task.state }) : this.setState({ ...empty_state });
+    //     console.log(this.state);
+    //   }).then(() => console.log(this.state));
+    
   }
 
   render() {

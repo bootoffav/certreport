@@ -44,7 +44,6 @@ function generatePDF(state) {
       }
     };
 
-  debugger;
   pdf.setFontSize(12);
   pdf.text(`Standards: ${state.standard.map(el => ' ' + el.label)}`, 15, 80);
   pdf.text(`Testing company: ${state.testingCompany.label}`, 15, 85);
