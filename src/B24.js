@@ -12,11 +12,11 @@ const auditors = process.env.REACT_APP_B24_AUDITORS.split(',');
 class B24 {
     static default_params = {
         CREATED_BY: creator_id,
-        AUDITORS: auditors,
         UF_CRM_TASK: ['CO_6295'],
-        RESPONSIBLE_ID: 5,
         TAGS: ['certification'],
-        GROUP_ID: 21
+        GROUP_ID: 21,
+        AUDITORS: auditors,
+        RESPONSIBLE_ID: 5,
     }
 
     static formTaskFields = state => {
@@ -27,6 +27,10 @@ class B24 {
       
         return {
         ...B24.default_params,
+        UF_CRM_TASK: B24.default_params.UF_CRM_TASK.concat(state.brand[0].value),
+        RESPONSIBLE_ID: state.RESPONSIBLE_ID || B24.default_params.RESPONSIBLE_ID,
+        ACCOMPLICES: state.ACCOMPLICES || B24.default_params.ACCOMPLICES,
+        AUDITORS: state.AUDITORS || B24.default_params.AUDITORS,
         TITLE: `${state.serialNumber}_AITEX - ${formatSelectee(state.standard)} - ${state.article}, ${state.colour} ` +
             `(send ${formatDate(state.sentOn)} - plan ${formatDate(state.resultsReceived)})`,
             // `(send ${formatDate(state.sentOn)} - plan ${formatDate(state.resultsReceived)}) = ${state.price} €`,
@@ -50,10 +54,8 @@ class B24 {
             `[B]tests to be started on:[/B] ${formatDate(state.startedOn)}\n` +
             `[B]tests to be finished on:[/B] ${formatDate(state.finishedOn)}\n` +
             `[B]results to be received on:[/B] ${formatDate(state.resultsReceived)}\n` +
-            `${dataSeparator}\n` +
-            state.otherTextInDescription,
-        DEADLINE: moment(state.resultsReceived).toISOString(),
-        UF_CRM_TASK: B24.default_params.UF_CRM_TASK.concat(state.brand[0].value)
+            `${dataSeparator}` + (state.otherTextInDescription || ''),
+        DEADLINE: moment(state.resultsReceived).toISOString()
       }
     };
 

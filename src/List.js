@@ -83,7 +83,10 @@ export default class List extends React.Component {
               sentOn: props.original.state.sentOn ? props.original.state.sentOn.valueOf() : null,
               receivedOn: props.original.state.receivedOn ? props.original.state.receivedOn.valueOf() : null,
               resultsReceived: props.original.state.resultsReceived ? props.original.state.resultsReceived.valueOf() : null,
-              startedOn: props.original.state.startedOn ? props.original.state.startedOn.valueOf() : null
+              startedOn: props.original.state.startedOn ? props.original.state.startedOn.valueOf() : null,
+              AUDITORS: props.original.AUDITORS,
+              ACCOMPLICES: props.original.ACCOMPLICES,
+              RESPONSIBLE_ID: props.original.RESPONSIBLE_ID
             }
           }}
           >{ props.value }</Link>
