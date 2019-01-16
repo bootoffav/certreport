@@ -58,7 +58,7 @@ export default class List extends React.Component {
       accessor: 'state.serialNumber',
       width: 55,
       Cell: props => <a 
-        href={`https://xmtextiles.bitrix24.ru/company/personal/user/460/tasks/task/view/${props.original.ID}`}
+        href={`https://xmtextiles.bitrix24.ru/company/personal/user/460/tasks/task/view/${props.original.ID}/`}
         target="_blank" rel="noopener noreferrer"
         >
           { props.value }

@@ -1,6 +1,6 @@
 import qs from 'qs';
 import moment from 'moment';
-import parse from './Helpers';
+import parse, { dataSeparator } from './Helpers';
 import { generatePDF } from './PDF';
 
 const creator_id = process.env.REACT_APP_B24_USER_ID;
@@ -30,7 +30,8 @@ class B24 {
         TITLE: `${state.serialNumber}_AITEX - ${formatSelectee(state.standard)} - ${state.article}, ${state.colour} ` +
             `(send ${formatDate(state.sentOn)} - plan ${formatDate(state.resultsReceived)})`,
             // `(send ${formatDate(state.sentOn)} - plan ${formatDate(state.resultsReceived)}) = ${state.price} €`,
-        DESCRIPTION: `[B]Applicant name:[/B] ${state.applicantName}\n` +
+        DESCRIPTION: `${dataSeparator}\n` +
+            `[B]Applicant name:[/B] ${state.applicantName}\n` +
             `[B]Product:[/B] ${state.product}\n` +
             `[B]Code:[/B] ${state.code}\n` +
             `[B]Article:[/B] ${state.article}\n` +
@@ -48,7 +49,9 @@ class B24 {
             `[B]to be received on:[/B] ${formatDate(state.receivedOn)}\n` +
             `[B]tests to be started on:[/B] ${formatDate(state.startedOn)}\n` +
             `[B]tests to be finished on:[/B] ${formatDate(state.finishedOn)}\n` +
-            `[B]results to be received on:[/B] ${formatDate(state.resultsReceived)}`,
+            `[B]results to be received on:[/B] ${formatDate(state.resultsReceived)}\n` +
+            `${dataSeparator}\n` +
+            state.otherTextInDescription,
         DEADLINE: moment(state.resultsReceived).toISOString(),
         UF_CRM_TASK: B24.default_params.UF_CRM_TASK.concat(state.brand[0].value)
       }

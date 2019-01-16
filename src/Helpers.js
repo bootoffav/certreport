@@ -1,5 +1,6 @@
 import m from 'moment';
 import { select_options } from './Form';
+import { strict } from 'assert';
 
 
 const parseDates = data => ({
@@ -24,10 +25,31 @@ const convertToSelectable = (prop_name, selectee) => {
   return selected;
 }
 
+const dataSeparator = '-------------------------------------------------';
+
+let parseable_description = desc => (desc.startsWith(dataSeparator)) ? true : false;
+
+let parseDescription = desc => {
+  let taskState;
+  let otherTextInDescription;
+
+  desc = desc.slice(dataSeparator.length); //удалили открывающий сепаратор
+  let end = desc.indexOf(dataSeparator); // нашли начало закрывающего сепаратора
+  taskState = desc.slice(0, end).trim();
+  otherTextInDescription = desc.slice(end + dataSeparator.length);
+
+  return [taskState, otherTextInDescription];
+};
+
 function parse(description, uf_crm_task) {
-  if (description.indexOf(':[/B]') === -1) {
-      return null; // is not valid for parsing
+  if (!parseable_description) {
+    return null;
   }
+
+  let [unParsedTaskState, otherTextInDescription] = parseDescription(description);
+
+  const newState = {};
+
   const prop_map = {
     'Applicant name': 'applicantName',
     'Product': 'product',
@@ -49,14 +71,13 @@ function parse(description, uf_crm_task) {
     'tests to be finished on': 'finishedOn',
     'results to be received on': 'resultsReceived'
   }
-  const newState = {};
 
-  description = description
+  unParsedTaskState = unParsedTaskState
     .replace(/\[\/B\]/gi, ':prop_value_separator:')
     .replace(/\[B\]|/gi, '')
     .split('\n');
 
-  description.forEach(prop => {
+  unParsedTaskState.forEach(prop => {
     const [prop_name, prop_value] = prop.split('::prop_value_separator:');
     newState[prop_map[prop_name]] = prop_value.trim();
   });
@@ -64,9 +85,10 @@ function parse(description, uf_crm_task) {
   newState.standard = convertToSelectable('standard', newState.standard);
   newState.testingCompany = convertToSelectable('testingCompany', newState.testingCompany);
   newState.brand = convertToSelectable('brand', uf_crm_task.filter(v => v !== 'CO_6295').join(','));
+  newState.otherTextInDescription = otherTextInDescription;
 
   return Object.assign(newState, { ...parseDates(newState) });
 };
 
 export default parse;
-export { convertToSelectable };
+export { convertToSelectable, dataSeparator };
