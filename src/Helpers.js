@@ -1,7 +1,5 @@
 import m from 'moment';
 import { select_options } from './Form';
-import { strict } from 'assert';
-
 
 const parseDates = data => ({
   sentOn: m(data.sentOn, 'DDMMMYYYY'),

@@ -25,6 +25,11 @@ const empty_state = {
 };
 
 function initApp() {
+  select_options = JSON.parse(localStorage.getItem('select_options'));
+  if (select_options) {
+    return;
+  }
+
   (async () => (
     {
       brand: [
@@ -44,9 +49,12 @@ function initApp() {
         {value: 'Aitex Headquarters (Spain)', label: 'Aitex Headquarters (Spain)'},
         {value: 'AITEX SHANGHAI OFFICE', label: 'AITEX SHANGHAI OFFICE'}
       ],
-      article: await B24.get_products()
+      article: await B24.get_products(),
+      created: new Date()
     }
-  ))().then(r => select_options = r);
+  ))().then(result => {
+    localStorage.setItem('select_options', JSON.stringify(result));
+    select_options = result;
+  });
 }
-
 export { empty_state, select_options, initApp };
