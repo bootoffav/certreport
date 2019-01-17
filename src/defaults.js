@@ -42,7 +42,8 @@ const empty_state = {
   receivedOn: '',
   startedOn: '',
   finishedOn: '',
-  resultsReceived: ''
+  resultsReceived: '',
+  price: ''
 };
 
 function initApp() {

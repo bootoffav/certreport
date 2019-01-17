@@ -51,8 +51,7 @@ class B24 {
         ...B24.defaultParams,
         UF_CRM_TASK: B24.makeUfCrmTaskField(state),
         TITLE: `${state.serialNumber}_AITEX - ${formatSelectee(state.standard)} - ${state.article}, ${state.colour} ` +
-            `(send ${formatDate(state.sentOn)} - plan ${formatDate(state.resultsReceived)})`,
-            // `(send ${formatDate(state.sentOn)} - plan ${formatDate(state.resultsReceived)}) = ${state.price} €`,
+            `(send ${formatDate(state.sentOn)} - plan ${formatDate(state.resultsReceived)}) = ${state.price} €`,
         DESCRIPTION: `[B]Applicant name:[/B] ${state.applicantName}\n` +
             `[B]Product:[/B] ${state.product}\n` +
             `[B]Code:[/B] ${state.code}\n` +
@@ -64,6 +63,7 @@ class B24 {
             `[B]Part number:[/B] ${state.partNumber}\n` +
             `[B]Roll number:[/B] ${state.rollNumber}\n` +
             `[B]Standard:[/B] ${formatSelectee(state.standard)}\n` +
+            `[B]Price:[/B] ${(state.price)} €\n` +
             `[B]Testing company:[/B] ${formatSelectee(state.testingCompany)}\n` +
             `[B]Material needed:[/B] ${state.materialNeeded}\n` +
             `[B]Testing time, days:[/B] ${state.testingTime}\n` +
@@ -111,7 +111,6 @@ class B24 {
         if (task_id === null) {
             throw new Error('task id is not defined');
         }
-        // const task_data = Object.assign({}, B24.formTaskFields(state));
         const task_data = B24.formTaskFields(state);
         return fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.update/`, {
           method: 'post',

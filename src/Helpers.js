@@ -59,6 +59,7 @@ function parse(description, uf_crm_task) {
     'Part number': 'partNumber',
     'Roll number': 'rollNumber',
     'Standard': 'standard',
+    'Price': 'price',
     'Testing company': 'testingCompany',
     'Material needed': 'materialNeeded',
     'Testing time, days': 'testingTime',
@@ -79,6 +80,10 @@ function parse(description, uf_crm_task) {
     newState[prop_map[prop_name]] = prop_value.trim();
   });
 
+  if (newState.price) {
+    newState.price = newState.price.split(' ')[0];
+  }
+  
   newState.standard = convertToSelectable('standard', newState.standard);
   newState.testingCompany = convertToSelectable('testingCompany', newState.testingCompany);
   newState.brand = convertToSelectable('brand', uf_crm_task.filter(v => ['C_10033', 'C_10035', 'C_10037', 'C_10041'].includes(v)).join(','));

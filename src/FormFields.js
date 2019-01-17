@@ -30,6 +30,17 @@ const BaseInput = props =>
     </div>
   </div>
 
+const Price = props =>
+  <div className="form-group">
+    {props.label}
+    <div className="input-group">
+      <input type="text" className="form-control" aria-label="Amount (to the nearest dollar)" required
+        id={props.id} value={props.value} onChange={props.handleChange}/>
+      <div className="input-group-append">
+        <span className="input-group-text">€</span>
+      </div>
+    </div>
+  </div>
 
 class Article extends React.Component {
   prop_map = {
@@ -83,4 +94,4 @@ class Article extends React.Component {
   }
 }
 
-export { PickDate, BaseInput, Article };
+export { PickDate, BaseInput, Article, Price };
