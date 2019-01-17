@@ -10,32 +10,50 @@ const auditors = process.env.REACT_APP_B24_AUDITORS.split(',');
 
 
 class B24 {
-    static default_params = {
+    static defaultParams = {
         CREATED_BY: creator_id,
-        UF_CRM_TASK: ['CO_6295'],
         TAGS: ['certification'],
         GROUP_ID: 21,
-        AUDITORS: auditors,
-        RESPONSIBLE_ID: 5,
     }
 
+    static makeUfCrmTaskField = state => {
+      let UF_CRM_TASK = [];
+
+      if (state.UF_CRM_TASK) {
+        state.UF_CRM_TASK.forEach(item => {
+          if (![
+              'C_10033',
+              'C_10035',
+              'C_10037',
+              'C_10041',
+              'CO_6295'
+            ].includes(item)
+          ) {
+            UF_CRM_TASK.push(item);
+          }
+        });
+      }
+
+      UF_CRM_TASK.push(state.brand[0].value, 'CO_6295');
+
+      return UF_CRM_TASK;
+    }
+    
     static formTaskFields = state => {
+
+
       const formatDate = date => moment(date).format("DDMMMYYYY");
       const formatSelectee = selectee => Array.isArray(selectee)
         ? selectee.map(item => item.value).join(', ')
         : [selectee].map(item => item.value).join(', ')
       
         return {
-        ...B24.default_params,
-        UF_CRM_TASK: B24.default_params.UF_CRM_TASK.concat(state.brand[0].value),
-        RESPONSIBLE_ID: state.RESPONSIBLE_ID || B24.default_params.RESPONSIBLE_ID,
-        ACCOMPLICES: state.ACCOMPLICES || B24.default_params.ACCOMPLICES,
-        AUDITORS: state.AUDITORS || B24.default_params.AUDITORS,
+        ...B24.defaultParams,
+        UF_CRM_TASK: B24.makeUfCrmTaskField(state),
         TITLE: `${state.serialNumber}_AITEX - ${formatSelectee(state.standard)} - ${state.article}, ${state.colour} ` +
             `(send ${formatDate(state.sentOn)} - plan ${formatDate(state.resultsReceived)})`,
             // `(send ${formatDate(state.sentOn)} - plan ${formatDate(state.resultsReceived)}) = ${state.price} €`,
-        DESCRIPTION: `${dataSeparator}\n` +
-            `[B]Applicant name:[/B] ${state.applicantName}\n` +
+        DESCRIPTION: `[B]Applicant name:[/B] ${state.applicantName}\n` +
             `[B]Product:[/B] ${state.product}\n` +
             `[B]Code:[/B] ${state.code}\n` +
             `[B]Article:[/B] ${state.article}\n` +
@@ -61,6 +79,11 @@ class B24 {
 
     static createTask = state => {
 
+      const defaultParams = {
+        AUDITORS: auditors,
+        RESPONSIBLE_ID: 5
+      }
+
       const attachPDF = taskId => {
         fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.addfile/`, {
           method: 'post',
@@ -74,12 +97,11 @@ class B24 {
         })
       }
 
+      const taskData = { ...B24.formTaskFields(state), ...defaultParams };
       return fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.add/`, {
         method: 'post',
         headers: { 'content-type': 'application/x-www-form-urlencoded' },
-        body: qs.stringify([
-          Object.assign({}, B24.formTaskFields(state))
-        ])
+        body: qs.stringify([ taskData ])
       })
         .then(r => r.json())
         .then(response => attachPDF(response.result));
@@ -89,7 +111,8 @@ class B24 {
         if (task_id === null) {
             throw new Error('task id is not defined');
         }
-        const task_data = Object.assign({}, B24.formTaskFields(state));
+        // const task_data = Object.assign({}, B24.formTaskFields(state));
+        const task_data = B24.formTaskFields(state);
         return fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.update/`, {
           method: 'post',
           headers: { 'content-type': 'application/x-www-form-urlencoded' },

@@ -27,13 +27,12 @@ const convertToSelectable = (prop_name, selectee) => {
 
 const dataSeparator = '-------------------------------------------------';
 
-let parseable_description = desc => (desc.startsWith(dataSeparator)) ? true : false;
+let parseable_description = desc => (desc.startsWith('[B]Applicant name:[/B]')) ? true : false;
 
 let parseDescription = desc => {
   let taskState;
   let otherTextInDescription;
 
-  desc = desc.slice(dataSeparator.length); //удалили открывающий сепаратор
   let end = desc.indexOf(dataSeparator); // нашли начало закрывающего сепаратора
   taskState = desc.slice(0, end).trim();
   otherTextInDescription = desc.slice(end + dataSeparator.length);
@@ -84,7 +83,7 @@ function parse(description, uf_crm_task) {
 
   newState.standard = convertToSelectable('standard', newState.standard);
   newState.testingCompany = convertToSelectable('testingCompany', newState.testingCompany);
-  newState.brand = convertToSelectable('brand', uf_crm_task.filter(v => v !== 'CO_6295').join(','));
+  newState.brand = convertToSelectable('brand', uf_crm_task.filter(v => ['C_10033', 'C_10035', 'C_10037', 'C_10041'].includes(v)).join(','));
   newState.otherTextInDescription = otherTextInDescription;
 
   return Object.assign(newState, { ...parseDates(newState) });
