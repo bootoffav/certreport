@@ -61,7 +61,7 @@ class Article extends React.Component {
     <div className={this.props.col || 'col'}>
       <div className="form-group">
       Article
-      <Select value={select_options.article.find(el => el.label === this.props.value)}
+      <Select value={this.props.options.find(el => el.label === this.props.value)}
         onChange={
           async e => {
             let product = await B24.get_product(e.value);
@@ -76,7 +76,7 @@ class Article extends React.Component {
             this.props.handleChange(e.label, 'article');
           }
         }
-        options={select_options.article}
+        options={this.props.options}
       />
       </div>
     </div>);

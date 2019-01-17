@@ -13,7 +13,6 @@ export default class Task extends React.Component {
         .then(task => {
           alert(1);
           task.state ? this.setState({ ...task.state }) : this.setState({ ...empty_state });
-          console.log(this.state);
         });
     }
 

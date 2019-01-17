@@ -97,6 +97,7 @@ export default class Form extends React.Component {
                 </div>
                 <div className="form-row">
                   <Article value={this.state.article}
+                    options={select_options.article}
                     handleChange={this.handleSelectChange}
                     handleSlaveChange={(product, code, brand) => {
                       this.setState({ product, code, brand });
