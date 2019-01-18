@@ -72,6 +72,7 @@ class B24 {
             `[B]tests to be started on:[/B] ${formatDate(state.startedOn)}\n` +
             `[B]tests to be finished on:[/B] ${formatDate(state.finishedOn)}\n` +
             `[B]results to be received on:[/B] ${formatDate(state.resultsReceived)}\n` +
+            `${state.link ? '[B]Edit:[/B] ' + state.link + '\n' : ''} ` +
             `${dataSeparator}` + (state.otherTextInDescription || ''),
         DEADLINE: moment(state.resultsReceived).toISOString()
       }
@@ -104,7 +105,11 @@ class B24 {
         body: qs.stringify([ taskData ])
       })
         .then(r => r.json())
-        .then(response => attachPDF(response.result));
+        .then(response => {
+          attachPDF(response.result);
+          state.link = `[URL=https://certreport.xmtextiles.com/edit/${response.result}/]this task[/URL]`;
+          B24.updateTask(state, response.result); //to include link for editing
+        });
     }
 
     static updateTask(state, task_id = null) {
@@ -131,25 +136,6 @@ class B24 {
         }))
         .then(response => response.json())
         .then(json => json.result)
-
-    // static async get_task(id = null) {
-    //     let task;
-    //     if (id === null) {
-    //         throw new Error('id is not defined');
-    //     }
-    //     const result = await fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.getdata?ID=${id}`)
-    //       .then(rsp=> rsp.json()).then(rsp => rsp.result);
-
-    //     if (result) {
-    //         task = { ...result };
-    //         task.state = parse(
-    //           result.DESCRIPTION,
-    //           result.UF_CRM_TASK
-    //         );
-    //     }
-
-    //     return task;
-    // }
 
     static get_task(id = null) {
       if (id === null) {

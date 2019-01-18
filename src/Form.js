@@ -10,8 +10,17 @@ import m from 'moment';
 import { select_options, empty_state } from './defaults';
 
 export default class Form extends React.Component {
-    task_id = this.props.match.params.id || null;
-    state = this.props.location.state || { ...empty_state };
+    constructor(props) {
+      super(props);
+      this.task_id = props.match.params.id || null;
+      this.state = props.location.state || empty_state;
+    }
+
+    componentDidMount() {
+      if (this.props.match.path === '/edit/:id' && (this.props.location.state === undefined)) {
+        B24.get_task(this.task_id).then(r => this.setState({ ...r.state }));
+      }
+    }
 
     handleDateChange = (date, prop_name) => {
       date = m(date);

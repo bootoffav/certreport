@@ -25,7 +25,7 @@ const convertToSelectable = (prop_name, selectee) => {
 
 const dataSeparator = '-------------------------------------------------';
 
-let parseable_description = desc => (desc.startsWith('[B]Applicant name:[/B]')) ? true : false;
+let parseable_description = desc => desc.startsWith('[B]Applicant name:[/B]') ? true : false;
 
 let parseDescription = desc => {
   let taskState;
@@ -39,7 +39,7 @@ let parseDescription = desc => {
 };
 
 function parse(description, uf_crm_task) {
-  if (!parseable_description) {
+  if (!parseable_description(description)) {
     return null;
   }
 
@@ -67,7 +67,8 @@ function parse(description, uf_crm_task) {
     'to be received on': 'receivedOn',
     'tests to be started on': 'startedOn',
     'tests to be finished on': 'finishedOn',
-    'results to be received on': 'resultsReceived'
+    'results to be received on': 'resultsReceived',
+    'Edit': 'link'
   }
 
   unParsedTaskState = unParsedTaskState
