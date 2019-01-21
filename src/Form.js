@@ -20,6 +20,9 @@ export default class Form extends React.Component {
       if (this.props.match.path === '/edit/:id' && (this.props.location.state === undefined)) {
         B24.get_task(this.task_id).then(r => this.setState({ ...r.state }));
       }
+      if (!this.state.link) {
+        this.setState({ link: `[URL=https://certreport.xmtextiles.com/edit/${this.task_id}/]this task[/URL]` });
+      }
     }
 
     handleDateChange = (date, prop_name) => {
