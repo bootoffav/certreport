@@ -99,14 +99,19 @@ export default class List extends React.Component {
       width: 95,
       Cell: props => props.value.length === 0 ? '' : props.value.format("DD MMM YYYY")
     }, {
-      Header: 'Ткань',
+      Header: 'Fabric',
       accessor: 'state.article',
       width: 100
     }, {
-      Header: 'Стандарт',
+      Header: 'Standards',
       accessor: 'state.standard',
       minWidth: 100,
       Cell: props => props.value.length === 0 ? '' : props.value.map(el => `${el.label} `)
+    }, {
+      Header: 'Price, €',
+      accessor: 'state.price',
+      minWidth: 110,
+      Cell: props => Number(props.value).toLocaleString('en-US', {style: 'currency', currency: 'EUR'}).replace(/,/g, ' ')
     }];
 
   componentDidMount() {

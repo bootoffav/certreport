@@ -34,11 +34,14 @@ const Price = props =>
   <div className="form-group">
     {props.label}
     <div className="input-group">
-      <input type="text" className="form-control" aria-label="Amount (to the nearest dollar)" required
-        id={props.id} value={props.value} onChange={props.handleChange}/>
-      <div className="input-group-append">
+      <div className="input-group-prepend">
         <span className="input-group-text">€</span>
       </div>
+      <input type="text" className="form-control" required
+        id={props.id}
+        value={props.value}
+        onChange={props.handleChange}
+        />
     </div>
   </div>
 
