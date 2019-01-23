@@ -1,5 +1,6 @@
 import m from 'moment';
 import { select_options } from './Form';
+import { empty_state } from './defaults';
 
 const parseDates = data => ({
   sentOn: m(data.sentOn, 'DDMMMYYYY'),
@@ -40,7 +41,11 @@ let parseDescription = desc => {
 
 function parse(description, uf_crm_task) {
   if (!parseable_description(description)) {
-    return null;
+    return {
+      ...empty_state,
+      otherTextInDescription: description,
+      UF_CRM_TASK: uf_crm_task
+    };
   }
 
   let [unParsedTaskState, otherTextInDescription] = parseDescription(description);

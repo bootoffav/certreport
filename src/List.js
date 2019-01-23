@@ -136,6 +136,8 @@ export default class List extends React.Component {
         
         filtered.old.forEach(task => {
           task.state = { ...empty_state };
+          task.state.otherTextInDescription = '\n' + task.DESCRIPTION;
+          task.state.UF_CRM_TASK = task.UF_CRM_TASK;
           task.position = taskPositionInList++;
         });
         tasks = tasks.concat(filtered.old);
