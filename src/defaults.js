@@ -9,11 +9,14 @@ let select_options = {
   ],
   standard: [
     {value: 'ISO 17893', label: 'ISO 17893'},
+    {value: 'EN 1149-3', label: 'ISO 1149-3'},
     {value: 'EN 11611', label: 'EN 11611'},
     {value: 'EN 11612', label: 'EN 11612'},
-    {value: 'EN 1149-3', label: 'ISO 1149-3'},
+    {value: 'EN 13034', label: 'EN 13034'},
     {value: 'EN 20471', label: 'EN 20471'},
-    {value: 'EN 469', label: 'EN 469'}
+    {value: 'EN 469', label: 'EN 469'},
+    {value: 'EN 61482-1-1', label: 'EN 61482-1-1'},
+    {value: 'RIS-3279-TOM (former GO/RT 3279)', label: 'RIS-3279-TOM (former GO/RT 3279)'}
   ],
   testingCompany: [
     {value: 'Aitex Headquarters (Spain)', label: 'Aitex Headquarters (Spain)'},
