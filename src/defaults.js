@@ -12,11 +12,13 @@ let select_options = {
     {value: 'EN 11611', label: 'EN 11611'},
     {value: 'EN 11612', label: 'EN 11612'},
     {value: 'EN 1149-3', label: 'ISO 1149-3'},
-    {value: 'EN 20471', label: 'EN 20471'}
+    {value: 'EN 20471', label: 'EN 20471'},
+    {value: 'EN 469', label: 'EN 469'}
   ],
   testingCompany: [
     {value: 'Aitex Headquarters (Spain)', label: 'Aitex Headquarters (Spain)'},
-    {value: 'AITEX SHANGHAI OFFICE', label: 'AITEX SHANGHAI OFFICE'}
+    {value: 'AITEX SHANGHAI OFFICE', label: 'AITEX SHANGHAI OFFICE'},
+    {value: 'SATRA (UK)', label: 'SATRA (UK)'}
   ],
   created: new Date(),
   article: []
