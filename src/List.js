@@ -102,6 +102,14 @@ export default class List extends React.Component {
       accessor: 'state.article',
       width: 100
     }, {
+      Header: 'Test report',
+      accessor: 'state.testReport',
+      minWidth: 100,
+    }, {
+      Header: 'Certificate',
+      accessor: 'state.certificate',
+      minWidth: 100,
+    }, {
       Header: 'Standards',
       accessor: 'state.standard',
       minWidth: 100,

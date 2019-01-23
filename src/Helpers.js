@@ -64,6 +64,8 @@ function parse(description, uf_crm_task) {
     'Part number': 'partNumber',
     'Roll number': 'rollNumber',
     'Standard': 'standard',
+    'Test report': 'testReport',
+    'Certificate': 'certificate',
     'Price': 'price',
     'Testing company': 'testingCompany',
     'Material needed': 'materialNeeded',

@@ -119,6 +119,8 @@ export default class Form extends React.Component {
                   <BaseInput value={this.state.product} id='product' col="col-4" label='Product' handleChange={this.handleChange} />
                   <BaseInput value={this.state.code} id='code' label='Code' handleChange={this.handleChange} />
                   <BaseInput value={this.state.colour} id='colour' label='Colour' handleChange={this.handleChange} />
+                  <BaseInput value={this.state.testReport} id='testReport' label='Test Report' handleChange={this.handleChange} />
+                  <BaseInput value={this.state.certificate} id='certificate' label='Certificate' handleChange={this.handleChange} />
                   <BaseInput value={this.state.materialNeeded} id='materialNeeded' label='Material needed' handleChange={this.handleChange} />
                 </div>
                 <div className="form-row">

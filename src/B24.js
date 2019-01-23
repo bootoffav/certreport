@@ -65,6 +65,8 @@ class B24 {
             `[B]Standard:[/B] ${formatSelectee(state.standard)}\n` +
             `[B]Price:[/B] ${(state.price)} €\n` +
             `[B]Testing company:[/B] ${formatSelectee(state.testingCompany)}\n` +
+            `[B]Test report:[/B] ${(state.testReport)}\n` +
+            `[B]Certificate:[/B] ${(state.certificate)}\n` +
             `[B]Material needed:[/B] ${state.materialNeeded}\n` +
             `[B]Testing time, days:[/B] ${state.testingTime}\n` +
             `[B]to be sent on:[/B] ${formatDate(state.sentOn)}\n` +
