@@ -89,6 +89,7 @@ function parse(description, uf_crm_task) {
   newState.testingCompany = convertToSelectable('testingCompany', newState.testingCompany);
   newState.brand = convertToSelectable('brand', uf_crm_task.filter(v => ['C_10033', 'C_10035', 'C_10037', 'C_10041'].includes(v)).join(','));
   newState.otherTextInDescription = otherTextInDescription;
+  newState.UF_CRM_TASK = uf_crm_task;
 
   return Object.assign(newState, { ...parseDates(newState) });
 };

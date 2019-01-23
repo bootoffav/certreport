@@ -84,7 +84,6 @@ export default class List extends React.Component {
               receivedOn: props.original.state.receivedOn ? props.original.state.receivedOn.valueOf() : null,
               resultsReceived: props.original.state.resultsReceived ? props.original.state.resultsReceived.valueOf() : null,
               startedOn: props.original.state.startedOn ? props.original.state.startedOn.valueOf() : null,
-              UF_CRM_TASK: props.original.UF_CRM_TASK
             }
           }}
           >{ props.value }</Link>
