@@ -157,6 +157,10 @@ export default class Form extends React.Component {
                   handleChange={date => this.handleDateChange(date, 'resultsReceived')}/>
               </div>
               <div className="form-row">
+                  <label htmlFor='comments'>Comments:</label>
+                  <textarea className='form-control' value={this.state.comments} id='comments' rows='3' onChange={this.handleChange} />
+              </div>
+              <div className="form-row">
                 <div className="col">
                   <button type="submit"
                     className="btn btn-danger btn-block"

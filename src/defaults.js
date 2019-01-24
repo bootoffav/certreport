@@ -48,7 +48,10 @@ const empty_state = {
   startedOn: '',
   finishedOn: '',
   resultsReceived: '',
-  price: ''
+  price: '',
+  comments: '',
+  testReport: '',
+  certificate: ''
 };
 
 function initApp() {

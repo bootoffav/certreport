@@ -74,6 +74,7 @@ class B24 {
             `[B]tests to be started on:[/B] ${formatDate(state.startedOn)}\n` +
             `[B]tests to be finished on:[/B] ${formatDate(state.finishedOn)}\n` +
             `[B]results to be received on:[/B] ${formatDate(state.resultsReceived)}\n` +
+            `${state.comments ? '[B]Comments:[/B] ' + state.comments + '\n' : ''}` +
             `${state.link ? '[B]Edit:[/B] ' + state.link + '\n' : ''} ` +
             `${dataSeparator}` + (state.otherTextInDescription || ''),
         DEADLINE: moment(state.resultsReceived).toISOString()
