@@ -168,26 +168,38 @@ class B24 {
         return json.result;
       };
 
-      do {
-        products = products.concat(await fetch(`${main_url}/${creator_id}/${webhook_key}/crm.product.list?` +
-          qs.stringify({
-            order: {
-              NAME: 'ASC'
-            },
-            filter: {
-              SECTION_ID: 8568
-            },
-            select: ['ID', 'NAME'],
-            start
-          }))
-        .then(response => response.json())
-        .then(step));
-      } while (start !== undefined);
-      
-      return products.map(product => ({
-        value: product.ID,
-        label: product.NAME
-      }));
+      const productSections = new Map([ [8568, 'XMF'], [8574, 'XMT'], [8572, 'XMS'] ]);
+      let productsInSection = [];
+
+      for (let [sectionId, brand] of productSections) {
+        do {
+          productsInSection = productsInSection.concat(await fetch(`${main_url}/${creator_id}/${webhook_key}/crm.product.list?` +
+            qs.stringify({
+              order: {
+                NAME: 'ASC'
+              },
+              filter: {
+                SECTION_ID: sectionId
+              },
+              select: ['ID', 'NAME'],
+              start
+            }))
+          .then(response => response.json())
+          .then(step));
+        } while (start !== undefined);
+        productsInSection = productsInSection.map(product => ({
+          value: product.ID,
+          label: product.NAME
+        }));
+        products.push({
+          label: brand,
+          options: [ ...productsInSection ]
+        });
+
+        productsInSection.length = 0;
+      };
+
+      return products;
   }
   
   static get_product(id = null) {

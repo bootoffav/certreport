@@ -24,7 +24,7 @@ let select_options = {
     {value: 'SATRA (UK)', label: 'SATRA (UK)'}
   ],
   created: new Date(),
-  article: []
+  articles: []
 };
 
 const empty_state = {
@@ -52,17 +52,17 @@ const empty_state = {
 };
 
 function initApp() {
-  let articleFromStorage = JSON.parse(localStorage.getItem('article'));
+  let articlesFromStorage = JSON.parse(localStorage.getItem('articles'));
   
-  if (articleFromStorage) {
-    select_options.article = articleFromStorage;
+  if (articlesFromStorage) {
+    select_options.articles = articlesFromStorage;
     return;
   }
 
   B24.get_products()
     .then(products => {
-      localStorage.setItem('article', JSON.stringify(products));
-      select_options.article = products;
+      localStorage.setItem('articles', JSON.stringify(products));
+      select_options.articles = products;
     });
 
 }
