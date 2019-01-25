@@ -69,11 +69,11 @@ class B24 {
             `[B]Certificate:[/B] ${(state.certificate)}\n` +
             `[B]Material needed:[/B] ${state.materialNeeded}\n` +
             `[B]Testing time, days:[/B] ${state.testingTime}\n` +
-            `[B]to be sent on:[/B] ${formatDate(state.sentOn)}\n` +
-            `[B]to be received on:[/B] ${formatDate(state.receivedOn)}\n` +
-            `[B]tests to be started on:[/B] ${formatDate(state.startedOn)}\n` +
-            `[B]tests to be finished on:[/B] ${formatDate(state.finishedOn)}\n` +
-            `[B]results to be received on:[/B] ${formatDate(state.resultsReceived)}\n` +
+            `${state.sentOn ? '[B]to be sent on:[/B]' + formatDate(state.sentOn) + '\n' : ''}` +
+            `${state.receivedOn ? '[B]to be received on:[/B]' + formatDate(state.receivedOn) + '\n' : ''}` +
+            `${state.startedOn ? '[B]tests to be started on:[/B]' + formatDate(state.startedOn) + '\n' : ''}` +
+            `${state.finishedOn ? '[B]tests to be finished on:[/B]' + formatDate(state.finishedOn) + '\n' : ''}` +
+            `${state.resultsReceived ? '[B]results to be received on:[/B]' + formatDate(state.resultsReceived) + '\n' : ''}` +
             `${state.comments ? '[B]Comments:[/B] ' + state.comments + '\n' : ''}` +
             `${state.link ? '[B]Edit:[/B] ' + state.link + '\n' : ''} ` +
             `${dataSeparator}` + (state.otherTextInDescription || ''),

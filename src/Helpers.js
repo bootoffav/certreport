@@ -79,27 +79,17 @@ function parse(description, uf_crm_task) {
     'Edit': 'link',
   }
 
-  unParsedTaskState = unParsedTaskState
-    .replace(/:/g, '');
-    // .replace(/\[\/B\]/gi, '_pvs_')
-    // .replace(/\[B\]|/gi, '')
-    // .split('\n');
+  unParsedTaskState = unParsedTaskState.replace(/:/g, '');
 
-    const props = unParsedTaskState.match(/\[B\].+\[\/B\]/gm)
-                    .map(prop => prop.slice(3, -4));
-    const vals = unParsedTaskState.split(/\[B\].+\[\/B\]/g)
-                  .map(item => item.trim())
-                  .slice(1);
+  const props = unParsedTaskState.match(/\[B\].+\[\/B\]/gm)
+                  .map(prop => prop.slice(3, -4));
+  const vals = unParsedTaskState.split(/\[B\].+\[\/B\]/g)
+                .map(item => item.trim())
+                .slice(1);
 
-    for (let i = 0; i < props.length; i++) {
-      newState[prop_map[props[i]]] = vals[i];
-    }
-    // debugger;
-  // unParsedTaskState.forEach((prop, ind, arr) => {
-  //   const [prop_name, prop_value] = prop.split(':_pvs_');
-  //   // debugger;
-  //   newState[prop_map[prop_name]] = prop_value.trim();
-  // });
+  for (let i = 0; i < props.length; i++) {
+    newState[prop_map[props[i]]] = vals[i];
+  }
 
   if (newState.price) {
     newState.price = newState.price.split(' ')[0];

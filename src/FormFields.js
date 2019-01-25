@@ -8,10 +8,9 @@ const PickDate = props =>
   <div className="col">
     {props.label}
     <div className="form-group">
-      <DatePicker className="form-control" required
+      <DatePicker className="form-control"
         selected={
           props.date
-          // ? props.date.toDate()
           ? new Date(props.date)
           : null
         }

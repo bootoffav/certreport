@@ -25,22 +25,19 @@ export default class Form extends React.Component {
       }
     }
 
-    handleDateChange = (date, prop_name) => {
-      date = m(date);
-      if (prop_name === 'sentOn') {
+    handleDateChange = (date, prop) => {
+      date = date ? m(date) : date;
+      if (prop === 'sentOn' && date) {
         let receivedOn = date.clone().add(3, 'days');
         let startedOn = receivedOn.clone().add(1, 'days');
         let finishedOn = startedOn.clone().add(this.state.testingTime, 'days');
         let resultsReceived = finishedOn.clone().add(1, 'days');
-        this.setState({
-          sentOn: date,
-          receivedOn, startedOn, finishedOn, resultsReceived
-        });
-      } else {
-        this.setState({
-          [prop_name]: date
-        });
+        this.setState({receivedOn, startedOn, finishedOn, resultsReceived});
       }
+
+      this.setState({
+        [prop]: date
+      });
     }
 
     handleSelectChange = (selected, id) => {
