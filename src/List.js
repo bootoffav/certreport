@@ -116,14 +116,22 @@ export default class List extends React.Component {
       Cell: props => props.value.length === 0 ? '' : props.value.map(el => `${el.label} `)
     }, {
       Header: 'Price, €',
+      Footer: () => `Total cost: ${this.formatPrice(this.totalPrice)}`,
       accessor: 'state.price',
       minWidth: 110,
-      Cell: props => Number(props.value).toLocaleString('en-US', {style: 'currency', currency: 'EUR'}).replace(/,/g, ' ')
+      Cell: props => this.formatPrice(props.value)
     }];
+
+  formatPrice = price => Number(price)
+    .toLocaleString('en-US', {
+      style: 'currency',
+      currency: 'EUR'
+    })
+    .replace(/,/g, ' ');
 
   componentDidMount() {
     let taskPositionInList = 1;
-   
+
     B24.get_tasks()
       .then(tasks => {
         let filtered = {
@@ -134,8 +142,7 @@ export default class List extends React.Component {
         return filtered;
       })
       .then(async filtered => {
-        let task;
-        let tasks = [];
+        let task, tasks = [];
 
         for (let i = 0; i < filtered.new.length; i++) {
           task = await B24.get_task(filtered.new[i].ID);
@@ -150,7 +157,10 @@ export default class List extends React.Component {
         });
         tasks = tasks.concat(filtered.old);
         return tasks;
-      }).then(tasks => this.setState({ tasks }));
+      }).then(tasks => {
+          this.totalPrice = tasks.reduce((sum, task) => sum + Number(task.state.price), 0);
+          this.setState({ tasks });
+      });
   }
 
   render (){
@@ -159,15 +169,15 @@ export default class List extends React.Component {
         data={ this.state.tasks } columns={ this.columns }
         defaultSorted={[
           {
-            id: "position",
+            id: 'position',
             asc: true
           }
         ]}
-        defaultPageSize={ 20 } className="-striped -highlight table"/>;
+        defaultPageSize={ 20 } className='-striped -highlight table'/>;
     }
-    return <div className="loader-place row align-items-center">
-      <div className="col row justify-content-center">
-        <Loader type="ThreeDots" height="80" width="200"/>
+    return <div className='loader-place row align-items-center'>
+      <div className='col row justify-content-center'>
+        <Loader type='ThreeDots' height='80' width='200'/>
       </div>
     </div>
   }

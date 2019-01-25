@@ -42,7 +42,7 @@ class B24 {
     static formTaskFields = state => {
 
 
-      const formatDate = date => moment(date).format("DDMMMYYYY");
+      const formatDate = date => date ? moment(date).format("DDMMMYYYY") : '';
       const formatSelectee = selectee => Array.isArray(selectee)
         ? selectee.map(item => item.value).join(', ')
         : [selectee].map(item => item.value).join(', ')

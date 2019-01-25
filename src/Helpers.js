@@ -101,7 +101,6 @@ function parse(description, uf_crm_task) {
   newState.otherTextInDescription = otherTextInDescription;
   newState.UF_CRM_TASK = uf_crm_task;
 
-  debugger;
   return Object.assign(newState, { ...parseDates(newState) });
 };
 
