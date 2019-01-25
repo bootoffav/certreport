@@ -2,12 +2,12 @@ import m from 'moment';
 import { select_options } from './Form';
 import { empty_state } from './defaults';
 
-const parseDates = data => ({
-  sentOn: m(data.sentOn, 'DDMMMYYYY'),
-  receivedOn: m(data.receivedOn, 'DDMMMYYYY'),
-  startedOn: m(data.startedOn, 'DDMMMYYYY'),
-  finishedOn: m(data.finishedOn, 'DDMMMYYYY'),
-  resultsReceived: m(data.resultsReceived, 'DDMMMYYYY')
+const parseDates = d => ({
+  sentOn: d.sentOn ? m(d.sentOn, 'DDMMMYYYY') : d.sentOn,
+  receivedOn: d.receivedOn ? m(d.receivedOn, 'DDMMMYYYY') : d.receivedOn,
+  startedOn: d.startedOn ? m(d.startedOn, 'DDMMMYYYY') : d.startedOn,
+  finishedOn: d.finishedOn ? m(d.finishedOn, 'DDMMMYYYY') : d.finishedOn,
+  resultsReceived: d.resultsReceived ? m(d.resultsReceived, 'DDMMMYYYY') : d.resultsReceived
 });
 
 const convertToSelectable = (prop_name, selectee) => {
@@ -101,6 +101,7 @@ function parse(description, uf_crm_task) {
   newState.otherTextInDescription = otherTextInDescription;
   newState.UF_CRM_TASK = uf_crm_task;
 
+  debugger;
   return Object.assign(newState, { ...parseDates(newState) });
 };
 
