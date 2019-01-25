@@ -67,6 +67,7 @@ function parse(description, uf_crm_task) {
     'Test report': 'testReport',
     'Certificate': 'certificate',
     'Price': 'price',
+    'Payment date': 'paymentDate',
     'Testing company': 'testingCompany',
     'Material needed': 'materialNeeded',
     'Testing time, days': 'testingTime',
@@ -96,6 +97,9 @@ function parse(description, uf_crm_task) {
 
   if (newState.price) {
     newState.price = newState.price.split(' ')[0];
+  }
+  if (newState.paymentDate) {
+    newState.paid = true;
   }
   
   newState.standard = convertToSelectable('standard', newState.standard);

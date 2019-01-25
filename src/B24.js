@@ -64,6 +64,7 @@ class B24 {
             `[B]Roll number:[/B] ${state.rollNumber}\n` +
             `[B]Standard:[/B] ${formatSelectee(state.standard)}\n` +
             `[B]Price:[/B] ${(state.price)} €\n` +
+            `${state.paymentDate ? '[B]Payment date:[/B] ' + formatDate(state.paymentDate) + '\n' : ''}` +
             `[B]Testing company:[/B] ${formatSelectee(state.testingCompany)}\n` +
             `[B]Test report:[/B] ${(state.testReport)}\n` +
             `[B]Certificate:[/B] ${(state.certificate)}\n` +

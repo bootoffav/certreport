@@ -44,32 +44,26 @@ const Price = props =>
     </div>
   </div>
 
-// const Paid = props => (
-//   // <div className='form-group'>
-//   //   <div className="input-group-prepend">
-//   //     <div className="input-group-text">
-//   //       <input className='form-check-input'
-//   //         type='checkbox' id={props.id} onChange={props.handleCheckboxChange}
-//   //       />
-//   //     </div>
-//   //   </div>
-
-//   //     {/* <label htmlFor={props.id}>{props.label}</label> */}
-//   // </div>
-//   <div class="form-group">
-//     {props.label}
-//     <div className="input-group">
-//       <div class="input-group-prepend">
-//         <div class="input-group-text">
-//           <input type='checkbox' id={props.id} onChange={props.handleCheckboxChange}/>
-//         </div>
-//       </div>
-//       <PickDate type="text" class="form-control" date={props.paymentDate}
-//         label='Paid'
-//         handleChange={props.handleChange} disabled={!props.checkboxState}
-//       />
-//     </div>
-//   </div>);
+const Paid = props =>
+  <div className="form-group">
+    {props.label}
+    <div className="input-group">
+      <div className="input-group-prepend">
+        <div className="input-group-text">
+          <input type='checkbox' id={props.id} onChange={props.handleCheckboxChange} checked={props.paymentDate}/>
+        </div>
+      </div>
+      <DatePicker className="form-control" disabled={!props.checkboxState}
+        selected={
+          props.paymentDate
+          ? new Date(props.paymentDate)
+          : null
+        }
+        dateFormat="dd.MM.yyyy"
+        onChange={props.handleChange}
+      />
+    </div>
+  </div>
 
 class Article extends React.Component {
   prop_map = {
@@ -161,4 +155,4 @@ class Article extends React.Component {
   }
 }
 
-export { PickDate, BaseInput, Article, Price };
+export { PickDate, BaseInput, Article, Price, Paid };

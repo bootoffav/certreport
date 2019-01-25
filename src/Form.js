@@ -1,5 +1,5 @@
 import React from 'react';
-import { PickDate, BaseInput, Article, Price } from "./FormFields.js";
+import { PickDate, BaseInput, Article, Price, Paid } from "./FormFields.js";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select';
 import B24 from './B24.js';
@@ -106,7 +106,7 @@ export default class Form extends React.Component {
                     </div>
                   </div>
                   <Price value={this.state.price} id='price' label='Price' handleChange={this.handleChange} />
-                  {/* <div className="col">
+                  <div className="col">
                     <Paid
                       id='paid'
                       label='Paid'
@@ -121,7 +121,7 @@ export default class Form extends React.Component {
                         }
                       }
                     />
-                  </div> */}
+                  </div>
                 </div>
                 <div className="form-row">
                   <Article value={this.state.article}
