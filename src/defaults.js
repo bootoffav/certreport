@@ -51,7 +51,11 @@ const empty_state = {
   price: '',
   comments: '',
   testReport: '',
-  certificate: ''
+  certificate: '',
+  paymentDate: null,
+  pretreatment1: '',
+  pretreatment2: '',
+  pretreatment3: '',
 };
 
 function initApp() {

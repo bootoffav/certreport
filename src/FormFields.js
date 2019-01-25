@@ -8,7 +8,7 @@ const PickDate = props =>
   <div className="col">
     {props.label}
     <div className="form-group">
-      <DatePicker className="form-control"
+      <DatePicker className="form-control" disabled={props.disabled}
         selected={
           props.date
           ? new Date(props.date)
@@ -43,6 +43,33 @@ const Price = props =>
         />
     </div>
   </div>
+
+// const Paid = props => (
+//   // <div className='form-group'>
+//   //   <div className="input-group-prepend">
+//   //     <div className="input-group-text">
+//   //       <input className='form-check-input'
+//   //         type='checkbox' id={props.id} onChange={props.handleCheckboxChange}
+//   //       />
+//   //     </div>
+//   //   </div>
+
+//   //     {/* <label htmlFor={props.id}>{props.label}</label> */}
+//   // </div>
+//   <div class="form-group">
+//     {props.label}
+//     <div className="input-group">
+//       <div class="input-group-prepend">
+//         <div class="input-group-text">
+//           <input type='checkbox' id={props.id} onChange={props.handleCheckboxChange}/>
+//         </div>
+//       </div>
+//       <PickDate type="text" class="form-control" date={props.paymentDate}
+//         label='Paid'
+//         handleChange={props.handleChange} disabled={!props.checkboxState}
+//       />
+//     </div>
+//   </div>);
 
 class Article extends React.Component {
   prop_map = {

@@ -40,6 +40,8 @@ export default class Form extends React.Component {
       });
     }
 
+    handleCheckboxChange = e => this.setState({ [e.target.id]: e.target.checked })
+
     handleSelectChange = (selected, id) => {
       (selected)
       ? this.setState({ [id]: selected })
@@ -104,6 +106,22 @@ export default class Form extends React.Component {
                     </div>
                   </div>
                   <Price value={this.state.price} id='price' label='Price' handleChange={this.handleChange} />
+                  {/* <div className="col">
+                    <Paid
+                      id='paid'
+                      label='Paid'
+                      checkboxState={this.state.paid}
+                      paymentDate={this.state.paymentDate}
+                      handleChange={date => this.handleDateChange(date, 'paymentDate')}
+                      handleCheckboxChange={e => {
+                        if (!e.target.checked) {
+                          this.setState({ paymentDate: null});
+                        }
+                        this.handleCheckboxChange(e);
+                        }
+                      }
+                    />
+                  </div> */}
                 </div>
                 <div className="form-row">
                   <Article value={this.state.article}
@@ -131,7 +149,11 @@ export default class Form extends React.Component {
                       <SerialNumber serialNumber={this.state.serialNumber} handleChange={this.handleChange} handleInit={v => this.setState({serialNumber: v})} url={this.props.match.url}/>
                     </div>
                   </div>
-
+                </div>
+                <div className="form-row">
+                  <BaseInput value={this.state.pretreatment1} id='pretreatment1' label='Pre-treatment 1' handleChange={this.handleChange} />
+                  <BaseInput value={this.state.pretreatment2} id='pretreatment2' label='Pre-treatment 2' handleChange={this.handleChange} />
+                  <BaseInput value={this.state.pretreatment3} id='pretreatment3' label='Pre-treatment 3' handleChange={this.handleChange} />
                 </div>
               <div className="form-row">
                 <div className="col">
