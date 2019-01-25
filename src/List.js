@@ -96,7 +96,7 @@ export default class List extends React.Component {
       Header: 'Sent On',
       accessor: 'state.sentOn',
       width: 95,
-      Cell: props => props.value.length === 0 ? '' : props.value.format("DD MMM YYYY")
+      Cell: props => props.value ? props.value.format("DD MMM YYYY") : ''
     }, {
       Header: 'Fabric',
       accessor: 'state.article',
