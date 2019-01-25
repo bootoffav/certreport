@@ -69,6 +69,9 @@ class B24 {
             `[B]Certificate:[/B] ${(state.certificate)}\n` +
             `[B]Material needed:[/B] ${state.materialNeeded}\n` +
             `[B]Testing time, days:[/B] ${state.testingTime}\n` +
+            `${state.pretreatment1 ? '[B]Pre-treatment 1:[/B] ' + state.pretreatment1 + '\n' : ''}` +
+            `${state.pretreatment2 ? '[B]Pre-treatment 2:[/B] ' + state.pretreatment2 + '\n' : ''}` +
+            `${state.pretreatment3 ? '[B]Pre-treatment 3:[/B] ' + state.pretreatment3 + '\n' : ''}` +
             `${state.sentOn ? '[B]to be sent on:[/B]' + formatDate(state.sentOn) + '\n' : ''}` +
             `${state.receivedOn ? '[B]to be received on:[/B]' + formatDate(state.receivedOn) + '\n' : ''}` +
             `${state.startedOn ? '[B]tests to be started on:[/B]' + formatDate(state.startedOn) + '\n' : ''}` +
