@@ -8,7 +8,7 @@ let select_options = {
     {value: 'C_10041', label: 'XMG'}
   ],
   standard: [
-    {value: 'ISO 17893', label: 'ISO 17893'},
+    {value: 'ISO 17493', label: 'ISO 17493'},
     {value: 'EN 1149-3', label: 'ISO 1149-3'},
     {value: 'EN 11611', label: 'EN 11611'},
     {value: 'EN 11612', label: 'EN 11612'},

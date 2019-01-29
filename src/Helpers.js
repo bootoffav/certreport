@@ -7,7 +7,8 @@ const parseDates = d => ({
   receivedOn: d.receivedOn ? m(d.receivedOn, 'DDMMMYYYY') : d.receivedOn,
   startedOn: d.startedOn ? m(d.startedOn, 'DDMMMYYYY') : d.startedOn,
   finishedOn: d.finishedOn ? m(d.finishedOn, 'DDMMMYYYY') : d.finishedOn,
-  resultsReceived: d.resultsReceived ? m(d.resultsReceived, 'DDMMMYYYY') : d.resultsReceived
+  resultsReceived: d.resultsReceived ? m(d.resultsReceived, 'DDMMMYYYY') : d.resultsReceived,
+  paymentDate: d.paymentDate ? m(d.paymentDate, 'DDMMMYYYY') : d.paymentDate
 });
 
 const convertToSelectable = (prop_name, selectee) => {

@@ -50,7 +50,7 @@ class B24 {
         return {
         ...B24.defaultParams,
         UF_CRM_TASK: B24.makeUfCrmTaskField(state),
-        TITLE: `${state.serialNumber}_AITEX - ${formatSelectee(state.standard)} - ${state.article}, ${state.colour} ` +
+        TITLE: `${state.serialNumber}_${formatSelectee(state.testingCompany).split(' ')[0]} - ${formatSelectee(state.standard)} - ${state.article}, ${state.colour} ` +
             `(send ${formatDate(state.sentOn)} - plan ${formatDate(state.resultsReceived)}) = ${state.price} €`,
         DESCRIPTION: `[B]Applicant name:[/B] ${state.applicantName}\n` +
             `[B]Product:[/B] ${state.product}\n` +
@@ -73,11 +73,11 @@ class B24 {
             `${state.pretreatment1 ? '[B]Pre-treatment 1:[/B] ' + state.pretreatment1 + '\n' : ''}` +
             `${state.pretreatment2 ? '[B]Pre-treatment 2:[/B] ' + state.pretreatment2 + '\n' : ''}` +
             `${state.pretreatment3 ? '[B]Pre-treatment 3:[/B] ' + state.pretreatment3 + '\n' : ''}` +
-            `${state.sentOn ? '[B]to be sent on:[/B]' + formatDate(state.sentOn) + '\n' : ''}` +
-            `${state.receivedOn ? '[B]to be received on:[/B]' + formatDate(state.receivedOn) + '\n' : ''}` +
-            `${state.startedOn ? '[B]tests to be started on:[/B]' + formatDate(state.startedOn) + '\n' : ''}` +
-            `${state.finishedOn ? '[B]tests to be finished on:[/B]' + formatDate(state.finishedOn) + '\n' : ''}` +
-            `${state.resultsReceived ? '[B]results to be received on:[/B]' + formatDate(state.resultsReceived) + '\n' : ''}` +
+            `${state.sentOn ? '[B]to be sent on:[/B] ' + formatDate(state.sentOn) + '\n' : ''}` +
+            `${state.receivedOn ? '[B]to be received on:[/B] ' + formatDate(state.receivedOn) + '\n' : ''}` +
+            `${state.startedOn ? '[B]tests to be started on:[/B] ' + formatDate(state.startedOn) + '\n' : ''}` +
+            `${state.finishedOn ? '[B]tests to be finished on:[/B] ' + formatDate(state.finishedOn) + '\n' : ''}` +
+            `${state.resultsReceived ? '[B]results to be received on: [/B]' + formatDate(state.resultsReceived) + '\n' : ''}` +
             `${state.comments ? '[B]Comments:[/B] ' + state.comments + '\n' : ''}` +
             `${state.link ? '[B]Edit:[/B] ' + state.link + '\n' : ''} ` +
             `${dataSeparator}` + (state.otherTextInDescription || ''),
