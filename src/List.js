@@ -99,10 +99,13 @@ export default class List extends React.Component {
       width: 95,
       Cell: props => props.value ? props.value.format("DD MMM YYYY") : ''
     }, {
-      Header: 'Payment Date',
-      accessor: 'state.paymentDate',
-      width: 95,
-      Cell: props => props.value ? props.value.format("DD MMM YYYY") : ''
+      Header: 'Paid',
+      id: 'paid',
+      accessor: row => row.state.paymentDate,
+      minWidth: 40,
+      Cell: props => props.value 
+              ? <span className="oi oi-check"></span>
+              : ''
     }, {
       Header: 'Fabric',
       accessor: 'state.article',

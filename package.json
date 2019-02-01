@@ -10,6 +10,7 @@
     "jspdf-autotable": "^2.3.5",
     "moment": "^2.22.2",
     "netlify-identity-widget": "^1.5.1",
+    "open-iconic": "^1.1.1",
     "popper.js": "^1.14.5",
     "qs": "^6.6.0",
     "rc-tooltip": "^3.7.3",
