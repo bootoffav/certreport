@@ -55,7 +55,8 @@ export default class List extends React.Component {
       maxWidth: 30
     },{
       Header: '##',
-      accessor: 'state.serialNumber',
+      id: 'serialNumber',
+      accessor: row => row.state.serialNumber ? Number(row.state.serialNumber) : '',
       width: 55,
       Cell: props => <a 
         href={`https://xmtextiles.bitrix24.ru/company/personal/user/460/tasks/task/view/${props.original.ID}/`}
