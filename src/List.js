@@ -83,6 +83,7 @@ export default class List extends React.Component {
               receivedOn: props.original.state.receivedOn ? props.original.state.receivedOn.valueOf() : null,
               resultsReceived: props.original.state.resultsReceived ? props.original.state.resultsReceived.valueOf() : null,
               startedOn: props.original.state.startedOn ? props.original.state.startedOn.valueOf() : null,
+              paymentDate: props.original.state.paymentDate ? props.original.state.paymentDate.valueOf() : null,
             }
           }}
           >{ props.value }</Link>
