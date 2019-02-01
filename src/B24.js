@@ -51,7 +51,7 @@ class B24 {
         ...B24.defaultParams,
         UF_CRM_TASK: B24.makeUfCrmTaskField(state),
         TITLE: `${state.serialNumber}_${formatSelectee(state.testingCompany).split(' ')[0]} - ${formatSelectee(state.standard)} - ${state.article}, ${state.colour} ` +
-            `(send ${formatDate(state.sentOn)} - plan ${formatDate(state.resultsReceived)}) = ${state.price} €`,
+            `(send ${formatDate(state.sentOn)} - plan ${formatDate(state.resultsReceived)}) = ${state.price} € | ${state.testReport ? state.testReport : ''}`,
         DESCRIPTION: `[B]Applicant name:[/B] ${state.applicantName}\n` +
             `[B]Product:[/B] ${state.product}\n` +
             `[B]Code:[/B] ${state.code}\n` +
@@ -66,10 +66,10 @@ class B24 {
             `[B]Price:[/B] ${(state.price)} €\n` +
             `${state.paymentDate ? '[B]Payment date:[/B] ' + formatDate(state.paymentDate) + '\n' : ''}` +
             `[B]Testing company:[/B] ${formatSelectee(state.testingCompany)}\n` +
-            `[B]Test report:[/B] ${(state.testReport)}\n` +
-            `[B]Certificate:[/B] ${(state.certificate)}\n` +
-            `[B]Material needed:[/B] ${state.materialNeeded}\n` +
-            `[B]Testing time, days:[/B] ${state.testingTime}\n` +
+            `${state.testReport ? '[B]Test report:[/B] ' + state.testReport + '\n' : ''}` +
+            `${state.certificate ? '[B]Certificate:[/B] ' + state.certificate + '\n' : ''}` +
+            `${state.materialNeeded ? '[B]Material needed:[/B] ' + state.materialNeeded + '\n' : ''}` +
+            `${state.testingTime ? '[B]Testing time, days:[/B] ' + state.testingTime + '\n' : ''}` +
             `${state.pretreatment1 ? '[B]Pre-treatment 1:[/B] ' + state.pretreatment1 + '\n' : ''}` +
             `${state.pretreatment2 ? '[B]Pre-treatment 2:[/B] ' + state.pretreatment2 + '\n' : ''}` +
             `${state.pretreatment3 ? '[B]Pre-treatment 3:[/B] ' + state.pretreatment3 + '\n' : ''}` +
