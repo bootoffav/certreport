@@ -67,8 +67,7 @@ export default class List extends React.Component {
       Header: 'Brand',
       id: 'brand',
       minWidth: 50,
-      accessor: 'state.brand',
-      Cell: props => props.value.length === 0 ? '' : props.value[0].label,
+      accessor: row => row.state.brand.length === 0 ? '' : row.state.brand[0].label
     },{
       Header: 'Task name',
       accessor: 'TITLE',
@@ -122,7 +121,8 @@ export default class List extends React.Component {
     }, {
       Header: 'Price, €',
       Footer: () => `Total cost: ${this.formatPrice(this.totalPrice)}`,
-      accessor: 'state.price',
+      id: 'price',
+      accessor: row => Number(row.state.price),
       minWidth: 110,
       Cell: props => this.formatPrice(props.value)
     }];
