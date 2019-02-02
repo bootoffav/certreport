@@ -150,7 +150,7 @@ export default class List extends React.Component {
         'receivedOn',
         'startedOn',
         'finishedOn',
-        'resultsReceived'].includes(k) && v !== null ? v.substr(0, 9) : v
+        'resultsReceived', 'paymentDate'].includes(k) && v !== null ? v.substr(0, 9) : v
       ).map(task => {
         task.state = { ...task.state, ...parseDates(task.state) };
         return task;
