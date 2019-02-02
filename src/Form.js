@@ -70,6 +70,7 @@ export default class Form extends React.Component {
     afterSuccessfulSubmit() {
       this.setState({request_status: 'success'});
       SerialNumber.update(Number(this.state.serialNumber) + 1);
+      sessionStorage.removeItem('tasks');
       setTimeout(() => window.location.replace("/"), 4000);
     }
 

@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { empty_state } from './defaults';
 import B24 from './B24.js';
 import './css/style.css';
+import { parseDates } from './Helpers';
 
 // export default class List extends React.Component {
 //     constructor (props) {
@@ -139,38 +140,63 @@ export default class List extends React.Component {
     })
     .replace(/,/g, ' ');
 
-  componentDidMount() {
-    let taskPositionInList = 1;
+  loadFromCache = () => {
+    const totalPrice = sessionStorage.getItem('totalPrice');
+    const tasks = sessionStorage.getItem('tasks');
 
-    B24.get_tasks()
-      .then(tasks => {
-        let filtered = {
-          new: [],
-          old: []
-        };
-        tasks.forEach(task => (task.CREATED_BY === '460') ? filtered.new.push(task) : filtered.old.push(task))
-        return filtered;
-      })
-      .then(async filtered => {
-        let task, tasks = [];
-
-        for (let i = 0; i < filtered.new.length; i++) {
-          task = await B24.get_task(filtered.new[i].ID);
-          tasks.push({ ...task, position: taskPositionInList++ });
-        }
-        
-        filtered.old.forEach(task => {
-          task.state = { ...empty_state };
-          task.state.otherTextInDescription = '\n' + task.DESCRIPTION;
-          task.state.UF_CRM_TASK = task.UF_CRM_TASK;
-          task.position = taskPositionInList++;
-        });
-        tasks = tasks.concat(filtered.old);
-        return tasks;
-      }).then(tasks => {
-          this.totalPrice = tasks.reduce((sum, task) => sum + Number(task.state.price), 0);
-          this.setState({ tasks });
+    if (totalPrice && tasks) {
+      let tasks = JSON.parse(sessionStorage.getItem('tasks'),
+        (k, v) => ['sentOn',
+        'receivedOn',
+        'startedOn',
+        'finishedOn',
+        'resultsReceived'].includes(k) && v !== null ? v.substr(0, 9) : v
+      ).map(task => {
+        task.state = { ...task.state, ...parseDates(task.state) };
+        return task;
       });
+      this.setState({ tasks });
+    } else {
+      throw new Error('Nothing in cache');
+    }
+  }
+
+  componentDidMount() {
+    try {
+      return this.loadFromCache();
+    } catch {
+      let taskPositionInList = 1;
+      B24.get_tasks()
+        .then(tasks => {
+          let filtered = {
+            new: [],
+            old: []
+          };
+          tasks.forEach(task => (task.CREATED_BY === '460') ? filtered.new.push(task) : filtered.old.push(task))
+          return filtered;
+        })
+        .then(async filtered => {
+          let task, tasks = [];
+
+          for (let i = 0; i < filtered.new.length; i++) {
+            task = await B24.get_task(filtered.new[i].ID);
+            tasks.push({ ...task, position: taskPositionInList++ });
+          }
+          filtered.old.forEach(task => {
+            task.state = { ...empty_state };
+            task.state.otherTextInDescription = '\n' + task.DESCRIPTION;
+            task.state.UF_CRM_TASK = task.UF_CRM_TASK;
+            task.position = taskPositionInList++;
+          });
+          tasks = tasks.concat(filtered.old);
+          return tasks;
+        }).then(tasks => {
+            this.totalPrice = tasks.reduce((sum, task) => sum + Number(task.state.price), 0);
+            this.setState({ tasks });
+            sessionStorage.setItem('tasks', JSON.stringify(tasks));
+            sessionStorage.setItem('totalPrice', JSON.stringify(this.totalPrice));
+        });
+    }
   }
 
   render (){

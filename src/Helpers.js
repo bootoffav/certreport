@@ -3,12 +3,12 @@ import { select_options } from './Form';
 import { empty_state } from './defaults';
 
 const parseDates = d => ({
-  sentOn: d.sentOn ? m(d.sentOn, 'DDMMMYYYY') : d.sentOn,
-  receivedOn: d.receivedOn ? m(d.receivedOn, 'DDMMMYYYY') : d.receivedOn,
-  startedOn: d.startedOn ? m(d.startedOn, 'DDMMMYYYY') : d.startedOn,
-  finishedOn: d.finishedOn ? m(d.finishedOn, 'DDMMMYYYY') : d.finishedOn,
-  resultsReceived: d.resultsReceived ? m(d.resultsReceived, 'DDMMMYYYY') : d.resultsReceived,
-  paymentDate: d.paymentDate ? m(d.paymentDate, 'DDMMMYYYY') : d.paymentDate
+    sentOn: d.sentOn ? m(d.sentOn, 'DDMMMYYYY') : d.sentOn,
+    receivedOn: d.receivedOn ? m(d.receivedOn, 'DDMMMYYYY') : d.receivedOn,
+    startedOn: d.startedOn ? m(d.startedOn, 'DDMMMYYYY') : d.startedOn,
+    finishedOn: d.finishedOn ? m(d.finishedOn, 'DDMMMYYYY') : d.finishedOn,
+    resultsReceived: d.resultsReceived ? m(d.resultsReceived, 'DDMMMYYYY') : d.resultsReceived,
+    paymentDate: d.paymentDate ? m(d.paymentDate, 'DDMMMYYYY') : d.paymentDate
 });
 
 const convertToSelectable = (prop_name, selectee) => {
@@ -113,4 +113,4 @@ function parse(description, uf_crm_task) {
 };
 
 export default parse;
-export { convertToSelectable, dataSeparator };
+export { convertToSelectable, dataSeparator, parseDates };
