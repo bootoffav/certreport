@@ -52,6 +52,7 @@ export default class List extends React.Component {
     state = {};
     columns = [{
       Header: '#',
+      id: 'position',
       accessor: 'position',
       maxWidth: 30
     },{
@@ -73,6 +74,7 @@ export default class List extends React.Component {
     },{
       Header: 'Task name',
       accessor: 'TITLE',
+      id: 'taskName',
       minWidth: 550,
       Cell: props => {
         return props.original.state.serialNumber
@@ -97,6 +99,7 @@ export default class List extends React.Component {
     }, {
       Header: 'Sent On',
       accessor: 'state.sentOn',
+      id: 'sentOn',
       width: 95,
       Cell: props => props.value ? props.value.format("DD MMM YYYY") : ''
     }, {
@@ -109,18 +112,22 @@ export default class List extends React.Component {
               : ''
     }, {
       Header: 'Fabric',
+      id: 'article',
       accessor: 'state.article',
       width: 100
     }, {
       Header: 'Test report',
+      id: 'testReport',
       accessor: 'state.testReport',
       minWidth: 100,
     }, {
       Header: 'Certificate',
+      id: 'certificate',
       accessor: 'state.certificate',
       minWidth: 100,
     }, {
       Header: 'Standards',
+      id: 'standard',
       accessor: 'state.standard',
       minWidth: 100,
       Cell: props => props.value.length === 0 ? '' : props.value.map(el => `${el.label} `)
