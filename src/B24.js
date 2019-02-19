@@ -89,7 +89,8 @@ class B24 {
 
       const defaultParams = {
         AUDITORS: auditors,
-        RESPONSIBLE_ID: 5
+        PARENT_ID: 46902,
+        RESPONSIBLE_ID: 19
       }
 
       const attachPDF = taskId => {
