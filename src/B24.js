@@ -165,6 +165,33 @@ class B24 {
         });
   }
 
+    static async get_standards() {
+      let start = 0;
+      let standards = [];
+
+      let step = json => {
+        start = json.next;
+        return json.result;
+      };
+
+      do {
+        standards = standards.concat(await fetch(`${main_url}/${creator_id}/${webhook_key}/crm.product.list?` + 
+          qs.stringify({
+            order: {
+              NAME: 'ASC'
+            },
+            filter: {
+              SECTION_ID: 8582
+            },
+            select: ['NAME'],
+            start
+          }))
+          .then(response => response.json())
+          .then(step));
+      } while (start !== undefined);
+      return standards.map(standard => ({ value: standard.NAME, label: standard.NAME }));
+    }
+
     static async get_products() {
       let start = 0;
       let products = [];
