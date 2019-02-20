@@ -30,7 +30,7 @@ const empty_state = {
   serialNumber: '',
   materialNeeded: '',
   testingTime: 21,
-  standard: [],
+  standards: [],
   testingCompany: [],
   brand: [],
   sentOn: null,

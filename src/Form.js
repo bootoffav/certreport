@@ -101,7 +101,7 @@ export default class Form extends React.Component {
                   <div className="col">
                     <div className="form-group">
                       Standards
-                      <Select isMulti required value={this.state.standard} onChange={e => this.handleSelectChange(e, 'standard')}
+                      <Select isMulti required value={this.state.standards} onChange={e => this.handleSelectChange(e, 'standards')}
                         options={select_options.standards}
                       />
                     </div>

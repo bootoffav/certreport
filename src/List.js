@@ -127,8 +127,8 @@ export default class List extends React.Component {
       minWidth: 100,
     }, {
       Header: 'Standards',
-      id: 'standard',
-      accessor: 'state.standard',
+      id: 'standards',
+      accessor: 'state.standards',
       minWidth: 100,
       Cell: props => props.value.length === 0 ? '' : props.value.map(el => `${el.label} `)
     }, {

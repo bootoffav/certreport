@@ -45,7 +45,7 @@ function generatePDF(state) {
     };
 
   pdf.setFontSize(12);
-  pdf.text(`Standards: ${state.standard.map(el => ' ' + el.label)}`, 15, 80);
+  pdf.text(`Standards: ${state.standards.map(el => ' ' + el.label)}`, 15, 80);
   pdf.text(`Testing company: ${state.testingCompany.label}`, 15, 85);
   pdf.text(`Materials needed: ${state.materialNeeded}`, 15, 90);
   pdf.text(`Testing Time: ${state.testingTime}`, 15, 95);

@@ -64,7 +64,7 @@ function parse(description, uf_crm_task) {
     'Width of sample, meters': 'width',
     'Part number': 'partNumber',
     'Roll number': 'rollNumber',
-    'Standard': 'standard',
+    'Standard': 'standards',
     'Test report': 'testReport',
     'Certificate': 'certificate',
     'Price': 'price',
@@ -103,7 +103,7 @@ function parse(description, uf_crm_task) {
     newState.paid = true;
   }
   
-  newState.standard = convertToSelectable('standard', newState.standard);
+  newState.standards = convertToSelectable('standards', newState.standards);
   newState.testingCompany = convertToSelectable('testingCompany', newState.testingCompany);
   newState.brand = convertToSelectable('brand', uf_crm_task.filter(v => ['C_10033', 'C_10035', 'C_10037', 'C_10041'].includes(v)).join(','));
   newState.otherTextInDescription = otherTextInDescription;

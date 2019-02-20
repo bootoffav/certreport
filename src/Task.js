@@ -77,8 +77,8 @@ export default class Task extends React.Component {
           {this.state.article || <div className="loader"></div>}
         </td>
         <td>
-          {(this.state.standard)
-           ? this.state.standard.map(el => el.value).join(', ')
+          {(this.state.standards)
+           ? this.state.standards.map(el => el.value).join(', ')
            : <div className="loader"></div>}
         </td>
       </tr>
