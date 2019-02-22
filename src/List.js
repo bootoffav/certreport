@@ -6,47 +6,7 @@ import { empty_state } from './defaults';
 import B24 from './B24.js';
 import './css/style.css';
 import { parseDates } from './Helpers';
-
-// export default class List extends React.Component {
-//     constructor (props) {
-//       super(props);
-//       this.state = {};
-//     }
-//     componentDidMount() {
-//       B24.get_tasks().then(tasks => {
-//         this.setState({ tasks: tasks.filter(task => task.CREATED_BY === '460') });
-//       });
-//     }
-//     render (){
-//         let position = 1;
-//         return (this.state.tasks)
-//         ? <table className="table table-bordered">
-//             <thead className="thead-light">
-//               <tr>
-//                   <th scope="col">#</th>
-//                   <th scope="col">##</th>
-//                   <th scope="col">Brand</th>
-//                   <th scope="col">Task name</th>
-//                   <th scope="col">Created On</th>
-//                   <th scope="col">Готовность</th>
-//                   <th scope="col">Test-report</th>
-//                   <th scope="col">Cert</th>
-//                   <th scope="col">Ткань</th>
-//                   <th scope="col">Стандарт</th>
-//               </tr>
-//             </thead>
-//             <tbody>
-//               {this.state.tasks.map(task => <Task key={task.ID} task={task} position={position++}/>)}
-//             </tbody>
-//           </table>
-//         : <div className="loader-place row align-items-center">
-//                 <div className="col row justify-content-center">
-//                     <Loader type="ThreeDots" height="80" width="200"/>
-//                 </div>
-//           </div>
-//     }
-// }
-
+import { Toolbar, filter } from './Toolbar';
 
 export default class List extends React.Component {
     state = {};
@@ -162,7 +122,7 @@ export default class List extends React.Component {
         task.state = { ...task.state, ...parseDates(task.state) };
         return task;
       });
-      this.setState({ tasks });
+      this.setState({ allTasks: tasks, viewableTasks: tasks });
     } else {
       throw new Error('Nothing in cache');
     }
@@ -199,24 +159,33 @@ export default class List extends React.Component {
           return tasks;
         }).then(tasks => {
             this.totalPrice = tasks.reduce((sum, task) => sum + Number(task.state.price), 0);
-            this.setState({ tasks });
+            this.setState({ allTasks: tasks, viewableTasks: tasks });
             sessionStorage.setItem('tasks', JSON.stringify(tasks));
             sessionStorage.setItem('totalPrice', JSON.stringify(this.totalPrice));
         });
     }
   }
 
+  toolbarFilter = prop => {
+    this.setState({
+      viewableTasks: filter(prop, this.state.allTasks)
+    });
+  }
+
   render (){
-    if (this.state.tasks) {
-      return <ReactTable
-        data={ this.state.tasks } columns={ this.columns }
-        defaultSorted={[
-          {
-            id: 'position',
-            asc: true
-          }
-        ]}
-        defaultPageSize={ 20 } className='-striped -highlight table'/>;
+    if (this.state.viewableTasks) {
+      return <>
+        <Toolbar onClick={this.toolbarFilter}/>
+        <ReactTable
+          data={ this.state.viewableTasks } columns={ this.columns }
+          defaultSorted={[
+            {
+              id: 'position',
+              asc: true
+            }
+          ]}
+          defaultPageSize={ 20 } className='-striped -highlight table'/>
+        </>
     }
     return <div className='loader-place row align-items-center'>
       <div className='col row justify-content-center'>
