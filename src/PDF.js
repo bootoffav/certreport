@@ -3,6 +3,7 @@ import * as jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import m from 'moment';
 
+m.fn.toJSON = function() { return this.format(); }
 
 function getPDF(e, state) {
   e.preventDefault();

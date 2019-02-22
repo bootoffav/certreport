@@ -1,8 +1,9 @@
 import qs from 'qs';
-import moment from 'moment';
+import m from 'moment';
 import parse, { dataSeparator } from './Helpers';
 import { generatePDF } from './PDF';
 
+m.fn.toJSON = function() { return this.format(); }
 const creator_id = process.env.REACT_APP_B24_USER_ID;
 const webhook_key = process.env.REACT_APP_B24_WEBHOOK_KEY;
 const main_url = process.env.REACT_APP_B24_MAIN_URL;
@@ -42,7 +43,7 @@ class B24 {
     static formTaskFields = state => {
 
 
-      const formatDate = date => date ? moment(date).format("DDMMMYYYY") : '';
+      const formatDate = date => date ? m(date).format("DDMMMYYYY") : '';
       const formatSelectee = selectee => Array.isArray(selectee)
         ? selectee.map(item => item.value).join(', ')
         : [selectee].map(item => item.value).join(', ')
@@ -81,7 +82,7 @@ class B24 {
             `${state.comments ? '[B]Comments:[/B] ' + state.comments + '\n' : ''}` +
             `${state.link ? '[B]Edit:[/B] ' + state.link + '\n' : ''} ` +
             `${dataSeparator}` + (state.otherTextInDescription || ''),
-        DEADLINE: moment(state.resultsReceived).toISOString()
+        DEADLINE: m(state.resultsReceived).toISOString()
       }
     };
 

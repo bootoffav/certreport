@@ -2,13 +2,15 @@ import m from 'moment';
 import { select_options } from './Form';
 import { empty_state } from './defaults';
 
-const parseDates = d => ({
-    sentOn: d.sentOn ? m(d.sentOn, 'DDMMMYYYY') : d.sentOn,
-    receivedOn: d.receivedOn ? m(d.receivedOn, 'DDMMMYYYY') : d.receivedOn,
-    startedOn: d.startedOn ? m(d.startedOn, 'DDMMMYYYY') : d.startedOn,
-    finishedOn: d.finishedOn ? m(d.finishedOn, 'DDMMMYYYY') : d.finishedOn,
-    resultsReceived: d.resultsReceived ? m(d.resultsReceived, 'DDMMMYYYY') : d.resultsReceived,
-    paymentDate: d.paymentDate ? m(d.paymentDate, 'DDMMMYYYY') : d.paymentDate
+m.fn.toJSON = function() { return this.format(); }
+
+const parseDates = (d, format = 'DDMMMYYYY') => ({
+    sentOn: d.sentOn ? m(d.sentOn, format) : d.sentOn,
+    receivedOn: d.receivedOn ? m(d.receivedOn, format) : d.receivedOn,
+    startedOn: d.startedOn ? m(d.startedOn, format) : d.startedOn,
+    finishedOn: d.finishedOn ? m(d.finishedOn, format) : d.finishedOn,
+    resultsReceived: d.resultsReceived ? m(d.resultsReceived, format) : d.resultsReceived,
+    paymentDate: d.paymentDate ? m(d.paymentDate, format) : d.paymentDate
 });
 
 const convertToSelectable = (prop_name, selectee) => {

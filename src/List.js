@@ -112,16 +112,11 @@ export default class List extends React.Component {
     const tasks = sessionStorage.getItem('tasks');
 
     if (totalPrice && tasks) {
-      let tasks = JSON.parse(sessionStorage.getItem('tasks'),
-        (k, v) => ['sentOn',
-        'receivedOn',
-        'startedOn',
-        'finishedOn',
-        'resultsReceived', 'paymentDate'].includes(k) && v !== null ? v.substr(0, 9) : v
-      ).map(task => {
-        task.state = { ...task.state, ...parseDates(task.state) };
-        return task;
-      });
+      let tasks = JSON.parse(sessionStorage.getItem('tasks'))
+        .map(task => {
+          task.state = { ...task.state, ...parseDates(task.state, 'YYYY-MM-DD') };
+          return task;
+        });
       this.setState({ allTasks: tasks, viewableTasks: tasks });
     } else {
       throw new Error('Nothing in cache');
@@ -160,7 +155,14 @@ export default class List extends React.Component {
         }).then(tasks => {
             this.totalPrice = tasks.reduce((sum, task) => sum + Number(task.state.price), 0);
             this.setState({ allTasks: tasks, viewableTasks: tasks });
-            sessionStorage.setItem('tasks', JSON.stringify(tasks));
+            sessionStorage.setItem('tasks', JSON.stringify(tasks, (k, v) => [
+              'sentOn',
+              'receivedOn',
+              'startedOn',
+              'finishedOn',
+              'resultsReceived', 'paymentDate'
+              ].includes(k) && v !== undefined && v !== null ? v.substr(0, 10) : v
+            ));
             sessionStorage.setItem('totalPrice', JSON.stringify(this.totalPrice));
         });
     }
