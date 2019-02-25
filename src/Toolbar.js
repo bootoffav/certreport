@@ -21,9 +21,9 @@ const Toolbar = props =>
         onClick={() => props.onClick('paid')}
       ><input type="radio" />Payment Done</label>
       <label
-        className="btn btn-secondary btn-sm"
-        // onClick={this.handleClick}
-      ><input type="radio" disabled/>Delivery Date announced</label>
+        className="btn btn-warning btn-sm"
+        onClick={() => props.onClick('finishedOn')}
+      ><input type="radio"/>Delivery Date announced</label>
       <label
         className="btn btn-secondary btn-sm"
         // onClick={this.handleClick}
@@ -39,6 +39,8 @@ function filter(prop, tasks) {
   switch (prop) {
     case 'sentOn':
       return tasks.filter(task => task.state.sentOn);
+    case 'finishedOn':
+      return tasks.filter(task => task.state.finishedOn)
     case 'paid':
       return tasks.filter(task => task.state.paid);
     default:

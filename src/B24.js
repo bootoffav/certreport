@@ -46,12 +46,12 @@ class B24 {
       const formatDate = date => date ? m(date).format("DDMMMYYYY") : '';
       const formatSelectee = selectee => Array.isArray(selectee)
         ? selectee.map(item => item.value).join(', ')
-        : [selectee].map(item => item.value).join(', ')
-      
+        : [selectee].map(item => item.value).join(', ');
+
         return {
         ...B24.defaultParams,
         UF_CRM_TASK: B24.makeUfCrmTaskField(state),
-        TITLE: `${state.serialNumber}_${formatSelectee(state.testingCompany).split(' ')[0]} - ${formatSelectee(state.standard)} - ${state.article}, ${state.colour} ` +
+        TITLE: `${state.serialNumber}_${formatSelectee(state.testingCompany).split(' ')[0]} - ${formatSelectee(state.standards)} - ${state.article}, ${state.colour} ` +
             `(send ${formatDate(state.sentOn)} - plan ${formatDate(state.resultsReceived)}) = ${state.price} € | ${state.testReport ? state.testReport : ''}`,
         DESCRIPTION: `[B]Applicant name:[/B] ${state.applicantName}\n` +
             `[B]Product:[/B] ${state.product}\n` +
@@ -63,7 +63,7 @@ class B24 {
             `[B]Width of sample, meters:[/B] ${state.width}\n` +
             `[B]Part number:[/B] ${state.partNumber}\n` +
             `[B]Roll number:[/B] ${state.rollNumber}\n` +
-            `[B]Standard:[/B] ${formatSelectee(state.standard)}\n` +
+            `[B]Standard:[/B] ${formatSelectee(state.standards)}\n` +
             `[B]Price:[/B] ${(state.price)} €\n` +
             `${state.paymentDate ? '[B]Payment date:[/B] ' + formatDate(state.paymentDate) + '\n' : ''}` +
             `[B]Testing company:[/B] ${formatSelectee(state.testingCompany)}\n` +
