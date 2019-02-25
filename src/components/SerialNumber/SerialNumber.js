@@ -1,5 +1,5 @@
 import React from 'react';
-import firebase from './DB.js';
+import firebase from '../../DB.js';
 
 class SerialNumber extends React.Component {
 

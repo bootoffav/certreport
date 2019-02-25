@@ -1,9 +1,9 @@
 import React from 'react';
-import B24 from './B24.js';
+import B24 from '../src/B24.js';
 import { Link } from 'react-router-dom';
 import Tooltip from 'rc-tooltip';
 import 'rc-tooltip/assets/bootstrap.css';
-import { empty_state } from './defaults';
+import { empty_state } from '../src/defaults';
 
 export default class Task extends React.Component {
   constructor(props) {

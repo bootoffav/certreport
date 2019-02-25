@@ -1,5 +1,5 @@
 import m from 'moment';
-import { select_options } from './Form';
+import { select_options } from './components/Form/Form';
 import { empty_state } from './defaults';
 
 m.fn.toJSON = function() { return this.format(); }

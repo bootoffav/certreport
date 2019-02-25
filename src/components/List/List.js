@@ -2,11 +2,11 @@ import React from 'react';
 import Loader from 'react-loader-spinner';
 import ReactTable from "react-table";
 import { Link } from 'react-router-dom';
-import { empty_state } from './defaults';
-import B24 from './B24.js';
-import './css/style.css';
-import { parseDates } from './Helpers';
-import { Toolbar, filter } from './Toolbar';
+import { empty_state } from '../../defaults';
+import B24 from '../../B24.js';
+import '../../css/style.css';
+import { parseDates } from '../../Helpers';
+import { Toolbar, filter } from '../Toolbar/Toolbar';
 
 export default class List extends React.Component {
     state = {};

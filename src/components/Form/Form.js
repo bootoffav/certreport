@@ -1,13 +1,13 @@
 import React from 'react';
-import { PickDate, BaseInput, Article, Price, Paid } from "./FormFields.js";
+import { PickDate, BaseInput, Article, Price, Paid } from "./FormFields";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select';
-import B24 from './B24.js';
-import Notification from './Notification.js';
-import { getPDF } from './PDF.js';
-import SerialNumber from './SerialNumber.js';
+import B24 from '../../B24.js';
+import Notification from '../Notification/Notification.js';
+import { getPDF } from '../PDF/PDF';
+import SerialNumber from '../SerialNumber/SerialNumber';
 import m from 'moment';
-import { select_options, empty_state } from './defaults';
+import { select_options, empty_state } from '../../defaults';
 
 export default class Form extends React.Component {
     constructor(props) {

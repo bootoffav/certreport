@@ -1,5 +1,6 @@
 import React from 'react';
 import 'bootstrap';
+import m from 'moment';
 
 const Toolbar = props =>
   (<div className="row">
@@ -25,9 +26,9 @@ const Toolbar = props =>
         onClick={() => props.onClick('finishedOn')}
       ><input type="radio"/>Delivery Date announced</label>
       <label
-        className="btn btn-secondary btn-sm"
-        // onClick={this.handleClick}
-      ><input type="radio" disabled/>Tests to be ready this month</label>
+        className="btn btn-warning btn-sm"
+        onClick={() => props.onClick('thisMonth')}
+      ><input type="radio"/>Tests to be ready this month</label>
       <label
         className="btn btn-secondary btn-sm"
         // onClick={this.handleClick}
@@ -35,17 +36,27 @@ const Toolbar = props =>
     </div>
   </div>);
 
-function filter(prop, tasks) {
+const filter = (prop, tasks) => {
   switch (prop) {
     case 'sentOn':
       return tasks.filter(task => task.state.sentOn);
     case 'finishedOn':
-      return tasks.filter(task => task.state.finishedOn)
+      return tasks.filter(task => task.state.finishedOn);
     case 'paid':
       return tasks.filter(task => task.state.paid);
+    case 'thisMonth':
+      const currentDate = m();
+      return tasks.filter(task => {
+        if (task.state.finishedOn) {
+          const date = m(task.state.finishedOn, 'DDMMMYYY');
+          return currentDate.month() === date.month() && currentDate.year() === date.year();
+        }
+        return false;
+      });
     default:
       return tasks;
-    }
   }
+};
+
 
 export { Toolbar, filter };

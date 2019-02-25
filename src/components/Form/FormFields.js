@@ -1,6 +1,6 @@
 import React from 'react';
 import DatePicker from "react-datepicker";
-import B24 from './B24';
+import B24 from '../../B24';
 import Select from 'react-select';
 import { select_options } from './Form';
 
