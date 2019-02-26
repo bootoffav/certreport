@@ -13,10 +13,10 @@ const Toolbar = props =>
         className="btn btn-warning btn-sm"
         onClick={() => props.onClick('sentOn')}
       ><input type="radio"/>Sample's sent</label>
-      <label
+      {/* <label
         className="btn btn-secondary btn-sm"
         // onClick={this.handleClick}
-      ><input type="radio" disabled/>Proforma received</label>
+      ><input type="radio" disabled/>Proforma received</label> */}
       <label
         className="btn btn-warning btn-sm"
         onClick={() => props.onClick('paid')}
@@ -30,16 +30,22 @@ const Toolbar = props =>
         onClick={() => props.onClick('thisMonth')}
       ><input type="radio"/>Tests to be ready this month</label>
       <label
-        className="btn btn-secondary btn-sm"
-        // onClick={this.handleClick}
-      ><input type="radio" disabled/>Waiting for certificate</label>
+        className="btn btn-warning btn-sm"
+        onClick={() => props.onClick('missingTestReport')}
+      ><input type="radio"/>Missing rest report</label>
+      <label
+        className="btn btn-warning btn-sm"
+        onClick={() => props.onClick('waitingCertificate')}
+      ><input type="radio"/>Waiting for certificate</label>
     </div>
   </div>);
 
 const filter = (prop, tasks) => {
+  const sentOnTasks = () => tasks.filter(task => task.state.sentOn);
+
   switch (prop) {
     case 'sentOn':
-      return tasks.filter(task => task.state.sentOn);
+      return sentOnTasks();
     case 'finishedOn':
       return tasks.filter(task => task.state.finishedOn);
     case 'paid':
@@ -53,6 +59,10 @@ const filter = (prop, tasks) => {
         }
         return false;
       });
+    case 'missingTestReport':
+      return sentOnTasks().filter(task => !task.state.testReport.includes('.pdf'));
+    case 'waitingCertificate':
+      return sentOnTasks().filter(task => !task.state.certificate.includes('.pdf'));
     default:
       return tasks;
   }
