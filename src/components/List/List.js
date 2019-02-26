@@ -93,11 +93,11 @@ export default class List extends React.Component {
       Cell: props => props.value.length === 0 ? '' : props.value.map(el => `${el.label} `)
     }, {
       Header: 'Price, €',
-      Footer: () => `Total cost: ${this.formatPrice(this.totalPrice)}`,
+      Footer: () => <>Total € <span style={{ float: 'right' }}>{this.formatPrice(this.totalPrice)}</span></>,
       id: 'price',
       accessor: row => Number(row.state.price),
-      minWidth: 110,
-      Cell: props => this.formatPrice(props.value)
+      minWidth: 90,
+    Cell: props => <>€<span style={{ float: 'right' }}>{this.formatPrice(props.value)}</span></>
     }];
 
   formatPrice = price => Number(price)
@@ -105,7 +105,9 @@ export default class List extends React.Component {
       style: 'currency',
       currency: 'EUR'
     })
-    .replace(/,/g, ' ');
+    .replace(/,/g, ' ')
+    .replace(/\./g, ',')
+    .substr(1);
 
   loadFromCache = () => {
     const totalPrice = sessionStorage.getItem('totalPrice');
@@ -118,6 +120,7 @@ export default class List extends React.Component {
           return task;
         });
       this.setState({ allTasks: tasks, visibleTasks: tasks });
+      this.totalPrice = totalPrice;
     } else {
       throw new Error('Nothing in cache');
     }
