@@ -65,6 +65,36 @@ const Paid = props =>
     </div>
   </div>
 
+const Pi = props =>
+  <div className="form-group">
+    {props.label}
+    <div className="input-group">
+      <div className="input-group-prepend">
+        <div className="input-group-text">
+          <input type='checkbox' id={props.id} onChange={props.handleCheckboxChange} checked={props.proformaReceivedDate}/>
+        </div>
+      </div>
+      <DatePicker className="form-control" disabled={!props.checkboxState}
+        selected={
+          props.date
+          ? new Date(props.date)
+          : null
+        }
+        dateFormat="dd.MM.yyyy"
+        onChange={props.handleDateChange}
+        placeholderText={props.checkboxState ? 'Receiving date' : ''}
+        todayButton={"Today"}
+      />
+      <input type="text" className="form-control"
+        disabled={!props.checkboxState}
+        onChange={props.handleNumberChange}
+        placeholder={props.checkboxState ? '#' : ''}
+        id='proformaNumber' value={props.number}
+        required
+      />
+    </div>
+  </div>
+
 class Article extends React.Component {
   prop_map = {
     code: 'PROPERTY_380',
@@ -155,4 +185,4 @@ class Article extends React.Component {
   }
 }
 
-export { PickDate, BaseInput, Article, Price, Paid };
+export { PickDate, BaseInput, Article, Price, Paid, Pi };

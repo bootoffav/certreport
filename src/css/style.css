@@ -51,8 +51,3 @@ label, p {
 0% { transform: rotate(0deg); }
 100% { transform: rotate(360deg); }
 }
-
-/* .btn-warning {
-    background-color: #fff70794;
-    border-color: #fff70794;
-} */

@@ -1,5 +1,5 @@
 import React from 'react';
-import { PickDate, BaseInput, Article, Price, Paid } from "./FormFields";
+import { PickDate, BaseInput, Article, Price, Paid, Pi } from "./FormFields";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select';
 import B24 from '../../B24.js';
@@ -88,9 +88,9 @@ export default class Form extends React.Component {
               ? <Notification result={request_status}/>
               : ''}
             <form onSubmit={(e) => this.handleCert(e)}>
-                <div className="form-row">
-                  <BaseInput value={this.state.applicantName} placeholder='SHANGHAI XM GROUP LTD' col='col' id='applicantName' label='Applicant name' handleChange={this.handleChange} />
-                  <div className="col">
+              <div className="form-row">
+                <BaseInput value={this.state.applicantName} placeholder='SHANGHAI XM GROUP LTD' col="col-2" id='applicantName' label='Applicant name' handleChange={this.handleChange} />
+                  <div className="col-2">
                     <div className="form-group">
                       Testing company
                       <Select required={true} value={this.state.testingCompany} onChange={e => this.handleSelectChange([e], 'testingCompany')}
@@ -98,32 +98,56 @@ export default class Form extends React.Component {
                       />
                     </div>
                   </div>
-                  <div className="col">
-                    <div className="form-group">
-                      Standards
-                      <Select isMulti required value={this.state.standards} onChange={e => this.handleSelectChange(e, 'standards')}
-                        options={select_options.standards}
+                    <div className="col-2">
+                      <div className="form-group">
+                        Standards
+                        <Select isMulti required value={this.state.standards} onChange={e => this.handleSelectChange(e, 'standards')}
+                          options={select_options.standards}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="col-1">
+                      <Price value={this.state.price} id='price' label='Price' handleChange={this.handleChange} />
+                    </div>
+                    <div className="col-2">
+                      <Paid
+                        id='paid'
+                        label='Paid'
+                        checkboxState={this.state.paid}
+                        paymentDate={this.state.paymentDate}
+                        handleChange={date => this.handleDateChange(date, 'paymentDate')}
+                        handleCheckboxChange={e => {
+                          if (!e.target.checked) {
+                            this.setState({ paymentDate: null});
+                          }
+                          this.handleCheckboxChange(e);
+                          }
+                        }
                       />
                     </div>
-                  </div>
-                  <Price value={this.state.price} id='price' label='Price' handleChange={this.handleChange} />
-                  <div className="col">
-                    <Paid
-                      id='paid'
-                      label='Paid'
-                      checkboxState={this.state.paid}
-                      paymentDate={this.state.paymentDate}
-                      handleChange={date => this.handleDateChange(date, 'paymentDate')}
-                      handleCheckboxChange={e => {
-                        if (!e.target.checked) {
-                          this.setState({ paymentDate: null});
-                        }
-                        this.handleCheckboxChange(e);
-                        }
-                      }
-                    />
-                  </div>
+                    <div className="col-3">
+                        <Pi
+                          label="Proforma Received"
+                          id="proformaReceived"
+                          checkboxState={this.state.proformaReceived}
+                          proformaReceivedDate={this.state.proformaReceived}
+                          date={this.state.proformaReceivedDate}
+                          handleCheckboxChange={e => {
+                            if (!e.target.checked) {
+                              this.setState({ proformaReceivedDate: null, proformaNumber: '' });
+                            }
+                            this.handleCheckboxChange(e);
+                            }
+                          }
+                          handleDateChange={date => this.handleDateChange(date, 'proformaReceivedDate')}
+                          handleNumberChange={date => this.handleChange(date, 'proformaNumber')}
+                          number={this.state.proformaNumber}
+                        />
+                    </div>
                 </div>
+
+
                 <div className="form-row">
                   <Article value={this.state.article}
                     options={select_options.articles}

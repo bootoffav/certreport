@@ -67,6 +67,7 @@ class B24 {
             `[B]Price:[/B] ${(state.price)} €\n` +
             `${state.paymentDate ? '[B]Payment date:[/B] ' + formatDate(state.paymentDate) + '\n' : ''}` +
             `[B]Testing company:[/B] ${formatSelectee(state.testingCompany)}\n` +
+            `${state.proformaReceivedDate && state.proformaNumber ? '[B]Proforma:[/B] ' + formatDate(state.proformaReceivedDate) + ', ' + state.proformaNumber + '\n' : ''}` +
             `${state.testReport ? '[B]Test report:[/B] ' + state.testReport + '\n' : ''}` +
             `${state.certificate ? '[B]Certificate:[/B] ' + state.certificate + '\n' : ''}` +
             `${state.materialNeeded ? '[B]Material needed:[/B] ' + state.materialNeeded + '\n' : ''}` +

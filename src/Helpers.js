@@ -71,6 +71,7 @@ function parse(description, uf_crm_task) {
     'Certificate': 'certificate',
     'Price': 'price',
     'Payment date': 'paymentDate',
+    'Proforma': 'proforma',
     'Testing company': 'testingCompany',
     'Material needed': 'materialNeeded',
     'Testing time, days': 'testingTime',
@@ -96,6 +97,14 @@ function parse(description, uf_crm_task) {
 
   for (let i = 0; i < props.length; i++) {
     newState[prop_map[props[i]]] = vals[i];
+  }
+
+  if (newState.proforma) {
+    const [ proformaReceivedDate, proformaNumber ] = newState.proforma.split(', ');
+    newState.proformaReceivedDate = proformaReceivedDate;
+    newState.proformaNumber = proformaNumber;
+    newState.proformaReceived = true;
+    delete newState.proforma;
   }
 
   if (newState.price) {

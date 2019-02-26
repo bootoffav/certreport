@@ -117,7 +117,7 @@ export default class List extends React.Component {
           task.state = { ...task.state, ...parseDates(task.state, 'YYYY-MM-DD') };
           return task;
         });
-      this.setState({ allTasks: tasks, viewableTasks: tasks });
+      this.setState({ allTasks: tasks, visibleTasks: tasks });
     } else {
       throw new Error('Nothing in cache');
     }
@@ -154,7 +154,7 @@ export default class List extends React.Component {
           return tasks;
         }).then(tasks => {
             this.totalPrice = tasks.reduce((sum, task) => sum + Number(task.state.price), 0);
-            this.setState({ allTasks: tasks, viewableTasks: tasks });
+            this.setState({ allTasks: tasks, visibleTasks: tasks });
             sessionStorage.setItem('tasks', JSON.stringify(tasks, (k, v) => [
               'sentOn',
               'receivedOn',
@@ -170,16 +170,16 @@ export default class List extends React.Component {
 
   toolbarFilter = prop => {
     this.setState({
-      viewableTasks: filter(prop, this.state.allTasks)
+      visibleTasks: filter(prop, this.state.allTasks)
     });
   }
 
   render (){
-    if (this.state.viewableTasks) {
+    if (this.state.visibleTasks) {
       return <>
         <Toolbar onClick={this.toolbarFilter}/>
         <ReactTable
-          data={ this.state.viewableTasks } columns={ this.columns }
+          data={ this.state.visibleTasks } columns={ this.columns }
           defaultSorted={[
             {
               id: 'position',
