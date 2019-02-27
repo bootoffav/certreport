@@ -14,7 +14,7 @@ export default class List extends React.Component {
       Header: '#',
       id: 'position',
       accessor: 'position',
-      maxWidth: 30
+      width: 40
     },{
       Header: '##',
       id: 'serialNumber',
@@ -118,7 +118,10 @@ export default class List extends React.Component {
           task.state = { ...task.state, ...parseDates(task.state, 'YYYY-MM-DD') };
           return task;
         });
-      this.setState({ allTasks: tasks, visibleTasks: tasks });
+      let allTasks = tasks;
+      let visibleTasks = filter(tasks);
+      let totalPrice = visibleTasks.reduce((sum, task) => sum + Number(task.state.price), 0);
+      this.setState({ allTasks, visibleTasks, totalPrice });
     } else {
       throw new Error('Nothing in cache');
     }
