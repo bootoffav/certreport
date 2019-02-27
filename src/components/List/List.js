@@ -93,7 +93,7 @@ export default class List extends React.Component {
       Cell: props => props.value.length === 0 ? '' : props.value.map(el => `${el.label} `)
     }, {
       Header: 'Price, €',
-      Footer: () => <>Total € <span style={{ float: 'right' }}>{this.formatPrice(this.totalPrice)}</span></>,
+      Footer: () => <>Total € <span style={{ float: 'right' }}>{this.formatPrice(this.state.totalPrice)}</span></>,
       id: 'price',
       accessor: row => Number(row.state.price),
       minWidth: 90,
@@ -110,17 +110,15 @@ export default class List extends React.Component {
     .substr(1);
 
   loadFromCache = () => {
-    const totalPrice = sessionStorage.getItem('totalPrice');
     const tasks = sessionStorage.getItem('tasks');
 
-    if (totalPrice && tasks) {
+    if (tasks) {
       let tasks = JSON.parse(sessionStorage.getItem('tasks'))
         .map(task => {
           task.state = { ...task.state, ...parseDates(task.state, 'YYYY-MM-DD') };
           return task;
         });
       this.setState({ allTasks: tasks, visibleTasks: tasks });
-      this.totalPrice = totalPrice;
     } else {
       throw new Error('Nothing in cache');
     }
@@ -130,7 +128,6 @@ export default class List extends React.Component {
     try {
       return this.loadFromCache();
     } catch {
-      let taskPositionInList = 1;
       B24.get_tasks()
         .then(tasks => {
           let filtered = {
@@ -145,19 +142,20 @@ export default class List extends React.Component {
 
           for (let i = 0; i < filtered.new.length; i++) {
             task = await B24.get_task(filtered.new[i].ID);
-            tasks.push({ ...task, position: taskPositionInList++ });
+            tasks.push(task);
           }
           filtered.old.forEach(task => {
             task.state = { ...empty_state };
             task.state.otherTextInDescription = '\n' + task.DESCRIPTION;
             task.state.UF_CRM_TASK = task.UF_CRM_TASK;
-            task.position = taskPositionInList++;
           });
           tasks = tasks.concat(filtered.old);
           return tasks;
         }).then(tasks => {
-            this.totalPrice = tasks.reduce((sum, task) => sum + Number(task.state.price), 0);
-            this.setState({ allTasks: tasks, visibleTasks: tasks });
+            let allTasks = tasks;
+            let visibleTasks = filter(tasks);
+            let totalPrice = visibleTasks.reduce((sum, task) => sum + Number(task.state.price), 0);
+            this.setState({ allTasks, visibleTasks, totalPrice });
             sessionStorage.setItem('tasks', JSON.stringify(tasks, (k, v) => [
               'sentOn',
               'receivedOn',
@@ -166,15 +164,14 @@ export default class List extends React.Component {
               'resultsReceived', 'paymentDate'
               ].includes(k) && v !== undefined && v !== null ? v.substr(0, 10) : v
             ));
-            sessionStorage.setItem('totalPrice', JSON.stringify(this.totalPrice));
         });
     }
   }
 
   toolbarFilter = prop => {
-    this.setState({
-      visibleTasks: filter(prop, this.state.allTasks)
-    });
+    let visibleTasks = filter(this.state.allTasks, prop);
+    let totalPrice = visibleTasks.reduce((sum, task) => sum + Number(task.state.price), 0);
+    this.setState({ visibleTasks, totalPrice });
   }
 
   render (){

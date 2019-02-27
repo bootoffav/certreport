@@ -40,32 +40,45 @@ const Toolbar = props =>
     </div>
   </div>);
 
-const filter = (prop, tasks) => {
+const filter = (tasks, prop) => {
+  let filteredTasks;
   const sentOnTasks = () => tasks.filter(task => task.state.sentOn);
 
   switch (prop) {
     case 'sentOn':
-      return sentOnTasks();
+      filteredTasks = sentOnTasks();
+      break;
     case 'finishedOn':
-      return tasks.filter(task => task.state.finishedOn);
+      filteredTasks = tasks.filter(task => task.state.finishedOn);
+      break;
     case 'paid':
-      return tasks.filter(task => task.state.paid);
+      filteredTasks = tasks.filter(task => task.state.paid);
+      break;
     case 'thisMonth':
       const currentDate = m();
-      return tasks.filter(task => {
+      filteredTasks = tasks.filter(task => {
         if (task.state.finishedOn) {
           const date = m(task.state.finishedOn, 'DDMMMYYY');
           return currentDate.month() === date.month() && currentDate.year() === date.year();
         }
         return false;
       });
+      break;
     case 'missingTestReport':
-      return sentOnTasks().filter(task => !task.state.testReport.includes('.pdf'));
+      filteredTasks = sentOnTasks().filter(task => !task.state.testReport.includes('.pdf'));
+      break;
     case 'waitingCertificate':
-      return sentOnTasks().filter(task => !task.state.certificate.includes('.pdf'));
+      filteredTasks = sentOnTasks().filter(task => !task.state.certificate.includes('.pdf'));
+      break;
     default:
-      return tasks;
-  }
+      debugger;
+      filteredTasks = tasks;
+    }
+
+  // пронумеровать
+  let i = 1;
+  filteredTasks.forEach(el => el.position = i++);
+  return filteredTasks;
 };
 
 
