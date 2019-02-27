@@ -13,10 +13,10 @@ const Toolbar = props =>
         className="btn btn-warning btn-sm"
         onClick={() => props.onClick('sentOn')}
       ><input type="radio"/>Sample's sent</label>
-      {/* <label
-        className="btn btn-secondary btn-sm"
-        // onClick={this.handleClick}
-      ><input type="radio" disabled/>Proforma received</label> */}
+      <label
+        className="btn btn-warning btn-sm"
+        onClick={() => props.onClick('proforma')}
+      ><input type="radio"/>Proforma received</label>
       <label
         className="btn btn-warning btn-sm"
         onClick={() => props.onClick('paid')}
@@ -54,6 +54,9 @@ const filter = (tasks, prop) => {
     case 'paid':
       filteredTasks = tasks.filter(task => task.state.paid);
       break;
+    case 'proforma':
+      filteredTasks = tasks.filter(task => task.state.proformaReceived);
+      break;
     case 'thisMonth':
       const currentDate = m();
       filteredTasks = tasks.filter(task => {
@@ -71,7 +74,6 @@ const filter = (tasks, prop) => {
       filteredTasks = sentOnTasks().filter(task => !task.state.certificate.includes('.pdf'));
       break;
     default:
-      debugger;
       filteredTasks = tasks;
     }
 
