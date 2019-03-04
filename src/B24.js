@@ -1,7 +1,7 @@
 import qs from 'qs';
 import m from 'moment';
 import parse, { dataSeparator } from './Helpers';
-import { generatePDF } from './components/PDF/PDF';
+import { generatePDF } from './components/Export/Export';
 
 m.fn.toJSON = function() { return this.format(); }
 const creator_id = process.env.REACT_APP_B24_USER_ID;

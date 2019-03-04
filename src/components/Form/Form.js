@@ -4,10 +4,11 @@ import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select';
 import B24 from '../../B24.js';
 import Notification from '../Notification/Notification.js';
-import { getPDF } from '../PDF/PDF';
+// import { getPDF } from '../PDF/PDF';
 import SerialNumber from '../SerialNumber/SerialNumber';
 import m from 'moment';
 import { select_options, empty_state } from '../../defaults';
+import { Export } from '../Export/Export';
 
 export default class Form extends React.Component {
     constructor(props) {
@@ -210,11 +211,8 @@ export default class Form extends React.Component {
                     className="btn btn-danger btn-block"
                   >Create / Update</button>
                 </div>
-                <div className="col">
-                  <button className="btn btn-info btn-block"
-                    onClick={(e) => getPDF(e, this.state)}
-                  >Get .PDF</button>
-                </div>
+                <Export type="pdf" data={this.state}/>
+                {/* <Export type="xls" data={this.state}/> */}
               </div>
           </form>
       </div>

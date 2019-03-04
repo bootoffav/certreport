@@ -7,6 +7,7 @@ import B24 from '../../B24.js';
 import '../../css/style.css';
 import { parseDates } from '../../Helpers';
 import { Toolbar, filter } from '../Toolbar/Toolbar';
+import { Export } from '../Export/Export';
 
 export default class List extends React.Component {
     state = {};
@@ -119,9 +120,10 @@ export default class List extends React.Component {
           return task;
         });
       let allTasks = tasks;
+      let filteredTasksLevel1 = tasks;
       let visibleTasks = filter(tasks);
       let totalPrice = visibleTasks.reduce((sum, task) => sum + Number(task.state.price), 0);
-      this.setState({ allTasks, visibleTasks, totalPrice });
+      this.setState({ allTasks, visibleTasks, filteredTasksLevel1, totalPrice });
     } else {
       throw new Error('Nothing in cache');
     }
@@ -156,9 +158,10 @@ export default class List extends React.Component {
           return tasks;
         }).then(tasks => {
             let allTasks = tasks;
+            let filteredTasksLevel1 = tasks;
             let visibleTasks = filter(tasks);
             let totalPrice = visibleTasks.reduce((sum, task) => sum + Number(task.state.price), 0);
-            this.setState({ allTasks, visibleTasks, totalPrice });
+            this.setState({ allTasks, filteredTasksLevel1, visibleTasks, totalPrice });
             sessionStorage.setItem('tasks', JSON.stringify(tasks, (k, v) => [
               'sentOn',
               'receivedOn',
@@ -171,8 +174,25 @@ export default class List extends React.Component {
     }
   }
 
+  //level 1 filter
+  brandFilter(brand) {
+    let filtered;
+    switch (brand) {
+      case 'ALL':
+        filtered = this.state.allTasks;
+        break;
+      default:
+        filtered = this.state.allTasks.filter(task => task.state.brand[0].label === brand);
+    }
+    this.setState({
+      filteredTasksLevel1: filtered,
+      visibleTasks: filtered
+    });
+  }
+
+  //level 2 filter
   toolbarFilter = prop => {
-    let visibleTasks = filter(this.state.allTasks, prop);
+    let visibleTasks = filter(this.state.filteredTasksLevel1, prop);
     let totalPrice = visibleTasks.reduce((sum, task) => sum + Number(task.state.price), 0);
     this.setState({ visibleTasks, totalPrice });
   }
@@ -180,6 +200,20 @@ export default class List extends React.Component {
   render (){
     if (this.state.visibleTasks) {
       return <>
+        {/* <Export type="xls" data={this.state.visibleTasks} /> */}
+        {/* <div className="dropdown"> */}
+          {/* <button className="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Brand
+          </button> */}
+          {/* <div className="dropdown-menu" aria-labelledby="dropdownMenu2"> */}
+            {/* <button className="dropdown-item" type="button" onClick={() => this.brandFilter('XMT')}>XMT</button>
+            <button className="dropdown-item" type="button" onClick={() => this.brandFilter('XMS')}>XMS</button>
+            <button className="dropdown-item" type="button" onClick={() => this.brandFilter('XMF')}>XMF</button>
+            <div className="dropdown-divider"></div>
+            <button className="dropdown-item" type="button" onClick={() => this.brandFilter('ALL')}>ALL</button> */}
+            {/* <a class="dropdown-item" href="#">Separated link</a> */}
+          {/* </div> */}
+        {/* </div> */}
         <Toolbar onClick={this.toolbarFilter}/>
         <ReactTable
           data={ this.state.visibleTasks } columns={ this.columns }
