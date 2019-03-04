@@ -1,5 +1,4 @@
 import React from 'react';
-import 'bootstrap';
 import m from 'moment';
 
 const Toolbar = props =>
@@ -71,7 +70,9 @@ const filter = (tasks, prop) => {
       filteredTasks = sentOnTasks().filter(task => !task.state.testReport.includes('.pdf'));
       break;
     case 'waitingCertificate':
-      filteredTasks = sentOnTasks().filter(task => !task.state.certificate.includes('.pdf'));
+      filteredTasks = sentOnTasks()
+                        .filter(task => task.state.testReport.includes('.pdf')
+                        && !task.state.certificate.includes('.pdf'));
       break;
     default:
       filteredTasks = tasks;

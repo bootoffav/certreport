@@ -18,6 +18,7 @@ let select_options = {
 };
 
 const empty_state = {
+  proformaReceived: false,
   proformaNumber: '',
   proformaReceivedDate: null,
   applicantName: '',
