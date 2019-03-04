@@ -182,7 +182,7 @@ export default class List extends React.Component {
         filtered = this.state.allTasks;
         break;
       default:
-        filtered = this.state.allTasks.filter(task => task.state.brand[0].label === brand);
+        filtered = this.state.allTasks.filter(task => task.state.brand[0] ? task.state.brand[0].label === brand : false);
     }
     this.setState({
       filteredTasksLevel1: filtered,
@@ -201,19 +201,17 @@ export default class List extends React.Component {
     if (this.state.visibleTasks) {
       return <>
         {/* <Export type="xls" data={this.state.visibleTasks} /> */}
-        {/* <div className="dropdown"> */}
-          {/* <button className="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Brand
-          </button> */}
-          {/* <div className="dropdown-menu" aria-labelledby="dropdownMenu2"> */}
-            {/* <button className="dropdown-item" type="button" onClick={() => this.brandFilter('XMT')}>XMT</button>
+        <div className="btn-group">
+          <button className="btn btn-sm btn-primary" type="button" onClick={() => this.brandFilter('ALL')}>All brands</button>
+          <button type="button" class="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span className="sr-only">Toggle Dropdown</span>
+          </button>
+          <div className="dropdown-menu">
+            <button className="dropdown-item" type="button" onClick={() => this.brandFilter('XMT')}>XMT</button>
             <button className="dropdown-item" type="button" onClick={() => this.brandFilter('XMS')}>XMS</button>
             <button className="dropdown-item" type="button" onClick={() => this.brandFilter('XMF')}>XMF</button>
-            <div className="dropdown-divider"></div>
-            <button className="dropdown-item" type="button" onClick={() => this.brandFilter('ALL')}>ALL</button> */}
-            {/* <a class="dropdown-item" href="#">Separated link</a> */}
-          {/* </div> */}
-        {/* </div> */}
+          </div>
+        </div>
         <Toolbar onClick={this.toolbarFilter}/>
         <ReactTable
           data={ this.state.visibleTasks } columns={ this.columns }
