@@ -26,28 +26,23 @@ function App() {
   initApp();
   return (
     <div className="container">
-      <Navigation />
+      <Router>
+        <div>
+          <ul className="nav nav-pills nav-fill justify-content-center">
+            <li className="nav-item">
+              <NavLink exact className="nav-link" to="/">List</NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink exact className="nav-link" to="/add">Add cert</NavLink>
+            </li>
+          </ul>
+          <Route exact path="/" component={List} />
+          <Route exact path="/add" component={Form} />
+          <Route exact path="/edit/:id" component={Form} />
+        </div>
+      </Router>
     </div>
   )
 }
-
-const Navigation = () =>
-  (<div className="col">
-    <Router>
-      <div>
-        <ul className="nav nav-pills nav-fill justify-content-center">
-          <li className="nav-item">
-            <NavLink exact className="nav-link" to="/">List</NavLink>
-          </li>
-          <li className="nav-item">
-            <NavLink exact className="nav-link" to="/add">Add cert</NavLink>
-          </li>
-        </ul>
-        <Route exact path="/" component={List} />
-        <Route exact path="/add" component={Form} />
-        <Route exact path="/edit/:id" component={Form} />
-      </div>
-    </Router>
-  </div>);
 
 ReactDOM.render(<App />, document.getElementById('root'));
