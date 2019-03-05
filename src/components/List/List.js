@@ -65,6 +65,18 @@ export default class List extends React.Component {
       width: 95,
       Cell: props => props.value ? props.value.format("DD MMM YYYY") : ''
     }, {
+      Header: 'Proforma date',
+      accessor: 'state.proformaReceivedDate',
+      id: 'proformaReceivedDate',
+      show: false,
+      width: 130,
+    }, {
+      Header: 'Proforma #',
+      accessor: 'state.proformaNumber',
+      id: 'proformaNumber',
+      show: false,
+      width: 100,
+    }, {
       Header: 'Paid',
       id: 'paid',
       accessor: row => row.state.paymentDate,
@@ -179,6 +191,7 @@ export default class List extends React.Component {
   brandFilter(brand) {
     document.getElementById('brandFilter').innerText = `Brands: ${brand}`;
     let filtered;
+
     switch (brand) {
       case 'All':
         filtered = this.state.allTasks;
@@ -189,13 +202,21 @@ export default class List extends React.Component {
       default:
         filtered = this.state.allTasks.filter(task => task.state.brand[0] ? task.state.brand[0].label === brand : false);
     }
-    this.setState({ filteredTasksLevel1: filtered }, this.toolbarFilter);
+
+    this.setState({ filteredTasksLevel1: filtered }, () => {
+      this.toolbarFilter();
+      Array.from(document.getElementsByClassName('btn btn-warning btn-sm'))
+        .forEach(el => el.className = 'btn btn-warning btn-sm');
+      document.getElementsByClassName('btn btn-warning btn-sm')[0].className += ' active';
+    });
   }
 
   //level 2 filter
   toolbarFilter = (prop = 'all') => {
     let visibleTasks = filter(this.state.filteredTasksLevel1, prop);
     let totalPrice = visibleTasks.reduce((sum, task) => sum + Number(task.state.price), 0);
+    this.columns[5].show = (prop === 'proforma') ? true : false;
+    this.columns[6].show = (prop === 'proforma') ? true : false;
     this.setState({ visibleTasks, totalPrice });
   }
 
@@ -204,7 +225,7 @@ export default class List extends React.Component {
       return <>
         <div className="d-flex filter-level-1">
           <div className="dropdown">
-            <button class="btn btn-success dropdown-toggle" type="button" id="brandFilter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <button className="btn btn-success dropdown-toggle" type="button" id="brandFilter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               All brands
             </button>
             <div className="dropdown-menu">
