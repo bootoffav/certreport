@@ -28,14 +28,21 @@ function App() {
     <div className="container">
       <Router>
         <div>
-          <ul className="nav nav-pills nav-fill justify-content-center">
-            <li className="nav-item">
-              <NavLink exact className="nav-link" to="/">List</NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink exact className="nav-link" to="/add">Add cert</NavLink>
-            </li>
-          </ul>
+          <nav class="navbar navbar-light" style={{ backgroundColor: "rgba(166, 188, 212, 0.5)" }}>
+            <div className="container d-flex flex-row-reverse">
+              <ul style={{ listStyleType: "none" }}>
+                <li className="nav-item">
+                  <NavLink exact className="nav-link" to="/add">Add cert</NavLink>
+                </li>
+              </ul>
+              <span class="navbar-text">
+                XMTextiles fabrics certification processes gathered together in one place!
+              </span>
+              <a class="navbar-brand" href="/">
+                <img src="/img/logo.png" width="150" height="50" class="d-inline-block align-top" alt=""/>
+              </a>
+            </div>
+          </nav>
           <Route exact path="/" component={List} />
           <Route exact path="/add" component={Form} />
           <Route exact path="/edit/:id" component={Form} />
