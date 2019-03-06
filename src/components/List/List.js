@@ -85,6 +85,13 @@ export default class List extends React.Component {
               ? <span className="oi oi-check"></span>
               : ''
     }, {
+      Header: 'Payment date',
+      id: 'paymentDate',
+      accessor: row => row.state.paymentDate,
+      width: 130,
+      show: false,
+      Cell: props => props.value ? props.value.format("DD MMM YYYY") : ''
+    }, {
       Header: 'Fabric',
       id: 'article',
       accessor: 'state.article',
@@ -215,10 +222,11 @@ export default class List extends React.Component {
   toolbarFilter = (prop = 'all') => {
     let visibleTasks = filter(this.state.filteredTasksLevel1, prop);
     let totalPrice = visibleTasks.reduce((sum, task) => sum + Number(task.state.price), 0);
-    this.columns[5].show = (prop === 'proforma') ? true : false;
-    this.columns[6].show = (prop === 'proforma') ? true : false;
     this.setState({ visibleTasks, totalPrice });
-  }
+    prop === 'proforma'
+    ? this.columns[5].show = this.columns[6].show = this.columns[8].show = true
+    : this.columns[5].show = this.columns[6].show = this.columns[8].show = false;
+    }
 
   render (){
     if (this.state.visibleTasks) {

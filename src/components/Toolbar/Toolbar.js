@@ -22,7 +22,7 @@ const Toolbar = props =>
       ><input type="radio" />Payment Done</label>
       <label
         className="btn btn-warning btn-sm"
-        onClick={() => props.onClick('finishedOn')}
+        onClick={() => props.onClick('deliveryDateAnnounced')}
       ><input type="radio"/>Delivery Date announced</label>
       <label
         className="btn btn-warning btn-sm"
@@ -47,7 +47,7 @@ const filter = (tasks, prop) => {
     case 'sentOn':
       filteredTasks = sentOnTasks();
       break;
-    case 'finishedOn':
+    case 'deliveryDateAnnounced':
       filteredTasks = tasks.filter(task => task.state.finishedOn);
       break;
     case 'paid':
