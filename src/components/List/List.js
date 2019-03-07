@@ -9,10 +9,11 @@ import '../../css/style.css';
 import { parseDates } from '../../Helpers';
 import { Toolbar, filter } from '../Toolbar/Toolbar';
 import { Export } from '../Export/Export';
+import { FabricSearch, BrandFilter } from '../Filters';
 
 export default class List extends React.Component {
-    state = {};
-    columns = [{
+  state = {};
+  columns = [{
       Header: '#',
       id: 'position',
       accessor: 'position',
@@ -130,75 +131,74 @@ export default class List extends React.Component {
     .replace(/\./g, ',')
     .substr(1);
 
-  loadFromCache = () => {
-    const tasks = sessionStorage.getItem('tasks');
-
-    if (tasks) {
-      let tasks = JSON.parse(sessionStorage.getItem('tasks'))
-        .map(task => {
-          task.state = { ...task.state, ...parseDates(task.state, 'YYYY-MM-DD') };
-          return task;
-        });
-      let allTasks = tasks;
-      let filteredTasksLevel1 = tasks;
-      let visibleTasks = filter(tasks);
-      let totalPrice = visibleTasks.reduce((sum, task) => sum + Number(task.state.price), 0);
-      this.setState({ allTasks, visibleTasks, filteredTasksLevel1, totalPrice });
-    } else {
-      throw new Error('Nothing in cache');
-    }
-  }
-
-  componentDidMount() {
-    try {
-      return this.loadFromCache();
-    } catch {
-      B24.get_tasks()
-        .then(tasks => {
-          let filtered = {
-            new: [],
-            old: []
-          };
-          tasks.forEach(task => (task.CREATED_BY === '460') ? filtered.new.push(task) : filtered.old.push(task))
-          return filtered;
-        })
-        .then(async filtered => {
-          let task, tasks = [];
-
-          for (let i = 0; i < filtered.new.length; i++) {
-            task = await B24.get_task(filtered.new[i].ID);
-            tasks.push(task);
-          }
-          filtered.old.forEach(task => {
-            task.state = { ...empty_state };
-            task.state.otherTextInDescription = '\n' + task.DESCRIPTION;
-            task.state.UF_CRM_TASK = task.UF_CRM_TASK;
+    loadFromCache = () => {
+      const tasks = sessionStorage.getItem('tasks');
+  
+      if (tasks) {
+        let tasks = JSON.parse(sessionStorage.getItem('tasks'))
+          .map(task => {
+            task.state = { ...task.state, ...parseDates(task.state, 'YYYY-MM-DD') };
+            return task;
           });
-          tasks = tasks.concat(filtered.old);
-          return tasks;
-        }).then(tasks => {
-            let allTasks = tasks;
-            let filteredTasksLevel1 = tasks;
-            let visibleTasks = filter(tasks);
-            let totalPrice = visibleTasks.reduce((sum, task) => sum + Number(task.state.price), 0);
-            this.setState({ allTasks, filteredTasksLevel1, visibleTasks, totalPrice });
-            sessionStorage.setItem('tasks', JSON.stringify(tasks, (k, v) => [
-              'sentOn',
-              'receivedOn',
-              'startedOn',
-              'finishedOn',
-              'resultsReceived', 'paymentDate'
-              ].includes(k) && v !== undefined && v !== null ? v.substr(0, 10) : v
-            ));
-        });
+        let allTasks = tasks;
+        let filteredTasksLevel1 = tasks;
+        let visibleTasks = filter(tasks);
+        let totalPrice = visibleTasks.reduce((sum, task) => sum + Number(task.state.price), 0);
+        this.setState({ allTasks, visibleTasks, filteredTasksLevel1, totalPrice });
+      } else {
+        throw new Error('Nothing in cache');
+      }
     }
-  }
-
+  
+    componentDidMount() {
+      try {
+        return this.loadFromCache();
+      } catch {
+        B24.get_tasks()
+          .then(tasks => {
+            let filtered = {
+              new: [],
+              old: []
+            };
+            tasks.forEach(task => (task.CREATED_BY === '460') ? filtered.new.push(task) : filtered.old.push(task))
+            return filtered;
+          })
+          .then(async filtered => {
+            let task, tasks = [];
+  
+            for (let i = 0; i < filtered.new.length; i++) {
+              task = await B24.get_task(filtered.new[i].ID);
+              tasks.push(task);
+            }
+            filtered.old.forEach(task => {
+              task.state = { ...empty_state };
+              task.state.otherTextInDescription = '\n' + task.DESCRIPTION;
+              task.state.UF_CRM_TASK = task.UF_CRM_TASK;
+            });
+            tasks = tasks.concat(filtered.old);
+            return tasks;
+          }).then(tasks => {
+              let allTasks = tasks;
+              let filteredTasksLevel1 = tasks;
+              let visibleTasks = filter(tasks);
+              let totalPrice = visibleTasks.reduce((sum, task) => sum + Number(task.state.price), 0);
+              this.setState({ allTasks, filteredTasksLevel1, visibleTasks, totalPrice });
+              sessionStorage.setItem('tasks', JSON.stringify(tasks, (k, v) => [
+                'sentOn',
+                'receivedOn',
+                'startedOn',
+                'finishedOn',
+                'resultsReceived', 'paymentDate'
+                ].includes(k) && v !== undefined && v !== null ? v.substr(0, 10) : v
+              ));
+          });
+      }
+    }
+  
   //level 1 filter
   brandFilter(brand) {
-    document.getElementById('brandFilter').innerText = `Brands: ${brand}`;
+    document.getElementById('brandFilter').innerText = `Brand: ${brand}`;
     let filtered;
-
     switch (brand) {
       case 'All':
         filtered = this.state.allTasks;
@@ -210,12 +210,22 @@ export default class List extends React.Component {
         filtered = this.state.allTasks.filter(task => task.state.brand[0] ? task.state.brand[0].label === brand : false);
     }
 
-    this.setState({ filteredTasksLevel1: filtered }, () => {
-      this.toolbarFilter();
-      Array.from(document.getElementsByClassName('btn btn-warning btn-sm'))
-        .forEach(el => el.className = 'btn btn-warning btn-sm');
-      document.getElementsByClassName('btn btn-warning btn-sm')[0].className += ' active';
-    });
+    this.setState({
+      filteredTasksLevel1: filtered
+    }, this.filterLevel1Callback);
+  }
+
+  fabricFilter(fabric) {
+    this.setState({
+      filteredTasksLevel1: this.state.allTasks.filter(task => task.state.article.includes(fabric))
+    }, this.filterLevel1Callback);
+  }
+
+  filterLevel1Callback = () => {
+    this.toolbarFilter();
+    Array.from(document.getElementsByClassName('btn btn-warning btn-sm'))
+      .forEach(el => el.className = 'btn btn-warning btn-sm');
+    document.getElementsByClassName('btn btn-warning btn-sm')[0].className += ' active';
   }
 
   //level 2 filter
@@ -231,23 +241,15 @@ export default class List extends React.Component {
   render (){
     if (this.state.visibleTasks) {
       return <>
-        <div className="d-flex filter-level-1">
-          <div className="dropdown">
-            <button className="btn btn-success dropdown-toggle" type="button" id="brandFilter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              All brands
-            </button>
-            <div className="dropdown-menu">
-              <button className="dropdown-item" type="button" onClick={e => this.brandFilter('All')}>All</button>
-              <div className="dropdown-divider"></div>
-              <button className="dropdown-item" type="button" onClick={e => this.brandFilter('XMT')}>XMT</button>
-              <button className="dropdown-item" type="button" onClick={e => this.brandFilter('XMS')}>XMS</button>
-              <button className="dropdown-item" type="button" onClick={e => this.brandFilter('XMF')}>XMF</button>
-              <div className="dropdown-divider"></div>
-              <button className="dropdown-item" type="button" onClick={e => this.brandFilter('No brand')}>No brand</button>
-            </div>
+        <div className="d-flex justify-content-start">
+          <div className="p-2">
+            <BrandFilter filter={this.brandFilter.bind(this)}/>
           </div>
-          {/* <Export type="xls" data={this.state.visibleTasks} /> */}
+          <div className="p-2">
+            <FabricSearch filter={this.fabricFilter.bind(this)}/>
+          </div>
         </div>
+          {/* <Export type="xls" data={this.state.visibleTasks} /> */}
         <Toolbar onClick={this.toolbarFilter}/>
         <ReactTable
           data={ this.state.visibleTasks } columns={ this.columns }

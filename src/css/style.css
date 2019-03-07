@@ -8,18 +8,17 @@ body {
     }
 }
 
-
-thead {
+/* thead {
     text-align: center;
 }
-
+*/
 label, p {
     font-weight: 500;
 }
 .nav, .navbar-light {
     border-radius: 5pt;
     font-size: 1.3em;
-    margin-bottom: 2em;
+    margin-bottom: 1em;
 }
 .form-place {
     margin-top: 2em;
