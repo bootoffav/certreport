@@ -9,7 +9,7 @@ import '../../css/style.css';
 import { parseDates } from '../../Helpers';
 import { Toolbar, filter } from '../Toolbar/Toolbar';
 import { Export } from '../Export/Export';
-import { FabricSearch, BrandFilter } from '../Filters';
+import { ColumnSearch, BrandFilter } from '../Filters';
 
 export default class List extends React.Component {
   state = {};
@@ -215,10 +215,13 @@ export default class List extends React.Component {
     }, this.filterLevel1Callback);
   }
 
-  fabricFilter(fabric) {
-    fabric = fabric.toLowerCase();
+  columnFilter = (valueToSearch, columnToSearch) => {
+    valueToSearch = valueToSearch.toLowerCase();
     this.setState({
-      filteredTasksLevel1: this.state.allTasks.filter(task => task.state.article.toLowerCase().includes(fabric))
+      filteredTasksLevel1: this.state.allTasks.filter(task => columnToSearch === 'TITLE'
+        ? task[columnToSearch].toLowerCase().includes(valueToSearch)
+        : task.state[columnToSearch].toLowerCase().includes(valueToSearch)
+      )
     }, this.filterLevel1Callback);
   }
 
@@ -247,7 +250,7 @@ export default class List extends React.Component {
             <BrandFilter filter={this.brandFilter.bind(this)}/>
           </div>
           <div className="p-1">
-            <FabricSearch filter={this.fabricFilter.bind(this)}/>
+            <ColumnSearch filter={this.columnFilter}/>
           </div>
         </div>
           {/* <Export type="xls" data={this.state.visibleTasks} /> */}
