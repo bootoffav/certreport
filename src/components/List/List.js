@@ -216,8 +216,9 @@ export default class List extends React.Component {
   }
 
   fabricFilter(fabric) {
+    fabric = fabric.toLowerCase();
     this.setState({
-      filteredTasksLevel1: this.state.allTasks.filter(task => task.state.article.includes(fabric))
+      filteredTasksLevel1: this.state.allTasks.filter(task => task.state.article.toLowerCase().includes(fabric))
     }, this.filterLevel1Callback);
   }
 
@@ -242,10 +243,10 @@ export default class List extends React.Component {
     if (this.state.visibleTasks) {
       return <>
         <div className="d-flex justify-content-start">
-          <div className="p-2">
+          <div className="p-1">
             <BrandFilter filter={this.brandFilter.bind(this)}/>
           </div>
-          <div className="p-2">
+          <div className="p-1">
             <FabricSearch filter={this.fabricFilter.bind(this)}/>
           </div>
         </div>
