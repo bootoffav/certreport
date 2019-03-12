@@ -2,6 +2,7 @@ import qs from 'qs';
 import m from 'moment';
 import parse, { dataSeparator } from './Helpers';
 import { generatePDF } from './components/Export/Export';
+import Task from './Task';
 
 m.fn.toJSON = function() { return this.format(); }
 const creator_id = process.env.REACT_APP_B24_USER_ID;
@@ -53,20 +54,20 @@ class B24 {
         UF_CRM_TASK: B24.makeUfCrmTaskField(state),
         TITLE: `${state.serialNumber}_${formatSelectee(state.testingCompany).split(' ')[0]} - ${formatSelectee(state.standards)} - ${state.article}, ${state.colour} ` +
             `(send ${formatDate(state.sentOn)} - plan ${formatDate(state.resultsReceived)}) = ${state.price} € | ${state.testReport ? state.testReport : ''}`,
-        DESCRIPTION: `[B]Applicant name:[/B] ${state.applicantName}\n` +
-            `[B]Product:[/B] ${state.product}\n` +
-            `[B]Code:[/B] ${state.code}\n` +
-            `[B]Article:[/B] ${state.article}\n` +
-            `[B]Colour:[/B] ${state.colour}\n` +
-            `[B]Serial number:[/B] ${state.serialNumber}\n` +
-            `[B]Length of sample, meters:[/B] ${state.length}\n` +
-            `[B]Width of sample, meters:[/B] ${state.width}\n` +
-            `[B]Part number:[/B] ${state.partNumber}\n` +
-            `[B]Roll number:[/B] ${state.rollNumber}\n` +
-            `[B]Standard:[/B] ${formatSelectee(state.standards)}\n` +
-            `[B]Price:[/B] ${(state.price)} €\n` +
+        DESCRIPTION: `${state.applicantName ? '[B]Applicant name:[/B] ' + state.applicantName + '\n' : ''}` +
+            `${state.product ? '[B]Product:[/B] ' + state.product + '\n' : ''}` +
+            `${state.code ? '[B]Code:[/B] ' + state.code + '\n' : ''}` +
+            `${state.article ? '[B]Article:[/B] ' + state.article + '\n' : ''}` +
+            `${state.colour ? '[B]Colour:[/B] ' + state.colour + '\n' : ''}` +
+            `${state.serialNumber ? '[B]Serial number:[/B] ' + state.serialNumber + '\n' : ''}` +
+            `${state.length ? '[B]Length of sample, meters:[/B] ' + state.length + '\n' : ''}` +
+            `${state.width ? '[B]Width of sample, meters:[/B] ' + state.width + '\n' : ''}` +
+            `${state.partNumber ? '[B]Part number:[/B] ' + state.partNumber + '\n' : ''}` +
+            `${state.rollNumber ? '[B]Roll number:[/B] ' + state.rollNumber + '\n' : ''}` +
+            `${state.standards ? '[B]Standard:[/B] ' + state.standards + '\n' : ''}` +
+            `${state.price ? '[B]Price:[/B] ' + state.price + ' €\n' : ''}` +
             `${state.paymentDate ? '[B]Payment date:[/B] ' + formatDate(state.paymentDate) + '\n' : ''}` +
-            `[B]Testing company:[/B] ${formatSelectee(state.testingCompany)}\n` +
+            `${state.testingCompany ? '[B]Testing company:[/B] ' + state.testingCompany + '\n' : ''}` +
             `${state.proformaReceivedDate && state.proformaNumber ? '[B]Proforma:[/B] ' + formatDate(state.proformaReceivedDate) + ', ' + state.proformaNumber + '\n' : ''}` +
             `${state.testReport ? '[B]Test report:[/B] ' + state.testReport + '\n' : ''}` +
             `${state.certificate ? '[B]Certificate:[/B] ' + state.certificate + '\n' : ''}` +
@@ -157,7 +158,7 @@ class B24 {
         .then(rsp => {
           let task;
           if (rsp.result) {
-            task = { ...rsp.result };
+            task = new Task({ ...rsp.result });
             task.state = parse(
               rsp.result.DESCRIPTION,
               rsp.result.UF_CRM_TASK

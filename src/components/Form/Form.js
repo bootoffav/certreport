@@ -44,9 +44,14 @@ export default class Form extends React.Component {
     handleCheckboxChange = e => this.setState({ [e.target.id]: e.target.checked })
 
     handleSelectChange = (selected, id) => {
-      (selected)
-      ? this.setState({ [id]: selected })
-      : this.setState({ id: [selected] });
+      Array.isArray(selected)
+      ? this.setState({
+          [id]: selected.reduce(
+          (endValue, currentValue, index) => index === selected.length - 1
+            ? `${endValue}${currentValue.value}`
+            : `${endValue}${currentValue.value}, `, '')
+        })
+      : this.setState({ [id]: selected.value })
     }
 
     handleChange = e => this.setState({[e.target.id]: e.target.value});
@@ -66,6 +71,16 @@ export default class Form extends React.Component {
             () => this.afterUnsuccessfulSubmit()
           )
       }
+    }
+
+    asSelectable(value) {
+      value = value.split(', ');
+      return value.length === 1
+      ? [{
+          label: value,
+          value
+        }]
+      : value.map(label => ({label, value: label }));
     }
 
     afterSuccessfulSubmit() {
@@ -94,7 +109,11 @@ export default class Form extends React.Component {
                   <div className="col-2">
                     <div className="form-group">
                       Testing company
-                      <Select required={true} value={this.state.testingCompany} onChange={e => this.handleSelectChange([e], 'testingCompany')}
+                      <Select
+                        value={this.asSelectable(this.state.testingCompany)}
+                        onChange={e => {
+                          this.handleSelectChange(e, 'testingCompany')}
+                        }
                         options={select_options.testingCompany}
                       />
                     </div>
@@ -102,7 +121,11 @@ export default class Form extends React.Component {
                     <div className="col-2">
                       <div className="form-group">
                         Standards
-                        <Select isMulti required value={this.state.standards} onChange={e => this.handleSelectChange(e, 'standards')}
+                        <Select isMulti
+                          value={this.asSelectable(this.state.standards)}
+                          onChange={e => {
+                            this.handleSelectChange(e, 'standards')}
+                          }
                           options={select_options.standards}
                         />
                       </div>

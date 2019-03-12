@@ -8,7 +8,7 @@ import B24 from '../../B24.js';
 import '../../css/style.css';
 import { parseDates } from '../../Helpers';
 import { Toolbar, filter } from '../Toolbar/Toolbar';
-import { Export } from '../Export/Export';
+// import { Export } from '../Export/Export';
 import { ColumnSearch, BrandFilter } from '../Filters';
 
 export default class List extends React.Component {
@@ -112,7 +112,6 @@ export default class List extends React.Component {
       id: 'standards',
       accessor: 'state.standards',
       minWidth: 100,
-      Cell: props => props.value.length === 0 ? '' : props.value.map(el => `${el.label} `)
     }, {
       Header: 'Price, €',
       Footer: () => <>Total € <span style={{ float: 'right' }}>{this.formatPrice(this.state.totalPrice)}</span></>,
@@ -164,19 +163,18 @@ export default class List extends React.Component {
             return filtered;
           })
           .then(async filtered => {
-            let task, tasks = [];
+            let task, parsedTasks = [];
   
             for (let i = 0; i < filtered.new.length; i++) {
               task = await B24.get_task(filtered.new[i].ID);
-              tasks.push(task);
+              parsedTasks.push(task);
             }
             filtered.old.forEach(task => {
               task.state = { ...empty_state };
               task.state.otherTextInDescription = '\n' + task.DESCRIPTION;
               task.state.UF_CRM_TASK = task.UF_CRM_TASK;
             });
-            tasks = tasks.concat(filtered.old);
-            return tasks;
+            return [ ...parsedTasks, ...filtered.old];
           }).then(tasks => {
               let allTasks = tasks;
               let filteredTasksLevel1 = tasks;
@@ -266,10 +264,11 @@ export default class List extends React.Component {
           defaultPageSize={ 20 } className='-striped -highlight table'/>
         </>
     }
-    return <div className='loader-place row align-items-center'>
-      <div className='col row justify-content-center'>
-        <Loader type='ThreeDots' height='80' width='200'/>
-      </div>
-    </div>
+    return (
+      <div className='loader-place row align-items-center'>
+        <div className='col row justify-content-center'>
+          <Loader type='ThreeDots' height='80' width='200'/>
+        </div>
+      </div>);
   }
 }

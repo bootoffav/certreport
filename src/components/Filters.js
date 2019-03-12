@@ -33,9 +33,9 @@ class ColumnSearch extends React.Component {
             <button className="dropdown-item"
               onClick={e => this.changeColumn(e, 'certificate')}
               >Certificate</button>
-            {/* <button className="dropdown-item"
+            <button className="dropdown-item"
               onClick={e => this.changeColumn(e, 'standards')}
-            >Standards</button> */}
+            >Standards</button>
             <button className="dropdown-item"
               onClick={e => this.changeColumn(e, 'article')}
             >Fabric</button>
