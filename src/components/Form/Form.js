@@ -73,29 +73,28 @@ export default class Form extends React.Component {
       }
     }
 
-    asSelectable(value) {
+  asSelectable = value => {
+    if (value !== '') {
       value = value.split(', ');
       return value.length === 1
-      ? [{
-          label: value,
-          value
-        }]
+      ? [{ label: value, value }]
       : value.map(label => ({label, value: label }));
     }
+  }
 
-    afterSuccessfulSubmit() {
-      this.setState({request_status: 'success'});
-      SerialNumber.update(Number(this.state.serialNumber) + 1);
-      sessionStorage.removeItem('tasks');
-      setTimeout(() => window.location.replace("/"), 4000);
-    }
+  afterSuccessfulSubmit() {
+    this.setState({request_status: 'success'});
+    SerialNumber.update(Number(this.state.serialNumber) + 1);
+    sessionStorage.removeItem('tasks');
+    setTimeout(() => window.location.replace("/"), 4000);
+  }
 
-    afterUnsuccessfulSubmit() {
-      this.setState({request_status: 'failure'})
-      setTimeout(() => this.setState({
-        request_status: ''
-      }), 3000);
-    }
+  afterUnsuccessfulSubmit() {
+    this.setState({request_status: 'failure'})
+    setTimeout(() => this.setState({
+      request_status: ''
+    }), 3000);
+  }
     render() {
       const request_status = this.state.request_status || null;
         return (

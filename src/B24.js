@@ -18,6 +18,19 @@ class B24 {
         GROUP_ID: 21,
     }
 
+    static get start() {
+      return this._start;
+    }
+
+    static set start(start) {
+      this._start = start;
+    }
+
+    static step = json => {
+      B24.start = json.next;
+      return json.result;
+    };
+
     static makeUfCrmTaskField = state => {
       let UF_CRM_TASK = [];
 
@@ -135,18 +148,24 @@ class B24 {
         });
     }
 
-    static get_tasks = () =>
-      fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.list?` +
+    static async get_tasks() {
+      let tasks = [];
+      do {
+        tasks = tasks.concat(await fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.list?` +
         qs.stringify({
           order: {
             ID: 'desc'
           },
           filter: {
             TAG: 'certification'
-          }
+          },
+          start: B24.start
         }))
         .then(response => response.json())
-        .then(json => json.result)
+        .then(B24.step));
+      } while (B24.start !== undefined);
+      return tasks;
+    }
 
     static get_task(id = null) {
       if (id === null) {
@@ -169,13 +188,7 @@ class B24 {
   }
 
     static async get_standards() {
-      let start = 0;
       let standards = [];
-
-      let step = json => {
-        start = json.next;
-        return json.result;
-      };
 
       do {
         standards = standards.concat(await fetch(`${main_url}/${creator_id}/${webhook_key}/crm.product.list?` + 
@@ -187,22 +200,16 @@ class B24 {
               SECTION_ID: 8582
             },
             select: ['NAME'],
-            start
+            start: B24.start
           }))
           .then(response => response.json())
-          .then(step));
-      } while (start !== undefined);
+          .then(B24.step));
+      } while (B24.start !== undefined);
       return standards.map(standard => ({ value: standard.NAME, label: standard.NAME }));
     }
 
     static async get_products() {
-      let start = 0;
       let products = [];
-
-      let step = json => {
-        start = json.next;
-        return json.result;
-      };
 
       const productSections = new Map([ [8568, 'XMF'], [8574, 'XMT'], [8572, 'XMS'] ]);
       let productsInSection = [];
@@ -218,11 +225,11 @@ class B24 {
                 SECTION_ID: sectionId
               },
               select: ['ID', 'NAME'],
-              start
+              start: B24.start
             }))
           .then(response => response.json())
-          .then(step));
-        } while (start !== undefined);
+          .then(B24.step));
+        } while (B24.start !== undefined);
         productsInSection = productsInSection.map(product => ({
           value: product.ID,
           label: product.NAME
