@@ -64,14 +64,11 @@ class B24 {
 
 
       const formatDate = date => date ? m(date).format("DDMMMYYYY") : '';
-      const formatSelectee = selectee => Array.isArray(selectee)
-        ? selectee.map(item => item.value).join(', ')
-        : [selectee].map(item => item.value).join(', ');
 
         return {
         ...B24.defaultParams,
         UF_CRM_TASK: B24.makeUfCrmTaskField(state),
-        TITLE: `${state.serialNumber}_${formatSelectee(state.testingCompany).split(' ')[0]} - ${formatSelectee(state.standards)} - ${state.article}, ${state.colour} ` +
+        TITLE: `${state.serialNumber}_${state.testingCompany} - ${state.standards} - ${state.article}, ${state.colour} ` +
             `(send ${formatDate(state.sentOn)} - plan ${formatDate(state.resultsReceived)}) = ${state.price} € | ${state.testReport ? state.testReport : ''}`,
         DESCRIPTION: `${state.applicantName ? '[B]Applicant name:[/B] ' + state.applicantName + '\n' : ''}` +
             `${state.product ? '[B]Product:[/B] ' + state.product + '\n' : ''}` +
