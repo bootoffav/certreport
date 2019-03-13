@@ -35,7 +35,7 @@ const empty_state = {
   testingTime: 21,
   standards: '',
   testingCompany: '',
-  brand: [],
+  brand: '',
   sentOn: null,
   receivedOn: null,
   startedOn: null,

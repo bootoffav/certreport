@@ -135,17 +135,6 @@ class Article extends React.Component {
     textAlign: "center"
   };
 
-  async componentDidMount() {
-    // setTimeout(() => {
-    //   if (this.props.value !== '') {
-    //     let ind = select_options.articles.findIndex(el => el.label === this.props.value.label);
-    //     this.setState({ 
-    //       value: select_options.articles[ind]
-    //     });
-    //   }
-    // }, 2000);
-  }
-
   onChange = async e => {
     let product = await B24.get_product(e.value);
     this.props.handleSlaveChange(

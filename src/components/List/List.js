@@ -33,7 +33,7 @@ export default class List extends React.Component {
       Header: 'Brand',
       id: 'brand',
       minWidth: 50,
-      accessor: row => row.state.brand.length === 0 ? '' : row.state.brand[0].label
+      accessor: 'state.brand'
     },{
       Header: 'Task name',
       accessor: 'TITLE',
@@ -202,10 +202,10 @@ export default class List extends React.Component {
         filtered = this.state.allTasks;
         break;
       case 'No brand':
-        filtered = this.state.allTasks.filter(task => task.state.brand[0] ? task.state.brand[0].label === brand : true);
+        filtered = this.state.allTasks.filter(task => !Boolean(task.state.brand));
         break;
       default:
-        filtered = this.state.allTasks.filter(task => task.state.brand[0] ? task.state.brand[0].label === brand : false);
+        filtered = this.state.allTasks.filter(task => task.state.brand === brand);
     }
 
     this.setState({

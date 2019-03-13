@@ -48,8 +48,8 @@ export default class Form extends React.Component {
       ? this.setState({
           [id]: selected.reduce(
           (endValue, currentValue, index) => index === selected.length - 1
-            ? `${endValue}${currentValue.value}`
-            : `${endValue}${currentValue.value}, `, '')
+            ? `${endValue}${currentValue.label}`
+            : `${endValue}${currentValue.label}, `, '')
         })
       : this.setState({ [id]: selected.value })
     }
@@ -207,7 +207,7 @@ export default class Form extends React.Component {
                 <div className="col">
                   <div className="form-group">
                     Brand
-                    <Select value={this.state.brand} onChange={e => this.handleSelectChange([e], 'brand')}
+                    <Select value={this.asSelectable(this.state.brand)} onChange={e => this.handleSelectChange([e], 'brand')}
                       options={select_options.brand}
                     />
                   </div>

@@ -32,25 +32,31 @@ class B24 {
     };
 
     static makeUfCrmTaskField = state => {
+      const brands_map = {
+        XMS: 'C_10037',
+        XMF: 'C_10035',
+        XMT: 'C_10033',
+        XMG: 'C_10041'
+      };
       let UF_CRM_TASK = [];
-
+      
       if (state.UF_CRM_TASK) {
         state.UF_CRM_TASK.forEach(item => {
           if (![
-              'C_10033',
-              'C_10035',
-              'C_10037',
-              'C_10041',
-              'CO_6295'
-            ].includes(item)
+            'C_10033',
+            'C_10035',
+            'C_10037',
+            'C_10041',
+            'CO_6295'
+          ].includes(item)
           ) {
             UF_CRM_TASK.push(item);
           }
         });
       }
-
-      UF_CRM_TASK.push(state.brand[0].value, 'CO_6295');
-
+      
+      UF_CRM_TASK.push(brands_map[state.brand], 'CO_6295');
+      
       return UF_CRM_TASK;
     }
     

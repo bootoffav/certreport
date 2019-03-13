@@ -13,20 +13,6 @@ const parseDates = (d, format = 'DDMMMYYYY') => ({
     paymentDate: d.paymentDate ? m(d.paymentDate, format) : d.paymentDate
 });
 
-const convertToSelectable = (prop_name, selectee) => {
-  const selected = [];
-  if (selectee !== '') {
-    selectee.split(',').forEach(value => {
-      value = value.trim();
-      selected.push({
-        value,
-        label: select_options[prop_name].find(el => el.value === value).label,
-      });
-    });
-  }
-  return selected;
-}
-
 const dataSeparator = '-------------------------------------------------';
 
 let parseable_description = desc => desc.startsWith('[B]Applicant name:[/B]') ? true : false;
@@ -114,7 +100,8 @@ function parse(description, uf_crm_task) {
     newState.paid = true;
   }
   
-  newState.brand = convertToSelectable('brand', uf_crm_task.filter(v => ['C_10033', 'C_10035', 'C_10037', 'C_10041'].includes(v)).join(','));
+  newState.brand = uf_crm_task.filter(v => ['C_10033', 'C_10035', 'C_10037', 'C_10041'].includes(v)).join();
+  newState.brand = select_options.brand.find(el => el.value === newState.brand).label;
   newState.otherTextInDescription = otherTextInDescription;
   newState.UF_CRM_TASK = uf_crm_task;
 
@@ -122,4 +109,4 @@ function parse(description, uf_crm_task) {
 };
 
 export default parse;
-export { convertToSelectable, dataSeparator, parseDates };
+export { dataSeparator, parseDates };
