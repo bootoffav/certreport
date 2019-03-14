@@ -26,7 +26,7 @@ class SerialNumber extends React.Component {
         Serial number:
         <input required
         className="form-control"
-        type="number"
+        type="text"
         id="serialNumber"
         placeholder="Loading ..."
         value={this.props.serialNumber}
