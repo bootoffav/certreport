@@ -2,7 +2,7 @@ import React from 'react';
 import DatePicker from "react-datepicker";
 import B24 from '../../B24';
 import Select from 'react-select';
-import { select_options } from './Form';
+import './FormFields.css';
 
 const PickDate = props =>
   <div className="col">
@@ -110,40 +110,18 @@ class Article extends React.Component {
   };
 
   formatGroupLabel = data => (
-    <div style={this.groupStyles}>
+    <div className="Article_groupStyles">
       <span>{data.label}</span>
-      <span style={this.groupBadgeStyles}>{data.options.length}</span>
+      <span className="Article_groupBadgeStyles">{data.options.length}</span>
     </div>
   );
-
-  groupStyles = {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between"
-  };
-  
-  groupBadgeStyles = {
-    backgroundColor: "#EBECF0",
-    borderRadius: "2em",
-    color: "#172B4D",
-    fontSize: 12,
-    display: "inline-block",
-    fontWeight: "bold",
-    lineHeight: "1",
-    minWidth: 1,
-    padding: "0.16666666666667em 0.5em",
-    textAlign: "center"
-  };
 
   onChange = async e => {
     let product = await B24.get_product(e.value);
     this.props.handleSlaveChange(
       `${ product[this.prop_map.product] ? product[this.prop_map.product].value : '' }, ${ product[this.prop_map.weight] ? product[this.prop_map.weight].value : '' }`,
       product[this.prop_map.code] ? product[this.prop_map.code].value : '',
-      [{
-        value: select_options.brand.find(el => el.label === this.brand_map[ product[this.prop_map.brand] ]).value,
-        label: this.brand_map[ product[this.prop_map.brand] ]
-      }]
+      this.brand_map[ product[this.prop_map.brand] ]
     );
     this.props.handleChange(e.label, 'article');
   }
