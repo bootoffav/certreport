@@ -48,7 +48,7 @@ const filter = (tasks, prop) => {
       filteredTasks = sentOnTasks();
       break;
     case 'deliveryDateAnnounced':
-      filteredTasks = tasks.filter(task => task.state.finishedOn);
+      filteredTasks = tasks.filter(task => task.state.finishedOn && !task.state.testReport.includes('.pdf'));
       break;
     case 'paid':
       filteredTasks = tasks.filter(task => task.state.paid);
