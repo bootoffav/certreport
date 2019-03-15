@@ -61,15 +61,11 @@ class B24 {
     }
     
     static formTaskFields = state => {
-
-
-      const formatDate = date => date ? m(date).format("DDMMMYYYY") : '';
-
         return {
         ...B24.defaultParams,
         UF_CRM_TASK: B24.makeUfCrmTaskField(state),
         TITLE: `${state.serialNumber}_${state.testingCompany} - ${state.standards} - ${state.article}, ${state.colour} ` +
-            `(send ${formatDate(state.sentOn)} - plan ${formatDate(state.resultsReceived)}) = ${state.price} € | ${state.testReport ? state.testReport : ''}`,
+            `(send ${state.formatDate(state.sentOn)} - plan ${state.formatDate(state.resultsReceived)}) = ${state.price} € | ${state.testReport ? state.testReport : ''}`,
         DESCRIPTION: `${state.applicantName ? '[B]Applicant name:[/B] ' + state.applicantName + '\n' : ''}` +
             `${state.product ? '[B]Product:[/B] ' + state.product + '\n' : ''}` +
             `${state.code ? '[B]Code:[/B] ' + state.code + '\n' : ''}` +
@@ -82,9 +78,10 @@ class B24 {
             `${state.rollNumber ? '[B]Roll number:[/B] ' + state.rollNumber + '\n' : ''}` +
             `${state.standards ? '[B]Standard:[/B] ' + state.standards + '\n' : ''}` +
             `${state.price ? '[B]Price:[/B] ' + state.price + ' €\n' : ''}` +
-            `${state.paymentDate ? '[B]Payment date:[/B] ' + formatDate(state.paymentDate) + '\n' : ''}` +
+            `${state.secondPayment ? '[B]Second payment:[/B] ' + state.secondPayment + '\n' : ''}` +
+            `${state.paymentDate ? '[B]Payment date:[/B] ' + state.formatDate(state.paymentDate) + '\n' : ''}` +
             `${state.testingCompany ? '[B]Testing company:[/B] ' + state.testingCompany + '\n' : ''}` +
-            `${state.proformaReceivedDate && state.proformaNumber ? '[B]Proforma:[/B] ' + formatDate(state.proformaReceivedDate) + ', ' + state.proformaNumber + '\n' : ''}` +
+            `${state.proformaReceivedDate && state.proformaNumber ? '[B]Proforma:[/B] ' + state.formatDate(state.proformaReceivedDate) + ', ' + state.proformaNumber + '\n' : ''}` +
             `${state.testReport ? '[B]Test report:[/B] ' + state.testReport + '\n' : ''}` +
             `${state.certificate ? '[B]Certificate:[/B] ' + state.certificate + '\n' : ''}` +
             `${state.materialNeeded ? '[B]Material needed:[/B] ' + state.materialNeeded + '\n' : ''}` +
@@ -92,11 +89,11 @@ class B24 {
             `${state.pretreatment1 ? '[B]Pre-treatment 1:[/B] ' + state.pretreatment1 + '\n' : ''}` +
             `${state.pretreatment2 ? '[B]Pre-treatment 2:[/B] ' + state.pretreatment2 + '\n' : ''}` +
             `${state.pretreatment3 ? '[B]Pre-treatment 3:[/B] ' + state.pretreatment3 + '\n' : ''}` +
-            `${state.sentOn ? '[B]to be sent on:[/B] ' + formatDate(state.sentOn) + '\n' : ''}` +
-            `${state.receivedOn ? '[B]to be received on:[/B] ' + formatDate(state.receivedOn) + '\n' : ''}` +
-            `${state.startedOn ? '[B]tests to be started on:[/B] ' + formatDate(state.startedOn) + '\n' : ''}` +
-            `${state.finishedOn ? '[B]tests to be finished on:[/B] ' + formatDate(state.finishedOn) + '\n' : ''}` +
-            `${state.resultsReceived ? '[B]results to be received on: [/B]' + formatDate(state.resultsReceived) + '\n' : ''}` +
+            `${state.sentOn ? '[B]to be sent on:[/B] ' + state.formatDate(state.sentOn) + '\n' : ''}` +
+            `${state.receivedOn ? '[B]to be received on:[/B] ' + state.formatDate(state.receivedOn) + '\n' : ''}` +
+            `${state.startedOn ? '[B]tests to be started on:[/B] ' + state.formatDate(state.startedOn) + '\n' : ''}` +
+            `${state.finishedOn ? '[B]tests to be finished on:[/B] ' + state.formatDate(state.finishedOn) + '\n' : ''}` +
+            `${state.resultsReceived ? '[B]results to be received on: [/B]' + state.formatDate(state.resultsReceived) + '\n' : ''}` +
             `${state.comments ? '[B]Comments:[/B] ' + state.comments + '\n' : ''}` +
             `${state.link ? '[B]Edit:[/B] ' + state.link + '\n' : ''} ` +
             `${dataSeparator}` + (state.otherTextInDescription || ''),
@@ -105,7 +102,6 @@ class B24 {
     };
 
     static createTask = state => {
-
       const defaultParams = {
         AUDITORS: auditors,
         PARENT_ID: 46902,

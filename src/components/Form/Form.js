@@ -1,5 +1,5 @@
 import React from 'react';
-import { PickDate, BaseInput, Article, Price, Paid, Pi } from "./FormFields";
+import { PickDate, BaseInput, Article, Price, Paid, Pi, SecondPayment } from "./FormFields";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select';
 import B24 from '../../B24.js';
@@ -7,14 +7,16 @@ import Notification from '../Notification/Notification.js';
 // import { getPDF } from '../PDF/PDF';
 import SerialNumber from '../SerialNumber/SerialNumber';
 import m from 'moment';
-import { select_options, empty_state } from '../../defaults';
+import { select_options, emptyState } from '../../defaults';
+import StateAdapter from '../../StateAdapter';
 import { Export } from '../Export/Export';
+
 
 export default class Form extends React.Component {
     constructor(props) {
       super(props);
       this.task_id = props.match.params.id || null;
-      this.state = props.location.state || empty_state;
+      this.state = props.location.state || emptyState;
     }
 
     componentDidMount() {
@@ -58,14 +60,15 @@ export default class Form extends React.Component {
 
     handleCert (e){
       e.preventDefault();
+      let state = new StateAdapter(this.state);
       if (window.confirm('Are you sure?')) {
         (this.task_id)
-        ? B24.updateTask(this.state, this.task_id)
+        ? B24.updateTask(state, this.task_id)
           .then(
             () => this.afterSuccessfulSubmit(),
             () => this.afterUnsuccessfulSubmit()
           )
-        : B24.createTask(this.state)
+        : B24.createTask(state)
           .then(
             () => this.afterSuccessfulSubmit(),
             () => this.afterUnsuccessfulSubmit()
@@ -131,12 +134,11 @@ export default class Form extends React.Component {
                     </div>
 
                     <div className="col-1">
-                      <Price value={this.state.price} id='price' label='Price' handleChange={this.handleChange} />
+                      <Price value={this.state.price} id='price' handleChange={this.handleChange} />
                     </div>
-                    <div className="col-2">
+                    <div className="col-auto">
                       <Paid
                         id='paid'
-                        label='Paid'
                         checkboxState={this.state.paid}
                         paymentDate={this.state.paymentDate}
                         handleChange={date => this.handleDateChange(date, 'paymentDate')}
@@ -149,9 +151,8 @@ export default class Form extends React.Component {
                         }
                       />
                     </div>
-                    <div className="col-3">
+                    <div className="col-auto">
                         <Pi
-                          label="Proforma Received"
                           id="proformaReceived"
                           checkboxState={this.state.proformaReceived}
                           proformaReceivedDate={this.state.proformaReceived}
@@ -165,12 +166,46 @@ export default class Form extends React.Component {
                           }
                           handleDateChange={date => this.handleDateChange(date, 'proformaReceivedDate')}
                           handleNumberChange={date => this.handleChange(date, 'proformaNumber')}
+                          numberId={'proformaNumber1'}
                           number={this.state.proformaNumber}
                         />
                     </div>
+                    <div className="col">
+                      <SecondPayment>
+                        <Price value={this.state.price2} id='price2' handleChange={this.handleChange}/>
+                        <Paid
+                          id='paid2'
+                          checkboxState={this.state.paid2}
+                          paymentDate={this.state.paymentDate2}
+                          handleChange={date => this.handleDateChange(date, 'paymentDate2')}
+                          handleCheckboxChange={e => {
+                            if (!e.target.checked) {
+                              this.setState({ paymentDate2: null});
+                            }
+                            this.handleCheckboxChange(e);
+                            }
+                          }
+                        />
+                        <Pi
+                          id="proformaReceived2"
+                          checkboxState={this.state.proformaReceived2}
+                          proformaReceivedDate={this.state.proformaReceived2}
+                          date={this.state.proformaReceivedDate2}
+                          handleCheckboxChange={e => {
+                            if (!e.target.checked) {
+                              this.setState({ proformaReceivedDate2: null, proformaNumber2: '' });
+                            }
+                            this.handleCheckboxChange(e);
+                            }
+                          }
+                          handleDateChange={date => this.handleDateChange(date, 'proformaReceivedDate2')}
+                          handleNumberChange={date => this.handleChange(date, 'proformaNumber2')}
+                          numberId={'proformaNumber2'}
+                          number={this.state.proformaNumber2}
+                        />
+                      </SecondPayment>
+                    </div>
                 </div>
-
-
                 <div className="form-row">
                   <Article value={this.state.article}
                     options={select_options.articles}

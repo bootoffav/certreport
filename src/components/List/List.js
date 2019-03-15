@@ -3,7 +3,7 @@ import React from 'react';
 import Loader from 'react-loader-spinner';
 import ReactTable from "react-table";
 import { Link } from 'react-router-dom';
-import { empty_state } from '../../defaults';
+import { emptyState } from '../../defaults';
 import B24 from '../../B24.js';
 import '../../css/style.css';
 import { parseDates } from '../../Helpers';
@@ -170,7 +170,7 @@ export default class List extends React.Component {
               parsedTasks.push(task);
             }
             filtered.old.forEach(task => {
-              task.state = { ...empty_state };
+              task.state = { ...emptyState };
               task.state.otherTextInDescription = '\n' + task.DESCRIPTION;
               task.state.UF_CRM_TASK = task.UF_CRM_TASK;
             });

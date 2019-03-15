@@ -1,6 +1,6 @@
 import m from 'moment';
 import { select_options } from './components/Form/Form';
-import { empty_state } from './defaults';
+import { emptyState } from './defaults';
 
 m.fn.toJSON = function() { return this.format(); }
 
@@ -31,7 +31,7 @@ let parseDescription = desc => {
 function parse(description, uf_crm_task) {
   if (!parseable_description(description)) {
     return {
-      ...empty_state,
+      ...emptyState,
       otherTextInDescription: description,
       UF_CRM_TASK: uf_crm_task
     };
@@ -71,6 +71,7 @@ function parse(description, uf_crm_task) {
     'results to be received on': 'resultsReceived',
     'Comments': 'comments',
     'Edit': 'link',
+    'Second payment': 'secondPayment'
   }
 
   unParsedTaskState = unParsedTaskState.replace(/:/g, '');
@@ -86,18 +87,25 @@ function parse(description, uf_crm_task) {
   }
 
   if (newState.proforma) {
-    const [ proformaReceivedDate, proformaNumber ] = newState.proforma.split(', ');
-    newState.proformaReceivedDate = proformaReceivedDate;
-    newState.proformaNumber = proformaNumber;
+    [ newState.proformaReceivedDate, newState.proformaNumber ] = newState.proforma.split(', ');
     newState.proformaReceived = true;
     delete newState.proforma;
   }
 
-  if (newState.price) {
-    newState.price = newState.price.split(' ')[0];
-  }
-  if (newState.paymentDate) {
-    newState.paid = true;
+  newState.price = newState.price ? newState.price.split(' ')[0] : newState.price;
+  newState.paid = newState.paymentDate ? true : false;
+
+  if (newState.secondPayment) {
+    [
+      newState.price2,
+      newState.paymentDate2,
+      newState.proformaReceivedDate2,
+      newState.proformaNumber2
+    ] = newState.secondPayment.split(', ');
+    newState.price2 = newState.price2.split(' ')[0];
+    newState.paid2 = newState.paymentDate2 ? true : false;
+    newState.proformaReceived2 = true;
+    delete newState.secondPayment;
   }
   
   newState.brand = uf_crm_task.filter(v => ['C_10033', 'C_10035', 'C_10037', 'C_10041'].includes(v)).join();

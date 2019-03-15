@@ -31,7 +31,7 @@ const BaseInput = props =>
 
 const Price = props =>
   <div className="form-group">
-    {props.label}
+    Price
     <div className="input-group">
       <div className="input-group-prepend">
         <span className="input-group-text">€</span>
@@ -46,7 +46,7 @@ const Price = props =>
 
 const Paid = props =>
   <div className="form-group">
-    {props.label}
+    Payment Date
     <div className="input-group">
       <div className="input-group-prepend">
         <div className="input-group-text">
@@ -67,7 +67,7 @@ const Paid = props =>
 
 const Pi = props =>
   <div className="form-group">
-    {props.label}
+    Proforma Received
     <div className="input-group">
       <div className="input-group-prepend">
         <div className="input-group-text">
@@ -89,11 +89,46 @@ const Pi = props =>
         disabled={!props.checkboxState}
         onChange={props.handleNumberChange}
         placeholder={props.checkboxState ? '#' : ''}
-        id='proformaNumber' value={props.number}
+        id={props.numberId} value={props.number}
         required
       />
     </div>
   </div>
+
+const SecondPayment = props => {
+    return <div className="form-group">
+      Payment #2
+      <button type="button" className="btn btn-sm btn-block btn-light form-control SecondPayment_button" data-toggle="modal" data-target="#secondPayment">
+        show
+      </button>
+      <div className="modal fade" id="secondPayment" tabIndex="-1" role="dialog" aria-labelledby="secondPaymentLabel" aria-hidden="true">
+        <div className="modal-dialog" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="secondPaymentLabel">Second payment</h5>
+              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div className="modal-body">
+              <div className="row">
+                <div className="col">
+                  {props.children[0]}
+                </div>
+                <div className="col-auto">
+                  {props.children[1]}
+                </div>
+              </div>
+                {props.children[2]}
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-secondary" data-dismiss="modal">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+}
 
 class Article extends React.Component {
   prop_map = {
@@ -152,4 +187,4 @@ class Article extends React.Component {
   }
 }
 
-export { PickDate, BaseInput, Article, Price, Paid, Pi };
+export { PickDate, BaseInput, Article, Price, Paid, Pi, SecondPayment };
