@@ -131,25 +131,6 @@ export default class List extends React.Component {
     .replace(/\./g, ',')
     .substr(1);
 
-    loadFromCache = () => {
-      const tasks = sessionStorage.getItem('tasks');
-  
-      if (tasks) {
-        let tasks = JSON.parse(sessionStorage.getItem('tasks'))
-          .map(task => {
-            task.state = { ...task.state, ...parseDates(task.state, 'YYYY-MM-DD') };
-            return task;
-          });
-        let allTasks = tasks;
-        let filteredTasksLevel1 = tasks;
-        let visibleTasks = filter(tasks);
-        let totalPrice = visibleTasks.reduce((sum, task) => sum + Number(task.state.price), 0);
-        this.setState({ allTasks, visibleTasks, filteredTasksLevel1, totalPrice });
-      } else {
-        throw new Error('Nothing in cache');
-      }
-    }
-  
   async componentDidMount() {
     let tasks = await this.cache.load();
     
@@ -211,12 +192,19 @@ export default class List extends React.Component {
   render (){
     if (this.state.visibleTasks) {
       return <>
-        <div className="d-flex justify-content-start">
-          <div className="p-1">
-            <BrandFilter filter={this.brandFilter.bind(this)}/>
+        <div className="d-flex justify-content-between">
+          <div className="d-inline-flex justify-content-start">
+            <div className="p-1">
+              <BrandFilter filter={this.brandFilter.bind(this)}/>
+            </div>
+            <div className="p-1">
+              <ColumnSearch filter={this.columnFilter}/>
+            </div>
           </div>
-          <div className="p-1">
-            <ColumnSearch filter={this.columnFilter}/>
+          
+          <div className="d-inline-flex justify-content-end">
+            <div id="cacheStateLabel" className="p-1">State is actual</div>
+            <div id="cacheStateLoader" className="p-1"></div>
           </div>
         </div>
           {/* <Export type="xls" data={this.state.visibleTasks} /> */}

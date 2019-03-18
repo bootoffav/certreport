@@ -1,55 +1,55 @@
 import { parseDates } from './Helpers';
 import B24 from './B24';
 import { emptyState } from './defaults';
+import React from 'react';
+import Loader from 'react-loader-spinner';
+import ReactDOM from 'react-dom';
 
 
 class CacheManager {
-
   async load() {
+    let tasks;
     if (sessionStorage.hasOwnProperty('tasks')) {
-      return this.getSessionCache()
+      return this.getFromCache(sessionStorage);
     }
-    let tasks = await this.getFromAPI();
+    if (localStorage.hasOwnProperty('tasks')) {
 
+      setTimeout(async () => {
+        document.getElementById('cacheStateLabel').innerHTML = 'contacting Bitrix24, receiving updates';
+        ReactDOM.render(
+          <Loader type='Circles' color='blueviolet' height='30' width='30'/>,
+          document.getElementById('cacheStateLoader')
+        );
+        let tasks = await this.getFromAPI();
+        this.setCaches(tasks);
+        window.location.reload();
+      }, 0);
+
+      return this.getFromCache(localStorage);
+    }
+
+    tasks = await this.getFromAPI();
+    this.setCaches(tasks);
+
+    return tasks;
+  }
+
+  getFromCache = cacheType => JSON.parse(cacheType.getItem('tasks'))
+    .map(task => {
+      task.state = { ...task.state, ...parseDates(task.state, 'YYYY-MM-DD') };
+      return task;
+  });
+
+  setCaches = tasks => {
     let stringifiedTasks = this.prefareForCaching(tasks);
-    this.setSessionCache(stringifiedTasks);
-    this.setLocalCache(stringifiedTasks);
-
-    return tasks;
+    localStorage.setItem('tasks', stringifiedTasks);
+    sessionStorage.setItem('tasks', stringifiedTasks);
   }
 
-  getSessionCache() {
-    let tasks = JSON.parse(sessionStorage.getItem('tasks'))
-      .map(task => {
-        task.state = { ...task.state, ...parseDates(task.state, 'YYYY-MM-DD') };
-        return task;
-      });
-    return tasks;
-  }
+  prefareForCaching = tasks => JSON.stringify(tasks, (k, v) => [
+    'sentOn', 'receivedOn', 'startedOn', 'finishedOn', 'resultsReceived', 'paymentDate'
+  ].includes(k) && v !== undefined && v !== null ? v.substr(0, 10) : v);
 
-  getLocalCache() {
-
-  }
-
-  setLocalCache = tasks => {
-    localStorage.setItem('tasks', tasks);
-    return tasks;
-  }
-
-  prefareForCaching(tasks) {
-    return JSON.stringify(tasks, (k, v) => [
-      'sentOn',
-      'receivedOn',
-      'startedOn',
-      'finishedOn',
-      'resultsReceived', 'paymentDate'
-    ].includes(k) && v !== undefined && v !== null ? v.substr(0, 10) : v);
-  }
-
-  setSessionCache = tasks => {
-    sessionStorage.setItem('tasks', tasks);
-    return tasks;
-  }
 
   getFromAPI() {
     return B24.get_tasks()
