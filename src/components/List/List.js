@@ -3,16 +3,17 @@ import React from 'react';
 import Loader from 'react-loader-spinner';
 import ReactTable from "react-table";
 import { Link } from 'react-router-dom';
-import { emptyState } from '../../defaults';
-import B24 from '../../B24.js';
 import '../../css/style.css';
 import { parseDates } from '../../Helpers';
 import { Toolbar, filter } from '../Toolbar/Toolbar';
 // import { Export } from '../Export/Export';
 import { ColumnSearch, BrandFilter } from '../Filters';
+import CacheManager from '../../CacheManager';
 
 export default class List extends React.Component {
   state = {};
+  cache = new CacheManager();
+
   columns = [{
       Header: '#',
       id: 'position',
@@ -149,49 +150,16 @@ export default class List extends React.Component {
       }
     }
   
-    componentDidMount() {
-      try {
-        return this.loadFromCache();
-      } catch {
-        B24.get_tasks()
-          .then(tasks => {
-            let filtered = {
-              new: [],
-              old: []
-            };
-            tasks.forEach(task => (task.CREATED_BY === '460') ? filtered.new.push(task) : filtered.old.push(task))
-            return filtered;
-          })
-          .then(async filtered => {
-            let task, parsedTasks = [];
-  
-            for (let i = 0; i < filtered.new.length; i++) {
-              task = await B24.get_task(filtered.new[i].ID);
-              parsedTasks.push(task);
-            }
-            filtered.old.forEach(task => {
-              task.state = { ...emptyState };
-              task.state.otherTextInDescription = '\n' + task.DESCRIPTION;
-              task.state.UF_CRM_TASK = task.UF_CRM_TASK;
-            });
-            return [ ...parsedTasks, ...filtered.old];
-          }).then(tasks => {
-              let allTasks = tasks;
-              let filteredTasksLevel1 = tasks;
-              let visibleTasks = filter(tasks);
-              let totalPrice = visibleTasks.reduce((sum, task) => sum + Number(task.state.price), 0);
-              this.setState({ allTasks, filteredTasksLevel1, visibleTasks, totalPrice });
-              sessionStorage.setItem('tasks', JSON.stringify(tasks, (k, v) => [
-                'sentOn',
-                'receivedOn',
-                'startedOn',
-                'finishedOn',
-                'resultsReceived', 'paymentDate'
-                ].includes(k) && v !== undefined && v !== null ? v.substr(0, 10) : v
-              ));
-          });
-      }
-    }
+  async componentDidMount() {
+    let tasks = await this.cache.load();
+    
+    let allTasks = tasks;
+    let filteredTasksLevel1 = tasks;
+    let visibleTasks = filter(tasks);
+    let totalPrice = visibleTasks.reduce((sum, task) => sum + Number(task.state.price), 0);
+
+    this.setState({ allTasks, visibleTasks, filteredTasksLevel1, totalPrice });
+  }
   
   //level 1 filter
   brandFilter(brand) {
