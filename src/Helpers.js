@@ -116,5 +116,4 @@ function parse(description, uf_crm_task) {
   return Object.assign(newState, { ...parseDates(newState) });
 };
 
-export default parse;
-export { dataSeparator, parseDates };
+export { dataSeparator, parseDates, parse as default}

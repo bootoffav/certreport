@@ -4,7 +4,6 @@ import Loader from 'react-loader-spinner';
 import ReactTable from "react-table";
 import { Link } from 'react-router-dom';
 import '../../css/style.css';
-import { parseDates } from '../../Helpers';
 import { Toolbar, filter } from '../Toolbar/Toolbar';
 // import { Export } from '../Export/Export';
 import { ColumnSearch, BrandFilter } from '../Filters';
@@ -201,7 +200,6 @@ export default class List extends React.Component {
               <ColumnSearch filter={this.columnFilter}/>
             </div>
           </div>
-          
           <div className="d-inline-flex justify-content-end">
             <div id="cacheStateLabel" className="p-1">State is actual</div>
             <div id="cacheStateLoader" className="p-1"></div>
