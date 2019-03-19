@@ -1,8 +1,8 @@
 import qs from 'qs';
 import m from 'moment';
 import parse, { dataSeparator } from './Helpers';
-import { generatePDF } from './components/Export/Export';
 import Task from './Task';
+import PDFExport from './components/Export/PDFExport';
 
 m.fn.toJSON = function() { return this.format(); }
 const creator_id = process.env.REACT_APP_B24_USER_ID;
@@ -115,7 +115,7 @@ class B24 {
             TASK_ID: taskId,
             FILE: {
               NAME: `${state.serialNumber} - ${state.applicantName}.pdf`,
-              CONTENT: btoa(generatePDF(state).output())
+              CONTENT: btoa(new PDFExport(state).output())
             }
           })
         })

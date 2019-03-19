@@ -9,7 +9,7 @@ import SerialNumber from '../SerialNumber/SerialNumber';
 import m from 'moment';
 import { select_options, emptyState } from '../../defaults';
 import StateAdapter from '../../StateAdapter';
-import { Export } from '../Export/Export';
+import Export from '../Export/Export';
 
 
 export default class Form extends React.Component {
