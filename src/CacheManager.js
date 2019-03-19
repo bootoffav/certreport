@@ -1,10 +1,6 @@
 import { parseDates } from './Helpers';
 import B24 from './B24';
 import { emptyState } from './defaults';
-import React from 'react';
-import Loader from 'react-loader-spinner';
-import ReactDOM from 'react-dom';
-
 
 class CacheManager {
   async load() {
@@ -13,17 +9,6 @@ class CacheManager {
       return this.getFromCache(sessionStorage);
     }
     if (localStorage.hasOwnProperty('tasks')) {
-      setTimeout(async () => {
-        document.getElementById('cacheStateLabel').innerHTML = 'contacting Bitrix24, receiving updates';
-        ReactDOM.render(
-          <Loader type='Circles' color='blueviolet' height='30' width='30'/>,
-          document.getElementById('cacheStateLoader')
-        );
-        let tasks = await this.getFromAPI();
-        this.setCaches(tasks);
-        window.location.reload();
-      }, 0);
-
       return this.getFromCache(localStorage);
     }
 

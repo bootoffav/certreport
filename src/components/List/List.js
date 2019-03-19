@@ -12,6 +12,20 @@ import CacheManager from '../../CacheManager';
 export default class List extends React.Component {
   state = {};
   cache = new CacheManager();
+  static State = ({notUpdated}) => (
+    <>
+      <div id="cacheStateLabel" className="p-1"
+      >{notUpdated
+        ? 'contacting Bitrix24, receiving updates'
+        : 'state is actual'}
+      </div>
+      <div id="cacheStateLoader" className="p-1"
+      >{notUpdated
+        ? <Loader type='Circles' color='blueviolet' height='30' width='30'/>
+        : ''}
+      </div>
+    </>
+  );
 
   columns = [{
       Header: '#',
@@ -134,17 +148,20 @@ export default class List extends React.Component {
     .substr(1);
 
   async componentDidMount() {
-    // if (this.cache.localData) {
-
-    // }
     let tasks = await this.cache.load();
-    
-    let allTasks = tasks;
-    let filteredTasksLevel1 = tasks;
+    this.updateState(tasks);
+
+    if (this.cache.staleData) {
+      tasks = await this.cache.getFromAPI();
+      this.cache.setCaches(tasks);
+      this.updateState(tasks);
+    }
+  }
+
+  updateState = tasks => {
     let visibleTasks = filter(tasks);
     let totalPrice = visibleTasks.reduce((sum, task) => sum + Number(task.state.price), 0);
-
-    this.setState({ allTasks, visibleTasks, filteredTasksLevel1, totalPrice });
+    this.setState({ allTasks: tasks, filteredTasksLevel1: tasks, visibleTasks, totalPrice });
   }
   
   //level 1 filter
@@ -207,8 +224,7 @@ export default class List extends React.Component {
             </div>
           </div>
           <div className="d-inline-flex justify-content-end">
-            <div id="cacheStateLabel" className="p-1">state is actual</div>
-            <div id="cacheStateLoader" className="p-1"></div>
+            <List.State notUpdated={this.cache.staleData} />
           </div>
         </div>
           {/* <Export type="xls" data={this.state.visibleTasks} /> */}
