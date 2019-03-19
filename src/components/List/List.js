@@ -40,19 +40,22 @@ export default class List extends React.Component {
       id: 'taskName',
       minWidth: 550,
       Cell: props => {
-        return props.original.state.serialNumber
-        ? <Link to={{
-            pathname: `/edit/${props.original.ID}`,
-            state: {
-              ...props.original.state,
-              finishedOn: props.original.state.finishedOn ? props.original.state.finishedOn.valueOf() : null,
-              sentOn: props.original.state.sentOn ? props.original.state.sentOn.valueOf() : null,
-              receivedOn: props.original.state.receivedOn ? props.original.state.receivedOn.valueOf() : null,
-              resultsReceived: props.original.state.resultsReceived ? props.original.state.resultsReceived.valueOf() : null,
-              startedOn: props.original.state.startedOn ? props.original.state.startedOn.valueOf() : null,
-              paymentDate: props.original.state.paymentDate ? props.original.state.paymentDate.valueOf() : null,
-            }
-          }}
+        return (props.original.state.serialNumber) ?
+          <Link className={this.cache.staleData ? 'EditLinkIsDisabled' : ''}
+            to={
+              this.cache.staleData
+              ? '' : {
+              pathname: `/edit/${props.original.ID}`,
+              state: {
+                ...props.original.state,
+                finishedOn: props.original.state.finishedOn ? props.original.state.finishedOn.valueOf() : null,
+                sentOn: props.original.state.sentOn ? props.original.state.sentOn.valueOf() : null,
+                receivedOn: props.original.state.receivedOn ? props.original.state.receivedOn.valueOf() : null,
+                resultsReceived: props.original.state.resultsReceived ? props.original.state.resultsReceived.valueOf() : null,
+                startedOn: props.original.state.startedOn ? props.original.state.startedOn.valueOf() : null,
+                paymentDate: props.original.state.paymentDate ? props.original.state.paymentDate.valueOf() : null,
+              }
+            }}
           >{ props.value }</Link>
           : <Link to={{
             pathname: `/edit/${props.original.ID}`,
@@ -131,6 +134,9 @@ export default class List extends React.Component {
     .substr(1);
 
   async componentDidMount() {
+    // if (this.cache.localData) {
+
+    // }
     let tasks = await this.cache.load();
     
     let allTasks = tasks;

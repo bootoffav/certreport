@@ -5,3 +5,14 @@
 .filter-level-1 {
   color: rgb(43, 51, 34);
 }
+
+.EditLinkIsDisabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+.EditLinkIsDisabled > a {
+  color: currentColor;
+  display: inline-block; /* For IE11/ MS Edge bug */
+  pointer-events: none;
+  text-decoration: none;
+}

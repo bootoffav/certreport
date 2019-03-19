@@ -13,7 +13,6 @@ class CacheManager {
       return this.getFromCache(sessionStorage);
     }
     if (localStorage.hasOwnProperty('tasks')) {
-
       setTimeout(async () => {
         document.getElementById('cacheStateLabel').innerHTML = 'contacting Bitrix24, receiving updates';
         ReactDOM.render(
@@ -32,6 +31,10 @@ class CacheManager {
     this.setCaches(tasks);
 
     return tasks;
+  }
+
+  get staleData() {
+    return !sessionStorage.hasOwnProperty('tasks');
   }
 
   getFromCache = cacheType => JSON.parse(cacheType.getItem('tasks'))
