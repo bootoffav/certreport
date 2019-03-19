@@ -36,7 +36,7 @@ const Price = props =>
       <div className="input-group-prepend">
         <span className="input-group-text">€</span>
       </div>
-      <input type="text" className="form-control" required
+      <input type="text" className="form-control"
         id={props.id}
         value={props.value}
         onChange={props.handleChange}
@@ -90,7 +90,6 @@ const Pi = props =>
         onChange={props.handleNumberChange}
         placeholder={props.checkboxState ? '#' : ''}
         id={props.numberId} value={props.number}
-        required
       />
     </div>
   </div>

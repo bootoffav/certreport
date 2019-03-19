@@ -41,15 +41,13 @@ class CacheManager {
   });
 
   setCaches = tasks => {
-    let stringifiedTasks = this.prefareForCaching(tasks);
+    let stringifiedTasks = JSON.stringify(tasks, (k, v) => [
+      'sentOn', 'receivedOn', 'startedOn', 'finishedOn', 'resultsReceived', 'paymentDate'
+    ].includes(k) && v !== undefined && v !== null ? v.substr(0, 10) : v);
+
     localStorage.setItem('tasks', stringifiedTasks);
     sessionStorage.setItem('tasks', stringifiedTasks);
   }
-
-  prefareForCaching = tasks => JSON.stringify(tasks, (k, v) => [
-    'sentOn', 'receivedOn', 'startedOn', 'finishedOn', 'resultsReceived', 'paymentDate'
-  ].includes(k) && v !== undefined && v !== null ? v.substr(0, 10) : v);
-
 
   getFromAPI() {
     return B24.get_tasks()

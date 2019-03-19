@@ -9,9 +9,9 @@ let select_options = {
   ],
   standards: [],
   testingCompany: [
-    {value: 'Aitex Headquarters (Spain)', label: 'Aitex Headquarters (Spain)'},
-    {value: 'AITEX SHANGHAI OFFICE', label: 'AITEX SHANGHAI OFFICE'},
-    {value: 'SATRA (UK)', label: 'SATRA (UK)'}
+    {value: 'Aitex (Spain)', label: 'Aitex (Spain)'},
+    {value: 'Aitex (China)', label: 'Aitex (China)'},
+    {value: 'Satra (UK)', label: 'Satra (UK)'}
   ],
   created: new Date(),
   articles: []

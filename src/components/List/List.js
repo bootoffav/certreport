@@ -201,7 +201,7 @@ export default class List extends React.Component {
             </div>
           </div>
           <div className="d-inline-flex justify-content-end">
-            <div id="cacheStateLabel" className="p-1">State is actual</div>
+            <div id="cacheStateLabel" className="p-1">state is actual</div>
             <div id="cacheStateLoader" className="p-1"></div>
           </div>
         </div>
