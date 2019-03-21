@@ -164,8 +164,8 @@ export default class Form extends React.Component {
                             }
                           }
                           handleDateChange={date => this.handleDateChange(date, 'proformaReceivedDate')}
-                          handleNumberChange={date => this.handleChange(date, 'proformaNumber')}
-                          numberId={'proformaNumber1'}
+                          handleNumberChange={e => this.handleChange(e, 'proformaNumber')}
+                          numberId={'proformaNumber'}
                           number={this.state.proformaNumber}
                         />
                     </div>

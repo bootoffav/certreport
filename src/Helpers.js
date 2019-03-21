@@ -113,7 +113,7 @@ function parse(description, uf_crm_task) {
   newState.otherTextInDescription = otherTextInDescription;
   newState.UF_CRM_TASK = uf_crm_task;
 
-  return Object.assign(newState, { ...parseDates(newState) });
+  return Object.assign({}, emptyState, newState, { ...parseDates(newState) });
 };
 
 export { dataSeparator, parseDates, parse as default}
