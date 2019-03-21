@@ -4,7 +4,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select';
 import B24 from '../../B24.js';
 import Notification from '../Notification/Notification.js';
-// import { getPDF } from '../PDF/PDF';
 import SerialNumber from '../SerialNumber/SerialNumber';
 import m from 'moment';
 import { select_options, emptyState } from '../../defaults';
@@ -207,9 +206,9 @@ export default class Form extends React.Component {
                     </div>
                 </div>
                 <div className="form-row">
-                  <Article value={this.state.article}
+                  <Article value={this.asSelectable(this.state.article)}
                     options={select_options.articles}
-                    handleChange={this.handleSelectChange}
+                    handleChange={e => this.handleSelectChange([e], 'article')}
                     handleSlaveChange={(product, code, brand) => {
                       this.setState({ product, code, brand });
                     }}

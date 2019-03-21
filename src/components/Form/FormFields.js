@@ -157,7 +157,7 @@ class Article extends React.Component {
       product[this.prop_map.code] ? product[this.prop_map.code].value : '',
       this.brand_map[ product[this.prop_map.brand] ]
     );
-    this.props.handleChange(e.label, 'article');
+    this.props.handleChange(e);
   }
 
   findCurrentValue = value => {
@@ -176,7 +176,7 @@ class Article extends React.Component {
     <div className={this.props.col || 'col'}>
       <div className="form-group">
       Article
-      <Select value={this.findCurrentValue(this.props.value)}
+      <Select value={this.props.value}
         onChange={this.onChange}
         options={this.props.options}
         formatGroupLabel={this.formatGroupLabel}
