@@ -51,7 +51,10 @@ const Paid = (props : any) =>
     <div className="input-group">
       <div className="input-group-prepend">
         <div className="input-group-text">
-          <input type='checkbox' id={props.id} onChange={props.handleCheckboxChange} checked={props.paymentDate}/>
+          <input type='checkbox'
+            id={props.id}
+            onChange={props.handleCheckboxChange} 
+            checked={props.checkboxState}/>
         </div>
       </div>
       <DatePicker className="form-control" disabled={!props.checkboxState}

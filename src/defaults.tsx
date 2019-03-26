@@ -59,6 +59,7 @@ export interface IState {
   partNumber: string;
   rollNumber: string;
   brand: string;
+  readyOn: string;
   sentOn: string;
   receivedOn: string;
   startedOn: string;
@@ -77,6 +78,7 @@ const emptyState : IState = {
   width: '1.5',
   proformaReceivedDate: '',
   proformaReceivedDate2: '',
+  readyOn: '',
   sentOn: '',
   receivedOn: '',
   startedOn: '',

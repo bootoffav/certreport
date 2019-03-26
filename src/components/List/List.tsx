@@ -1,20 +1,22 @@
 import './List.css';
 import React from 'react';
 import Loader from 'react-loader-spinner';
-import ReactTable from "react-table";
+import ReactTable, { Column } from "react-table";
 import { Link } from 'react-router-dom';
 import Task from '../../Task';
 import '../../css/style.css';
-import { Toolbar, filter } from '../Toolbar/Toolbar';
+import { Toolbar } from '../Toolbar/Toolbar';
 // import { Export } from '../Export/Export';
 import { ColumnSearch, BrandFilter } from '../Filters';
 import CacheManager from '../../CacheManager';
+import m from 'moment';
 
 interface IListState {
     visibleTasks: Task[];
     allTasks: Task[];
     filteredTasksLevel1: Task[];
     totalPrice: string;
+    toolbarProp: string;
 }
 
 export default class List extends React.Component {
@@ -22,7 +24,8 @@ export default class List extends React.Component {
     visibleTasks: [],
     allTasks: [],
     filteredTasksLevel1: [],
-    totalPrice: ''
+    totalPrice: '',
+    toolbarProp: 'all'
   };
   cache = new CacheManager();
   static State = (props : any) => (
@@ -40,7 +43,7 @@ export default class List extends React.Component {
     </>
   );
 
-  columns = [{
+  columns : any[] = [{
       Header: '#',
       id: 'position',
       accessor: 'position',
@@ -90,22 +93,24 @@ export default class List extends React.Component {
           }}>{ props.value }</Link>
       }
     }, {
+      Header: 'Sample ready on',
+      accessor: 'state.readyOn',
+      id: 'readyOn',
+      width: 95,
+    }, {
       Header: 'Sent On',
       accessor: 'state.sentOn',
       id: 'sentOn',
       width: 95,
-      Cell: (props : any) => props.value ? props.value.format("DD MMM YYYY") : ''
     }, {
       Header: 'Proforma date',
       accessor: 'state.proformaReceivedDate',
       id: 'proformaReceivedDate',
-      show: false,
       width: 130,
     }, {
       Header: 'Proforma #',
       accessor: 'state.proformaNumber',
       id: 'proformaNumber',
-      show: false,
       width: 100,
     }, {
       Header: 'Paid',
@@ -120,8 +125,6 @@ export default class List extends React.Component {
       id: 'paymentDate',
       accessor: (row : any) => row.state.paymentDate,
       width: 130,
-      show: false,
-      Cell: (props : any) => props.value ? props.value.format("DD MMM YYYY") : ''
     }, {
       Header: 'Fabric',
       id: 'article',
@@ -172,9 +175,17 @@ export default class List extends React.Component {
   }
 
   updateState = (tasks : any) => {
-    let visibleTasks = filter(tasks);
+    const toolbarProp : string = 'all';
+    let visibleTasks = Toolbar.filter(tasks, toolbarProp);
+    this.visibleColumns(toolbarProp);
     let totalPrice = visibleTasks.reduce((sum : number, task : any) => sum + Number(task.state.price), 0);
-    this.setState({ allTasks: tasks, filteredTasksLevel1: tasks, visibleTasks, totalPrice });
+    this.setState({ 
+      allTasks: tasks,
+      filteredTasksLevel1: tasks,
+      visibleTasks,
+      totalPrice,
+      toolbarProp
+    });
   }
   
   //level 1 filter
@@ -216,14 +227,54 @@ export default class List extends React.Component {
   }
 
   //level 2 filter
-  toolbarFilter = (prop = 'all') => {
-    let visibleTasks = filter(this.state.filteredTasksLevel1, prop);
+  toolbarFilter = (toolbarProp : string = 'all') => {
+    let visibleTasks = Toolbar.filter(this.state.filteredTasksLevel1, toolbarProp);
     let totalPrice = visibleTasks.reduce((sum : number, task : any) => sum + Number(task.state.price), 0);
-    this.setState({ visibleTasks, totalPrice });
-    prop === 'proforma'
-    ? this.columns[5].show = this.columns[6].show = this.columns[8].show = true
-    : this.columns[5].show = this.columns[6].show = this.columns[8].show = false;
+    this.setState({ visibleTasks, totalPrice, toolbarProp });
+    this.visibleColumns(toolbarProp);
+  }
+
+  visibleColumns(prop : string) : void {
+    this.columns.forEach(col => col.show = true);
+    switch (prop) {
+      case 'proforma':
+        this.columns[5].show = this.columns[6].show = this.columns[8].show = true;
+        break;
+      case 'preparingSample':
+        // this.columns[4].show = true;
+        this.columns[6].show = this.columns[7].show = this.columns[9].show = false;
+        break;
+      case 'sentOn':
+        break;
+      case 'paid':
+        break;
+      case 'paid':
+        break;
+      case 'thisMonth':
+        break;
+      case 'missingTestReport':
+        break;
+      case 'waitingCertificate':
+        break;
+      case 'all':
+        this.columns[4].show = this.columns[6].show = this.columns[7].show = this.columns[9].show = false;
+        break;
     }
+  }
+
+  getTrProps = (state : any, rowInfo : any, column : any) : {} => {
+    if (rowInfo !== undefined) {
+      switch (this.state.toolbarProp) {
+        case 'preparingSample':
+          return m(rowInfo.row.readyOn).add(7, 'days') < m()
+          ? { className: "missedDeadline" }
+          : {};
+        case 'sentOn':
+          break;
+      }
+    }
+    return {};
+  }
 
   render = () => <>
     <div className="d-flex justify-content-between">
@@ -249,6 +300,8 @@ export default class List extends React.Component {
           desc: false
         }
       ]}
-      defaultPageSize={ 20 } className='-striped -highlight table'/>
+      defaultPageSize={ 20 } className='-striped -highlight table'
+      getTrProps={this.getTrProps.bind(this)}
+      />
     </>
 }

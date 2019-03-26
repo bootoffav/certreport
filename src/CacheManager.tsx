@@ -1,4 +1,3 @@
-import { parseDates } from './Helpers';
 import B24 from './B24';
 import { emptyState } from './defaults';
 
@@ -25,17 +24,13 @@ class CacheManager {
   getFromCache = (cacheType: Storage) => {
     let fromCache: string | null = cacheType.getItem('tasks');
     if (typeof fromCache === 'string') {
-      return JSON.parse(fromCache)
-      .map((task : any) => {
-        task.state = { ...task.state, ...parseDates(task.state, 'YYYY-MM-DD') };
-        return task;
-      });
+      return JSON.parse(fromCache);
     }
   }
 
   setCaches = (tasks : any) => {
     let stringifiedTasks = JSON.stringify(tasks, (k, v) => [
-      'sentOn', 'receivedOn', 'startedOn', 'finishedOn', 'resultsReceived', 'paymentDate'
+      'readyOn', 'sentOn', 'receivedOn', 'startedOn', 'finishedOn', 'resultsReceived', 'paymentDate'
     ].includes(k) && v !== undefined && v !== null ? v.substr(0, 10) : v);
 
     localStorage.setItem('tasks', stringifiedTasks);

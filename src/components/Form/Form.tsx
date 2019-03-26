@@ -124,104 +124,103 @@ export default class Form extends React.Component {
             <form onSubmit={(e) => this.handleCert(e)}>
               <div className="form-row">
                 <BaseInput value={this.state.applicantName} placeholder='SHANGHAI XM GROUP LTD' col="col-2" id='applicantName' label='Applicant name' handleChange={this.handleChange} />
-                  <div className="col-2">
-                    <div className="form-group">
-                      Testing company
-                      <Select
-                        value={this.asSelectable(this.state.testingCompany)}
-                        onChange={e => {
-                          this.handleSelectChange(e, 'testingCompany')}
-                        }
-                        options={select_options.testingCompany}
-                      />
-                    </div>
+                <div className="col-2">
+                  <div className="form-group">
+                    Testing company
+                    <Select
+                      value={this.asSelectable(this.state.testingCompany)}
+                      onChange={e => {
+                        this.handleSelectChange(e, 'testingCompany')}
+                      }
+                      options={select_options.testingCompany}
+                    />
                   </div>
-                    <div className="col-2">
-                      <div className="form-group">
-                        Standards
-                        <Select isMulti
-                          value={this.asSelectable(this.state.standards)}
-                          onChange={e => {
-                            this.handleSelectChange(e, 'standards')}
-                          }
-                          options={select_options.standards}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="col-1">
-                      <Price value={this.state.price} id='price' handleChange={this.handleChange} />
-                    </div>
-                    <div className="col-auto">
-                      <Paid
-                        id='paid'
-                        checkboxState={this.state.paid}
-                        paymentDate={this.state.paymentDate}
-                        handleChange={(date : any) => this.handleDateChange(date, 'paymentDate')}
-                        handleCheckboxChange={(e : any) => {
-                          if (!e.target.checked) {
-                            this.setState({ paymentDate: null});
-                          }
-                          this.handleCheckboxChange(e);
-                          }
-                        }
-                      />
-                    </div>
-                    <div className="col-auto">
-                        <Pi
-                          id="proformaReceived"
-                          checkboxState={this.state.proformaReceived}
-                          proformaReceivedDate={this.state.proformaReceived}
-                          date={this.state.proformaReceivedDate}
-                          handleCheckboxChange={(e : any) => {
-                            if (!e.target.checked) {
-                              this.setState({ proformaReceivedDate: null, proformaNumber: '' });
-                            }
-                            this.handleCheckboxChange(e);
-                            }
-                          }
-                          handleDateChange={(date : any) => this.handleDateChange(date, 'proformaReceivedDate')}
-                          handleNumberChange={(e : any) => this.handleChange(e)}
-                          numberId={'proformaNumber'}
-                          number={this.state.proformaNumber}
-                        />
-                    </div>
-                    </div>
-                    <div className="col">
-                      <SecondPayment>
-                        <Price value={this.state.price2} id='price2' handleChange={this.handleChange}/>
-                        <Paid
-                          id='paid2'
-                          checkboxState={this.state.paid2}
-                          paymentDate={this.state.paymentDate2}
-                          handleChange={(date : any) => this.handleDateChange(date, 'paymentDate2')}
-                          handleCheckboxChange={(e : any) => {
-                            if (!e.target.checked) {
-                              this.setState({ paymentDate2: null});
-                            }
-                            this.handleCheckboxChange(e);
-                            }
-                          }
-                        />
-                        <Pi
-                          id="proformaReceived2"
-                          checkboxState={this.state.proformaReceived2}
-                          proformaReceivedDate={this.state.proformaReceived2}
-                          date={this.state.proformaReceivedDate2}
-                          handleCheckboxChange={(e : any) => {
-                            if (!e.target.checked) {
-                              this.setState({ proformaReceivedDate2: null, proformaNumber2: '' });
-                            }
-                            this.handleCheckboxChange(e);
-                            }
-                          }
-                          handleDateChange={(date : any) => this.handleDateChange(date, 'proformaReceivedDate2')}
-                          handleNumberChange={(date : any) => this.handleChange(date)}
-                          numberId={'proformaNumber2'}
-                          number={this.state.proformaNumber2}
-                        />
-                      </SecondPayment>
                 </div>
+                <div className="col-2">
+                  <div className="form-group">
+                    Standards
+                    <Select isMulti
+                      value={this.asSelectable(this.state.standards)}
+                      onChange={e => {
+                        this.handleSelectChange(e, 'standards')}
+                      }
+                      options={select_options.standards}
+                    />
+                  </div>
+                </div>
+                <div className="col-1">
+                  <Price value={this.state.price} id='price' handleChange={this.handleChange} />
+                </div>
+                <div className="col-auto">
+                  <Paid
+                    id='paid'
+                    checkboxState={this.state.paid}
+                    paymentDate={this.state.paymentDate}
+                    handleChange={(date : any) => this.handleDateChange(date, 'paymentDate')}
+                    handleCheckboxChange={(e : any) => {
+                      if (!e.target.checked) {
+                        this.setState({ paymentDate: null});
+                      }
+                      this.handleCheckboxChange(e);
+                      }
+                    }
+                  />
+                </div>
+                <div className="col">
+                  <Pi
+                    id="proformaReceived"
+                    checkboxState={this.state.proformaReceived}
+                    proformaReceivedDate={this.state.proformaReceived}
+                    date={this.state.proformaReceivedDate}
+                    handleCheckboxChange={(e : any) => {
+                      if (!e.target.checked) {
+                        this.setState({ proformaReceivedDate: '', proformaNumber: '' });
+                      }
+                      this.handleCheckboxChange(e);
+                      }
+                    }
+                    handleDateChange={(date : any) => this.handleDateChange(date, 'proformaReceivedDate')}
+                    handleNumberChange={(e : any) => this.handleChange(e)}
+                    numberId={'proformaNumber'}
+                    number={this.state.proformaNumber}
+                  />
+                </div>
+                <div className="col-auto">
+                  <SecondPayment>
+                    <Price value={this.state.price2} id='price2' handleChange={this.handleChange}/>
+                    <Paid
+                      id='paid2'
+                      checkboxState={this.state.paid2}
+                      paymentDate={this.state.paymentDate2}
+                      handleChange={(date : any) => this.handleDateChange(date, 'paymentDate2')}
+                      handleCheckboxChange={(e : any) => {
+                        if (!e.target.checked) {
+                          this.setState({ paymentDate2: null});
+                        }
+                        this.handleCheckboxChange(e);
+                        }
+                      }
+                    />
+                    <Pi
+                      id="proformaReceived2"
+                      checkboxState={this.state.proformaReceived2}
+                      proformaReceivedDate={this.state.proformaReceived2}
+                      date={this.state.proformaReceivedDate2}
+                      handleCheckboxChange={(e : any) => {
+                        if (!e.target.checked) {
+                          this.setState({ proformaReceivedDate2: '', proformaNumber2: '' });
+                        }
+                        this.handleCheckboxChange(e);
+                        }
+                      }
+                      handleDateChange={(date : any) => this.handleDateChange(date, 'proformaReceivedDate2')}
+                      handleNumberChange={(date : any) => this.handleChange(date)}
+                      numberId={'proformaNumber2'}
+                      number={this.state.proformaNumber2}
+                    />
+                  </SecondPayment>
+                </div>
+              </div>
                 <div className="form-row">
                   <Article col='col' value={this.asSelectable(this.state.article)}
                     options={select_options.articles}
@@ -266,6 +265,8 @@ export default class Form extends React.Component {
                     />
                   </div>
                 </div>
+                <PickDate date={this.state.readyOn} label='Sample ready on:'
+                  handleChange={(date : any) => this.handleDateChange(date, 'readyOn')}/>
                 <PickDate date={this.state.sentOn} label='Sent on:'
                   handleChange={(date : any) => this.handleDateChange(date, 'sentOn')}/>
                 <PickDate date={this.state.receivedOn} label='Received on:'

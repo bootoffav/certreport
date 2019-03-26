@@ -19,15 +19,6 @@ class Task implements ITask {
     this.state = this.parse(props.DESCRIPTION, props.UF_CRM_TASK);
   }
 
-  parseDates = (d : any, format = 'DDMMMYYYY') => ({
-    sentOn: d.sentOn ? m(d.sentOn, format) : d.sentOn,
-    receivedOn: d.receivedOn ? m(d.receivedOn, format) : d.receivedOn,
-    startedOn: d.startedOn ? m(d.startedOn, format) : d.startedOn,
-    finishedOn: d.finishedOn ? m(d.finishedOn, format) : d.finishedOn,
-    resultsReceived: d.resultsReceived ? m(d.resultsReceived, format) : d.resultsReceived,
-    paymentDate: d.paymentDate ? m(d.paymentDate, format) : d.paymentDate
-  });
-
   parseable_description = (desc : string) => desc.startsWith('[B]Applicant name:[/B]') ? true : false;
 
   parseDescription = (desc : string) => {
@@ -81,6 +72,7 @@ class Task implements ITask {
       'Pre-treatment 1' : 'pretreatment1',
       'Pre-treatment 2' : 'pretreatment2',
       'Pre-treatment 3' : 'pretreatment3',
+      'Sample ready on': 'readyOn',
       'to be sent on': 'sentOn',
       'to be received on': 'receivedOn',
       'tests to be started on': 'startedOn',
@@ -123,7 +115,7 @@ class Task implements ITask {
       ] = newState.secondPayment.split(', ');
       newState.price2 = newState.price2.split(' ')[0];
       newState.paid2 = newState.paymentDate2 ? true : false;
-      newState.proformaReceived2 = true;
+      newState.proformaReceived2 = newState.proformaReceivedDate2 ? true : false;
       delete newState.secondPayment;
     }
     
@@ -132,10 +124,10 @@ class Task implements ITask {
     newState.otherTextInDescription = otherTextInDescription;
     newState.UF_CRM_TASK = uf_crm_task;
 
-    return { ...emptyState, ...newState, ...this.parseDates(newState) };
+    return { ...emptyState, ...newState };
 };
 
 
 }
 
-export default Task;
+export { dataSeparator, Task as default };

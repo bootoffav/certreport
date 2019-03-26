@@ -1,6 +1,6 @@
 import qs from 'qs';
 import m from 'moment';
-import { dataSeparator } from './Helpers';
+import { dataSeparator } from './Task';
 import Task from './Task';
 import PDFExport from './components/Export/PDFExport';
 import { any } from 'prop-types';
@@ -11,10 +11,7 @@ const creator_id = process.env.REACT_APP_B24_USER_ID;
 const webhook_key = process.env.REACT_APP_B24_WEBHOOK_KEY;
 const main_url = process.env.REACT_APP_B24_MAIN_URL;
 
-const auditors: string[] = [];
-if (process.env.REACT_APP_B24_AUDITORS) {
-  const auditors = process.env.REACT_APP_B24_AUDITORS.split(',');
-}
+const auditors: string[] = process.env.REACT_APP_B24_AUDITORS ? process.env.REACT_APP_B24_AUDITORS.split(',') : [];
 
 
 class B24 {
@@ -73,7 +70,6 @@ class B24 {
     
     static formTaskFields = (state : any) => {
       let stateAdapter = new StateAdapter(state);
-      // debugger;
       return {
       ...B24.defaultParams,
       UF_CRM_TASK: B24.makeUfCrmTaskField(state),
@@ -91,7 +87,7 @@ class B24 {
           `${state.rollNumber ? '[B]Roll number:[/B] ' + state.rollNumber + '\n' : ''}` +
           `${state.standards ? '[B]Standard:[/B] ' + state.standards + '\n' : ''}` +
           `${state.price ? '[B]Price:[/B] ' + state.price + ' €\n' : ''}` +
-          `${state.secondPayment ? '[B]Second payment:[/B] ' + state.secondPayment + '\n' : ''}` +
+          `${stateAdapter.secondPayment ? '[B]Second payment:[/B] ' + stateAdapter.secondPayment + '\n' : ''}` +
           `${state.paymentDate ? '[B]Payment date:[/B] ' + stateAdapter.formatDate(state.paymentDate) + '\n' : ''}` +
           `${state.testingCompany ? '[B]Testing company:[/B] ' + state.testingCompany + '\n' : ''}` +
           `${state.proformaReceivedDate && state.proformaNumber ? '[B]Proforma:[/B] ' + stateAdapter.formatDate(state.proformaReceivedDate) + ', ' + state.proformaNumber + '\n' : ''}` +
@@ -102,6 +98,7 @@ class B24 {
           `${state.pretreatment1 ? '[B]Pre-treatment 1:[/B] ' + state.pretreatment1 + '\n' : ''}` +
           `${state.pretreatment2 ? '[B]Pre-treatment 2:[/B] ' + state.pretreatment2 + '\n' : ''}` +
           `${state.pretreatment3 ? '[B]Pre-treatment 3:[/B] ' + state.pretreatment3 + '\n' : ''}` +
+          `${state.readyOn ? '[B]Sample ready on:[/B] ' + stateAdapter.formatDate(state.readyOn) + '\n' : ''}` +
           `${state.sentOn ? '[B]to be sent on:[/B] ' + stateAdapter.formatDate(state.sentOn) + '\n' : ''}` +
           `${state.receivedOn ? '[B]to be received on:[/B] ' + stateAdapter.formatDate(state.receivedOn) + '\n' : ''}` +
           `${state.startedOn ? '[B]tests to be started on:[/B] ' + stateAdapter.formatDate(state.startedOn) + '\n' : ''}` +
