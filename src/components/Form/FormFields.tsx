@@ -3,8 +3,9 @@ import DatePicker from "react-datepicker";
 import B24 from '../../B24';
 import Select from 'react-select';
 import './FormFields.css';
+import { any } from 'prop-types';
 
-const PickDate = props =>
+const PickDate = (props : any) =>
   <div className="col">
     {props.label}
     <div className="form-group">
@@ -20,7 +21,7 @@ const PickDate = props =>
     </div>
   </div>
 
-const BaseInput = props =>
+const BaseInput = (props : any) =>
   <div className={props.col || 'col'}>
     <div className="form-group">
       {props.label}
@@ -29,7 +30,7 @@ const BaseInput = props =>
     </div>
   </div>
 
-const Price = props =>
+const Price = (props : any) =>
   <div className="form-group">
     Price
     <div className="input-group">
@@ -44,7 +45,7 @@ const Price = props =>
     </div>
   </div>
 
-const Paid = props =>
+const Paid = (props : any) =>
   <div className="form-group">
     Payment Date
     <div className="input-group">
@@ -65,7 +66,7 @@ const Paid = props =>
     </div>
   </div>
 
-const Pi = props =>
+const Pi = (props : any) =>
   <div className="form-group">
     Proforma Received
     <div className="input-group">
@@ -94,42 +95,53 @@ const Pi = props =>
     </div>
   </div>
 
-const SecondPayment = props => {
-    return <div className="form-group">
-      Payment #2
-      <button type="button" className="btn btn-sm btn-block btn-light form-control SecondPayment_button" data-toggle="modal" data-target="#secondPayment">
-        show
-      </button>
-      <div className="modal fade" id="secondPayment" tabIndex="-1" role="dialog" aria-labelledby="secondPaymentLabel" aria-hidden="true">
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="secondPaymentLabel">Second payment</h5>
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
+interface SecondPaymentProps {
+  children: any[];
+}
+
+const SecondPayment = (props : SecondPaymentProps) => {
+  return <div className="form-group">
+    Payment #2
+    <button type="button" className="btn btn-sm btn-block btn-light form-control SecondPayment_button" data-toggle="modal" data-target="#secondPayment">
+      show
+    </button>
+    <div className="modal fade" id="secondPayment" role="dialog" aria-labelledby="secondPaymentLabel" aria-hidden="true">
+      <div className="modal-dialog" role="document">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title" id="secondPaymentLabel">Second payment</h5>
+            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div className="modal-body">
+            <div className="row">
+              <div className="col">{props.children[0]}</div>
+              <div className="col-auto">{props.children[1]}</div>
             </div>
-            <div className="modal-body">
-              <div className="row">
-                <div className="col">
-                  {props.children[0]}
-                </div>
-                <div className="col-auto">
-                  {props.children[1]}
-                </div>
-              </div>
-                {props.children[2]}
-            </div>
-            <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" data-dismiss="modal">Save</button>
-            </div>
+              {props.children[2]}
+          </div>
+          <div className="modal-footer">
+            <button type="button" className="btn btn-secondary" data-dismiss="modal">Save</button>
           </div>
         </div>
       </div>
     </div>
+  </div>
 }
 
-class Article extends React.Component {
+interface ArticleProps {
+  options: any[];
+  value: any;
+  col: string | undefined;
+  handleSlaveChange: (
+    product: string,
+    code: string,
+    brand: string) => void;
+  handleChange: (a: any) => void;
+}
+
+class Article extends React.Component<ArticleProps> {
   prop_map = {
     code: 'PROPERTY_380',
     weight: 'PROPERTY_384',
@@ -137,20 +149,22 @@ class Article extends React.Component {
     brand: 'SECTION_ID'
   };
 
-  brand_map = {
+  brand_map : {
+    [key: string]: string;
+  } = {
     8568: 'XMF',
     8574: 'XMT',
     8572: 'XMS'
   };
 
-  formatGroupLabel = data => (
+  formatGroupLabel = (data : any) => (
     <div className="Article_groupStyles">
       <span>{data.label}</span>
       <span className="Article_groupBadgeStyles">{data.options.length}</span>
     </div>
   );
 
-  onChange = async e => {
+  onChange = async (e : any) => {
     let product = await B24.get_product(e.value);
     this.props.handleSlaveChange(
       `${ product[this.prop_map.product] ? product[this.prop_map.product].value : '' }, ${ product[this.prop_map.weight] ? product[this.prop_map.weight].value : '' }`,
@@ -160,10 +174,10 @@ class Article extends React.Component {
     this.props.handleChange(e);
   }
 
-  findCurrentValue = value => {
+  findCurrentValue = () => {
     let result;
-    this.props.options.forEach(section => {
-      let sectionResult = section.options.find(el => el.label === this.props.value);
+    this.props.options.forEach((section : any) => {
+      let sectionResult = section.options.find((el : any) => el.label === this.props.value);
       if (sectionResult) {
         result = sectionResult;
       }

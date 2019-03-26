@@ -1,18 +1,35 @@
-import React from 'react';
+import React, { DOMElement } from 'react';
 
 
 class ColumnSearch extends React.Component {
-  state = {
-    value: '',
-    searchingColumn: 'article'
+  props : {
+    filter: (columnToSeach: string, valueToSearch: string) => void
   };
-  onChange = (e) => {
+  state : {
+    value: string;
+    searchingColumn : string;
+  }
+
+  constructor(props : any) {
+    super(props);
+    this.props = props;
+    this.state = {
+      value: '',
+      searchingColumn: 'article'
+    };
+
+  }
+  onChange = (e : any) => {
     this.setState({ value: e.target.value });
     this.props.filter(e.target.value, this.state.searchingColumn);
   };
 
-  changeColumn = (e, value) => {
-    document.getElementById('columnSearch').innerText = e.target.innerText;
+  changeColumn = (e : any, value :string) => {
+    let columnSearch : HTMLElement | null = document.getElementById('columnSearch');
+    if (columnSearch !== null) {
+      columnSearch.innerText = e.target.innerText;
+    }
+    
     this.setState({ searchingColumn: value })
   };
 
@@ -46,6 +63,15 @@ class ColumnSearch extends React.Component {
 }
 
 class BrandFilter extends React.Component {
+  props : {
+    filter: (brand : string) => void
+  }
+
+  constructor(props : any) {
+    super(props);
+    this.props = props;
+  }
+
   render() {
     return <div className="d-flex filter-level-1">
       <div className="dropdown">

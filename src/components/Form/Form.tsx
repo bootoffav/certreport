@@ -2,20 +2,39 @@ import React from 'react';
 import { PickDate, BaseInput, Article, Price, Paid, Pi, SecondPayment } from "./FormFields";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select';
-import B24 from '../../B24.js';
-import Notification from '../Notification/Notification.js';
+import B24 from '../../B24';
+import Notification from '../Notification/Notification';
 import SerialNumber from '../SerialNumber/SerialNumber';
 import m from 'moment';
 import { select_options, emptyState } from '../../defaults';
-import StateAdapter from '../../StateAdapter';
-import Export from '../Export/Export';
+import { IState } from '../../defaults';
+// import Export from '../Export/Export';
 
+
+interface IFormState extends IState {
+  requestStatus: boolean | null;
+}
 
 export default class Form extends React.Component {
-    constructor(props) {
+  task_id : string;
+  props : {
+    match: {
+      path: string;
+      url: string;
+    };
+    location: {
+      state : string;
+    };
+  }
+  state : IFormState;
+  request_status: string = 'none';
+
+  constructor(props : any) {
       super(props);
+      this.props = props;
       this.task_id = props.match.params.id || null;
-      this.state = props.location.state || emptyState;
+      this.state = { ...props.location.state || emptyState };
+      this.state.requestStatus = null;
     }
 
     componentDidMount() {
@@ -27,7 +46,7 @@ export default class Form extends React.Component {
       }
     }
 
-    handleDateChange = (date, prop) => {
+    handleDateChange = (date : any, prop : any) => {
       date = date ? m(date) : date;
       if (prop === 'sentOn' && date) {
         let receivedOn = date.clone().add(3, 'days');
@@ -42,9 +61,9 @@ export default class Form extends React.Component {
       });
     }
 
-    handleCheckboxChange = e => this.setState({ [e.target.id]: e.target.checked })
+    handleCheckboxChange = (e : any) => this.setState({ [e.target.id]: e.target.checked })
 
-    handleSelectChange = (selected, id) => {
+    handleSelectChange = (selected : any, id : string) => {
       Array.isArray(selected)
       ? this.setState({
           [id]: selected.reduce(
@@ -55,19 +74,18 @@ export default class Form extends React.Component {
       : this.setState({ [id]: selected.value })
     }
 
-    handleChange = e => this.setState({[e.target.id]: e.target.value});
+    handleChange = (e : any) => this.setState({[e.target.id]: e.target.value});
 
-    handleCert (e){
+    handleCert (e : any) {
       e.preventDefault();
-      let state = new StateAdapter(this.state);
       if (window.confirm('Are you sure?')) {
         (this.task_id)
-        ? B24.updateTask(state, this.task_id)
+        ? B24.updateTask(this.state, this.task_id)
           .then(
             () => this.afterSuccessfulSubmit(),
             () => this.afterUnsuccessfulSubmit()
           )
-        : B24.createTask(state)
+        : B24.createTask(this.state)
           .then(
             () => this.afterSuccessfulSubmit(),
             () => this.afterUnsuccessfulSubmit()
@@ -75,34 +93,33 @@ export default class Form extends React.Component {
       }
     }
 
-  asSelectable = value => {
+  asSelectable = (value : string) => {
     if (value !== '') {
-      value = value.split(', ');
-      return value.length === 1
+      const splitted : string[] = value.split(', ');
+      return splitted.length === 1
       ? [{ label: value, value }]
-      : value.map(label => ({label, value: label }));
+      : splitted.map(label => ({label, value: label }));
     }
   }
 
   afterSuccessfulSubmit() {
-    this.setState({request_status: 'success'});
-    SerialNumber.update(Number(this.state.serialNumber) + 1);
+    this.setState({ requestStatus: true });
+    // SerialNumber.update(Number(this.state.serialNumber) + 1);
     sessionStorage.removeItem('tasks');
     setTimeout(() => window.location.replace("/"), 4000);
   }
 
   afterUnsuccessfulSubmit() {
-    this.setState({request_status: 'failure'})
+    this.setState({ requestStatus: false });
     setTimeout(() => this.setState({
       request_status: ''
     }), 3000);
   }
     render() {
-      const request_status = this.state.request_status || null;
         return (
           <div className="form-place">
-            {(request_status)
-              ? <Notification result={request_status}/>
+            {(this.state.requestStatus !== null)
+              ? <Notification result={this.state.requestStatus}/>
               : ''}
             <form onSubmit={(e) => this.handleCert(e)}>
               <div className="form-row">
@@ -140,8 +157,8 @@ export default class Form extends React.Component {
                         id='paid'
                         checkboxState={this.state.paid}
                         paymentDate={this.state.paymentDate}
-                        handleChange={date => this.handleDateChange(date, 'paymentDate')}
-                        handleCheckboxChange={e => {
+                        handleChange={(date : any) => this.handleDateChange(date, 'paymentDate')}
+                        handleCheckboxChange={(e : any) => {
                           if (!e.target.checked) {
                             this.setState({ paymentDate: null});
                           }
@@ -156,18 +173,19 @@ export default class Form extends React.Component {
                           checkboxState={this.state.proformaReceived}
                           proformaReceivedDate={this.state.proformaReceived}
                           date={this.state.proformaReceivedDate}
-                          handleCheckboxChange={e => {
+                          handleCheckboxChange={(e : any) => {
                             if (!e.target.checked) {
                               this.setState({ proformaReceivedDate: null, proformaNumber: '' });
                             }
                             this.handleCheckboxChange(e);
                             }
                           }
-                          handleDateChange={date => this.handleDateChange(date, 'proformaReceivedDate')}
-                          handleNumberChange={e => this.handleChange(e, 'proformaNumber')}
+                          handleDateChange={(date : any) => this.handleDateChange(date, 'proformaReceivedDate')}
+                          handleNumberChange={(e : any) => this.handleChange(e)}
                           numberId={'proformaNumber'}
                           number={this.state.proformaNumber}
                         />
+                    </div>
                     </div>
                     <div className="col">
                       <SecondPayment>
@@ -176,8 +194,8 @@ export default class Form extends React.Component {
                           id='paid2'
                           checkboxState={this.state.paid2}
                           paymentDate={this.state.paymentDate2}
-                          handleChange={date => this.handleDateChange(date, 'paymentDate2')}
-                          handleCheckboxChange={e => {
+                          handleChange={(date : any) => this.handleDateChange(date, 'paymentDate2')}
+                          handleCheckboxChange={(e : any) => {
                             if (!e.target.checked) {
                               this.setState({ paymentDate2: null});
                             }
@@ -190,26 +208,25 @@ export default class Form extends React.Component {
                           checkboxState={this.state.proformaReceived2}
                           proformaReceivedDate={this.state.proformaReceived2}
                           date={this.state.proformaReceivedDate2}
-                          handleCheckboxChange={e => {
+                          handleCheckboxChange={(e : any) => {
                             if (!e.target.checked) {
                               this.setState({ proformaReceivedDate2: null, proformaNumber2: '' });
                             }
                             this.handleCheckboxChange(e);
                             }
                           }
-                          handleDateChange={date => this.handleDateChange(date, 'proformaReceivedDate2')}
-                          handleNumberChange={date => this.handleChange(date, 'proformaNumber2')}
+                          handleDateChange={(date : any) => this.handleDateChange(date, 'proformaReceivedDate2')}
+                          handleNumberChange={(date : any) => this.handleChange(date)}
                           numberId={'proformaNumber2'}
                           number={this.state.proformaNumber2}
                         />
                       </SecondPayment>
-                    </div>
                 </div>
                 <div className="form-row">
-                  <Article value={this.asSelectable(this.state.article)}
+                  <Article col='col' value={this.asSelectable(this.state.article)}
                     options={select_options.articles}
-                    handleChange={e => this.handleSelectChange([e], 'article')}
-                    handleSlaveChange={(product, code, brand) => {
+                    handleChange={(e : any) => this.handleSelectChange([e], 'article')}
+                    handleSlaveChange={(product : any, code : any, brand : any) => {
                       this.setState({ product, code, brand });
                     }}
                   />
@@ -228,7 +245,10 @@ export default class Form extends React.Component {
                   <BaseInput value={this.state.testingTime} id='testingTime' label='Testing Time' handleChange={this.handleChange} />
                   <div className="col">
                     <div className="from-group">
-                      <SerialNumber serialNumber={this.state.serialNumber} handleChange={this.handleChange} handleInit={v => this.setState({serialNumber: v})} url={this.props.match.url}/>
+                      <SerialNumber
+                        serialNumber={this.state.serialNumber}
+                        handleChange={this.handleChange}
+                        handleInit={(v : any) => this.setState({serialNumber: v})} url={this.props.match.url}/>
                     </div>
                   </div>
                 </div>
@@ -247,19 +267,19 @@ export default class Form extends React.Component {
                   </div>
                 </div>
                 <PickDate date={this.state.sentOn} label='Sent on:'
-                  handleChange={date => this.handleDateChange(date, 'sentOn')}/>
+                  handleChange={(date : any) => this.handleDateChange(date, 'sentOn')}/>
                 <PickDate date={this.state.receivedOn} label='Received on:'
-                  handleChange={date => this.handleDateChange(date, 'receivedOn')}/>
+                  handleChange={(date : any) => this.handleDateChange(date, 'receivedOn')}/>
                 <PickDate date={this.state.startedOn} label='Started on:'
-                  handleChange={date => this.handleDateChange(date, 'startedOn')}/>
+                  handleChange={(date : any) => this.handleDateChange(date, 'startedOn')}/>
                 <PickDate date={this.state.finishedOn} label='Finished on:'
-                  handleChange={date => this.handleDateChange(date, 'finishedOn')}/>
+                  handleChange={(date : any) => this.handleDateChange(date, 'finishedOn')}/>
                 <PickDate date={this.state.resultsReceived} label='Results received on:'
-                  handleChange={date => this.handleDateChange(date, 'resultsReceived')}/>
+                  handleChange={(date : any) => this.handleDateChange(date, 'resultsReceived')}/>
               </div>
               <div className="form-row">
                   <label htmlFor='comments'>Comments:</label>
-                  <textarea className='form-control' value={this.state.comments} id='comments' rows='15' onChange={this.handleChange} />
+                  <textarea className='form-control' value={this.state.comments} id='comments' rows={Number('15')} onChange={this.handleChange} />
               </div>
               <div className="form-row">
                 <div className="col">
@@ -267,7 +287,7 @@ export default class Form extends React.Component {
                     className="btn btn-danger btn-block"
                   >Create / Update</button>
                 </div>
-                <Export type="pdf" data={this.state}/>
+                {/* <Export type="pdf" data={this.state}/> */}
                 {/* <Export type="xls" data={this.state}/> */}
               </div>
           </form>

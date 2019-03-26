@@ -1,7 +1,8 @@
 import React from 'react';
 import m from 'moment';
+import Task from '../../Task';
 
-const Toolbar = props =>
+const Toolbar = (props : any) =>
   (<div className="row">
     <div className="col btn-group btn-group-toggle" data-toggle="buttons">
       <label
@@ -39,7 +40,7 @@ const Toolbar = props =>
     </div>
   </div>);
 
-const filter = (tasks, prop) => {
+const filter = (tasks: Task[], prop : any = undefined) => {
   let filteredTasks;
   const sentOnTasks = () => tasks.filter(task => task.state.sentOn);
 

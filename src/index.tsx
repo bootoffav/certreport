@@ -2,7 +2,7 @@ import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'open-iconic/font/css/open-iconic-bootstrap.min.css';
 import 'react-table/react-table.css';
-import React from 'react';
+import React, { ReactNode } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
 import Form from './components/Form/Form';
@@ -18,12 +18,7 @@ netlifyIdentity.on('login', user => {
   window.location.replace('/');
 });
 
-
-function App() {
-  if (!netlifyIdentity.currentUser()) {
-    return <div>{ netlifyIdentity.open('login') }</div>;
-  }
-
+const App: React.FunctionComponent = () => {
   initApp();
   return (
     <div className="container">
@@ -59,5 +54,7 @@ function App() {
   );
 }
 
+!netlifyIdentity.currentUser() ? netlifyIdentity.open('login') : ReactDOM.render(<App />, document.getElementById('root'));
 
-ReactDOM.render(<App />, document.getElementById('root'));
+
+

@@ -3,24 +3,37 @@ import React from 'react';
 import Loader from 'react-loader-spinner';
 import ReactTable from "react-table";
 import { Link } from 'react-router-dom';
+import Task from '../../Task';
 import '../../css/style.css';
 import { Toolbar, filter } from '../Toolbar/Toolbar';
 // import { Export } from '../Export/Export';
 import { ColumnSearch, BrandFilter } from '../Filters';
 import CacheManager from '../../CacheManager';
 
+interface IListState {
+    visibleTasks: Task[];
+    allTasks: Task[];
+    filteredTasksLevel1: Task[];
+    totalPrice: string;
+}
+
 export default class List extends React.Component {
-  state = {};
+  state : IListState = {
+    visibleTasks: [],
+    allTasks: [],
+    filteredTasksLevel1: [],
+    totalPrice: ''
+  };
   cache = new CacheManager();
-  static State = ({notUpdated}) => (
+  static State = (props : any) => (
     <>
       <div id="cacheStateLabel" className="p-1"
-      >{notUpdated
+      >{props.notUpdated
         ? 'contacting Bitrix24, receiving updates'
         : 'state is actual'}
       </div>
       <div id="cacheStateLoader" className="p-1"
-      >{notUpdated
+      >{props.notUpdated
         ? <Loader type='Circles' color='blueviolet' height='30' width='30'/>
         : ''}
       </div>
@@ -35,9 +48,9 @@ export default class List extends React.Component {
     },{
       Header: '##',
       id: 'serialNumber',
-      accessor: row => row.state.serialNumber ? Number(row.state.serialNumber) : '',
+      accessor: (row : any) => row.state.serialNumber ? String(row.state.serialNumber) : '',
       width: 55,
-      Cell: props => <a 
+      Cell: (props : any) => <a 
         href={`https://xmtextiles.bitrix24.ru/company/personal/user/460/tasks/task/view/${props.original.ID}/`}
         target="_blank" rel="noopener noreferrer"
         >
@@ -53,7 +66,7 @@ export default class List extends React.Component {
       accessor: 'TITLE',
       id: 'taskName',
       minWidth: 550,
-      Cell: props => {
+      Cell: (props : any) => {
         return (props.original.state.serialNumber) ?
           <Link className={this.cache.staleData ? 'EditLinkIsDisabled' : ''}
             to={
@@ -81,7 +94,7 @@ export default class List extends React.Component {
       accessor: 'state.sentOn',
       id: 'sentOn',
       width: 95,
-      Cell: props => props.value ? props.value.format("DD MMM YYYY") : ''
+      Cell: (props : any) => props.value ? props.value.format("DD MMM YYYY") : ''
     }, {
       Header: 'Proforma date',
       accessor: 'state.proformaReceivedDate',
@@ -97,18 +110,18 @@ export default class List extends React.Component {
     }, {
       Header: 'Paid',
       id: 'paid',
-      accessor: row => row.state.paymentDate,
+      accessor: (row : any) => row.state.paymentDate,
       minWidth: 40,
-      Cell: props => props.value 
+      Cell: (props : any) => props.value 
               ? <span className="oi oi-check"></span>
               : ''
     }, {
       Header: 'Payment date',
       id: 'paymentDate',
-      accessor: row => row.state.paymentDate,
+      accessor: (row : any) => row.state.paymentDate,
       width: 130,
       show: false,
-      Cell: props => props.value ? props.value.format("DD MMM YYYY") : ''
+      Cell: (props : any) => props.value ? props.value.format("DD MMM YYYY") : ''
     }, {
       Header: 'Fabric',
       id: 'article',
@@ -133,12 +146,12 @@ export default class List extends React.Component {
       Header: 'Price, €',
       Footer: () => <>Total € <span style={{ float: 'right' }}>{this.formatPrice(this.state.totalPrice)}</span></>,
       id: 'price',
-      accessor: row => Number(row.state.price),
+      accessor: (row : any) => Number(row.state.price),
       minWidth: 90,
-    Cell: props => <>€<span style={{ float: 'right' }}>{this.formatPrice(props.value)}</span></>
+    Cell: (props : any) => <>€<span style={{ float: 'right' }}>{this.formatPrice(props.value)}</span></>
     }];
 
-  formatPrice = price => Number(price)
+  formatPrice = (price : string) => Number(price)
     .toLocaleString('en-US', {
       style: 'currency',
       currency: 'EUR'
@@ -158,25 +171,26 @@ export default class List extends React.Component {
     }
   }
 
-  updateState = tasks => {
+  updateState = (tasks : any) => {
     let visibleTasks = filter(tasks);
-    let totalPrice = visibleTasks.reduce((sum, task) => sum + Number(task.state.price), 0);
+    let totalPrice = visibleTasks.reduce((sum : number, task : any) => sum + Number(task.state.price), 0);
     this.setState({ allTasks: tasks, filteredTasksLevel1: tasks, visibleTasks, totalPrice });
   }
   
   //level 1 filter
-  brandFilter(brand) {
-    document.getElementById('brandFilter').innerText = `Brand: ${brand}`;
+  brandFilter(brand : string) {
+    let brandFilter : HTMLElement | null = document.getElementById('brandFilter');
+    brandFilter ? brandFilter.innerText = `Brand: ${brand}` : '';
     let filtered;
     switch (brand) {
       case 'All':
         filtered = this.state.allTasks;
         break;
       case 'No brand':
-        filtered = this.state.allTasks.filter(task => !Boolean(task.state.brand));
+        filtered = this.state.allTasks.filter((task : any) => !Boolean(task.state.brand));
         break;
       default:
-        filtered = this.state.allTasks.filter(task => task.state.brand === brand);
+        filtered = this.state.allTasks.filter((task : any) => task.state.brand === brand);
     }
 
     this.setState({
@@ -184,10 +198,10 @@ export default class List extends React.Component {
     }, this.filterLevel1Callback);
   }
 
-  columnFilter = (valueToSearch, columnToSearch) => {
+  columnFilter = (valueToSearch : any, columnToSearch : any) => {
     valueToSearch = valueToSearch.toLowerCase();
     this.setState({
-      filteredTasksLevel1: this.state.allTasks.filter(task => columnToSearch === 'TITLE'
+      filteredTasksLevel1: this.state.allTasks.filter((task : any) => columnToSearch === 'TITLE'
         ? task[columnToSearch].toLowerCase().includes(valueToSearch)
         : task.state[columnToSearch].toLowerCase().includes(valueToSearch)
       )
@@ -204,47 +218,37 @@ export default class List extends React.Component {
   //level 2 filter
   toolbarFilter = (prop = 'all') => {
     let visibleTasks = filter(this.state.filteredTasksLevel1, prop);
-    let totalPrice = visibleTasks.reduce((sum, task) => sum + Number(task.state.price), 0);
+    let totalPrice = visibleTasks.reduce((sum : number, task : any) => sum + Number(task.state.price), 0);
     this.setState({ visibleTasks, totalPrice });
     prop === 'proforma'
     ? this.columns[5].show = this.columns[6].show = this.columns[8].show = true
     : this.columns[5].show = this.columns[6].show = this.columns[8].show = false;
     }
 
-  render (){
-    if (this.state.visibleTasks) {
-      return <>
-        <div className="d-flex justify-content-between">
-          <div className="d-inline-flex justify-content-start">
-            <div className="p-1">
-              <BrandFilter filter={this.brandFilter.bind(this)}/>
-            </div>
-            <div className="p-1">
-              <ColumnSearch filter={this.columnFilter}/>
-            </div>
-          </div>
-          <div className="d-inline-flex justify-content-end">
-            <List.State notUpdated={this.cache.staleData} />
-          </div>
+  render = () => <>
+    <div className="d-flex justify-content-between">
+      <div className="d-inline-flex justify-content-start">
+        <div className="p-1">
+          <BrandFilter filter={this.brandFilter.bind(this)}/>
         </div>
-          {/* <Export type="xls" data={this.state.visibleTasks} /> */}
-        <Toolbar onClick={this.toolbarFilter}/>
-        <ReactTable
-          data={ this.state.visibleTasks } columns={ this.columns }
-          defaultSorted={[
-            {
-              id: 'position',
-              asc: true
-            }
-          ]}
-          defaultPageSize={ 20 } className='-striped -highlight table'/>
-        </>
-    }
-    return (
-      <div className='loader-place row align-items-center'>
-        <div className='col row justify-content-center'>
-          <Loader type='ThreeDots' height='80' width='200'/>
+        <div className="p-1">
+          <ColumnSearch filter={this.columnFilter}/>
         </div>
-      </div>);
-  }
+      </div>
+      <div className="d-inline-flex justify-content-end">
+        <List.State notUpdated={this.cache.staleData} />
+      </div>
+    </div>
+      {/* <Export type="xls" data={this.state.visibleTasks} /> */}
+    <Toolbar onClick={this.toolbarFilter}/>
+    <ReactTable
+      data={ this.state.visibleTasks } columns={ this.columns }
+      defaultSorted={[
+        {
+          id: 'position',
+          desc: false
+        }
+      ]}
+      defaultPageSize={ 20 } className='-striped -highlight table'/>
+    </>
 }
