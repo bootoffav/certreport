@@ -104,7 +104,7 @@ class B24 {
           `${state.receivedOn ? '[B]to be received on:[/B] ' + stAd.formatDate(state.receivedOn) + '\n' : ''}` +
           `${state.startedOn ? '[B]tests to be started on:[/B] ' + stAd.formatDate(state.startedOn) + '\n' : ''}` +
           `${state.finishedOn ? '[B]tests to be finished on:[/B] ' + stAd.formatDate(state.finishedOn) + '\n' : ''}` +
-          `${state.resultsReceived ? '[B]results to be received on: [/B]' + stAd.formatDate(state.resultsReceived) + '\n' : ''}` +
+          `${state.resultsReceived ? '[B]results to be received on:[/B] ' + stAd.formatDate(state.resultsReceived) + '\n' : ''}` +
           `${state.comments ? '[B]Comments:[/B] ' + state.comments + '\n' : ''}` +
           `${state.link ? '[B]Edit:[/B] ' + state.link + '\n' : ''} ` +
           `${dataSeparator}` + (state.otherTextInDescription || ''),

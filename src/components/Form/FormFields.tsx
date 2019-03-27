@@ -21,11 +21,20 @@ const PickDate = (props : any) =>
     </div>
   </div>
 
-const BaseInput = (props : any) =>
+const BaseInput = (props : {
+  required?: boolean;
+  col?: string;
+  label: string;
+  type?: string;
+  placeholder?: string;
+  id: string;
+  value: string;
+  handleChange: (e : React.SyntheticEvent) => void
+}) =>
   <div className={props.col || 'col'}>
     <div className="form-group">
       {props.label}
-      <input type={props.type || 'text' } required className="form-control"
+      <input type={props.type || 'text' } required={props.required !== undefined ? props.required : true} className="form-control"
         placeholder={props.placeholder} id={props.id} value={props.value} onChange={props.handleChange}/>
     </div>
   </div>

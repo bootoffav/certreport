@@ -48,13 +48,13 @@ export default class Form extends React.Component {
 
     handleDateChange = (date : any, prop : any) => {
       date = date ? m(date) : date;
-      if (prop === 'sentOn' && date) {
-        let receivedOn = date.clone().add(3, 'days');
-        let startedOn = receivedOn.clone().add(1, 'days');
-        let finishedOn = startedOn.clone().add(this.state.testingTime, 'days');
-        let resultsReceived = finishedOn.clone().add(1, 'days');
-        this.setState({receivedOn, startedOn, finishedOn, resultsReceived});
-      }
+      // if (prop === 'sentOn' && date) {
+        // let receivedOn = date.clone().add(3, 'days');
+        // let startedOn = receivedOn.clone().add(1, 'days');
+        // let finishedOn = startedOn.clone().add(this.state.testingTime, 'days');
+        // let resultsReceived = finishedOn.clone().add(1, 'days');
+        // this.setState({receivedOn, startedOn, finishedOn, resultsReceived});
+      // }
 
       this.setState({
         [prop]: date
@@ -232,8 +232,8 @@ export default class Form extends React.Component {
                   <BaseInput value={this.state.product} id='product' col="col-4" label='Product' handleChange={this.handleChange} />
                   <BaseInput value={this.state.code} id='code' label='Code' handleChange={this.handleChange} />
                   <BaseInput value={this.state.colour} id='colour' label='Colour' handleChange={this.handleChange} />
-                  <BaseInput value={this.state.testReport} id='testReport' label='Test Report' handleChange={this.handleChange} />
-                  <BaseInput value={this.state.certificate} id='certificate' label='Certificate' handleChange={this.handleChange} />
+                  <BaseInput value={this.state.testReport} id='testReport' required={false} label='Test Report' handleChange={this.handleChange} />
+                  <BaseInput value={this.state.certificate} id='certificate' required={false} label='Certificate' handleChange={this.handleChange} />
                   <BaseInput value={this.state.materialNeeded} id='materialNeeded' label='Material needed' handleChange={this.handleChange} />
                 </div>
                 <div className="form-row">
@@ -265,15 +265,15 @@ export default class Form extends React.Component {
                     />
                   </div>
                 </div>
-                <PickDate date={this.state.readyOn} label='Sample ready on:'
+                <PickDate date={this.state.readyOn} label='Sample prepared on:'
                   handleChange={(date : any) => this.handleDateChange(date, 'readyOn')}/>
-                <PickDate date={this.state.sentOn} label='Sent on:'
+                <PickDate date={this.state.sentOn} label='Sample sent on:'
                   handleChange={(date : any) => this.handleDateChange(date, 'sentOn')}/>
-                <PickDate date={this.state.receivedOn} label='Received on:'
+                <PickDate date={this.state.receivedOn} label='Sample received by laboratory on:'
                   handleChange={(date : any) => this.handleDateChange(date, 'receivedOn')}/>
-                <PickDate date={this.state.startedOn} label='Started on:'
-                  handleChange={(date : any) => this.handleDateChange(date, 'startedOn')}/>
-                <PickDate date={this.state.finishedOn} label='Finished on:'
+                {/* <PickDate date={this.state.startedOn} label='Started on:'
+                  handleChange={(date : any) => this.handleDateChange(date, 'startedOn')}/> */}
+                <PickDate date={this.state.finishedOn} label='Tests to be finished on:'
                   handleChange={(date : any) => this.handleDateChange(date, 'finishedOn')}/>
                 <PickDate date={this.state.resultsReceived} label='Results received on:'
                   handleChange={(date : any) => this.handleDateChange(date, 'resultsReceived')}/>

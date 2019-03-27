@@ -93,15 +93,30 @@ export default class List extends React.Component {
           }}>{ props.value }</Link>
       }
     }, {
-      Header: 'Sample ready on',
+      Header: 'Sample prepared on',
       accessor: 'state.readyOn',
       id: 'readyOn',
-      width: 95,
+      width: 130,
     }, {
       Header: 'Sent On',
       accessor: 'state.sentOn',
       id: 'sentOn',
-      width: 95,
+      width: 130,
+    }, {
+      Header: 'Sample received On',
+      accessor: 'state.receivedOn',
+      id: 'receivedOn',
+      width: 130,
+    }, {
+      Header: 'Tests finished On',
+      accessor: 'state.finishedOn',
+      id: 'receivedOn',
+      width: 130,
+    }, {
+      Header: 'Results received',
+      accessor: 'state.resultsReceived',
+      id: 'receivedOn',
+      width: 130,
     }, {
       Header: 'Proforma date',
       accessor: 'state.proformaReceivedDate',
@@ -236,41 +251,69 @@ export default class List extends React.Component {
 
   visibleColumns(prop : string) : void {
     this.columns.forEach(col => col.show = true);
+    let hidden: number[];
+
     switch (prop) {
-      case 'proforma':
-        this.columns[5].show = this.columns[6].show = this.columns[8].show = true;
-        break;
       case 'preparingSample':
-        // this.columns[4].show = true;
-        this.columns[6].show = this.columns[7].show = this.columns[9].show = false;
+        hidden = [5, 6, 7, 8, 9, 10, 11, 12];
         break;
       case 'sentOn':
+        hidden = [4, 6, 7, 8, 9, 10, 11, 12];
+        break;
+      case 'receivedOn':
+        hidden = [4, 5, 7, 8, 9, 10, 11, 12];
+        break;
+      case 'PIIssued':
+        hidden = [4, 5, 6, 7, 8, 11, 12];
         break;
       case 'paid':
+        hidden = [4, 5, 6, 7, 8];
         break;
-      case 'paid':
+      case 'isInProgress':
+        hidden = [4, 5, 6, 8, 9, 10, 11, 12];
         break;
-      case 'thisMonth':
-        break;
-      case 'missingTestReport':
-        break;
-      case 'waitingCertificate':
+      case 'resultsReceived':
+        hidden = [4, 5, 6, 7, 9, 10, 11, 12];
         break;
       case 'all':
-        this.columns[4].show = this.columns[6].show = this.columns[7].show = this.columns[9].show = false;
+        hidden = [4, 5, 6, 7, 8, 9, 10, 11, 12];
         break;
+      default:
+        hidden = [4, 5, 6, 9, 10, 11, 12];
     }
+
+    this.columns.forEach((col, ind) => {
+      if (hidden.includes(ind)) col.show = false;
+    });
   }
 
   getTrProps = (state : any, rowInfo : any, column : any) : {} => {
     if (rowInfo !== undefined) {
       switch (this.state.toolbarProp) {
         case 'preparingSample':
-          return m(rowInfo.row.readyOn).add(1, 'days') < m()
+          return m(rowInfo.row._original.state.readyOn).add(2, 'days') < m()
           ? { className: "missedDeadline" }
           : {};
         case 'sentOn':
-          break;
+          return m(rowInfo.row._original.state.sentOn).add(7, 'days') < m()
+          ? { className: "missedDeadline" }
+          : {};
+        case 'receivedOn':
+          return m(rowInfo.row._original.state.receivedOn).add(2, 'days') < m()
+          ? { className: "missedDeadline" }
+          : {};
+        case 'PIIssued':
+          return m(rowInfo.row._original.state.proformaReceivedDate).add(2, 'days') < m()
+          ? { className: "missedDeadline" }
+          : {};
+        case 'paid':
+          return m(rowInfo.row._original.state.paymentDate).add(2, 'days') < m()
+          ? { className: "missedDeadline" }
+          : {};
+        case 'isInProgress':
+          return m(rowInfo.row._original.state.finishedOn).add(1, 'days') < m()
+          ? { className: "missedDeadline" }
+          : {};
       }
     }
     return {};
