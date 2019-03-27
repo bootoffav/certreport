@@ -66,6 +66,7 @@ export interface IState {
   finishedOn: string;
   resultsReceived: string;
   comments: string;
+  otherTextInDescription: string | null;
 }
 
 const emptyState : IState = {
@@ -110,6 +111,7 @@ const emptyState : IState = {
   pretreatment1: '',
   pretreatment2: '',
   pretreatment3: '',
+  otherTextInDescription: ''
 };
 
 function initApp() {

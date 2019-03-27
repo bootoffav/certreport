@@ -113,9 +113,16 @@ class Task implements ITask {
         newState.proformaReceivedDate2,
         newState.proformaNumber2
       ] = newState.secondPayment.split(', ');
-      newState.price2 = newState.price2.split(' ')[0];
+
+      newState.price2 = newState.price2 ? newState.price2.split(' ')[0] : '';
+      
+      newState.paymentDate2 = newState.paymentDate2 || '';
       newState.paid2 = newState.paymentDate2 ? true : false;
+      
+      newState.proformaReceivedDate2 = newState.proformaReceivedDate2 || '';
+      newState.proformaNumber2 = newState.proformaNumber2 || '';
       newState.proformaReceived2 = newState.proformaReceivedDate2 ? true : false;
+      
       delete newState.secondPayment;
     }
     

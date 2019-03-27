@@ -2,9 +2,10 @@ import qs from 'qs';
 import m from 'moment';
 import { dataSeparator } from './Task';
 import Task from './Task';
-import PDFExport from './components/Export/PDFExport';
+import PDF from './components/Export/PDF';
 import { any } from 'prop-types';
 import StateAdapter from './StateAdapter';
+import { IState } from './defaults';
 
 m.fn.toJSON = function() { return this.format(); }
 const creator_id = process.env.REACT_APP_B24_USER_ID;
@@ -68,13 +69,13 @@ class B24 {
       return UF_CRM_TASK;
     }
     
-    static formTaskFields = (state : any) => {
-      let stateAdapter = new StateAdapter(state);
+    static formTaskFields = (state : IState) => {
+      let stAd = new StateAdapter(state);
       return {
       ...B24.defaultParams,
       UF_CRM_TASK: B24.makeUfCrmTaskField(state),
       TITLE: `${state.serialNumber}_${state.testingCompany} - ${state.standards} - ${state.article}, ${state.colour} ` +
-          `(send ${stateAdapter.formatDate(state.sentOn)} - plan ${stateAdapter.formatDate(state.resultsReceived)}) = ${state.price} € | ${state.testReport ? state.testReport : ''}`,
+          `(send ${stAd.formatDate(state.sentOn)} - plan ${stAd.formatDate(state.resultsReceived)}) = ${state.price} € | ${state.testReport ? state.testReport : ''}`,
       DESCRIPTION: `${state.applicantName ? '[B]Applicant name:[/B] ' + state.applicantName + '\n' : ''}` +
           `${state.product ? '[B]Product:[/B] ' + state.product + '\n' : ''}` +
           `${state.code ? '[B]Code:[/B] ' + state.code + '\n' : ''}` +
@@ -87,10 +88,10 @@ class B24 {
           `${state.rollNumber ? '[B]Roll number:[/B] ' + state.rollNumber + '\n' : ''}` +
           `${state.standards ? '[B]Standard:[/B] ' + state.standards + '\n' : ''}` +
           `${state.price ? '[B]Price:[/B] ' + state.price + ' €\n' : ''}` +
-          `${stateAdapter.secondPayment ? '[B]Second payment:[/B] ' + stateAdapter.secondPayment + '\n' : ''}` +
-          `${state.paymentDate ? '[B]Payment date:[/B] ' + stateAdapter.formatDate(state.paymentDate) + '\n' : ''}` +
+          `${stAd.secondPayment ? '[B]Second payment:[/B] ' + stAd.secondPayment + '\n' : ''}` +
+          `${state.paymentDate ? '[B]Payment date:[/B] ' + stAd.formatDate(state.paymentDate) + '\n' : ''}` +
           `${state.testingCompany ? '[B]Testing company:[/B] ' + state.testingCompany + '\n' : ''}` +
-          `${state.proformaReceivedDate && state.proformaNumber ? '[B]Proforma:[/B] ' + stateAdapter.formatDate(state.proformaReceivedDate) + ', ' + state.proformaNumber + '\n' : ''}` +
+          `${state.proformaReceivedDate && state.proformaNumber ? '[B]Proforma:[/B] ' + stAd.formatDate(state.proformaReceivedDate) + ', ' + state.proformaNumber + '\n' : ''}` +
           `${state.testReport ? '[B]Test report:[/B] ' + state.testReport + '\n' : ''}` +
           `${state.certificate ? '[B]Certificate:[/B] ' + state.certificate + '\n' : ''}` +
           `${state.materialNeeded ? '[B]Material needed:[/B] ' + state.materialNeeded + '\n' : ''}` +
@@ -98,12 +99,12 @@ class B24 {
           `${state.pretreatment1 ? '[B]Pre-treatment 1:[/B] ' + state.pretreatment1 + '\n' : ''}` +
           `${state.pretreatment2 ? '[B]Pre-treatment 2:[/B] ' + state.pretreatment2 + '\n' : ''}` +
           `${state.pretreatment3 ? '[B]Pre-treatment 3:[/B] ' + state.pretreatment3 + '\n' : ''}` +
-          `${state.readyOn ? '[B]Sample ready on:[/B] ' + stateAdapter.formatDate(state.readyOn) + '\n' : ''}` +
-          `${state.sentOn ? '[B]to be sent on:[/B] ' + stateAdapter.formatDate(state.sentOn) + '\n' : ''}` +
-          `${state.receivedOn ? '[B]to be received on:[/B] ' + stateAdapter.formatDate(state.receivedOn) + '\n' : ''}` +
-          `${state.startedOn ? '[B]tests to be started on:[/B] ' + stateAdapter.formatDate(state.startedOn) + '\n' : ''}` +
-          `${state.finishedOn ? '[B]tests to be finished on:[/B] ' + stateAdapter.formatDate(state.finishedOn) + '\n' : ''}` +
-          `${state.resultsReceived ? '[B]results to be received on: [/B]' + stateAdapter.formatDate(state.resultsReceived) + '\n' : ''}` +
+          `${state.readyOn ? '[B]Sample ready on:[/B] ' + stAd.formatDate(state.readyOn) + '\n' : ''}` +
+          `${state.sentOn ? '[B]to be sent on:[/B] ' + stAd.formatDate(state.sentOn) + '\n' : ''}` +
+          `${state.receivedOn ? '[B]to be received on:[/B] ' + stAd.formatDate(state.receivedOn) + '\n' : ''}` +
+          `${state.startedOn ? '[B]tests to be started on:[/B] ' + stAd.formatDate(state.startedOn) + '\n' : ''}` +
+          `${state.finishedOn ? '[B]tests to be finished on:[/B] ' + stAd.formatDate(state.finishedOn) + '\n' : ''}` +
+          `${state.resultsReceived ? '[B]results to be received on: [/B]' + stAd.formatDate(state.resultsReceived) + '\n' : ''}` +
           `${state.comments ? '[B]Comments:[/B] ' + state.comments + '\n' : ''}` +
           `${state.link ? '[B]Edit:[/B] ' + state.link + '\n' : ''} ` +
           `${dataSeparator}` + (state.otherTextInDescription || ''),
@@ -119,14 +120,13 @@ class B24 {
       }
 
       const attachPDF = (taskId: string) => {
-        let doc = new PDFExport(new StateAdapter(state));
         fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.addfile/`, {
           method: 'post',
           body: qs.stringify({
             TASK_ID: taskId,
             FILE: {
               NAME: `${state.serialNumber} - ${state.applicantName}.pdf`,
-              CONTENT: btoa(doc.output())
+              CONTENT: btoa(new PDF(state).pdf.output())
             }
           })
         })
@@ -143,8 +143,6 @@ class B24 {
           attachPDF(response.result);
           state.link = `[URL=https://certreport.xmtextiles.com/edit/${response.result}/]this task[/URL]`;
           B24.updateTask(state, response.result); //to include link for editing
-        }).catch(onrejected => {
-          debugger;
         });
     }
 

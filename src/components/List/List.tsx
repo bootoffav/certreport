@@ -266,7 +266,7 @@ export default class List extends React.Component {
     if (rowInfo !== undefined) {
       switch (this.state.toolbarProp) {
         case 'preparingSample':
-          return m(rowInfo.row.readyOn).add(7, 'days') < m()
+          return m(rowInfo.row.readyOn).add(1, 'days') < m()
           ? { className: "missedDeadline" }
           : {};
         case 'sentOn':

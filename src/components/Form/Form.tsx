@@ -8,7 +8,7 @@ import SerialNumber from '../SerialNumber/SerialNumber';
 import m from 'moment';
 import { select_options, emptyState } from '../../defaults';
 import { IState } from '../../defaults';
-// import Export from '../Export/Export';
+import Export from '../Export/Export';
 
 
 interface IFormState extends IState {
@@ -288,7 +288,7 @@ export default class Form extends React.Component {
                     className="btn btn-danger btn-block"
                   >Create / Update</button>
                 </div>
-                {/* <Export type="pdf" data={this.state}/> */}
+                <Export type="pdf" data={this.state}/>
                 {/* <Export type="xls" data={this.state}/> */}
               </div>
           </form>

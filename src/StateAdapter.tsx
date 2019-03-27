@@ -3,19 +3,28 @@ import { IState } from './defaults';
 
 m.fn.toJSON = function() { return this.format(); }
 
-class StateAdapter {
-  st : IState;
-  constructor(st : IState) {
-    this.st = { ...st };
+interface IStateAdapter {
+  formatDate: (date : any) => string;
+}
+
+class StateAdapter implements IStateAdapter {
+  constructor(state : IState) {
+     Object.assign(this, state);
   }
 
-  formatDate = (date : any) => date ? m(date).format("DDMMMYYYY") : '';
+  formatDate(date : any) {
+    return date ? m(date).format("DDMMMYYYY") : '';
+  }
 
   get secondPayment() {
-    return (`${this.st.price2 ? this.st.price2 + ' €, ' : ''}` +
-           `${this.st.paymentDate2 ? this.formatDate(this.st.paymentDate2) + ', ' : ''}` +
-           `${this.st.proformaReceivedDate2 ? this.formatDate(this.st.proformaReceivedDate2) + ', ' : ''}` +
-           `${this.st.proformaNumber2 ? this.st.proformaNumber2 + ', ' : ''}`).slice(0, -2);
+    // @ts-ignore
+    return (`${this.price2 ? this.price2 + ' €, ' : ''}` +
+      //@ts-ignore
+      `${this.paymentDate2 ? this.formatDate(this.paymentDate2) + ', ' : ''}` +
+      //@ts-ignore
+      `${this.proformaReceivedDate2 ? this.formatDate(this.proformaReceivedDate2) + ', ' : ''}` +
+      //@ts-ignore
+      `${this.proformaNumber2 ? this.proformaNumber2 + ', ' : ''}`).slice(0, -2);
   }
 }
 
