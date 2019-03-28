@@ -3,7 +3,7 @@ import React from 'react';
 import Loader from 'react-loader-spinner';
 import ReactTable, { Column } from "react-table";
 import { Link } from 'react-router-dom';
-import Task from '../../Task';
+import Task, { Stage } from '../../Task';
 import '../../css/style.css';
 import { Toolbar } from '../Toolbar/Toolbar';
 // import { Export } from '../Export/Export';
@@ -64,6 +64,11 @@ export default class List extends React.Component {
       id: 'brand',
       minWidth: 50,
       accessor: 'state.brand'
+    },{
+      Header: 'Status',
+      id: 'stage',
+      minWidth: 100,
+      accessor: (row : any) => Stage[row.stage]
     },{
       Header: 'Task name',
       accessor: 'TITLE',
@@ -254,32 +259,32 @@ export default class List extends React.Component {
     let hidden: number[];
 
     switch (prop) {
-      case 'preparingSample':
-        hidden = [5, 6, 7, 8, 9, 10, 11, 12];
+      case 'Preparing Sample':
+        hidden = [3, 6, 7, 8, 9, 10, 11, 12, 13];
         break;
-      case 'sentOn':
-        hidden = [4, 6, 7, 8, 9, 10, 11, 12];
+      case 'Sample Sent':
+        hidden = [3, 5, 7, 8, 9, 10, 11, 12, 13];
         break;
-      case 'receivedOn':
-        hidden = [4, 5, 7, 8, 9, 10, 11, 12];
+      case 'Sample Arrived':
+        hidden = [3, 5, 6, 8, 9, 10, 11, 12, 13];
         break;
-      case 'PIIssued':
-        hidden = [4, 5, 6, 7, 8, 11, 12];
+      case 'PI Issued':
+        hidden = [3, 5, 6, 7, 8, 9, 12, 13];
         break;
-      case 'paid':
-        hidden = [4, 5, 6, 7, 8];
+      case 'Payment Done':
+        hidden = [3, 5, 6, 7, 8, 9];
         break;
-      case 'isInProgress':
-        hidden = [4, 5, 6, 8, 9, 10, 11, 12];
+      case 'Tests are in progress':
+        hidden = [3, 5, 6, 7, 9, 10, 11, 12, 13];
         break;
-      case 'resultsReceived':
-        hidden = [4, 5, 6, 7, 9, 10, 11, 12];
+      case 'Results Ready':
+        hidden = [3, 5, 6, 7, 8, 10, 11, 12, 13];
         break;
       case 'all':
-        hidden = [4, 5, 6, 7, 8, 9, 10, 11, 12];
+        hidden = [5, 6, 7, 8, 9, 10, 11, 12, 13];
         break;
       default:
-        hidden = [4, 5, 6, 9, 10, 11, 12];
+        hidden = [5, 6, 7, 10, 11, 12, 13];
     }
 
     this.columns.forEach((col, ind) => {
@@ -290,27 +295,27 @@ export default class List extends React.Component {
   getTrProps = (state : any, rowInfo : any, column : any) : {} => {
     if (rowInfo !== undefined) {
       switch (this.state.toolbarProp) {
-        case 'preparingSample':
+        case 'Preparing Sample':
           return m(rowInfo.row._original.state.readyOn).add(2, 'days') < m()
           ? { className: "missedDeadline" }
           : {};
-        case 'sentOn':
+        case 'Sample Sent':
           return m(rowInfo.row._original.state.sentOn).add(7, 'days') < m()
           ? { className: "missedDeadline" }
           : {};
-        case 'receivedOn':
+        case 'Sample Arrived':
           return m(rowInfo.row._original.state.receivedOn).add(2, 'days') < m()
           ? { className: "missedDeadline" }
           : {};
-        case 'PIIssued':
+        case 'PI Issued':
           return m(rowInfo.row._original.state.proformaReceivedDate).add(2, 'days') < m()
           ? { className: "missedDeadline" }
           : {};
-        case 'paid':
+        case 'Payment Done':
           return m(rowInfo.row._original.state.paymentDate).add(2, 'days') < m()
           ? { className: "missedDeadline" }
           : {};
-        case 'isInProgress':
+        case 'Tests are in progress':
           return m(rowInfo.row._original.state.finishedOn).add(1, 'days') < m()
           ? { className: "missedDeadline" }
           : {};

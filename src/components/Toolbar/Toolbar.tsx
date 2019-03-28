@@ -1,6 +1,6 @@
 import React from 'react';
 import m, { Moment } from 'moment';
-import Task from '../../Task';
+import Task, { Stage } from '../../Task';
 
 interface Props {
   onClick: (toolBarProp: string) => void
@@ -16,31 +16,31 @@ class Toolbar extends React.Component<Props> {
       ><input type="radio"/>All</label>
       <label
         className="btn btn-warning btn-sm"
-        onClick={() => this.props.onClick('preparingSample')}
+        onClick={() => this.props.onClick('Preparing Sample')}
       ><input type="radio"/>0. Preparing sample</label>
       <label
         className="btn btn-warning btn-sm"
-        onClick={() => this.props.onClick('sentOn')}
+        onClick={() => this.props.onClick('Sample Sent')}
       ><input type="radio"/>1. Sample sent</label>
       <label
         className="btn btn-warning btn-sm"
-        onClick={() => this.props.onClick('receivedOn')}
+        onClick={() => this.props.onClick('Sample Arrived')}
       ><input type="radio"/>2. Sample arrived</label>
       <label
         className="btn btn-warning btn-sm"
-        onClick={() => this.props.onClick('PIIssued')}
+        onClick={() => this.props.onClick('PI Issued')}
       ><input type="radio"/>3. PI Issued</label>
       <label
         className="btn btn-warning btn-sm"
-        onClick={() => this.props.onClick('paid')}
+        onClick={() => this.props.onClick('Payment Done')}
       ><input type="radio" />4. Payment Done</label>
       <label
         className="btn btn-warning btn-sm"
-        onClick={() => this.props.onClick('isInProgress')}
+        onClick={() => this.props.onClick('Tests are In Progress')}
       ><input type="radio"/>5. Laboratory is performing tests</label>
       <label
         className="btn btn-warning btn-sm"
-        onClick={() => this.props.onClick('resultsReceived')}
+        onClick={() => this.props.onClick('Results Ready')}
       ><input type="radio"/>6. Results ready</label>
       <label
         className="btn btn-info btn-sm"
@@ -63,26 +63,34 @@ class Toolbar extends React.Component<Props> {
     const sentOnTasks = () => tasks.filter(task => task.state.sentOn);
   
     switch (prop) {
-      case 'preparingSample':
-        filteredTasks = tasks.filter(task => !task.state.sentOn && task.state.readyOn);
+      case 'Preparing Sample':
+        filteredTasks = tasks.filter(task => task.stage === Stage['Preparing Sample']);
         break;
-      case 'sentOn':
-        filteredTasks = sentOnTasks().filter(task => !task.state.receivedOn);
+        //   filteredTasks = tasks.filter(task => !task.state.sentOn && task.state.readyOn);
+        //   break;
+      case 'Sample Sent':
+        filteredTasks = tasks.filter(task => task.stage === Stage['Sample Sent']);
+        //   filteredTasks = sentOnTasks().filter(task => !task.state.receivedOn);
         break;
-      case 'receivedOn':
-        filteredTasks = tasks.filter(task => task.state.receivedOn && !task.state.proformaReceived);
+        case 'Sample Arrived':
+        filteredTasks = tasks.filter(task => task.stage === Stage['Sample Arrived']);
+        //   filteredTasks = tasks.filter(task => task.state.receivedOn && !task.state.proformaReceived);
         break;
-      case 'PIIssued':
-        filteredTasks = tasks.filter(task => task.state.proformaReceived && !task.state.paid);
+        case 'PI Issued':
+        filteredTasks = tasks.filter(task => task.stage === Stage['PI Issued']);
+        //   filteredTasks = tasks.filter(task => task.state.proformaReceived && !task.state.paid);
         break;
-      case 'paid':
-        filteredTasks = tasks.filter(task => task.state.paid && !task.state.finishedOn);
+        case 'Payment Done':
+        filteredTasks = tasks.filter(task => task.stage === Stage['Payment Done']);
+        //   filteredTasks = tasks.filter(task => task.state.paid && !task.state.finishedOn);
         break;
-      case 'isInProgress':
-        filteredTasks = tasks.filter(task => task.state.finishedOn && !task.state.resultsReceived);
+        case 'Tests are In Progress':
+        filteredTasks = tasks.filter(task => task.stage === Stage['Tests are In Progress']);
+        //   filteredTasks = tasks.filter(task => task.state.finishedOn && !task.state.resultsReceived);
         break;
-      case 'resultsReceived':
-        filteredTasks = tasks.filter(task => task.state.resultsReceived);
+        case 'Results Ready':
+        filteredTasks = tasks.filter(task => task.stage === Stage['Results Ready']);
+      //   filteredTasks = tasks.filter(task => task.state.resultsReceived);
         break;
       case 'thisMonth':
         const currentDate : Moment = m();

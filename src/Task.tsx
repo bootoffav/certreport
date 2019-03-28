@@ -6,17 +6,30 @@ m.fn.toJSON = function() { return this.format(); }
 interface ITask {
   state: {}
   position?: number;
+  determineStage: () => Stage;
 }
 
 const dataSeparator = '-------------------------------------------------';
 
+enum Stage {
+  'Preparing Sample',
+  'Sample Sent',
+  'Sample Arrived',
+  'PI Issued',
+  'Payment Done',
+  'Tests are In Progress',
+  'Results Ready'
+}
+
 class Task implements ITask {
   state: IState;
   position?: number;
+  stage: Stage;
 
   constructor(props : any) {
     Object.assign(this, props);
     this.state = this.parse(props.DESCRIPTION, props.UF_CRM_TASK);
+    this.stage = this.determineStage();
   }
 
   parseable_description = (desc : string) => desc.startsWith('[B]Applicant name:[/B]') ? true : false;
@@ -134,7 +147,15 @@ class Task implements ITask {
     return { ...emptyState, ...newState };
 };
 
-
+  determineStage() : Stage {
+    if (this.state.readyOn && !this.state.sentOn) return Stage['Preparing Sample'];
+    if (this.state.sentOn && !this.state.receivedOn) return Stage['Sample Sent'];
+    if (this.state.receivedOn && !this.state.proformaReceived) return Stage['Sample Arrived'];
+    if (this.state.proformaReceived && !this.state.paid) return Stage['PI Issued'];
+    if (this.state.paid && !this.state.finishedOn) return Stage['Payment Done'];
+    if (this.state.finishedOn && !this.state.resultsReceived) return Stage['Tests are In Progress'];
+    return Stage['Results Ready'];
+  }
 }
 
-export { dataSeparator, Task as default };
+export { Stage, dataSeparator, Task as default };
