@@ -3,7 +3,7 @@ import { PickDate, BaseInput, Article, Price, Paid, Pi, SecondPayment } from "./
 import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select';
 import B24 from '../../B24';
-import Notification from '../Notification/Notification';
+import Notification, { Status } from '../Notification/Notification';
 import SerialNumber from '../SerialNumber/SerialNumber';
 import m from 'moment';
 import { select_options, emptyState } from '../../defaults';
@@ -12,7 +12,7 @@ import Export from '../Export/Export';
 
 
 interface IFormState extends IState {
-  requestStatus: boolean | null;
+  requestStatus: Status;
 }
 
 export default class Form extends React.Component {
@@ -27,14 +27,13 @@ export default class Form extends React.Component {
     };
   }
   state : IFormState;
-  request_status: string = 'none';
 
   constructor(props : any) {
       super(props);
       this.props = props;
       this.task_id = props.match.params.id || null;
       this.state = { ...props.location.state || emptyState };
-      this.state.requestStatus = null;
+      this.state.requestStatus = Status.FillingForm;
     }
 
     componentDidMount() {
@@ -79,7 +78,8 @@ export default class Form extends React.Component {
     handleCert (e : any) {
       e.preventDefault();
       if (window.confirm('Are you sure?')) {
-        (this.task_id)
+        this.setState({ requestStatus: Status.Loading });
+        this.task_id
         ? B24.updateTask(this.state, this.task_id)
           .then(
             () => this.afterSuccessfulSubmit(),
@@ -103,24 +103,22 @@ export default class Form extends React.Component {
   }
 
   afterSuccessfulSubmit() {
-    this.setState({ requestStatus: true });
+    this.setState({ requestStatus: Status.Success });
     // SerialNumber.update(Number(this.state.serialNumber) + 1);
     sessionStorage.removeItem('tasks');
-    setTimeout(() => window.location.replace("/"), 4000);
+    setTimeout(() => window.location.replace("/"), 2000);
   }
 
   afterUnsuccessfulSubmit() {
-    this.setState({ requestStatus: false });
+    this.setState({ requestStatus: Status.Failure });
     setTimeout(() => this.setState({
-      request_status: ''
+      requestStatus: Status.FillingForm
     }), 3000);
   }
     render() {
         return (
           <div className="form-place">
-            {(this.state.requestStatus !== null)
-              ? <Notification result={this.state.requestStatus}/>
-              : ''}
+            <Notification status={this.state.requestStatus} />
             <form onSubmit={(e) => this.handleCert(e)}>
               <div className="form-row">
                 <BaseInput value={this.state.applicantName} placeholder='SHANGHAI XM GROUP LTD' col="col-2" id='applicantName' label='Applicant name' handleChange={this.handleChange} />
