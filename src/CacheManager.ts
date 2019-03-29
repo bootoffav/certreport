@@ -3,7 +3,7 @@ import { emptyState } from './defaults';
 
 class CacheManager {
   async load() {
-    let tasks;
+    let allTasks;
     if (sessionStorage.hasOwnProperty('tasks')) {
       return this.getFromCache(sessionStorage);
     }
@@ -11,10 +11,10 @@ class CacheManager {
       return this.getFromCache(localStorage);
     }
 
-    tasks = await this.getFromAPI();
-    this.setCaches(tasks);
+    allTasks = await this.getFromAPI();
+    this.setCaches(allTasks);
 
-    return tasks;
+    return allTasks;
   }
 
   get staleData() {
@@ -28,8 +28,8 @@ class CacheManager {
     }
   }
 
-  setCaches = (tasks : any) => {
-    let stringifiedTasks = JSON.stringify(tasks, (k, v) => [
+  setCaches = (allTasks : any) => {
+    let stringifiedTasks = JSON.stringify(allTasks, (k, v) => [
       'readyOn', 'sentOn', 'receivedOn', 'startedOn', 'finishedOn', 'resultsReceived', 'paymentDate'
     ].includes(k) && v !== undefined && v !== null ? v.substr(0, 10) : v);
 

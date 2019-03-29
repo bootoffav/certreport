@@ -21,7 +21,7 @@ class B24 {
 
     static defaultParams = {
         CREATED_BY: creator_id,
-        TAGS: ['certification'],
+        TAGS: ['certification-dev'],
         GROUP_ID: 21,
     }
 
@@ -116,7 +116,7 @@ class B24 {
       const defaultParams = {
         AUDITORS: auditors,
         PARENT_ID: 46902,
-        RESPONSIBLE_ID: 19
+        RESPONSIBLE_ID: 5
       }
 
       const attachPDF = (taskId: string) => {
@@ -167,7 +167,7 @@ class B24 {
             ID: 'desc'
           },
           filter: {
-            TAG: 'certification'
+            TAG: 'certification-dev'
           },
           start: B24.start
         }))

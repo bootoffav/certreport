@@ -66,31 +66,23 @@ class Toolbar extends React.Component<Props> {
       case 'Preparing Sample':
         filteredTasks = tasks.filter(task => task.stage === Stage['Preparing Sample']);
         break;
-        //   filteredTasks = tasks.filter(task => !task.state.sentOn && task.state.readyOn);
-        //   break;
       case 'Sample Sent':
         filteredTasks = tasks.filter(task => task.stage === Stage['Sample Sent']);
-        //   filteredTasks = sentOnTasks().filter(task => !task.state.receivedOn);
         break;
-        case 'Sample Arrived':
+      case 'Sample Arrived':
         filteredTasks = tasks.filter(task => task.stage === Stage['Sample Arrived']);
-        //   filteredTasks = tasks.filter(task => task.state.receivedOn && !task.state.proformaReceived);
         break;
-        case 'PI Issued':
+      case 'PI Issued':
         filteredTasks = tasks.filter(task => task.stage === Stage['PI Issued']);
-        //   filteredTasks = tasks.filter(task => task.state.proformaReceived && !task.state.paid);
         break;
-        case 'Payment Done':
+      case 'Payment Done':
         filteredTasks = tasks.filter(task => task.stage === Stage['Payment Done']);
-        //   filteredTasks = tasks.filter(task => task.state.paid && !task.state.finishedOn);
         break;
-        case 'Tests are In Progress':
+      case 'Tests are In Progress':
         filteredTasks = tasks.filter(task => task.stage === Stage['Tests are In Progress']);
-        //   filteredTasks = tasks.filter(task => task.state.finishedOn && !task.state.resultsReceived);
         break;
-        case 'Results Ready':
+      case 'Results Ready':
         filteredTasks = tasks.filter(task => task.stage === Stage['Results Ready']);
-      //   filteredTasks = tasks.filter(task => task.state.resultsReceived);
         break;
       case 'thisMonth':
         const currentDate : Moment = m();
