@@ -1,17 +1,15 @@
 import m from 'moment';
 import { select_options, emptyState, IState } from './defaults';
 
-m.fn.toJSON = function() { return this.format(); }
-
 interface ITask {
   state: {}
   position?: number;
   determineStage: () => Stage;
 }
 
-const dataSeparator = '-------------------------------------------------';
+const dataSeparator : string = '-------------------------------------------------';
 
-enum Stage {
+export enum Stage {
   'Preparing Sample',
   'Sample Sent',
   'Sample Arrived',
@@ -160,4 +158,4 @@ class Task implements ITask {
   }
 }
 
-export { Stage, dataSeparator, Task as default };
+export { dataSeparator, Task as default };

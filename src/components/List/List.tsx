@@ -19,11 +19,10 @@ interface IListState {
   allTasks: Task[];
   filteredTasksLevel1: Task[];
   uncompletedTasks: Task[];
-  totalPrice: string;
+  totalPrice: number;
   toolbarProp: string;
   showCompletedTasks: boolean;
 }
-
 
 export default class List extends React.Component {
   state: IListState = {
@@ -31,7 +30,7 @@ export default class List extends React.Component {
     allTasks: [],
     filteredTasksLevel1: [],
     uncompletedTasks: [],
-    totalPrice: '',
+    totalPrice: 0,
     toolbarProp: 'all',
     showCompletedTasks: Boolean(
       Number(localStorage.getItem('showCompletedTasks'))
@@ -179,14 +178,13 @@ export default class List extends React.Component {
     Cell: (props: any) => <>€<span style={{ float: 'right' }}>{this.formatPrice(props.value)}</span></>
   }];
 
-  formatPrice = (price: string) : string => Number(price)
-    .toLocaleString('en-US', {
-      style: 'currency',
-      currency: 'EUR'
-    })
+  formatPrice = (price: number): string => price
+      .toLocaleString('en-US', {
+        style: 'currency',
+        currency: 'EUR'
+      })
     .replace(/,/g, ' ')
     .replace(/\./g, ',')
-    .substr(1);
 
   async componentDidMount() {
     let allTasks = await this.cache.load();
@@ -201,16 +199,16 @@ export default class List extends React.Component {
 
   updateState = (allTasks : Task[]) : void => {
     //определить задачи по которым будет создан список
-    let uncompletedTasks = allTasks.filter((task: Task) => task.stage !== Stage['Results Ready']); //только те у которых статус не готов
+    let uncompletedTasks : Task[] = allTasks.filter((task: Task) => task.stage !== Stage['Results Ready']); //только те у которых статус не готов
     
-    let tasks = this.state.showCompletedTasks
+    let tasks : Task [] = this.state.showCompletedTasks
       ? allTasks
       : uncompletedTasks;
     
     const toolbarProp: string = 'all';
 
-    let visibleTasks = Toolbar.filter(tasks, toolbarProp);
-    let totalPrice = visibleTasks.reduce((sum: number, task: any) => sum + Number(task.state.price), 0);
+    let visibleTasks : Task[] = Toolbar.filter(tasks, toolbarProp);
+    let totalPrice : number = visibleTasks.reduce((sum: number, task: any) => sum + Number(task.state.price), 0);
     this.visibleColumns(toolbarProp);
     this.setState({
       allTasks: allTasks,
@@ -245,8 +243,8 @@ export default class List extends React.Component {
     }, this.filterLevel1Callback);
   }
 
-  columnFilter = (valueToSearch: any, columnToSearch: any) : void => {
-    let tasks = this.state.showCompletedTasks
+  columnFilter = (valueToSearch: string, columnToSearch: string) : void => {
+    let tasks : Task[] = this.state.showCompletedTasks
       ? this.state.allTasks
       : this.state.uncompletedTasks; //determine general settings set up
 
@@ -268,8 +266,8 @@ export default class List extends React.Component {
 
   //level 2 filter
   toolbarFilter = (toolbarProp: string = 'all') => {
-    let visibleTasks = Toolbar.filter(this.state.filteredTasksLevel1, toolbarProp);
-    let totalPrice = visibleTasks.reduce((sum: number, task: any) => sum + Number(task.state.price), 0);
+    let visibleTasks : Task[] = Toolbar.filter(this.state.filteredTasksLevel1, toolbarProp);
+    let totalPrice : number = visibleTasks.reduce((sum: number, task: any) => sum + Number(task.state.price), 0);
     this.setState({ visibleTasks, totalPrice, toolbarProp });
     this.visibleColumns(toolbarProp);
   }

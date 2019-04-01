@@ -1,7 +1,16 @@
 import B24 from './B24';
 import { emptyState } from './defaults';
+import Task from './Task';
 
-class CacheManager {
+interface ICacheManager {
+  load: () => any;
+  staleData: boolean;
+  getFromCache: (cacheType: Storage) => Task[];
+  setCaches: (tasks: Task[]) => void;
+}
+
+
+class CacheManager implements ICacheManager {
   async load() {
     let allTasks;
     if (sessionStorage.hasOwnProperty('tasks')) {
@@ -17,19 +26,20 @@ class CacheManager {
     return allTasks;
   }
 
-  get staleData() {
+  get staleData() : boolean {
     return !sessionStorage.hasOwnProperty('tasks');
   }
 
-  getFromCache = (cacheType: Storage) => {
-    let fromCache: string | null = cacheType.getItem('tasks');
+  getFromCache = (cacheType: Storage) : Task[] => {
+    const fromCache: string | null = cacheType.getItem('tasks');
     if (typeof fromCache === 'string') {
       return JSON.parse(fromCache);
     }
+    return [];
   }
 
-  setCaches = (allTasks : any) => {
-    let stringifiedTasks = JSON.stringify(allTasks, (k, v) => [
+  setCaches = (tasks : Task[]) => {
+    const stringifiedTasks = JSON.stringify(tasks, (k, v) => [
       'readyOn', 'sentOn', 'receivedOn', 'startedOn', 'finishedOn', 'resultsReceived', 'paymentDate'
     ].includes(k) && v !== undefined && v !== null ? v.substr(0, 10) : v);
 
@@ -67,12 +77,12 @@ class CacheManager {
           task = await B24.get_task(filtered.new[i].ID);
           parsedTasks.push(task);
         }
-        filtered.old.forEach((task : any) => {
+        filtered.old.forEach((task: any) => {
           task.state = { ...emptyState };
           task.state.otherTextInDescription = '\n' + task.DESCRIPTION;
           task.state.UF_CRM_TASK = task.UF_CRM_TASK;
         });
-        return [ ...parsedTasks, ...filtered.old];
+        return [ ...parsedTasks, ...filtered.old] as Task[];
       });
   }
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import Loader from 'react-loader-spinner';
 
-enum Status {
+export enum Status {
   FillingForm,
   Loading,
   Success,
@@ -34,4 +34,4 @@ class Notification extends React.Component<Props, {}> {
   }
 }
 
-export { Status, Notification as default };
+export { Notification as default };
