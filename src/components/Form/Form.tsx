@@ -15,52 +15,56 @@ interface IFormState extends IState {
   requestStatus: Status;
 }
 
-export default class Form extends React.Component {
-  task_id : string;
-  props : {
-    match: {
-      path: string;
-      url: string;
+interface IFormProps {
+  match: {
+    path: string;
+    url: string;
+    params: {
+      id: string;
     };
-    location: {
-      state : string;
-    };
+  };
+  location: {
+    state: IFormState;
+  };
+}
+
+export default class Form extends React.Component<IFormProps> {
+  task_id: string | undefined;
+  state: IFormState;
+
+  constructor(props: IFormProps) {
+    super(props);
+    this.task_id = props.match.params.id;
+    this.state = { ...props.location.state || emptyState };
+    this.state.requestStatus = Status.FillingForm;
   }
-  state : IFormState;
 
-  constructor(props : any) {
-      super(props);
-      this.props = props;
-      this.task_id = props.match.params.id || null;
-      this.state = { ...props.location.state || emptyState };
-      this.state.requestStatus = Status.FillingForm;
+  componentDidMount() {
+    if (this.props.match.path === '/edit/:id' && (this.props.location.state === undefined)) {
+      B24.get_task(this.task_id).then(r => this.setState({ ...r.state }));
     }
-
-    componentDidMount() {
-      if (this.props.match.path === '/edit/:id' && (this.props.location.state === undefined)) {
-        B24.get_task(this.task_id).then(r => this.setState({ ...r.state }));
-      }
-      if (!this.state.link) {
-        this.setState({ link: `[URL=https://certreport.xmtextiles.com/edit/${this.task_id}/]this task[/URL]` });
-      }
+    if (!this.state.link) {
+      this.setState({ link: `[URL=https://certreport.xmtextiles.com/edit/${this.task_id}/]this task[/URL]` });
     }
+  }
 
-    handleDateChange = (date : any, prop : any) => {
-      date = date ? m(date) : date;
-      // if (prop === 'sentOn' && date) {
-        // let receivedOn = date.clone().add(3, 'days');
-        // let startedOn = receivedOn.clone().add(1, 'days');
-        // let finishedOn = startedOn.clone().add(this.state.testingTime, 'days');
-        // let resultsReceived = finishedOn.clone().add(1, 'days');
-        // this.setState({receivedOn, startedOn, finishedOn, resultsReceived});
-      // }
+  handleDateChange = (date: Date, prop: string): void => {
+    // date = date ? m(date) : date;
+    // if (prop === 'sentOn' && date) {
+    // let receivedOn = date.clone().add(3, 'days');
+    // let startedOn = receivedOn.clone().add(1, 'days');
+    // let finishedOn = startedOn.clone().add(this.state.testingTime, 'days');
+    // let resultsReceived = finishedOn.clone().add(1, 'days');
+    // this.setState({receivedOn, startedOn, finishedOn, resultsReceived});
+    // }
 
-      this.setState({
-        [prop]: date
-      });
-    }
+    this.setState({
+      [prop]: m(date).format('DDMMMYYYY')
+    });
+  }
 
-    handleCheckboxChange = (e : any) => this.setState({ [e.target.id]: e.target.checked })
+  handleCheckboxChange = ({ currentTarget }: React.SyntheticEvent) =>
+    this.setState({ [currentTarget.id]: (currentTarget as HTMLInputElement).checked });
 
     handleSelectChange = (selected : any, id : string) => {
       Array.isArray(selected)

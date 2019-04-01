@@ -4,7 +4,7 @@ import { IState } from './defaults';
 m.fn.toJSON = function() { return this.format(); }
 
 interface IStateAdapter {
-  formatDate: (date : any) => string;
+  formatDate: (date : string | null) => string;
 }
 
 class StateAdapter implements IStateAdapter {
@@ -12,7 +12,7 @@ class StateAdapter implements IStateAdapter {
      Object.assign(this, state);
   }
 
-  formatDate(date : any) {
+  formatDate(date: string | null) {
     return date ? m(date).format("DDMMMYYYY") : '';
   }
 

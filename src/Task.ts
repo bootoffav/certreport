@@ -154,7 +154,9 @@ class Task implements ITask {
     if (this.state.proformaReceived && !this.state.paid) return Stage['PI Issued'];
     if (this.state.paid && !this.state.finishedOn) return Stage['Payment Done'];
     if (this.state.finishedOn && !this.state.resultsReceived) return Stage['Tests are In Progress'];
-    return Stage['Results Ready'];
+    if (this.state.resultsReceived) return Stage['Results Ready'];
+    
+    return Stage['Preparing Sample']; //default clause if no other case triggered;
   }
 }
 

@@ -12,6 +12,8 @@ import { ColumnSearch, BrandFilter } from '../Filters';
 import CacheManager from '../../CacheManager';
 import Settings from '../Settings/Settings';
 
+
+
 interface IListState {
   visibleTasks: Task[];
   allTasks: Task[];
@@ -21,6 +23,7 @@ interface IListState {
   toolbarProp: string;
   showCompletedTasks: boolean;
 }
+
 
 export default class List extends React.Component {
   state: IListState = {
@@ -34,16 +37,20 @@ export default class List extends React.Component {
       Number(localStorage.getItem('showCompletedTasks'))
     )
   };
+
   cache = new CacheManager();
-  static State = (props: any) => (
+
+  static State: React.FunctionComponent<{
+    notUpdated: boolean;
+  }> = ({ notUpdated }) => (
     <>
       <div id="cacheStateLabel" className="p-1 align-self-center"
-      >{props.notUpdated
+      >{notUpdated
         ? 'contacting Bitrix24, receiving updates'
         : 'state is actual'}
       </div>
       <div id="cacheStateLoader" className="p-1 align-self-center"
-      >{props.notUpdated
+      >{notUpdated
         ? <Loader type='Circles' color='blueviolet' height='30' width='30' />
         : ''}
       </div>
@@ -81,29 +88,22 @@ export default class List extends React.Component {
     accessor: 'TITLE',
     id: 'taskName',
     minWidth: 550,
-    Cell: (props: any) => {
-      return (props.original.state.serialNumber) ?
-        <Link className={this.cache.staleData ? 'EditLinkIsDisabled' : ''}
-          to={
-            this.cache.staleData
-              ? '' : {
-                pathname: `/edit/${props.original.ID}`,
-                state: {
-                  ...props.original.state,
-                  finishedOn: props.original.state.finishedOn ? props.original.state.finishedOn.valueOf() : null,
-                  sentOn: props.original.state.sentOn ? props.original.state.sentOn.valueOf() : null,
-                  receivedOn: props.original.state.receivedOn ? props.original.state.receivedOn.valueOf() : null,
-                  resultsReceived: props.original.state.resultsReceived ? props.original.state.resultsReceived.valueOf() : null,
-                  startedOn: props.original.state.startedOn ? props.original.state.startedOn.valueOf() : null,
-                  paymentDate: props.original.state.paymentDate ? props.original.state.paymentDate.valueOf() : null,
+      Cell: (props: any) => {
+        props.original.state.serialNumber ?
+          <Link className={this.cache.staleData ? 'EditLinkIsDisabled' : ''}
+            to={
+              this.cache.staleData
+                ? '' : {
+                  pathname: `/edit/${props.original.ID}`,
+                  state: { ...props.original.state }
                 }
-              }}
-        >{props.value}</Link>
-        : <Link to={{
-          pathname: `/edit/${props.original.ID}`,
-          state: { ...props.original.state }
-        }}>{props.value}</Link>
-    }
+            }
+          >{props.value}</Link>
+          : <Link to={{
+            pathname: `/edit/${props.original.ID}`,
+            state: { ...props.original.state }
+          }}>{props.value}</Link>
+      }
   }, {
     Header: 'Sample prepared on',
     accessor: 'state.readyOn',
@@ -201,7 +201,7 @@ export default class List extends React.Component {
     }
   }
 
-  updateState = (allTasks: any) => {
+  updateState = (allTasks: Task[]) : void => {
     //определить задачи по которым будет создан список
     let uncompletedTasks = allTasks.filter((task: Task) => task.stage !== Stage['Results Ready']); //только те у которых статус не готов
     

@@ -178,8 +178,8 @@ class B24 {
     }
 
   static get_task(id : string | undefined) {
-    if (id === undefined) {
-      throw new Error('id is not defined');
+    if (id === null) {
+      throw new Error('id is undefined');
     }
 
     return fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.getdata?ID=${id}`)
