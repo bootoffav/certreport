@@ -88,22 +88,20 @@ export default class List extends React.Component {
     accessor: 'TITLE',
     id: 'taskName',
     minWidth: 550,
-      Cell: (props: any) => {
-        props.original.state.serialNumber ?
-          <Link className={this.cache.staleData ? 'EditLinkIsDisabled' : ''}
-            to={
-              this.cache.staleData
-                ? '' : {
-                  pathname: `/edit/${props.original.ID}`,
-                  state: { ...props.original.state }
-                }
+    Cell: (props: any) => props.original.state.serialNumber ?
+      <Link className={this.cache.staleData ? 'EditLinkIsDisabled' : ''}
+        to={
+          this.cache.staleData
+            ? '' : {
+              pathname: `/edit/${props.original.ID}`,
+              state: { ...props.original.state }
             }
-          >{props.value}</Link>
-          : <Link to={{
-            pathname: `/edit/${props.original.ID}`,
-            state: { ...props.original.state }
-          }}>{props.value}</Link>
-      }
+        }
+      >{props.value}</Link>
+      : <Link to={{
+        pathname: `/edit/${props.original.ID}`,
+        state: { ...props.original.state }
+      }}>{props.value}</Link>
   }, {
     Header: 'Sample prepared on',
     accessor: 'state.readyOn',
@@ -181,7 +179,7 @@ export default class List extends React.Component {
     Cell: (props: any) => <>€<span style={{ float: 'right' }}>{this.formatPrice(props.value)}</span></>
   }];
 
-  formatPrice = (price: string) => Number(price)
+  formatPrice = (price: string) : string => Number(price)
     .toLocaleString('en-US', {
       style: 'currency',
       currency: 'EUR'
@@ -201,7 +199,7 @@ export default class List extends React.Component {
     }
   }
 
-  updateState = (allTasks: Task[]) : void => {
+  updateState = (allTasks : Task[]) : void => {
     //определить задачи по которым будет создан список
     let uncompletedTasks = allTasks.filter((task: Task) => task.stage !== Stage['Results Ready']); //только те у которых статус не готов
     
@@ -213,7 +211,6 @@ export default class List extends React.Component {
 
     let visibleTasks = Toolbar.filter(tasks, toolbarProp);
     let totalPrice = visibleTasks.reduce((sum: number, task: any) => sum + Number(task.state.price), 0);
-
     this.visibleColumns(toolbarProp);
     this.setState({
       allTasks: allTasks,
@@ -223,7 +220,7 @@ export default class List extends React.Component {
   }
 
   //level 1 filter
-  brandFilter(brand: string) {
+  brandFilter(brand: string) : void {
     let brandFilter: HTMLElement | null = document.getElementById('brandFilter');
     brandFilter ? brandFilter.innerText = `Brand: ${brand}` : '';
     let filtered;
@@ -248,7 +245,7 @@ export default class List extends React.Component {
     }, this.filterLevel1Callback);
   }
 
-  columnFilter = (valueToSearch: any, columnToSearch: any) => {
+  columnFilter = (valueToSearch: any, columnToSearch: any) : void => {
     let tasks = this.state.showCompletedTasks
       ? this.state.allTasks
       : this.state.uncompletedTasks; //determine general settings set up
@@ -262,7 +259,7 @@ export default class List extends React.Component {
     }, this.filterLevel1Callback);
   }
 
-  filterLevel1Callback = () => {
+  filterLevel1Callback = () : void => {
     this.toolbarFilter();
     Array.from(document.getElementsByClassName('btn btn-warning btn-sm'))
       .forEach(el => el.className = 'btn btn-warning btn-sm');
@@ -347,7 +344,7 @@ export default class List extends React.Component {
     return {};
   }
 
-  render = () => <>
+  render = () : JSX.Element => <>
     <div className="d-flex justify-content-between">
       <div className="d-inline-flex justify-content-start">
         <div className="p-1">
