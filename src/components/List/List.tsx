@@ -81,7 +81,7 @@ export default class List extends React.Component {
     Header: 'Status',
     id: 'stage',
     minWidth: 100,
-    accessor: (row: any) => Stage[row.stage]
+    accessor: (row: any) => `${row.stage}. ${Stage[row.stage]}`
   }, {
     Header: 'Task name',
     accessor: 'TITLE',
@@ -102,7 +102,7 @@ export default class List extends React.Component {
         state: { ...props.original.state }
       }}>{props.value}</Link>
   }, {
-    Header: 'Sample prepared on',
+    Header: 'Sample to be prepared on',
     accessor: 'state.readyOn',
     id: 'readyOn',
     width: 130,
@@ -112,12 +112,12 @@ export default class List extends React.Component {
     id: 'sentOn',
     width: 130,
   }, {
-    Header: 'Sample received On',
+    Header: 'Sample has received On',
     accessor: 'state.receivedOn',
     id: 'receivedOn',
     width: 130,
   }, {
-    Header: 'Tests finished On',
+    Header: 'Tests to be finished On',
     accessor: 'state.finishedOn',
     id: 'receivedOn',
     width: 130,

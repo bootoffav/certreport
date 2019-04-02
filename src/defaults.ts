@@ -67,9 +67,11 @@ export interface IState {
   resultsReceived: string;
   comments: string;
   otherTextInDescription: string | null;
+  resume: undefined | 'fail' | 'pass';
 }
 
 const emptyState : IState = {
+  resume: undefined,
   link: '',
   paid: false,
   proforma: '',

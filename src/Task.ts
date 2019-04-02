@@ -89,6 +89,7 @@ class Task implements ITask {
       'tests to be started on': 'startedOn',
       'tests to be finished on': 'finishedOn',
       'results to be received on': 'resultsReceived',
+      'Resume': 'resume',
       'Comments': 'comments',
       'Edit': 'link',
       'Second payment': 'secondPayment'
