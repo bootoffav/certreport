@@ -81,7 +81,7 @@ export default class List extends React.Component {
     Header: 'Status',
     id: 'stage',
     minWidth: 100,
-    accessor: (row: any) => `${row.stage}. ${Stage[row.stage]}`
+    accessor: (row: any) => `${row.stage !== undefined ? row.stage + '. ' + Stage[row.stage] : ''}`
   }, {
     Header: 'Task name',
     accessor: 'TITLE',
