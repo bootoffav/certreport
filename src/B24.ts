@@ -75,7 +75,7 @@ class B24 {
       ...B24.defaultParams,
       UF_CRM_TASK: B24.makeUfCrmTaskField(state),
       TITLE: `${state.serialNumber}_${state.testingCompany} - ${state.standards} - ${state.article}, ${state.colour} ` +
-          `(send ${stAd.formatDate(state.sentOn)} - plan ${stAd.formatDate(state.resultsReceived)}) = ${state.price} € | ${state.testReport ? state.testReport : ''}`,
+          `(send ${stAd.formatDate(state.sentOn)} - plan ${stAd.formatDate(state.testFinishedOnPlanDate)}) = ${state.price} € | ${state.testReport ? state.testReport : ''}`,
       DESCRIPTION: `${state.applicantName ? '[B]Applicant name:[/B] ' + state.applicantName + '\n' : ''}` +
           `${state.product ? '[B]Product:[/B] ' + state.product + '\n' : ''}` +
           `${state.code ? '[B]Code:[/B] ' + state.code + '\n' : ''}` +
@@ -102,14 +102,14 @@ class B24 {
           `${state.readyOn ? '[B]Sample ready on:[/B] ' + stAd.formatDate(state.readyOn) + '\n' : ''}` +
           `${state.sentOn ? '[B]to be sent on:[/B] ' + stAd.formatDate(state.sentOn) + '\n' : ''}` +
           `${state.receivedOn ? '[B]to be received on:[/B] ' + stAd.formatDate(state.receivedOn) + '\n' : ''}` +
-          `${state.startedOn ? '[B]tests to be started on:[/B] ' + stAd.formatDate(state.startedOn) + '\n' : ''}` +
-          `${state.finishedOn ? '[B]tests to be finished on:[/B] ' + stAd.formatDate(state.finishedOn) + '\n' : ''}` +
-          `${state.resultsReceived ? '[B]results to be received on:[/B] ' + stAd.formatDate(state.resultsReceived) + '\n' : ''}` +
+          // `${state.startedOn ? '[B]tests to be started on:[/B] ' + stAd.formatDate(state.startedOn) + '\n' : ''}` +
+          `${stAd.testFinishedOn ? '[B]tests to be finished on:[/B] ' + stAd.testFinishedOn + '\n' : ''}` +
+          `${stAd.certReceivedOn ? '[B]results to be received on:[/B] ' + stAd.certReceivedOn + '\n' : ''}` +
           `${state.resume ? '[B]Resume:[/B] ' + state.resume + '\n' : ''}` +
           `${state.comments ? '[B]Comments:[/B] ' + state.comments + '\n' : ''}` +
           `${state.link ? '[B]Edit:[/B] ' + state.link + '\n' : ''} ` +
           `${dataSeparator}` + (state.otherTextInDescription || ''),
-      DEADLINE: m(state.resultsReceived).toISOString()
+      DEADLINE: m(state.certReceivedOnPlanDate).toISOString()
     }
   };
 

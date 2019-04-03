@@ -1,6 +1,7 @@
 import React, { DOMElement } from 'react';
 import { PickDate, BaseInput, Article, Price, Paid, Pi, SecondPayment } from "./FormFields";
 import "react-datepicker/dist/react-datepicker.css";
+import DatePicker from "react-datepicker";
 import Select from 'react-select';
 import B24 from '../../B24';
 import Notification, { Status } from '../Notification/Notification';
@@ -48,8 +49,9 @@ export default class Form extends React.Component<IFormProps> {
     }
   }
 
-  handleDateChange = (date: Date, prop: string): void =>
-    this.setState({ [prop]: m(date).format('DDMMMYYYY') });
+  handleDateChange = (date: Date | null, prop: string): void =>
+    this.setState({ [prop]: date === null ? '' : m(date).format('DDMMMYYYY') });
+
 
   handleCheckboxChange = ({ currentTarget }: React.SyntheticEvent) : void =>
     this.setState({ [currentTarget.id]: (currentTarget as HTMLInputElement).checked });
@@ -57,13 +59,15 @@ export default class Form extends React.Component<IFormProps> {
   handleSelectChange = (selected: {
     label: string;
     value: string
-  }[], id: string) =>
+  }[], id: string) => {
+    selected = Array.isArray(selected) ? selected : [selected];
     this.setState({
       [id]: selected.reduce(
         (endValue, currentValue, index) => index === selected.length - 1
           ? `${endValue}${currentValue.label}`
           : `${endValue}${currentValue.label}, `, '')
     });
+  }
 
   handleChange = (e : any) => this.setState({[e.target.id]: e.target.value});
 
@@ -226,26 +230,6 @@ export default class Form extends React.Component<IFormProps> {
                   <BaseInput value={this.state.certificate} id='certificate' required={false} label='Certificate' handleChange={this.handleChange} />
                   <BaseInput value={this.state.materialNeeded} id='materialNeeded' label='Material needed' handleChange={this.handleChange} />
                 </div>
-                <div className="form-row">
-                  <BaseInput value={this.state.length} id='length' label='Sample length (m)' handleChange={this.handleChange} />
-                  <BaseInput value={this.state.width} id='width' label='Sample width (m)' handleChange={this.handleChange} />
-                  <BaseInput value={this.state.partNumber} id='partNumber' label='Part number' handleChange={this.handleChange} />
-                  <BaseInput value={this.state.rollNumber} id='rollNumber' label='Roll number' handleChange={this.handleChange} />
-                  <BaseInput value={this.state.testingTime} id='testingTime' label='Testing Time' handleChange={this.handleChange} />
-                  <div className="col">
-                    <div className="from-group">
-                      <SerialNumber
-                        serialNumber={this.state.serialNumber}
-                        handleChange={this.handleChange}
-                        handleInit={(v : any) => this.setState({serialNumber: v})} url={this.props.match.url}/>
-                    </div>
-                  </div>
-                </div>
-                <div className="form-row">
-                  <BaseInput value={this.state.pretreatment1} id='pretreatment1' label='Pre-treatment 1' handleChange={this.handleChange} />
-                  <BaseInput value={this.state.pretreatment2} id='pretreatment2' label='Pre-treatment 2' handleChange={this.handleChange} />
-                  <BaseInput value={this.state.pretreatment3} id='pretreatment3' label='Pre-treatment 3' handleChange={this.handleChange} />
-                </div>
               <div className="form-row">
                 <div className="col">
                   <div className="form-group">
@@ -255,32 +239,102 @@ export default class Form extends React.Component<IFormProps> {
                     />
                   </div>
                 </div>
+                <BaseInput value={this.state.length} id='length' label='Sample length (m)' handleChange={this.handleChange} />
+                <BaseInput value={this.state.width} id='width' label='Sample width (m)' handleChange={this.handleChange} />
+                <BaseInput value={this.state.partNumber} id='partNumber' label='Part number' handleChange={this.handleChange} />
+                <BaseInput value={this.state.rollNumber} id='rollNumber' label='Roll number' handleChange={this.handleChange} />
+                <BaseInput value={this.state.testingTime} id='testingTime' label='Testing Time' handleChange={this.handleChange} />
+                <div className="col">
+                  <div className="from-group">
+                    <SerialNumber
+                      serialNumber={this.state.serialNumber}
+                      handleChange={this.handleChange}
+                      handleInit={(v : any) => this.setState({serialNumber: v})} url={this.props.match.url}/>
+                  </div>
+                </div>
+              </div>
+                <div className="form-row">
+                  <BaseInput value={this.state.pretreatment1} id='pretreatment1' label='Pre-treatment 1' handleChange={this.handleChange} />
+                  <BaseInput value={this.state.pretreatment2} id='pretreatment2' label='Pre-treatment 2' handleChange={this.handleChange} />
+                  <BaseInput value={this.state.pretreatment3} id='pretreatment3' label='Pre-treatment 3' handleChange={this.handleChange} />
+                </div>
+              <div className="form-row">
                 <PickDate date={this.state.readyOn} label='Sample to be prepared on:'
-                  handleChange={(date : any) => this.handleDateChange(date, 'readyOn')}/>
+                  handleChange={(date : Date) => this.handleDateChange(date, 'readyOn')}/>
                 <PickDate date={this.state.sentOn} label='Sample has sent on:'
-                  handleChange={(date : any) => this.handleDateChange(date, 'sentOn')}/>
+                  handleChange={(date : Date) => this.handleDateChange(date, 'sentOn')}/>
                 <PickDate date={this.state.receivedOn} label='Sample has received by lab. on:'
-                  handleChange={(date : any) => this.handleDateChange(date, 'receivedOn')}/>
+                  handleChange={(date : Date) => this.handleDateChange(date, 'receivedOn')}/>
                 {/* <PickDate date={this.state.startedOn} label='Started on:'
                   handleChange={(date : any) => this.handleDateChange(date, 'startedOn')}/> */}
-                <PickDate date={this.state.finishedOn} label='Tests to be finished on:'
-                  handleChange={(date : any) => this.handleDateChange(date, 'finishedOn')}/>
-                <PickDate date={this.state.resultsReceived} label='Results received on:'
-                  handleChange={(date: any) => this.handleDateChange(date, 'resultsReceived')} />
+                {/* <PickDate date={this.state.finishedOn} label='Tests to be finished on:'
+                  handleChange={(date: any) => this.handleDateChange(date, 'finishedOn')} /> */}
+                <div className="col-3">
+                  <div style={{ textAlign: 'center' }}>Tests to be finished / really finished on:</div>
+                  <div className="input-group">
+                    <DatePicker className="form-control"
+                      placeholderText="plan"
+                      dateFormat="dd.MM.yyyy"
+                      selected={this.state.testFinishedOnPlanDate ? new Date(this.state.testFinishedOnPlanDate) : undefined}
+                      onChange={(date : Date) => this.handleDateChange(date, 'testFinishedOnPlanDate')}
+                      />
+                    <DatePicker className="form-control"
+                      placeholderText="fact"
+                      dateFormat="dd.MM.yyyy"
+                      selected={this.state.testFinishedOnRealDate ? new Date(this.state.testFinishedOnRealDate) : undefined}
+                      onChange={(date: Date) => this.handleDateChange(date, 'testFinishedOnRealDate')}
+                    />
+                  </div>
+                </div>
+                {/* <PickDate date={this.state.resultsReceived} label='Cert received on:'
+                  handleChange={(date: Date) =>
+                    this.handleDateChange(date, 'resultsReceived')
+                  } /> */}
+                <div className="col-3">
+                  <div style={{ textAlign: 'center' }}>Certificate to be received / really received on:</div>
+                  <div className="input-group">
+                    <DatePicker className="form-control"
+                      placeholderText="plan"
+                      dateFormat="dd.MM.yyyy"
+                      selected={this.state.certReceivedOnPlanDate ? new Date(this.state.certReceivedOnPlanDate) : undefined}
+                      onChange={(date: Date) => this.handleDateChange(date, 'certReceivedOnPlanDate')}
+                    />
+                    <DatePicker className="form-control"
+                      placeholderText="fact"
+                      dateFormat="dd.MM.yyyy"
+                      selected={this.state.certReceivedOnRealDate ? new Date(this.state.certReceivedOnRealDate) : undefined}
+                      onChange={(date: Date) => this.handleDateChange(date, 'certReceivedOnRealDate')}
+                    />
+                  </div>
+                </div>
                 <div className="col">
                   Results:
                   <div className="form-group">
                     <div className="btn-group btn-group-toggle" data-toggle="buttons">
                       <label
-                        className={`btn btn-outline-danger ${this.state.resume === 'fail' ? 'active' : ''}`}
+                        className={
+                          `${!this.state.testFinishedOnRealDate ? 'disabled' : ''}` +
+                          ' btn btn-outline-light ' +
+                          `${this.state.resume === undefined ? 'active' : ''}`
+                        }
+                        onClick={() => this.setState({ resume: undefined })}
+                      ><input type="radio" />None</label>
+                      <label
+                        className={
+                          `${!this.state.testFinishedOnRealDate ? 'disabled' : ''}` +
+                          ' btn btn-outline-danger ' +
+                          `${this.state.resume === 'fail' ? 'active' : ''}`
+                        }
                         onClick={() => this.setState({ resume: 'fail' })}
                         ><input type="radio" />FAIL</label>
                       <label
-                        className={`btn btn-outline-success ${this.state.resume === 'pass' ? 'active' : ''}`}
+                        className={
+                          `${!this.state.testFinishedOnRealDate ? 'disabled' : ''}` +
+                          ' btn btn-outline-success ' +
+                          `${this.state.resume === 'pass' ? 'active' : ''}`
+                        }
                         onClick={() => this.setState({ resume: 'pass' })}
-                        >
-                        <input type="radio"
-                           />PASS</label>
+                        ><input type="radio" />PASS</label>
                     </div>
                   </div>
                 </div>

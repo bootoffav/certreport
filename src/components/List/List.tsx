@@ -176,6 +176,22 @@ export default class List extends React.Component {
     accessor: 'state.price',
     minWidth: 90,
     Cell: (props: any) => <>€<span style={{ float: 'right' }}>{this.formatPrice(props.value)}</span></>
+  }, {
+    Header: 'Result',
+    Footer: () => <>Total € <span style={{ float: 'right' }}>{this.formatPrice(this.state.totalPrice)}</span></>,
+    id: 'result',
+    accessor: 'state.resume',
+    minWidth: 40,
+    Cell: (props: any) => {
+      switch (props.value) {
+        case 'fail':
+          return <span className="oi oi-circle-x"></span>;
+        case 'pass':
+          return <span className="oi oi-thumb-up"></span>;
+        default:
+          return '';
+      }
+    }
   }];
 
   formatPrice = (price: number): string => price
@@ -278,28 +294,28 @@ export default class List extends React.Component {
 
     switch (prop) {
       case 'Preparing Sample':
-        hidden = [3, 6, 7, 8, 9, 10, 11, 12, 13];
+        hidden = [3, 6, 7, 8, 9, 10, 11, 12, 13, 19];
         break;
       case 'Sample Sent':
-        hidden = [3, 5, 7, 8, 9, 10, 11, 12, 13];
+        hidden = [3, 5, 7, 8, 9, 10, 11, 12, 13, 19];
         break;
       case 'Sample Arrived':
-        hidden = [3, 5, 6, 8, 9, 10, 11, 12, 13];
+        hidden = [3, 5, 6, 8, 9, 10, 11, 12, 13, 19];
         break;
       case 'PI Issued':
-        hidden = [3, 5, 6, 7, 8, 9, 12, 13];
+        hidden = [3, 5, 6, 7, 8, 9, 12, 13, 19];
         break;
       case 'Payment Done':
-        hidden = [3, 5, 6, 7, 8, 9];
+        hidden = [3, 5, 6, 7, 8, 9, 19];
         break;
       case 'Tests are in progress':
-        hidden = [3, 5, 6, 7, 9, 10, 11, 12, 13];
+        hidden = [3, 5, 6, 7, 9, 10, 11, 12, 13, 19];
         break;
       case 'Results Ready':
         hidden = [3, 5, 6, 7, 8, 10, 11, 12, 13];
         break;
       case 'all':
-        hidden = [5, 6, 7, 8, 9, 10, 11, 12, 13];
+        hidden = [5, 6, 7, 8, 9, 10, 11, 12, 13, 17, 18];
         break;
       default:
         hidden = [5, 6, 7, 10, 11, 12, 13];

@@ -87,17 +87,17 @@ class Toolbar extends React.Component<Props> {
       case 'thisMonth':
         const currentDate : Moment = m();
         filteredTasks = tasks.filter(task => {
-          if (task.state.finishedOn) {
-            const date : Moment = m(task.state.finishedOn);
+          if (task.state.testFinishedOnPlanDate) {
+            const date: Moment = m(task.state.testFinishedOnPlanDate);
             return currentDate.month() === date.month() && currentDate.year() === date.year();
           }
         });
         break;
       case 'missingTestReport':
-        filteredTasks = tasks.filter(task => task.state.resultsReceived && !task.state.testReport.toLowerCase().includes('.pdf'));
+        filteredTasks = tasks.filter(task => task.state.testFinishedOnRealDate && !task.state.testReport.toLowerCase().includes('.pdf'));
         break;
       case 'waitingCertificate':
-        filteredTasks = tasks.filter(task => task.state.resultsReceived
+        filteredTasks = tasks.filter(task => task.state.certReceivedOnRealDate
                           && task.state.testReport.toLowerCase().includes('.pdf')
                           && !task.state.certificate.toLowerCase().includes('.pdf'));
         break;

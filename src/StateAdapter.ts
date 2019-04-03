@@ -26,6 +26,20 @@ class StateAdapter implements IStateAdapter {
       //@ts-ignore
       `${this.proformaNumber2 ? this.proformaNumber2 + ', ' : ''}`).slice(0, -2);
   }
+
+  get testFinishedOn() {
+    //@ts-ignore
+    return (`${this.testFinishedOnPlanDate ? this.formatDate(this.testFinishedOnPlanDate) + ', ' : ''}` +
+      //@ts-ignore
+      `${this.testFinishedOnRealDate ? this.formatDate(this.testFinishedOnRealDate) + ', ': ''}`).slice(0, -2);
+  }
+
+  get certReceivedOn() {
+    //@ts-ignore
+    return (`${this.certReceivedOnPlanDate ? this.formatDate(this.certReceivedOnPlanDate) + ', ' : ''}` +
+      //@ts-ignore
+      `${this.certReceivedOnRealDate ? this.formatDate(this.certReceivedOnRealDate) + ', ' : ''}`).slice(0, -2);
+  }
 }
 
 export default StateAdapter;

@@ -63,8 +63,10 @@ export interface IState {
   sentOn: string;
   receivedOn: string;
   startedOn: string;
-  finishedOn: string;
-  resultsReceived: string;
+  testFinishedOnPlanDate: string;
+  testFinishedOnRealDate: string;
+  certReceivedOnPlanDate: string;
+  certReceivedOnRealDate: string;
   comments: string;
   otherTextInDescription: string | null;
   resume: undefined | 'fail' | 'pass';
@@ -85,8 +87,10 @@ const emptyState : IState = {
   sentOn: '',
   receivedOn: '',
   startedOn: '',
-  finishedOn: '',
-  resultsReceived: '',
+  testFinishedOnPlanDate: '',
+  testFinishedOnRealDate: '',
+  certReceivedOnPlanDate: '',
+  certReceivedOnRealDate: '',
   paymentDate: '',
   paymentDate2: '',
   proformaReceived: '',

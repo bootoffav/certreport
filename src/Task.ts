@@ -53,7 +53,7 @@ class Task implements ITask {
     }
 
     let [unParsedTaskState, otherTextInDescription] = this.parseDescription(description);
-
+    
     const newState : {
       [key: string]: any;
     } = {};
@@ -87,8 +87,8 @@ class Task implements ITask {
       'to be sent on': 'sentOn',
       'to be received on': 'receivedOn',
       'tests to be started on': 'startedOn',
-      'tests to be finished on': 'finishedOn',
-      'results to be received on': 'resultsReceived',
+      'tests to be finished on': 'testFinishedOn',
+      'results to be received on': 'certReceivedOn',
       'Resume': 'resume',
       'Comments': 'comments',
       'Edit': 'link',
@@ -138,6 +138,16 @@ class Task implements ITask {
       delete newState.secondPayment;
     }
     
+    if (newState.testFinishedOn) {
+      [newState.testFinishedOnPlanDate, newState.testFinishedOnRealDate] = newState.testFinishedOn.split(', ')
+      delete newState.testFinishedOn;
+    }
+    
+    if (newState.certReceivedOn) {
+      [newState.certReceivedOnPlanDate, newState.certReceivedOnRealDate] = newState.certReceivedOn.split(', ')
+      delete newState.certReceivedOn;
+    }
+    
     newState.brand = uf_crm_task.filter((v : any) => ['C_10033', 'C_10035', 'C_10037', 'C_10041'].includes(v)).join();
     newState.brand = select_options.brand.find(el => el.value === newState.brand).label;
     newState.otherTextInDescription = otherTextInDescription;
@@ -151,9 +161,9 @@ class Task implements ITask {
     if (this.state.sentOn && !this.state.receivedOn) return Stage['Sample Sent'];
     if (this.state.receivedOn && !this.state.proformaReceived) return Stage['Sample Arrived'];
     if (this.state.proformaReceived && !this.state.paid) return Stage['PI Issued'];
-    if (this.state.paid && !this.state.finishedOn) return Stage['Payment Done'];
-    if (this.state.finishedOn && !this.state.resultsReceived) return Stage['Tests are In Progress'];
-    if (this.state.resultsReceived) return Stage['Results Ready'];
+    if (this.state.paid && !this.state.testFinishedOnPlanDate) return Stage['Payment Done'];
+    if (this.state.testFinishedOnPlanDate && !this.state.testFinishedOnRealDate) return Stage['Tests are In Progress'];
+    if (this.state.testFinishedOnRealDate) return Stage['Results Ready'];
     
     return Stage['Preparing Sample']; //default clause if no other case triggered;
   }
