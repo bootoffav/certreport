@@ -16,6 +16,9 @@
     "noEmit": true,
     "jsx": "preserve",
     "strict": true,
+    "strictFunctionTypes": true,
+    "strictNullChecks": true,
+    "strictBindCallApply": true,
     "downlevelIteration": true,
     "isolatedModules": true,
     "lib": [

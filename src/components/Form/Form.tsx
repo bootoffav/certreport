@@ -265,10 +265,6 @@ export default class Form extends React.Component<IFormProps> {
                   handleChange={(date : Date) => this.handleDateChange(date, 'sentOn')}/>
                 <PickDate date={this.state.receivedOn} label='Sample has received by lab. on:'
                   handleChange={(date : Date) => this.handleDateChange(date, 'receivedOn')}/>
-                {/* <PickDate date={this.state.startedOn} label='Started on:'
-                  handleChange={(date : any) => this.handleDateChange(date, 'startedOn')}/> */}
-                {/* <PickDate date={this.state.finishedOn} label='Tests to be finished on:'
-                  handleChange={(date: any) => this.handleDateChange(date, 'finishedOn')} /> */}
                 <div className="col-3">
                   <div style={{ textAlign: 'center' }}>Tests to be finished / really finished on:</div>
                   <div className="input-group">
@@ -286,10 +282,6 @@ export default class Form extends React.Component<IFormProps> {
                     />
                   </div>
                 </div>
-                {/* <PickDate date={this.state.resultsReceived} label='Cert received on:'
-                  handleChange={(date: Date) =>
-                    this.handleDateChange(date, 'resultsReceived')
-                  } /> */}
                 <div className="col-3">
                   <div style={{ textAlign: 'center' }}>Certificate to be received / really received on:</div>
                   <div className="input-group">
@@ -313,7 +305,7 @@ export default class Form extends React.Component<IFormProps> {
                     <div className="btn-group btn-group-toggle" data-toggle="buttons">
                       <label
                         className={
-                          `${!this.state.testFinishedOnRealDate ? 'disabled' : ''}` +
+                          `${!this.state.certReceivedOnRealDate ? 'disabled' : ''}` +
                           ' btn btn-outline-light ' +
                           `${this.state.resume === undefined ? 'active' : ''}`
                         }
@@ -321,7 +313,7 @@ export default class Form extends React.Component<IFormProps> {
                       ><input type="radio" />None</label>
                       <label
                         className={
-                          `${!this.state.testFinishedOnRealDate ? 'disabled' : ''}` +
+                          `${!this.state.certReceivedOnRealDate ? 'disabled' : ''}` +
                           ' btn btn-outline-danger ' +
                           `${this.state.resume === 'fail' ? 'active' : ''}`
                         }
@@ -329,7 +321,7 @@ export default class Form extends React.Component<IFormProps> {
                         ><input type="radio" />FAIL</label>
                       <label
                         className={
-                          `${!this.state.testFinishedOnRealDate ? 'disabled' : ''}` +
+                          `${!this.state.certReceivedOnRealDate ? 'disabled' : ''}` +
                           ' btn btn-outline-success ' +
                           `${this.state.resume === 'pass' ? 'active' : ''}`
                         }

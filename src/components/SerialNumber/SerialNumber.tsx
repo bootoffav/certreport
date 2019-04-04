@@ -1,5 +1,5 @@
 import React from 'react';
-import firebase from '../../DB';
+// import firebase from '../../../old_code/DB';
 
 interface SerialNumberProps {
   serialNumber: string;

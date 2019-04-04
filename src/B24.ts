@@ -3,7 +3,6 @@ import m from 'moment';
 import { dataSeparator } from './Task';
 import Task from './Task';
 import PDF from './components/Export/PDF';
-import { any } from 'prop-types';
 import StateAdapter from './StateAdapter';
 import { IState } from './defaults';
 

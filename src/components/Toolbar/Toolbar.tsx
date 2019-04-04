@@ -42,7 +42,7 @@ class Toolbar extends React.Component<Props> {
         className="btn btn-warning btn-sm"
         onClick={() => this.props.onClick('Results Ready')}
       ><input type="radio"/>6. Results ready</label>
-      <label
+      {/* <label
         className="btn btn-info btn-sm"
         onClick={() => this.props.onClick('thisMonth')}
       ><input type="radio"/>Tests to be ready this month</label>
@@ -53,7 +53,7 @@ class Toolbar extends React.Component<Props> {
       <label
         className="btn btn-info btn-sm"
         onClick={() => this.props.onClick('waitingCertificate')}
-      ><input type="radio"/>Waiting for certificate</label>
+      ><input type="radio"/>Waiting for certificate</label> */}
     </div>
   </div>);
   }
@@ -84,23 +84,23 @@ class Toolbar extends React.Component<Props> {
       case 'Results Ready':
         filteredTasks = tasks.filter(task => task.stage === Stage['Results Ready']);
         break;
-      case 'thisMonth':
-        const currentDate : Moment = m();
-        filteredTasks = tasks.filter(task => {
-          if (task.state.testFinishedOnPlanDate) {
-            const date: Moment = m(task.state.testFinishedOnPlanDate);
-            return currentDate.month() === date.month() && currentDate.year() === date.year();
-          }
-        });
-        break;
-      case 'missingTestReport':
-        filteredTasks = tasks.filter(task => task.state.testFinishedOnRealDate && !task.state.testReport.toLowerCase().includes('.pdf'));
-        break;
-      case 'waitingCertificate':
-        filteredTasks = tasks.filter(task => task.state.certReceivedOnRealDate
-                          && task.state.testReport.toLowerCase().includes('.pdf')
-                          && !task.state.certificate.toLowerCase().includes('.pdf'));
-        break;
+      // case 'thisMonth':
+      //   const currentDate : Moment = m();
+      //   filteredTasks = tasks.filter(task => {
+      //     if (task.state.testFinishedOnPlanDate) {
+      //       const date: Moment = m(task.state.testFinishedOnPlanDate);
+      //       return currentDate.month() === date.month() && currentDate.year() === date.year();
+      //     }
+      //   });
+      //   break;
+      // case 'missingTestReport':
+      //   filteredTasks = tasks.filter(task => task.state.testFinishedOnRealDate && !task.state.testReport.toLowerCase().includes('.pdf'));
+      //   break;
+      // case 'waitingCertificate':
+      //   filteredTasks = tasks.filter(task => task.state.certReceivedOnRealDate
+      //                     && task.state.testReport.toLowerCase().includes('.pdf')
+      //                     && !task.state.certificate.toLowerCase().includes('.pdf'));
+      //   break;
       default:
         filteredTasks = tasks;
       }
