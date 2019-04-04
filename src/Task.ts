@@ -1,4 +1,3 @@
-import m from 'moment';
 import { select_options, emptyState, IState } from './defaults';
 
 interface ITask {
@@ -7,7 +6,7 @@ interface ITask {
   determineStage: () => Stage;
 }
 
-const dataSeparator : string = '-------------------------------------------------';
+const dataSeparator = '-------------------------------------------------';
 
 export enum Stage {
   'Preparing Sample',
@@ -24,26 +23,23 @@ class Task implements ITask {
   position?: number;
   stage: Stage;
 
-  constructor(props : any) {
+  constructor(props: {
+    DESCRIPTION: string;
+    UF_CRM_TASK: string[]
+  }) {
     Object.assign(this, props);
     this.state = this.parse(props.DESCRIPTION, props.UF_CRM_TASK);
     this.stage = this.determineStage();
   }
 
-  parseable_description = (desc : string) => desc.startsWith('[B]Applicant name:[/B]') ? true : false;
+  parseable_description = (desc: string) => desc.startsWith('[B]Applicant name:[/B]');
 
-  parseDescription = (desc : string) => {
-    let taskState;
-    let otherTextInDescription;
+  separateParseableDataAndOtherTextOfDescription = (desc: string) => ({
+    unParsedTaskState: desc.slice(0, desc.indexOf(dataSeparator)).trim(),
+    otherTextInDescription: desc.slice(desc.indexOf(dataSeparator) + dataSeparator.length)
+  });
 
-    let end = desc.indexOf(dataSeparator); // нашли начало закрывающего сепаратора
-    taskState = desc.slice(0, end).trim();
-    otherTextInDescription = desc.slice(end + dataSeparator.length);
-
-    return [taskState, otherTextInDescription];
-};
-
-  parse(description : string, uf_crm_task : []) {
+  parse(description: string, uf_crm_task: string[]) {
     if (!this.parseable_description(description)) {
       return {
         ...emptyState,
@@ -52,14 +48,14 @@ class Task implements ITask {
       };
     }
 
-    let [unParsedTaskState, otherTextInDescription] = this.parseDescription(description);
-    
-    const newState : {
-      [key: string]: any;
-    } = {};
+    let { unParsedTaskState, otherTextInDescription } = this.separateParseableDataAndOtherTextOfDescription(description);
 
-    const prop_map : {
-      [key: string]: string;
+    let parsedState: {
+      [k: string]: any;
+    } = emptyState;
+
+    const prop_map: {
+      [k: string]: any;
     } = {
       'Applicant name': 'applicantName',
       'Product': 'product',
@@ -80,9 +76,9 @@ class Task implements ITask {
       'Testing company': 'testingCompany',
       'Material needed': 'materialNeeded',
       'Testing time, days': 'testingTime',
-      'Pre-treatment 1' : 'pretreatment1',
-      'Pre-treatment 2' : 'pretreatment2',
-      'Pre-treatment 3' : 'pretreatment3',
+      'Pre-treatment 1': 'pretreatment1',
+      'Pre-treatment 2': 'pretreatment2',
+      'Pre-treatment 3': 'pretreatment3',
       'Sample ready on': 'readyOn',
       'to be sent on': 'sentOn',
       'to be received on': 'receivedOn',
@@ -97,63 +93,62 @@ class Task implements ITask {
 
     unParsedTaskState = unParsedTaskState.replace(/:/g, '');
 
-    let matched = unParsedTaskState.match(/\[B\].+\[\/B\]/gm);
-    const props = matched ? matched.map(prop => prop.slice(3, -4)) : [];
-
+    let matched: string[] = unParsedTaskState.match(/\[B\].+\[\/B\]/gm) || [];
+    const props: string[] = matched.map(prop => prop.slice(3, -4)) || [];
 
     const vals = unParsedTaskState.split(/\[B\].+\[\/B\]/g)
-                  .map(item => item.trim())
-                  .slice(1);
+      .map(item => item.trim())
+      .slice(1);
 
-    for (let i = 0; i < props.length; i++) {
-      newState[prop_map[props[i]]] = vals[i];
+    
+    for (let i = 0; i < props.length; i++) parsedState[prop_map[props[i]]] = vals[i];
+    // parsedState = props.reduce((obj, k: string, i: number) => ({ ...obj, [prop_map[k]]: vals[i] }), {});
+
+    if (parsedState.proforma) {
+      [ parsedState.proformaReceivedDate, parsedState.proformaNumber ] = parsedState.proforma.split(', ');
+      parsedState.proformaReceived = true;
+      delete parsedState.proforma;
     }
 
-    if (newState.proforma) {
-      [ newState.proformaReceivedDate, newState.proformaNumber ] = newState.proforma.split(', ');
-      newState.proformaReceived = true;
-      delete newState.proforma;
-    }
+    parsedState.price = parsedState.price ? parsedState.price.split(' ')[0] : '';
+    parsedState.paid = parsedState.paymentDate ? true : false;
 
-    newState.price = newState.price ? newState.price.split(' ')[0] : '';
-    newState.paid = newState.paymentDate ? true : false;
-
-    if (newState.secondPayment) {
+    if (parsedState.secondPayment) {
       [
-        newState.price2,
-        newState.paymentDate2,
-        newState.proformaReceivedDate2,
-        newState.proformaNumber2
-      ] = newState.secondPayment.split(', ');
+        parsedState.price2,
+        parsedState.paymentDate2,
+        parsedState.proformaReceivedDate2,
+        parsedState.proformaNumber2
+      ] = parsedState.secondPayment.split(', ');
 
-      newState.price2 = newState.price2 ? newState.price2.split(' ')[0] : '';
+      parsedState.price2 = parsedState.price2 ? parsedState.price2.split(' ')[0] : '';
       
-      newState.paymentDate2 = newState.paymentDate2 || '';
-      newState.paid2 = newState.paymentDate2 ? true : false;
+      parsedState.paymentDate2 = parsedState.paymentDate2 || '';
+      parsedState.paid2 = parsedState.paymentDate2 ? true : false;
       
-      newState.proformaReceivedDate2 = newState.proformaReceivedDate2 || '';
-      newState.proformaNumber2 = newState.proformaNumber2 || '';
-      newState.proformaReceived2 = newState.proformaReceivedDate2 ? true : false;
+      parsedState.proformaReceivedDate2 = parsedState.proformaReceivedDate2 || '';
+      parsedState.proformaNumber2 = parsedState.proformaNumber2 || '';
+      parsedState.proformaReceived2 = parsedState.proformaReceivedDate2 ? true : false;
       
-      delete newState.secondPayment;
+      delete parsedState.secondPayment;
     }
     
-    if (newState.testFinishedOn) {
-      [newState.testFinishedOnPlanDate, newState.testFinishedOnRealDate] = newState.testFinishedOn.split(', ')
-      delete newState.testFinishedOn;
+    if (parsedState.testFinishedOn) {
+      [parsedState.testFinishedOnPlanDate, parsedState.testFinishedOnRealDate] = parsedState.testFinishedOn.split(', ')
+      delete parsedState.testFinishedOn;
     }
     
-    if (newState.certReceivedOn) {
-      [newState.certReceivedOnPlanDate, newState.certReceivedOnRealDate] = newState.certReceivedOn.split(', ')
-      delete newState.certReceivedOn;
+    if (parsedState.certReceivedOn) {
+      [parsedState.certReceivedOnPlanDate, parsedState.certReceivedOnRealDate] = parsedState.certReceivedOn.split(', ')
+      delete parsedState.certReceivedOn;
     }
     
-    newState.brand = uf_crm_task.filter((v : any) => ['C_10033', 'C_10035', 'C_10037', 'C_10041'].includes(v)).join();
-    newState.brand = select_options.brand.find(el => el.value === newState.brand).label;
-    newState.otherTextInDescription = otherTextInDescription;
-    newState.UF_CRM_TASK = uf_crm_task;
+    parsedState.brand = uf_crm_task.filter((v : any) => ['C_10033', 'C_10035', 'C_10037', 'C_10041'].includes(v)).join();
+    parsedState.brand = select_options.brand.find(el => el.value === parsedState.brand).label;
+    parsedState.otherTextInDescription = otherTextInDescription;
+    parsedState.UF_CRM_TASK = uf_crm_task;
 
-    return { ...emptyState, ...newState };
+    return parsedState as IState;
 };
 
   determineStage() : Stage {

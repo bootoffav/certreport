@@ -1,5 +1,7 @@
 import Task from './Task';
 
+let task;
+
 const props = {
   DESCRIPTION: `[B]Applicant name:[/B] Aleksei Butov
 [B]Product:[/B] 50% Meta Aramid, 50% FR Viscose, FR-Plain 1/1, 120 gsm
@@ -26,14 +28,54 @@ const props = {
 [B]results to be received on:[/B] 04Apr2019, 11Apr2019
 [B]Resume:[/B] fail
 [B]Comments:[/B] test
-[B]Edit:[/B] [URL=https//certreport.xmtextiles.com/edit/50858/]this task[/URL]\
- ------------------------------------------------- "`,
+[B]Edit:[/B] [URL=https//certreport.xmtextiles.com/edit/50858/]this task[/URL]
+-------------------------------------------------
+123`,
   UF_CRM_TASK: ["C_10035", "CO_6295"]
 }
 
+beforeAll(() => {
+  task = new Task(props);
+});
+
+it('can determine if description is parseable', () => {
+  expect(task.parseable_description(props.DESCRIPTION)).toBe(true);
+  expect(task.parseable_description("something else")).toBe(false);
+});
+
+it('can distinguish data from other description text', function () {
+  const { unParsedTaskState, otherTextInDescription } = task.separateParseableDataAndOtherTextOfDescription(props.DESCRIPTION);
+  expect(unParsedTaskState).toBe(`[B]Applicant name:[/B] Aleksei Butov
+[B]Product:[/B] 50% Meta Aramid, 50% FR Viscose, FR-Plain 1/1, 120 gsm
+[B]Code:[/B] 50A/50V - 120FR - P1
+[B]Article:[/B] Aravis-120
+[B]Colour:[/B] Dark Navy
+[B]Serial number:[/B] 23
+[B]Length of sample, meters:[/B] 1
+[B]Width of sample, meters:[/B] 1.5
+[B]Part number:[/B] 2
+[B]Roll number:[/B] 2
+[B]Standard:[/B] EN 1149-3, EN 20471 (Contrast)
+[B]Price:[/B] 12 €
+[B]Testing company:[/B] Satra (UK)
+[B]Material needed:[/B] 15 lineal meters
+[B]Testing time, days:[/B] 21
+[B]Pre-treatment 1:[/B] no
+[B]Pre-treatment 2:[/B] no
+[B]Pre-treatment 3:[/B] no
+[B]Sample ready on:[/B] 03Apr2019
+[B]to be sent on:[/B] 10Apr2019
+[B]to be received on:[/B] 04Apr2019
+[B]tests to be finished on:[/B] 03Apr2019, 10Apr2019
+[B]results to be received on:[/B] 04Apr2019, 11Apr2019
+[B]Resume:[/B] fail
+[B]Comments:[/B] test
+[B]Edit:[/B] [URL=https//certreport.xmtextiles.com/edit/50858/]this task[/URL]`);
+  expect(otherTextInDescription).toBe('\n123');
+});
 
 it('can parse Task properly', () => {
-  let { state } = { ...new Task(props) };
+  let { state } = { ...task };
   expect(state.applicantName).toBe('Aleksei Butov');
   expect(state.product).toBe('50% Meta Aramid, 50% FR Viscose, FR-Plain 1/1, 120 gsm');
   expect(state.article).toBe('Aravis-120');
@@ -61,4 +103,9 @@ it('can parse Task properly', () => {
   expect(state.resume).toBe('fail');
   expect(state.comments).toBe('test');
   expect(state.link).toBe('[URL=https//certreport.xmtextiles.com/edit/50858/]this task[/URL]');
+});
+
+it('can correctly determine Stage', function () {
+  
 })
+
