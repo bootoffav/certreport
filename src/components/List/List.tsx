@@ -20,7 +20,7 @@ interface IListState {
   filteredTasksLevel1: Task[];
   uncompletedTasks: Task[];
   totalPrice: number;
-  toolbarProp: string;
+  requiredStage: Stage | undefined;
   showCompletedTasks: boolean;
 }
 
@@ -31,7 +31,7 @@ export default class List extends React.Component {
     filteredTasksLevel1: [],
     uncompletedTasks: [],
     totalPrice: 0,
-    toolbarProp: 'all',
+    requiredStage: undefined,
     showCompletedTasks: Boolean(
       Number(localStorage.getItem('showCompletedTasks'))
     )
@@ -214,21 +214,19 @@ export default class List extends React.Component {
 
   updateState = (allTasks : Task[]) : void => {
     //определить задачи по которым будет создан список
-    let uncompletedTasks : Task[] = allTasks.filter((task: Task) => task.stage !== Stage['Certificate ready']); //только те у которых статус не готов
+    const uncompletedTasks : Task[] = allTasks.filter((task: Task) => task.stage !== Stage['Certificate ready']); //только те у которых статус не готов
     
-    let tasks : Task [] = this.state.showCompletedTasks
+    const tasks : Task [] = this.state.showCompletedTasks
       ? allTasks
       : uncompletedTasks;
     
-    const toolbarProp: string = 'all';
-
-    let visibleTasks : Task[] = Toolbar.filter(tasks, toolbarProp);
-    let totalPrice : number = visibleTasks.reduce((sum: number, task: any) => sum + Number(task.state.price), 0);
-    this.visibleColumns(toolbarProp);
+    const visibleTasks : Task[] = Toolbar.filter(tasks);
+    const totalPrice : number = visibleTasks.reduce((sum: number, task: any) => sum + Number(task.state.price), 0);
+    this.visibleColumns();
     this.setState({
       allTasks: allTasks,
       filteredTasksLevel1: tasks,
-      uncompletedTasks, visibleTasks, totalPrice, toolbarProp
+      uncompletedTasks, visibleTasks, totalPrice, requiredStage: undefined
     });
   }
 
@@ -280,40 +278,43 @@ export default class List extends React.Component {
   }
 
   //level 2 filter
-  toolbarFilter = (toolbarProp: string = 'all') => {
-    let visibleTasks : Task[] = Toolbar.filter(this.state.filteredTasksLevel1, toolbarProp);
+  toolbarFilter = (requiredStage: Stage | undefined = undefined) => {
+    let visibleTasks : Task[] = Toolbar.filter(this.state.filteredTasksLevel1, requiredStage);
     let totalPrice : number = visibleTasks.reduce((sum: number, task: any) => sum + Number(task.state.price), 0);
-    this.setState({ visibleTasks, totalPrice, toolbarProp });
-    this.visibleColumns(toolbarProp);
+    this.setState({ visibleTasks, totalPrice, requiredStage });
+    this.visibleColumns();
   }
 
-  visibleColumns(prop: string): void {
+  visibleColumns(prop: Stage | undefined = undefined): void {
     this.columns.forEach(col => col.show = true);
     let hidden: number[];
 
     switch (prop) {
-      case 'Preparing Sample':
+      case Stage['Preparing Sample']:
         hidden = [3, 6, 7, 8, 9, 10, 11, 12, 13, 19];
         break;
-      case 'Sample Sent':
+      case Stage['Sample Sent']:
         hidden = [3, 5, 7, 8, 9, 10, 11, 12, 13, 19];
         break;
-      case 'Sample Arrived':
+      case Stage['Sample Arrived']:
         hidden = [3, 5, 6, 8, 9, 10, 11, 12, 13, 19];
         break;
-      case 'PI Issued':
+      case Stage['PI Issued']:
         hidden = [3, 5, 6, 7, 8, 9, 12, 13, 19];
         break;
-      case 'Payment Done':
+      case Stage['Payment Done']:
         hidden = [3, 5, 6, 7, 8, 9, 19];
         break;
-      case 'Tests are in progress':
+      case Stage['Tests are in progress']:
         hidden = [3, 5, 6, 7, 9, 10, 11, 12, 13, 19];
         break;
-      case 'Results Ready':
+      case Stage['Test-report ready']:
         hidden = [3, 5, 6, 7, 8, 10, 11, 12, 13];
         break;
-      case 'all':
+      case Stage['Certificate ready']:
+        hidden = [3, 5, 6, 7, 8, 10, 11, 12, 13];
+        break;
+      case undefined:
         hidden = [5, 6, 7, 8, 9, 10, 11, 12, 13, 17, 18];
         break;
       default:
@@ -327,31 +328,24 @@ export default class List extends React.Component {
 
   getTrProps = (state: any, rowInfo: any, column: any): {} => {
     if (rowInfo !== undefined) {
-      switch (this.state.toolbarProp) {
-        case 'Preparing Sample':
-          return m(rowInfo.row._original.state.readyOn).add(2, 'days') < m()
-            ? { className: "missedDeadline" }
-            : {};
-        case 'Sample Sent':
-          return m(rowInfo.row._original.state.sentOn).add(7, 'days') < m()
-            ? { className: "missedDeadline" }
-            : {};
-        case 'Sample Arrived':
-          return m(rowInfo.row._original.state.receivedOn).add(2, 'days') < m()
-            ? { className: "missedDeadline" }
-            : {};
-        case 'PI Issued':
-          return m(rowInfo.row._original.state.proformaReceivedDate).add(2, 'days') < m()
-            ? { className: "missedDeadline" }
-            : {};
-        case 'Payment Done':
-          return m(rowInfo.row._original.state.paymentDate).add(2, 'days') < m()
-            ? { className: "missedDeadline" }
-            : {};
-        case 'Tests are in progress':
-          return m(rowInfo.row._original.state.finishedOn).add(1, 'days') < m()
-            ? { className: "missedDeadline" }
-            : {};
+      const getResult = (prop: string, days: number): {} =>
+        m(rowInfo.row._original.state[prop]).add(days, 'days') < m()
+        ? { className: "missedDeadline" }
+        : {};
+      
+      switch (this.state.requiredStage) {
+        case Stage['Preparing Sample']:
+          return getResult('readyOn', 2);
+        case Stage['Sample Sent']:
+          return getResult('sentOn', 7);
+        case Stage['Sample Arrived']:
+          return getResult('receivedOn', 2);
+        case Stage['PI Issued']:
+          return getResult('proformaReceivedDate', 2);
+        case Stage['Payment Done']:
+          return getResult('paymentDate', 2);
+        case Stage['Tests are in progress']:
+          return getResult('testFinishedOnPlanDate', 1);
       }
     }
     return {};

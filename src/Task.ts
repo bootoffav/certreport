@@ -14,7 +14,7 @@ export enum Stage {
   'Sample Arrived',
   'PI Issued',
   'Payment Done',
-  'Tests are In Progress',
+  'Tests are in progress',
   'Test-report ready',
   'Certificate ready'
 }
@@ -156,7 +156,7 @@ class Task implements ITask {
     if (this.state.receivedOn && !this.state.proformaReceived) return Stage['Sample Arrived'];
     if (this.state.proformaReceived && !this.state.paid) return Stage['PI Issued'];
     if (this.state.paid && !this.state.testFinishedOnPlanDate) return Stage['Payment Done'];
-    if (this.state.testFinishedOnPlanDate && !this.state.testFinishedOnRealDate) return Stage['Tests are In Progress'];
+    if (this.state.testFinishedOnPlanDate && !this.state.testFinishedOnRealDate) return Stage['Tests are in progress'];
     if (this.state.testFinishedOnRealDate && !this.state.certReceivedOnRealDate) return Stage['Test-report ready'];
     if (this.state.certReceivedOnRealDate) return Stage['Certificate ready'];
     
