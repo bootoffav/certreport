@@ -15,7 +15,8 @@ export enum Stage {
   'PI Issued',
   'Payment Done',
   'Tests are In Progress',
-  'Results Ready'
+  'Test-report ready',
+  'Certificate ready'
 }
 
 class Task implements ITask {
@@ -52,7 +53,7 @@ class Task implements ITask {
 
     let parsedState: {
       [k: string]: any;
-    } = emptyState;
+    } = { ...emptyState };
 
     const prop_map: {
       [k: string]: any;
@@ -100,10 +101,8 @@ class Task implements ITask {
       .map(item => item.trim())
       .slice(1);
 
-    
     for (let i = 0; i < props.length; i++) parsedState[prop_map[props[i]]] = vals[i];
     // parsedState = props.reduce((obj, k: string, i: number) => ({ ...obj, [prop_map[k]]: vals[i] }), {});
-
     if (parsedState.proforma) {
       [ parsedState.proformaReceivedDate, parsedState.proformaNumber ] = parsedState.proforma.split(', ');
       parsedState.proformaReceived = true;
@@ -157,8 +156,9 @@ class Task implements ITask {
     if (this.state.receivedOn && !this.state.proformaReceived) return Stage['Sample Arrived'];
     if (this.state.proformaReceived && !this.state.paid) return Stage['PI Issued'];
     if (this.state.paid && !this.state.testFinishedOnPlanDate) return Stage['Payment Done'];
-    if (this.state.testFinishedOnPlanDate && !this.state.certReceivedOnRealDate) return Stage['Tests are In Progress'];
-    if (this.state.certReceivedOnRealDate) return Stage['Results Ready'];
+    if (this.state.testFinishedOnPlanDate && !this.state.testFinishedOnRealDate) return Stage['Tests are In Progress'];
+    if (this.state.testFinishedOnRealDate && !this.state.certReceivedOnRealDate) return Stage['Test-report ready'];
+    if (this.state.certReceivedOnRealDate) return Stage['Certificate ready'];
     
     return Stage['Preparing Sample']; //default clause if no other case triggered;
   }

@@ -214,7 +214,7 @@ export default class List extends React.Component {
 
   updateState = (allTasks : Task[]) : void => {
     //определить задачи по которым будет создан список
-    let uncompletedTasks : Task[] = allTasks.filter((task: Task) => task.stage !== Stage['Results Ready']); //только те у которых статус не готов
+    let uncompletedTasks : Task[] = allTasks.filter((task: Task) => task.stage !== Stage['Certificate ready']); //только те у которых статус не готов
     
     let tasks : Task [] = this.state.showCompletedTasks
       ? allTasks
