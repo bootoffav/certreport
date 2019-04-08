@@ -10,7 +10,7 @@ class Toolbar extends React.Component<Props> {
   // filter: (tasks: Task[], prop: Stage | undefined) => Task[];
   render() {
     return (<div className="row">
-      <div className="col btn-group btn-group-toggle" data-toggle="buttons">
+      <div id="toolbar" className="col btn-group btn-group-toggle" data-toggle="buttons">
         <label
           className="btn btn-info btn-sm active"
           onClick={() => this.props.onClick(undefined)}

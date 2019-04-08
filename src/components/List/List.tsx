@@ -272,9 +272,13 @@ export default class List extends React.Component {
 
   filterLevel1Callback = () : void => {
     this.toolbarFilter();
-    Array.from(document.getElementsByClassName('btn btn-warning btn-sm'))
-      .forEach(el => el.className = 'btn btn-warning btn-sm');
-    document.getElementsByClassName('btn btn-warning btn-sm')[0].className += ' active';
+
+    const toolbar = document.querySelector('#toolbar');
+    if (toolbar) {
+      Array.from(toolbar.children).forEach(label => label === toolbar.firstElementChild
+        ? label.classList.add('active') : label.classList.remove('active')
+      );
+    }
   }
 
   //level 2 filter
