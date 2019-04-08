@@ -305,24 +305,21 @@ export default class Form extends React.Component<IFormProps> {
                     <div className="btn-group btn-group-toggle" data-toggle="buttons">
                       <label
                         className={
-                          `${!this.state.certReceivedOnRealDate ? 'disabled' : ''}` +
-                          ' btn btn-outline-light ' +
+                          'btn btn-outline-light ' +
                           `${this.state.resume === undefined ? 'active' : ''}`
                         }
                         onClick={() => this.setState({ resume: undefined })}
                       ><input type="radio" />None</label>
                       <label
                         className={
-                          `${!this.state.certReceivedOnRealDate ? 'disabled' : ''}` +
-                          ' btn btn-outline-danger ' +
+                          'btn btn-outline-danger ' +
                           `${this.state.resume === 'fail' ? 'active' : ''}`
                         }
                         onClick={() => this.setState({ resume: 'fail' })}
                         ><input type="radio" />FAIL</label>
                       <label
                         className={
-                          `${!this.state.certReceivedOnRealDate ? 'disabled' : ''}` +
-                          ' btn btn-outline-success ' +
+                          'btn btn-outline-success ' +
                           `${this.state.resume === 'pass' ? 'active' : ''}`
                         }
                         onClick={() => this.setState({ resume: 'pass' })}
