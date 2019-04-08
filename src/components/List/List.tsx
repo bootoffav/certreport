@@ -231,7 +231,7 @@ export default class List extends React.Component {
   }
 
   //level 1 filter
-  brandFilter(brand: string) : void {
+  brandFilter = (brand: string) : void => {
     let brandFilter: HTMLElement | null = document.getElementById('brandFilter');
     brandFilter ? brandFilter.innerText = `Brand: ${brand}` : '';
     let filtered;
@@ -356,18 +356,14 @@ export default class List extends React.Component {
   }
 
   render = () : JSX.Element => <>
-    <div className="d-flex justify-content-between">
+    <div className="mb-1 mt-2 d-flex justify-content-between">
       <div className="d-inline-flex justify-content-start">
-        <div className="p-1">
-          <BrandFilter filter={this.brandFilter.bind(this)} />
-        </div>
-        <div className="p-1">
-          <ColumnSearch filter={this.columnFilter} />
-        </div>
+        <BrandFilter filter={this.brandFilter} />
+        <ColumnSearch filter={this.columnFilter} />
       </div>
       <div className="d-inline-flex justify-content-end">
         <List.State notUpdated={this.cache.staleData} />
-        <div className="p-1 align-self-center">
+        <div className="align-self-center">
           <Settings checked={this.state.showCompletedTasks}
             toggle={() => {
               localStorage.setItem('showCompletedTasks', Number(!this.state.showCompletedTasks).toString());

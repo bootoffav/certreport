@@ -7,7 +7,6 @@ interface Props {
 }
 
 class Toolbar extends React.Component<Props> {
-  // filter: (tasks: Task[], prop: Stage | undefined) => Task[];
   render() {
     return (<div className="row">
       <div id="toolbar" className="col btn-group btn-group-toggle" data-toggle="buttons">

@@ -100,7 +100,6 @@ export default class Form extends React.Component<IFormProps> {
 
   afterSuccessfulSubmit() {
     this.setState({ requestStatus: Status.Success });
-    // SerialNumber.update(Number(this.state.serialNumber) + 1);
     sessionStorage.removeItem('tasks');
     setTimeout(() => window.location.replace("/"), 2000);
   }
@@ -113,7 +112,7 @@ export default class Form extends React.Component<IFormProps> {
   }
     render() {
         return (
-          <div className="form-place">
+          <div className="mt-3">
             <Notification status={this.state.requestStatus} />
             <form onSubmit={(e) => this.handleCert(e)}>
               <div className="form-row">

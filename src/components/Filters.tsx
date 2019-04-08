@@ -35,7 +35,7 @@ class ColumnSearch extends React.Component {
 
   render() {
     return (
-      <div className="input-group">
+      <div className="pl-1 input-group">
         <input type="text" className="form-control" placeholder="search"
           onChange={this.onChange} value={this.state.value}/>
         <div className="input-group-append">
@@ -73,7 +73,7 @@ class BrandFilter extends React.Component {
   }
 
   render() {
-    return <div className="d-flex filter-level-1">
+    return <div className="d-flex">
       <div className="dropdown">
         <button className="btn btn-success dropdown-toggle" type="button" id="brandFilter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Brand: All
