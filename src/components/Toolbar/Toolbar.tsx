@@ -11,7 +11,7 @@ class Toolbar extends React.Component<Props> {
     return (<div className="row">
       <div id="toolbar" className="col btn-group btn-group-toggle" data-toggle="buttons">
         <label
-          className="btn btn-info btn-sm active"
+          className="btn btn-light btn-sm active"
           onClick={() => this.props.onClick(undefined)}
         ><input type="radio" />All</label>
         <label

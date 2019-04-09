@@ -122,11 +122,6 @@ export default class List extends React.Component {
     id: 'receivedOn',
     width: 130,
   }, {
-    Header: 'Results received',
-    accessor: 'state.resultsReceived',
-    id: 'receivedOn',
-    width: 130,
-  }, {
     Header: 'Proforma date',
     accessor: 'state.proformaReceivedDate',
     id: 'proformaReceivedDate',
@@ -170,13 +165,6 @@ export default class List extends React.Component {
     accessor: 'state.standards',
     minWidth: 100,
   }, {
-    Header: 'Price, €',
-    Footer: () => <>Total € <span style={{ float: 'right' }}>{this.formatPrice(this.state.totalPrice)}</span></>,
-    id: 'price',
-    accessor: 'state.price',
-    minWidth: 90,
-    Cell: (props: any) => <>€<span style={{ float: 'right' }}>{this.formatPrice(props.value)}</span></>
-  }, {
     Header: 'Result',
     id: 'result',
     accessor: 'state.resume',
@@ -191,7 +179,14 @@ export default class List extends React.Component {
           return '';
       }
     }
-  }];
+    }, {
+      Header: 'Price, €',
+      Footer: () => <>Total € <span style={{ float: 'right' }}>{this.formatPrice(this.state.totalPrice)}</span></>,
+      id: 'price',
+      accessor: 'state.price',
+      minWidth: 90,
+      Cell: (props: any) => <>€<span style={{ float: 'right' }}>{this.formatPrice(props.value)}</span></>
+    }];
 
   formatPrice = (price: number): string => price
       .toLocaleString('en-US', {
@@ -216,12 +211,12 @@ export default class List extends React.Component {
     //определить задачи по которым будет создан список
     const uncompletedTasks : Task[] = allTasks.filter((task: Task) => task.stage !== Stage['Certificate ready']); //только те у которых статус не готов
     
-    const tasks : Task [] = this.state.showCompletedTasks
+    const tasks: Task [] = this.state.showCompletedTasks
       ? allTasks
       : uncompletedTasks;
     
-    const visibleTasks : Task[] = Toolbar.filter(tasks);
-    const totalPrice : number = visibleTasks.reduce((sum: number, task: any) => sum + Number(task.state.price), 0);
+    const visibleTasks: Task[] = Toolbar.filter(tasks);
+    const totalPrice: number = visibleTasks.reduce((sum: number, task: any) => sum + Number(task.state.price), 0);
     this.visibleColumns();
     this.setState({
       allTasks: allTasks,
@@ -253,7 +248,7 @@ export default class List extends React.Component {
 
     this.setState({
       filteredTasksLevel1: filtered
-    }, this.filterLevel1Callback);
+    }, () => this.toolbarFilter(this.state.requiredStage));
   }
 
   columnFilter = (valueToSearch: string, columnToSearch: string) : void => {
@@ -267,62 +262,46 @@ export default class List extends React.Component {
         ? task[columnToSearch].toLowerCase().includes(valueToSearch)
         : task.state[columnToSearch].toLowerCase().includes(valueToSearch)
       )
-    }, this.filterLevel1Callback);
-  }
-
-  filterLevel1Callback = () : void => {
-    this.toolbarFilter();
-
-    const toolbar = document.querySelector('#toolbar');
-    if (toolbar) {
-      Array.from(toolbar.children).forEach(label => label === toolbar.firstElementChild
-        ? label.classList.add('active') : label.classList.remove('active')
-      );
-    }
+    }, () => this.toolbarFilter(this.state.requiredStage));
   }
 
   //level 2 filter
   toolbarFilter = (requiredStage: Stage | undefined = undefined) => {
-    let visibleTasks : Task[] = Toolbar.filter(this.state.filteredTasksLevel1, requiredStage);
-    let totalPrice : number = visibleTasks.reduce((sum: number, task: any) => sum + Number(task.state.price), 0);
+    let visibleTasks: Task[] = Toolbar.filter(this.state.filteredTasksLevel1, requiredStage);
+    let totalPrice: number = visibleTasks.reduce((sum: number, task: any) => sum + Number(task.state.price), 0);
+    this.visibleColumns(requiredStage);
     this.setState({ visibleTasks, totalPrice, requiredStage });
-    this.visibleColumns();
   }
 
-  visibleColumns(prop: Stage | undefined = undefined): void {
+  visibleColumns(requiredStage : Stage | undefined = undefined): void {
     this.columns.forEach(col => col.show = true);
     let hidden: number[];
 
-    switch (prop) {
+    switch (requiredStage) {
       case Stage['Preparing Sample']:
-        hidden = [3, 6, 7, 8, 9, 10, 11, 12, 13, 19];
+        hidden = [3, 6, 7, 8, 9, 10, 11, 12, 17, 18];
         break;
       case Stage['Sample Sent']:
-        hidden = [3, 5, 7, 8, 9, 10, 11, 12, 13, 19];
+        hidden = [3, 5, 7, 8, 9, 10, 11, 12, 17, 19];
         break;
       case Stage['Sample Arrived']:
-        hidden = [3, 5, 6, 8, 9, 10, 11, 12, 13, 19];
+        hidden = [3, 5, 6, 8, 9, 10, 11, 12, 17, 19];
         break;
       case Stage['PI Issued']:
-        hidden = [3, 5, 6, 7, 8, 9, 12, 13, 19];
+        hidden = [3, 5, 6, 7, 8, 9, 12, 13, 17, 19];
         break;
       case Stage['Payment Done']:
-        hidden = [3, 5, 6, 7, 8, 9, 19];
+        hidden = [3, 5, 6, 7, 8, 9, 17];
         break;
       case Stage['Tests are in progress']:
-        hidden = [3, 5, 6, 7, 9, 10, 11, 12, 13, 19];
+        hidden = [3, 5, 6, 7, 9, 10, 11, 12, 17, 18];
         break;
       case Stage['Test-report ready']:
-        hidden = [3, 5, 6, 7, 8, 10, 11, 12, 13];
-        break;
       case Stage['Certificate ready']:
-        hidden = [3, 5, 6, 7, 8, 10, 11, 12, 13];
-        break;
-      case undefined:
-        hidden = [5, 6, 7, 8, 9, 10, 11, 12, 13, 17, 18];
+        hidden = [3, 5, 6, 7, 8, 10, 11, 12];
         break;
       default:
-        hidden = [5, 6, 7, 10, 11, 12, 13];
+        hidden = [5, 6, 7, 8, 9, 10, 11, 12];
     }
 
     this.columns.forEach((col, ind) => {
