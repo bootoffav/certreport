@@ -1,6 +1,6 @@
 import B24 from './B24';
 import { emptyState } from './defaults';
-import Task from './Task';
+import Task from './Task/Task';
 
 interface ICacheManager {
   load: () => any;

@@ -10,10 +10,12 @@ import m from 'moment';
 import { select_options, emptyState } from '../../defaults';
 import { IState } from '../../defaults';
 import Export from '../Export/Export';
+import { Stage } from '../../Task/Task';
 
 
 interface IFormState extends IState {
   requestStatus: Status;
+  stage: string;
 }
 
 interface IFormProps {
@@ -258,12 +260,14 @@ export default class Form extends React.Component<IFormProps> {
                   <BaseInput value={this.state.pretreatment3} id='pretreatment3' label='Pre-treatment 3' handleChange={this.handleChange} />
                 </div>
               <div className="form-row">
-                <PickDate date={this.state.readyOn} label='Sample to be prepared on:'
-                  handleChange={(date : Date) => this.handleDateChange(date, 'readyOn')}/>
-                <PickDate date={this.state.sentOn} label='Sample has sent on:'
-                  handleChange={(date : Date) => this.handleDateChange(date, 'sentOn')}/>
-                <PickDate date={this.state.receivedOn} label='Sample has received by lab. on:'
-                  handleChange={(date : Date) => this.handleDateChange(date, 'receivedOn')}/>
+                <PickDate date={this.state.readyOn} label='Sample to be prepared:'
+                  handleChange={(date: Date) => this.handleDateChange(date, 'readyOn')}/>
+                <PickDate date={this.state.sentOn} label='Sample has sent:'
+                  handleChange={(date: Date) => this.handleDateChange(date, 'sentOn')}/>
+                <PickDate date={this.state.receivedOn} label='Sample has received by lab:'
+                  handleChange={(date: Date) => this.handleDateChange(date, 'receivedOn')}/>
+                <PickDate date={this.state.startedOn} label='Test is started:'
+                  handleChange={(date: Date) => this.handleDateChange(date, 'startedOn')} />
                 <div className="col-3">
                   <div style={{ textAlign: 'center' }}>Tests to be finished / really finished on:</div>
                   <div className="input-group">
@@ -278,7 +282,7 @@ export default class Form extends React.Component<IFormProps> {
                       dateFormat="dd.MM.yyyy"
                       selected={this.state.testFinishedOnRealDate ? new Date(this.state.testFinishedOnRealDate) : undefined}
                       onChange={(date: Date) => this.handleDateChange(date, 'testFinishedOnRealDate')}
-                    />
+                      />
                   </div>
                 </div>
                 <div className="col-3">
@@ -298,7 +302,21 @@ export default class Form extends React.Component<IFormProps> {
                     />
                   </div>
                 </div>
-                <div className="col">
+              </div>
+              <div className="form-row d-flex justify-content-between">
+                <div className="col-2">
+                  <div className="form-group">
+                    Stage
+                    <Select
+                      value={this.asSelectable(this.state.stage)}
+                      onChange={e => {
+                        this.handleSelectChange(e, 'stage')}
+                      }
+                      options={select_options.stages}
+                    />
+                  </div>
+                </div>
+                <div className="col-auto">
                   Results:
                   <div className="form-group">
                     <div className="btn-group btn-group-toggle" data-toggle="buttons">
@@ -331,8 +349,8 @@ export default class Form extends React.Component<IFormProps> {
                   <label htmlFor='comments'>Comments:</label>
                   <textarea className='form-control' value={this.state.comments} id='comments' rows={Number('15')} onChange={this.handleChange} />
               </div>
-              <div className="form-row">
-                <div className="col">
+              <div className="mt-2 d-flex justify-content-around form-row">
+                <div className="col-2">
                   <button type="submit"
                     className="btn btn-danger btn-block"
                   >Create / Update</button>

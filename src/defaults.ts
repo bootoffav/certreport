@@ -6,6 +6,7 @@ let select_options : {
   testingCompany: any[];
   created: Date;
   articles: [];
+  stages: any[];
   [key: string]: any;
 } = {
   brand: [
@@ -20,6 +21,16 @@ let select_options : {
     {value: 'Aitex (China)', label: 'Aitex (China)'},
     {value: 'Satra (UK)', label: 'Satra (UK)'}
   ],
+  stages: [
+    { value: '0. Preparing Sample', label: '0. Preparing Sample' },
+    { value: '1. Sample Sent', label: '1. Sample Sent' },
+    { value: '2. Sample Arrived', label: '2. Sample Arrived' },
+    { value: '3. PI Issued', label: '3. PI Issued' },
+    { value: '4. Payment Done', label: '4. Payment Done' },
+    { value: '5. Tests are in progress', label: '5. Tests are in progress' },
+    { value: '6. Test-report ready', label: '6. Test-report ready' },
+    { value: '7. Certificate ready', label: '7. Certificate ready' }
+  ],
   created: new Date(),
   articles: []
 };
@@ -28,8 +39,9 @@ export interface IState {
   link : string;
   testingTime: string;
   serialNumber: string;
-  applicantName : string;
-  testingCompany : string;
+  applicantName: string;
+  testingCompany: string;
+  stage: string;
   standards : string;
   price: number;
   paid: boolean;
@@ -79,6 +91,7 @@ const emptyState : IState = {
   proforma: '',
   paid2: false,
   length: '1',
+  stage: '',
   testingTime: '21',
   width: '1.5',
   proformaReceivedDate: '',

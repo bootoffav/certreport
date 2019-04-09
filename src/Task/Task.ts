@@ -1,4 +1,4 @@
-import { select_options, emptyState, IState } from './defaults';
+import { select_options, emptyState, IState } from '../defaults';
 
 interface ITask {
   state: {}
@@ -9,14 +9,14 @@ interface ITask {
 const dataSeparator = '-------------------------------------------------';
 
 export enum Stage {
-  'Preparing Sample',
-  'Sample Sent',
-  'Sample Arrived',
-  'PI Issued',
-  'Payment Done',
-  'Tests are in progress',
-  'Test-report ready',
-  'Certificate ready'
+  '0. Preparing Sample',
+  '1. Sample Sent',
+  '2. Sample Arrived',
+  '3. PI Issued',
+  '4. Payment Done',
+  '5. Tests are in progress',
+  '6. Test-report ready',
+  '7. Certificate ready'
 }
 
 class Task implements ITask {
@@ -30,7 +30,13 @@ class Task implements ITask {
   }) {
     Object.assign(this, props);
     this.state = this.parse(props.DESCRIPTION, props.UF_CRM_TASK);
-    this.stage = this.determineStage();
+    if (this.state.stage) {
+      // @ts-ignore
+      this.stage = Stage[this.state.stage];
+    } else {
+      this.stage = this.determineStage();
+      this.state.stage = Stage[this.stage];
+    }
   }
 
   parseable_description = (desc: string) => desc.startsWith('[B]Applicant name:[/B]');
@@ -87,6 +93,7 @@ class Task implements ITask {
       'tests to be finished on': 'testFinishedOn',
       'results to be received on': 'certReceivedOn',
       'Resume': 'resume',
+      'Stage': 'stage',
       'Comments': 'comments',
       'Edit': 'link',
       'Second payment': 'secondPayment'
@@ -102,7 +109,7 @@ class Task implements ITask {
       .slice(1);
 
     for (let i = 0; i < props.length; i++) parsedState[prop_map[props[i]]] = vals[i];
-    // parsedState = props.reduce((obj, k: string, i: number) => ({ ...obj, [prop_map[k]]: vals[i] }), {});
+    
     if (parsedState.proforma) {
       [ parsedState.proformaReceivedDate, parsedState.proformaNumber ] = parsedState.proforma.split(', ');
       parsedState.proformaReceived = true;
@@ -150,17 +157,25 @@ class Task implements ITask {
     return parsedState as IState;
 };
 
-  determineStage() : Stage {
-    if (this.state.readyOn && !this.state.sentOn) return Stage['Preparing Sample'];
-    if (this.state.sentOn && !this.state.receivedOn) return Stage['Sample Sent'];
-    if (this.state.receivedOn && !this.state.proformaReceived) return Stage['Sample Arrived'];
-    if (this.state.proformaReceived && !this.state.paid) return Stage['PI Issued'];
-    if (this.state.paid && !this.state.testFinishedOnPlanDate) return Stage['Payment Done'];
-    if (this.state.testFinishedOnPlanDate && !this.state.testFinishedOnRealDate) return Stage['Tests are in progress'];
-    if (this.state.testFinishedOnRealDate && !this.state.certReceivedOnRealDate) return Stage['Test-report ready'];
-    if (this.state.certReceivedOnRealDate) return Stage['Certificate ready'];
+  determineStage(): Stage {
+    if (this.state.readyOn && !this.state.sentOn) return Stage['0. Preparing Sample'];
+    if (this.state.sentOn && !this.state.receivedOn) return Stage['1. Sample Sent'];
+    if (!this.state.proformaReceived && !this.state.paid && this.state.resume) return Stage['7. Certificate ready'];
+    if (this.state.receivedOn && !this.state.proformaReceived && !this.state.startedOn) return Stage['2. Sample Arrived'];
+    if (this.state.proformaReceived && !this.state.paid) return Stage['3. PI Issued'];
+    if (this.state.paid && !this.state.testFinishedOnPlanDate) return Stage['4. Payment Done'];
     
-    return Stage['Preparing Sample']; //default clause if no other case triggered;
+    // if (this.state.startedOn && !this.state.paid && !this.state.proformaReceived) {
+    //   if (new Date(this.state.startedOn) < new Date) {
+    //     return Stage['Tests are in progress'];
+    //   }
+    // }
+    
+    if (this.state.testFinishedOnPlanDate && !this.state.testFinishedOnRealDate) return Stage['5. Tests are in progress'];
+    if (this.state.testFinishedOnRealDate && !this.state.certReceivedOnRealDate) return Stage['6. Test-report ready'];
+    if (this.state.certReceivedOnRealDate) return Stage['7. Certificate ready'];
+    
+    return Stage['0. Preparing Sample']; //default clause if no other case triggered;
   }
 }
 

@@ -1,7 +1,7 @@
 import qs from 'qs';
 import m from 'moment';
-import { dataSeparator } from './Task';
-import Task from './Task';
+import { dataSeparator } from './Task/Task';
+import Task from './Task/Task';
 import PDF from './components/Export/PDF';
 import StateAdapter from './StateAdapter';
 import { IState } from './defaults';
@@ -101,9 +101,10 @@ class B24 {
           `${state.readyOn ? '[B]Sample ready on:[/B] ' + stAd.formatDate(state.readyOn) + '\n' : ''}` +
           `${state.sentOn ? '[B]to be sent on:[/B] ' + stAd.formatDate(state.sentOn) + '\n' : ''}` +
           `${state.receivedOn ? '[B]to be received on:[/B] ' + stAd.formatDate(state.receivedOn) + '\n' : ''}` +
-          // `${state.startedOn ? '[B]tests to be started on:[/B] ' + stAd.formatDate(state.startedOn) + '\n' : ''}` +
+          `${state.startedOn ? '[B]tests to be started on:[/B] ' + stAd.formatDate(state.startedOn) + '\n' : ''}` +
           `${stAd.testFinishedOn ? '[B]tests to be finished on:[/B] ' + stAd.testFinishedOn + '\n' : ''}` +
           `${stAd.certReceivedOn ? '[B]results to be received on:[/B] ' + stAd.certReceivedOn + '\n' : ''}` +
+          `${state.stage ? '[B]Stage:[/B] ' + state.stage + '\n' : ''}` +
           `${state.resume ? '[B]Resume:[/B] ' + state.resume + '\n' : ''}` +
           `${state.comments ? '[B]Comments:[/B] ' + state.comments + '\n' : ''}` +
           `${state.link ? '[B]Edit:[/B] ' + state.link + '\n' : ''} ` +

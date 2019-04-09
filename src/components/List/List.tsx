@@ -4,7 +4,7 @@ import m from 'moment';
 import Loader from 'react-loader-spinner';
 import ReactTable, { Column } from "react-table";
 import { Link } from 'react-router-dom';
-import Task, { Stage } from '../../Task';
+import Task, { Stage } from '../../Task/Task';
 import '../../css/style.css';
 import { Toolbar } from '../Toolbar/Toolbar';
 // import { Export } from '../Export/Export';
@@ -81,7 +81,7 @@ export default class List extends React.Component {
     Header: 'Status',
     id: 'stage',
     minWidth: 100,
-    accessor: (row: any) => `${row.stage !== undefined ? row.stage + '. ' + Stage[row.stage] : ''}`
+    accessor: (row: any) => Stage[row.stage]
   }, {
     Header: 'Task name',
     accessor: 'TITLE',
@@ -209,7 +209,7 @@ export default class List extends React.Component {
 
   updateState = (allTasks : Task[]) : void => {
     //определить задачи по которым будет создан список
-    const uncompletedTasks : Task[] = allTasks.filter((task: Task) => task.stage !== Stage['Certificate ready']); //только те у которых статус не готов
+    const uncompletedTasks : Task[] = allTasks.filter((task: Task) => task.stage !== Stage['7. Certificate ready']); //только те у которых статус не готов
     
     const tasks: Task [] = this.state.showCompletedTasks
       ? allTasks
@@ -278,26 +278,26 @@ export default class List extends React.Component {
     let hidden: number[];
 
     switch (requiredStage) {
-      case Stage['Preparing Sample']:
+      case Stage['0. Preparing Sample']:
         hidden = [3, 6, 7, 8, 9, 10, 11, 12, 17, 18];
         break;
-      case Stage['Sample Sent']:
+      case Stage['1. Sample Sent']:
         hidden = [3, 5, 7, 8, 9, 10, 11, 12, 17, 19];
         break;
-      case Stage['Sample Arrived']:
+      case Stage['2. Sample Arrived']:
         hidden = [3, 5, 6, 8, 9, 10, 11, 12, 17, 19];
         break;
-      case Stage['PI Issued']:
+      case Stage['3. PI Issued']:
         hidden = [3, 5, 6, 7, 8, 9, 12, 13, 17, 19];
         break;
-      case Stage['Payment Done']:
+      case Stage['4. Payment Done']:
         hidden = [3, 5, 6, 7, 8, 9, 17];
         break;
-      case Stage['Tests are in progress']:
+      case Stage['5. Tests are in progress']:
         hidden = [3, 5, 6, 7, 9, 10, 11, 12, 17, 18];
         break;
-      case Stage['Test-report ready']:
-      case Stage['Certificate ready']:
+      case Stage['6. Test-report ready']:
+      case Stage['7. Certificate ready']:
         hidden = [3, 5, 6, 7, 8, 10, 11, 12];
         break;
       default:
@@ -317,17 +317,17 @@ export default class List extends React.Component {
         : {};
       
       switch (this.state.requiredStage) {
-        case Stage['Preparing Sample']:
+        case Stage['0. Preparing Sample']:
           return getResult('readyOn', 2);
-        case Stage['Sample Sent']:
+        case Stage['1. Sample Sent']:
           return getResult('sentOn', 7);
-        case Stage['Sample Arrived']:
+        case Stage['2. Sample Arrived']:
           return getResult('receivedOn', 2);
-        case Stage['PI Issued']:
+        case Stage['3. PI Issued']:
           return getResult('proformaReceivedDate', 2);
-        case Stage['Payment Done']:
+        case Stage['4. Payment Done']:
           return getResult('paymentDate', 2);
-        case Stage['Tests are in progress']:
+        case Stage['5. Tests are in progress']:
           return getResult('testFinishedOnPlanDate', 1);
       }
     }

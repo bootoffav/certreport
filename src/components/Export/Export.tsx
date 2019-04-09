@@ -23,7 +23,7 @@ class Export extends React.Component<ExportProps> {
   render() {
     return (
     <>
-      <div className="col">
+      <div className="col-2">
         <button className="btn btn-info btn-block"
           onClick={e => {
             e.preventDefault();
