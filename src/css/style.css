@@ -12,8 +12,16 @@ label, p {
     font-weight: 200;
 }
 .navbar-light {
-    border-radius: 3pt;
     font-size: 1.2em;
+    background-color: rgba(166, 188, 212, 0.5)
+}
+
+.oi-thumb-up {
+    color: green;
+}
+
+.oi-circle-x {
+    color: red;
 }
 
 .loader {

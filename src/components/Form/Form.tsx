@@ -15,7 +15,6 @@ import { Stage } from '../../Task/Task';
 
 interface IFormState extends IState {
   requestStatus: Status;
-  stage: string;
 }
 
 interface IFormProps {
@@ -255,7 +254,40 @@ export default class Form extends React.Component<IFormProps> {
                 </div>
               </div>
                 <div className="form-row">
-                  <BaseInput value={this.state.pretreatment1} id='pretreatment1' label='Pre-treatment 1' handleChange={this.handleChange} />
+                {/* <BaseInput value={this.state.pretreatment1} id='pretreatment1' label='Pre-treatment 1' handleChange={this.handleChange} /> */}
+                  <div className='col'>
+                    Pre-treatment 1
+                    <div className="input-group">
+                      <input type='text' required={true} className="form-control"
+                        id='pretreatment1' value={this.state.pretreatment1} onChange={this.handleChange}/>
+                      <div className="input-group-append">
+                        <div className="input-group-text">
+                          <div className="form-check form-check-inline">
+                          <input type="radio" name="pretreatment1Result" id="pretreatment1Fail"
+                            checked={this.state.pretreatment1Result === 'fail'}
+                            onChange={() => this.setState({
+                              pretreatment1Result: 'fail'
+                            })
+                            }
+                          />
+                            <label className="ml-2 form-check-label" htmlFor="pretreatment1Fail">
+                              <span className="oi oi-circle-x"></span>
+                            </label>
+                          </div>
+                          <div className="form-check form-check-inline">
+                          <input type="radio" name="pretreatment1Result" id="pretreatment1Pass"
+                            checked={this.state.pretreatment1Result === 'pass'}
+                            onChange={() => this.setState({
+                              pretreatment1Result: 'pass'
+                            })
+                            }
+                          />
+                            <label className="form-check-label ml-2" htmlFor="pretreatment1Pass"><span className="oi oi-thumb-up"></span></label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                   <BaseInput value={this.state.pretreatment2} id='pretreatment2' label='Pre-treatment 2' handleChange={this.handleChange} />
                   <BaseInput value={this.state.pretreatment3} id='pretreatment3' label='Pre-treatment 3' handleChange={this.handleChange} />
                 </div>

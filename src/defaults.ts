@@ -64,6 +64,7 @@ export interface IState {
   certificate: string;
   materialNeeded: string;
   pretreatment1: string;
+  pretreatment1Result: string;
   pretreatment2: string;
   pretreatment3: string;
   length: string;
@@ -128,6 +129,7 @@ const emptyState : IState = {
   testReport: '',
   certificate: '',
   pretreatment1: '',
+  pretreatment1Result: '',
   pretreatment2: '',
   pretreatment3: '',
   otherTextInDescription: ''

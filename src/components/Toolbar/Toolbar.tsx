@@ -36,8 +36,8 @@ class Toolbar extends React.Component<Props> {
         ><input type="radio" />4. Payment Done</label>
         <label
           className="btn btn-warning btn-sm"
-          onClick={() => this.props.onClick(Stage['5. Tests are in progress'])}
-        ><input type="radio" />5. Laboratory is performing tests</label>
+          onClick={() => this.props.onClick(Stage['5. Testing is started'])}
+        ><input type="radio" />5. Testing is started</label>
         <label
           className="btn btn-warning btn-sm"
           onClick={() => this.props.onClick(Stage['6. Test-report ready'])}
@@ -53,7 +53,8 @@ class Toolbar extends React.Component<Props> {
   static filter = (tasks: Task[], requiredStage: Stage | undefined = undefined, i = 1) =>
     requiredStage !== undefined
       ? tasks
-          .filter(t => t.stage === requiredStage)
+        //@ts-ignore
+          .filter(t => Stage[t.state.stage] === requiredStage)
           .map(t => {
             t.position = i++;
             return t;

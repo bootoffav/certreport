@@ -3,7 +3,7 @@ import { select_options, emptyState, IState } from '../defaults';
 interface ITask {
   state: {}
   position?: number;
-  determineStage: () => Stage;
+  determineStage: () => string;
 }
 
 const dataSeparator = '-------------------------------------------------';
@@ -14,7 +14,7 @@ export enum Stage {
   '2. Sample Arrived',
   '3. PI Issued',
   '4. Payment Done',
-  '5. Tests are in progress',
+  '5. Testing is started',
   '6. Test-report ready',
   '7. Certificate ready'
 }
@@ -22,7 +22,6 @@ export enum Stage {
 class Task implements ITask {
   state: IState;
   position?: number;
-  stage: Stage;
 
   constructor(props: {
     DESCRIPTION: string;
@@ -30,12 +29,8 @@ class Task implements ITask {
   }) {
     Object.assign(this, props);
     this.state = this.parse(props.DESCRIPTION, props.UF_CRM_TASK);
-    if (this.state.stage) {
-      // @ts-ignore
-      this.stage = Stage[this.state.stage];
-    } else {
-      this.stage = this.determineStage();
-      this.state.stage = Stage[this.stage];
+    if (!this.state.stage) {
+      this.state.stage = this.determineStage();
     }
   }
 
@@ -139,13 +134,26 @@ class Task implements ITask {
       delete parsedState.secondPayment;
     }
     
+    if (parsedState.pretreatment1) {
+      [
+        parsedState.pretreatment1,
+        parsedState.pretreatment1Result = ''
+      ] = parsedState.pretreatment1.split(', ');
+    }
+
     if (parsedState.testFinishedOn) {
-      [parsedState.testFinishedOnPlanDate, parsedState.testFinishedOnRealDate] = parsedState.testFinishedOn.split(', ')
+      [
+        parsedState.testFinishedOnPlanDate,
+        parsedState.testFinishedOnRealDate = ''
+      ] = parsedState.testFinishedOn.split(', ')
       delete parsedState.testFinishedOn;
     }
     
     if (parsedState.certReceivedOn) {
-      [parsedState.certReceivedOnPlanDate, parsedState.certReceivedOnRealDate] = parsedState.certReceivedOn.split(', ')
+      [
+        parsedState.certReceivedOnPlanDate,
+        parsedState.certReceivedOnRealDate = ''
+      ] = parsedState.certReceivedOn.split(', ')
       delete parsedState.certReceivedOn;
     }
     
@@ -157,13 +165,13 @@ class Task implements ITask {
     return parsedState as IState;
 };
 
-  determineStage(): Stage {
-    if (this.state.readyOn && !this.state.sentOn) return Stage['0. Preparing Sample'];
-    if (this.state.sentOn && !this.state.receivedOn) return Stage['1. Sample Sent'];
-    if (!this.state.proformaReceived && !this.state.paid && this.state.resume) return Stage['7. Certificate ready'];
-    if (this.state.receivedOn && !this.state.proformaReceived && !this.state.startedOn) return Stage['2. Sample Arrived'];
-    if (this.state.proformaReceived && !this.state.paid) return Stage['3. PI Issued'];
-    if (this.state.paid && !this.state.testFinishedOnPlanDate) return Stage['4. Payment Done'];
+  determineStage(): string {
+    if (this.state.readyOn && !this.state.sentOn) return '0. Preparing Sample';
+    if (this.state.sentOn && !this.state.receivedOn) return '1. Sample Sent';
+    if (!this.state.proformaReceived && !this.state.paid && this.state.resume) return '7. Certificate ready';
+    if (this.state.receivedOn && !this.state.proformaReceived && !this.state.startedOn) return '2. Sample Arrived';
+    if (this.state.proformaReceived && !this.state.paid) return '3. PI Issued';
+    if (this.state.paid && !this.state.testFinishedOnPlanDate) return '4. Payment Done';
     
     // if (this.state.startedOn && !this.state.paid && !this.state.proformaReceived) {
     //   if (new Date(this.state.startedOn) < new Date) {
@@ -171,11 +179,11 @@ class Task implements ITask {
     //   }
     // }
     
-    if (this.state.testFinishedOnPlanDate && !this.state.testFinishedOnRealDate) return Stage['5. Tests are in progress'];
-    if (this.state.testFinishedOnRealDate && !this.state.certReceivedOnRealDate) return Stage['6. Test-report ready'];
-    if (this.state.certReceivedOnRealDate) return Stage['7. Certificate ready'];
+    if (this.state.testFinishedOnPlanDate && !this.state.testFinishedOnRealDate) return '5. Tests are in progress';
+    if (this.state.testFinishedOnRealDate && !this.state.certReceivedOnRealDate) return '6. Test-report ready';
+    if (this.state.certReceivedOnRealDate) return '7. Certificate ready';
     
-    return Stage['0. Preparing Sample']; //default clause if no other case triggered;
+    return '0. Preparing Sample'; //default clause if no other case triggered;
   }
 }
 

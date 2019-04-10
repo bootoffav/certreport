@@ -81,7 +81,7 @@ export default class List extends React.Component {
     Header: 'Status',
     id: 'stage',
     minWidth: 100,
-    accessor: (row: any) => Stage[row.stage]
+    accessor: 'state.stage'
   }, {
     Header: 'Task name',
     accessor: 'TITLE',
@@ -209,7 +209,7 @@ export default class List extends React.Component {
 
   updateState = (allTasks : Task[]) : void => {
     //определить задачи по которым будет создан список
-    const uncompletedTasks : Task[] = allTasks.filter((task: Task) => task.stage !== Stage['7. Certificate ready']); //только те у которых статус не готов
+    const uncompletedTasks : Task[] = allTasks.filter((task: Task) => task.state.stage !== Stage[8]); //только те у которых статус не готов
     
     const tasks: Task [] = this.state.showCompletedTasks
       ? allTasks
@@ -293,7 +293,7 @@ export default class List extends React.Component {
       case Stage['4. Payment Done']:
         hidden = [3, 5, 6, 7, 8, 9, 17];
         break;
-      case Stage['5. Tests are in progress']:
+      case Stage['5. Testing is started']:
         hidden = [3, 5, 6, 7, 9, 10, 11, 12, 17, 18];
         break;
       case Stage['6. Test-report ready']:
@@ -327,7 +327,7 @@ export default class List extends React.Component {
           return getResult('proformaReceivedDate', 2);
         case Stage['4. Payment Done']:
           return getResult('paymentDate', 2);
-        case Stage['5. Tests are in progress']:
+        case Stage['5. Testing is started']:
           return getResult('testFinishedOnPlanDate', 1);
       }
     }
