@@ -27,9 +27,10 @@ let select_options : {
     { value: '2. Sample Arrived', label: '2. Sample Arrived' },
     { value: '3. PI Issued', label: '3. PI Issued' },
     { value: '4. Payment Done', label: '4. Payment Done' },
-    { value: '5. Tests are in progress', label: '5. Tests are in progress' },
-    { value: '6. Test-report ready', label: '6. Test-report ready' },
-    { value: '7. Certificate ready', label: '7. Certificate ready' }
+    { value: '5. Testing is started', label: '5. Testing is started' },
+    { value: '6. Testing is started', label: '6. Testing is started' },
+    { value: '7. Test-report ready', label: '7. Test-report ready' },
+    { value: '8. Certificate ready', label: '8. Certificate ready' }
   ],
   created: new Date(),
   articles: []

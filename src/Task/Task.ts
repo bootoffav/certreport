@@ -15,8 +15,9 @@ export enum Stage {
   '3. PI Issued',
   '4. Payment Done',
   '5. Testing is started',
-  '6. Test-report ready',
-  '7. Certificate ready'
+  '6. Pre-treatment done - PASS/FAIL',
+  '7. Test-report ready',
+  '8. Certificate ready'
 }
 
 class Task implements ITask {

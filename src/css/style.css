@@ -2,11 +2,6 @@ body {
     font-size: 12px;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
 }
-@media (min-width: 1500px) {
-    .container{
-        max-width: 1870px;
-    }
-}
 
 label, p {
     font-weight: 200;

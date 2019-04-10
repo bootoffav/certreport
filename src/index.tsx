@@ -21,7 +21,7 @@ netlifyIdentity.on('login', user => {
 const App: React.FunctionComponent = () => {
   initApp();
   return (
-    <div className="container">
+    <div className="container-fluid">
       <Router>
         <div>
           <nav className="rounded-bottom navbar navbar-light">

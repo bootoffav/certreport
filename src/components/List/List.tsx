@@ -296,8 +296,10 @@ export default class List extends React.Component {
       case Stage['5. Testing is started']:
         hidden = [3, 5, 6, 7, 9, 10, 11, 12, 17, 18];
         break;
-      case Stage['6. Test-report ready']:
-      case Stage['7. Certificate ready']:
+      // case Stage['6. Pre-treatment done - PASS/FAIL']:
+      //   break;
+      case Stage['7. Test-report ready']:
+      case Stage['8. Certificate ready']:
         hidden = [3, 5, 6, 7, 8, 10, 11, 12];
         break;
       default:

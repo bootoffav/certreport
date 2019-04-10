@@ -3,7 +3,7 @@ import DatePicker from "react-datepicker";
 import B24 from '../../B24';
 import Select from 'react-select';
 import './FormFields.css';
-import { any } from 'prop-types';
+import { dateConverter } from '../../helpers';
 
 const PickDate = (props : any) =>
   <div className="col">
@@ -12,7 +12,7 @@ const PickDate = (props : any) =>
       <DatePicker className="form-control" disabled={props.disabled}
         selected={
           props.date
-          ? new Date(props.date)
+          ? new Date(dateConverter(props.date))
           : null
         }
         dateFormat="dd.MM.yyyy"
@@ -69,7 +69,7 @@ const Paid = (props : any) =>
       <DatePicker className="form-control" disabled={!props.checkboxState}
         selected={
           props.paymentDate
-          ? new Date(props.paymentDate)
+          ? new Date(dateConverter(props.paymentDate))
           : null
         }
         dateFormat="dd.MM.yyyy"
@@ -78,20 +78,20 @@ const Paid = (props : any) =>
     </div>
   </div>
 
-const Pi = (props : any) =>
+const Pi = (props: any) =>
   <div className="form-group">
     Proforma Received
     <div className="input-group">
       <div className="input-group-prepend">
         <div className="input-group-text">
-          <input type='checkbox' id={props.id} onChange={props.handleCheckboxChange} checked={props.proformaReceivedDate}/>
+          <input type='checkbox' id={props.id} onChange={props.handleCheckboxChange} checked={props.proformaReceivedDate} />
         </div>
       </div>
       <DatePicker className="form-control" disabled={!props.checkboxState}
         selected={
           props.date
-          ? new Date(props.date)
-          : null
+            ? new Date(dateConverter(props.date))
+            : null
         }
         dateFormat="dd.MM.yyyy"
         onChange={props.handleDateChange}
@@ -106,6 +106,7 @@ const Pi = (props : any) =>
       />
     </div>
   </div>
+
 
 interface SecondPaymentProps {
   children: any[];

@@ -10,8 +10,7 @@ import m from 'moment';
 import { select_options, emptyState } from '../../defaults';
 import { IState } from '../../defaults';
 import Export from '../Export/Export';
-import { Stage } from '../../Task/Task';
-
+import { dateConverter } from '../../helpers';
 
 interface IFormState extends IState {
   requestStatus: Status;
@@ -254,7 +253,6 @@ export default class Form extends React.Component<IFormProps> {
                 </div>
               </div>
                 <div className="form-row">
-                {/* <BaseInput value={this.state.pretreatment1} id='pretreatment1' label='Pre-treatment 1' handleChange={this.handleChange} /> */}
                   <div className='col'>
                     Pre-treatment 1
                     <div className="input-group">
@@ -306,13 +304,13 @@ export default class Form extends React.Component<IFormProps> {
                     <DatePicker className="form-control"
                       placeholderText="plan"
                       dateFormat="dd.MM.yyyy"
-                      selected={this.state.testFinishedOnPlanDate ? new Date(this.state.testFinishedOnPlanDate) : undefined}
+                      selected={this.state.testFinishedOnPlanDate ? new Date(dateConverter(this.state.testFinishedOnPlanDate)) : undefined}
                       onChange={(date : Date) => this.handleDateChange(date, 'testFinishedOnPlanDate')}
                       />
                     <DatePicker className="form-control"
                       placeholderText="fact"
                       dateFormat="dd.MM.yyyy"
-                      selected={this.state.testFinishedOnRealDate ? new Date(this.state.testFinishedOnRealDate) : undefined}
+                      selected={this.state.testFinishedOnRealDate ? new Date(dateConverter(this.state.testFinishedOnRealDate)) : undefined}
                       onChange={(date: Date) => this.handleDateChange(date, 'testFinishedOnRealDate')}
                       />
                   </div>
@@ -323,13 +321,13 @@ export default class Form extends React.Component<IFormProps> {
                     <DatePicker className="form-control"
                       placeholderText="plan"
                       dateFormat="dd.MM.yyyy"
-                      selected={this.state.certReceivedOnPlanDate ? new Date(this.state.certReceivedOnPlanDate) : undefined}
+                      selected={this.state.certReceivedOnPlanDate ? new Date(dateConverter(this.state.certReceivedOnPlanDate)) : undefined}
                       onChange={(date: Date) => this.handleDateChange(date, 'certReceivedOnPlanDate')}
                     />
                     <DatePicker className="form-control"
                       placeholderText="fact"
                       dateFormat="dd.MM.yyyy"
-                      selected={this.state.certReceivedOnRealDate ? new Date(this.state.certReceivedOnRealDate) : undefined}
+                      selected={this.state.certReceivedOnRealDate ? new Date(dateConverter(this.state.certReceivedOnRealDate)) : undefined}
                       onChange={(date: Date) => this.handleDateChange(date, 'certReceivedOnRealDate')}
                     />
                   </div>
