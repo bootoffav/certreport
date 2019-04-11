@@ -1,9 +1,10 @@
 /**
  * Converts strings that represent dates in the app.
  * @param {string} oldFormat like '05Mar2019' or ''
+ * @param {string} format like 'DD.MM.YYYY'
  * @returns {string} simplification of the ISO 8601 => '2019-03-05'
  */
-function dateConverter(oldFormat: string): string {
+function dateConverter(oldFormat: string, format: string | undefined = undefined): string {
   if (oldFormat === '') {
     return oldFormat;
   }
@@ -24,7 +25,16 @@ function dateConverter(oldFormat: string): string {
     'Nov': '11',
     'Dec': '12'
   };
-  return `${oldFormat.slice(5)}-${months[oldFormat.slice(2, 5)]}-${oldFormat.slice(0, 2)}`;
+  switch (format) {
+    case 'DD.MM.YYYY':
+      return `${oldFormat.slice(0, 2)}.${months[oldFormat.slice(2, 5)]}.${oldFormat.slice(5)}`;
+      break;
+    case undefined:
+      return `${oldFormat.slice(5)}-${months[oldFormat.slice(2, 5)]}-${oldFormat.slice(0, 2)}`;
+      break;
+    default:
+      return '';
+  }
 }
 
 

@@ -74,7 +74,7 @@ class B24 {
       ...B24.defaultParams,
       UF_CRM_TASK: B24.makeUfCrmTaskField(state),
       TITLE: `${state.serialNumber}_${state.testingCompany} - ${state.standards} - ${state.article}, ${state.colour} ` +
-          `(send ${stAd.formatDate(state.sentOn)} - plan ${stAd.formatDate(state.testFinishedOnPlanDate)}) = ${state.price} € | ${state.stage ? state.stage : ''}`,
+          `(send ${stAd.formatDate(state.sentOn)} - plan ${stAd.formatDate(state.testFinishedOnPlanDate)}) = ${state.price} € | ${stAd.getStageForTitle()}`,
       DESCRIPTION: `${state.applicantName ? '[B]Applicant name:[/B] ' + state.applicantName + '\n' : ''}` +
           `${state.product ? '[B]Product:[/B] ' + state.product + '\n' : ''}` +
           `${state.code ? '[B]Code:[/B] ' + state.code + '\n' : ''}` +

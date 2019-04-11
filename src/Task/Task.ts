@@ -15,7 +15,7 @@ export enum Stage {
   '3. PI Issued',
   '4. Payment Done',
   '5. Testing is started',
-  '6. Pre-treatment done - PASS/FAIL',
+  '6. Pre-treatment done',
   '7. Test-report ready',
   '8. Certificate ready'
 }

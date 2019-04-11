@@ -28,7 +28,7 @@ let select_options : {
     { value: '3. PI Issued', label: '3. PI Issued' },
     { value: '4. Payment Done', label: '4. Payment Done' },
     { value: '5. Testing is started', label: '5. Testing is started' },
-    { value: '6. Testing is started', label: '6. Testing is started' },
+    { value: '6. Pre-treatment done', label: '6. Pre-treatment done' },
     { value: '7. Test-report ready', label: '7. Test-report ready' },
     { value: '8. Certificate ready', label: '8. Certificate ready' }
   ],

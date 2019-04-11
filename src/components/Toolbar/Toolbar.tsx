@@ -40,8 +40,8 @@ class Toolbar extends React.Component<Props> {
         ><input type="radio" />5. Testing is started</label>
         <label
           className="btn btn-warning btn-sm"
-          onClick={() => this.props.onClick(Stage['6. Pre-treatment done - PASS/FAIL'])}
-        ><input type="radio" />6. Pre-treatment done - PASS/FAIL</label>
+          onClick={() => this.props.onClick(Stage['6. Pre-treatment done'])}
+        ><input type="radio" />6. Pre-treatment done</label>
         <label
           className="btn btn-warning btn-sm"
           onClick={() => this.props.onClick(Stage['7. Test-report ready'])}
