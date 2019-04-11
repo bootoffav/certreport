@@ -5,16 +5,14 @@ import Select from 'react-select';
 import './FormFields.css';
 import { dateConverter } from '../../helpers';
 
+const selected = (date: string) => date ? new Date(dateConverter(date)) : null
+
 const PickDate = (props : any) =>
   <div className="col">
     {props.label}
     <div className="form-group">
       <DatePicker className="form-control" disabled={props.disabled}
-        selected={
-          props.date
-          ? new Date(dateConverter(props.date))
-          : null
-        }
+        selected={selected(props.date)}
         dateFormat="dd.MM.yyyy"
         onChange={props.handleChange}
       />
@@ -67,11 +65,7 @@ const Paid = (props : any) =>
         </div>
       </div>
       <DatePicker className="form-control" disabled={!props.checkboxState}
-        selected={
-          props.paymentDate
-          ? new Date(dateConverter(props.paymentDate))
-          : null
-        }
+        selected={selected(props.date)}
         dateFormat="dd.MM.yyyy"
         onChange={props.handleChange}
       />
@@ -88,11 +82,7 @@ const Pi = (props: any) =>
         </div>
       </div>
       <DatePicker className="form-control" disabled={!props.checkboxState}
-        selected={
-          props.date
-            ? new Date(dateConverter(props.date))
-            : null
-        }
+        selected={selected(props.date)}
         dateFormat="dd.MM.yyyy"
         onChange={props.handleDateChange}
         placeholderText={props.checkboxState ? 'Receiving date' : ''}

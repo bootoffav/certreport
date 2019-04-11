@@ -25,7 +25,7 @@ const App: React.FunctionComponent = () => {
       <Router>
         <div>
           <nav className="rounded-bottom navbar navbar-light">
-            <div className="container d-flex">
+            <div className="container-fluid d-flex">
               <div className="col-1">
                 <a className="navbar-brand" href="/">
                   <img src="/img/logo.png" width="150" height="50" className="d-inline-block align-top" alt=""/>

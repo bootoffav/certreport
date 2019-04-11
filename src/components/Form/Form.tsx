@@ -148,7 +148,7 @@ export default class Form extends React.Component<IFormProps> {
                   <Paid
                     id='paid'
                     checkboxState={this.state.paid}
-                    paymentDate={this.state.paymentDate}
+                    date={this.state.paymentDate}
                     handleChange={(date : any) => this.handleDateChange(date, 'paymentDate')}
                     handleCheckboxChange={(e : any) => {
                       if (!e.target.checked) {
@@ -184,7 +184,7 @@ export default class Form extends React.Component<IFormProps> {
                     <Paid
                       id='paid2'
                       checkboxState={this.state.paid2}
-                      paymentDate={this.state.paymentDate2}
+                      date={this.state.paymentDate2}
                       handleChange={(date : any) => this.handleDateChange(date, 'paymentDate2')}
                       handleCheckboxChange={(e : any) => {
                         if (!e.target.checked) {

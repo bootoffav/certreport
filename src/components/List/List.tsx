@@ -83,7 +83,7 @@ export default class List extends React.Component {
     minWidth: 100,
     accessor: 'state.stage'
   }, {
-    Header: 'Task name',
+    Header: 'Task title',
     accessor: 'TITLE',
     id: 'taskName',
     minWidth: 550,
