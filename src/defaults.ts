@@ -22,7 +22,7 @@ let select_options : {
     {value: 'Satra (UK)', label: 'Satra (UK)'}
   ],
   stages: [
-    { value: '0. Preparing Sample', label: '0. Preparing Sample' },
+    { value: '0. Sample to be prepared', label: '0. Sample to be prepared' },
     { value: '1. Sample Sent', label: '1. Sample Sent' },
     { value: '2. Sample Arrived', label: '2. Sample Arrived' },
     { value: '3. PI Issued', label: '3. PI Issued' },

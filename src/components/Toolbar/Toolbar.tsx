@@ -16,8 +16,8 @@ class Toolbar extends React.Component<Props> {
         ><input type="radio" />All</label>
         <label
           className="btn btn-warning btn-sm"
-          onClick={() => this.props.onClick(Stage['0. Preparing Sample'])}
-        ><input type="radio" />0. Preparing sample</label>
+          onClick={() => this.props.onClick(Stage['0. Sample to be prepared'])}
+        ><input type="radio" />0. Sample to be prepared</label>
         <label
           className="btn btn-warning btn-sm"
           onClick={() => this.props.onClick(Stage['1. Sample Sent'])}

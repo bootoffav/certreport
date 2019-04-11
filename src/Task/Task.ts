@@ -9,7 +9,7 @@ interface ITask {
 const dataSeparator = '-------------------------------------------------';
 
 export enum Stage {
-  '0. Preparing Sample',
+  '0. Sample to be prepared',
   '1. Sample Sent',
   '2. Sample Arrived',
   '3. PI Issued',
@@ -167,7 +167,7 @@ class Task implements ITask {
 };
 
   determineStage(): string {
-    if (this.state.readyOn && !this.state.sentOn) return '0. Preparing Sample';
+    if (this.state.readyOn && !this.state.sentOn) return '0. Sample to be prepared';
     if (this.state.sentOn && !this.state.receivedOn) return '1. Sample Sent';
     if (!this.state.proformaReceived && !this.state.paid && this.state.resume) return '7. Certificate ready';
     if (this.state.receivedOn && !this.state.proformaReceived && !this.state.startedOn) return '2. Sample Arrived';
@@ -176,15 +176,15 @@ class Task implements ITask {
     
     // if (this.state.startedOn && !this.state.paid && !this.state.proformaReceived) {
     //   if (new Date(this.state.startedOn) < new Date) {
-    //     return Stage['Tests are in progress'];
+    //     return Stage['Testing is started'];
     //   }
     // }
     
-    if (this.state.testFinishedOnPlanDate && !this.state.testFinishedOnRealDate) return '5. Tests are in progress';
+    if (this.state.testFinishedOnPlanDate && !this.state.testFinishedOnRealDate) return '5. Testing is started';
     if (this.state.testFinishedOnRealDate && !this.state.certReceivedOnRealDate) return '6. Test-report ready';
     if (this.state.certReceivedOnRealDate) return '7. Certificate ready';
     
-    return '0. Preparing Sample'; //default clause if no other case triggered;
+    return '0. Sample to be prepared'; //default clause if no other case triggered;
   }
 }
 

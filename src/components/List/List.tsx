@@ -278,7 +278,7 @@ export default class List extends React.Component {
     let hidden: number[];
 
     switch (requiredStage) {
-      case Stage['0. Preparing Sample']:
+      case Stage['0. Sample to be prepared']:
         hidden = [3, 6, 7, 8, 9, 10, 11, 12, 17, 18];
         break;
       case Stage['1. Sample Sent']:
@@ -319,7 +319,7 @@ export default class List extends React.Component {
         : {};
       
       switch (this.state.requiredStage) {
-        case Stage['0. Preparing Sample']:
+        case Stage['0. Sample to be prepared']:
           return getResult('readyOn', 2);
         case Stage['1. Sample Sent']:
           return getResult('sentOn', 7);
