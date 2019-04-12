@@ -182,7 +182,7 @@ class Task implements ITask {
     
     if (this.state.testFinishedOnPlanDate && !this.state.testFinishedOnRealDate) return '5. Testing is started';
     if (this.state.testFinishedOnRealDate && !this.state.certReceivedOnRealDate) return '6. Test-report ready';
-    if (this.state.certReceivedOnRealDate) return '7. Certificate ready';
+    if (this.state.certReceivedOnRealDate) return '8. Certificate ready';
     
     return '0. Sample to be prepared'; //default clause if no other case triggered;
   }
