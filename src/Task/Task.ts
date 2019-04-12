@@ -169,7 +169,7 @@ class Task implements ITask {
   determineStage(): string {
     if (this.state.readyOn && !this.state.sentOn) return '0. Sample to be prepared';
     if (this.state.sentOn && !this.state.receivedOn) return '1. Sample Sent';
-    if (!this.state.proformaReceived && !this.state.paid && this.state.resume) return '7. Certificate ready';
+    if (!this.state.proformaReceived && !this.state.paid && this.state.resume) return '8. Certificate ready';
     if (this.state.receivedOn && !this.state.proformaReceived && !this.state.startedOn) return '2. Sample Arrived';
     if (this.state.proformaReceived && !this.state.paid) return '3. PI Issued';
     if (this.state.paid && !this.state.testFinishedOnPlanDate) return '4. Payment Done';

@@ -45,11 +45,11 @@ class Toolbar extends React.Component<Props> {
         <label
           className="btn btn-warning btn-sm"
           onClick={() => this.props.onClick(Stage['7. Test-report ready'])}
-        ><input type="radio" />6. Test-report ready</label>
+        ><input type="radio" />7. Test-report ready</label>
         <label
           className="btn btn-warning btn-sm"
           onClick={() => this.props.onClick(Stage['8. Certificate ready'])}
-        ><input type="radio" />7. Certificate ready</label>
+        ><input type="radio" />8. Certificate ready</label>
       </div>
     </div>);
   }
