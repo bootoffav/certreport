@@ -74,7 +74,7 @@ class B24 {
       ...B24.defaultParams,
       UF_CRM_TASK: B24.makeUfCrmTaskField(state),
       TITLE: `${state.serialNumber}_${state.testingCompany} - ${state.standards} - ${state.article}, ${state.colour} ` +
-          `(send ${stAd.formatDate(state.sentOn)} - plan ${stAd.formatDate(state.testFinishedOnPlanDate)}) = ${state.price} € | ${stAd.getStageForTitle()}`,
+          `(send ${state.sentOn} - plan ${state.testFinishedOnPlanDate}) = ${state.price} € | ${stAd.getStageForTitle()}`,
       DESCRIPTION: `${state.applicantName ? '[B]Applicant name:[/B] ' + state.applicantName + '\n' : ''}` +
           `${state.product ? '[B]Product:[/B] ' + state.product + '\n' : ''}` +
           `${state.code ? '[B]Code:[/B] ' + state.code + '\n' : ''}` +
@@ -88,9 +88,9 @@ class B24 {
           `${state.standards ? '[B]Standard:[/B] ' + state.standards + '\n' : ''}` +
           `${state.price ? '[B]Price:[/B] ' + state.price + ' €\n' : ''}` +
           `${stAd.secondPayment ? '[B]Second payment:[/B] ' + stAd.secondPayment + '\n' : ''}` +
-          `${state.paymentDate ? '[B]Payment date:[/B] ' + stAd.formatDate(state.paymentDate) + '\n' : ''}` +
+          `${state.paymentDate ? '[B]Payment date:[/B] ' + state.paymentDate + '\n' : ''}` +
           `${state.testingCompany ? '[B]Testing company:[/B] ' + state.testingCompany + '\n' : ''}` +
-          `${state.proformaReceivedDate && state.proformaNumber ? '[B]Proforma:[/B] ' + stAd.formatDate(state.proformaReceivedDate) + ', ' + state.proformaNumber + '\n' : ''}` +
+          `${state.proformaReceivedDate && state.proformaNumber ? '[B]Proforma:[/B] ' + state.proformaReceivedDate + ', ' + state.proformaNumber + '\n' : ''}` +
           `${state.testReport ? '[B]Test report:[/B] ' + state.testReport + '\n' : ''}` +
           `${state.certificate ? '[B]Certificate:[/B] ' + state.certificate + '\n' : ''}` +
           `${state.materialNeeded ? '[B]Material needed:[/B] ' + state.materialNeeded + '\n' : ''}` +
@@ -98,10 +98,10 @@ class B24 {
           `${state.pretreatment1 ? `[B]Pre-treatment 1:[/B] ${state.pretreatment1}, ${state.pretreatment1Result}` + '\n' : ''}` +
           `${state.pretreatment2 ? '[B]Pre-treatment 2:[/B] ' + state.pretreatment2 + '\n' : ''}` +
           `${state.pretreatment3 ? '[B]Pre-treatment 3:[/B] ' + state.pretreatment3 + '\n' : ''}` +
-          `${state.readyOn ? '[B]Sample ready on:[/B] ' + stAd.formatDate(state.readyOn) + '\n' : ''}` +
-          `${state.sentOn ? '[B]to be sent on:[/B] ' + stAd.formatDate(state.sentOn) + '\n' : ''}` +
-          `${state.receivedOn ? '[B]to be received on:[/B] ' + stAd.formatDate(state.receivedOn) + '\n' : ''}` +
-          `${state.startedOn ? '[B]tests to be started on:[/B] ' + stAd.formatDate(state.startedOn) + '\n' : ''}` +
+          `${state.readyOn ? '[B]Sample ready on:[/B] ' + state.readyOn + '\n' : ''}` +
+          `${state.sentOn ? '[B]to be sent on:[/B] ' + state.sentOn + '\n' : ''}` +
+          `${state.receivedOn ? '[B]to be received on:[/B] ' + state.receivedOn + '\n' : ''}` +
+          `${state.startedOn ? '[B]tests to be started on:[/B] ' + state.startedOn + '\n' : ''}` +
           `${stAd.testFinishedOn ? '[B]tests to be finished on:[/B] ' + stAd.testFinishedOn + '\n' : ''}` +
           `${stAd.certReceivedOn ? '[B]results to be received on:[/B] ' + stAd.certReceivedOn + '\n' : ''}` +
           `${state.stage ? '[B]Stage:[/B] ' + state.stage + '\n' : ''}` +
