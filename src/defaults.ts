@@ -51,7 +51,7 @@ export interface IState {
   proforma: string;
   proformaReceivedDate: string;
   proformaNumber: string;
-  price2: string;
+  price2: number;
   paid2: boolean;
   paymentDate2: string;
   proformaReceived2: string;
@@ -125,7 +125,7 @@ const emptyState : IState = {
   testingCompany: '',
   brand: '',
   price: 0,
-  price2: '',
+  price2: 0,
   comments: '',
   testReport: '',
   certificate: '',

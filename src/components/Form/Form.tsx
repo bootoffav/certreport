@@ -36,7 +36,7 @@ export default class Form extends React.Component<IFormProps> {
   constructor(props: IFormProps) {
     super(props);
     this.task_id = props.match.params.id;
-    this.state = { ...props.location.state || emptyState };
+    this.state = props.location.state || emptyState;
     this.state.requestStatus = Status.FillingForm;
   }
 
@@ -69,7 +69,7 @@ export default class Form extends React.Component<IFormProps> {
     });
   }
 
-  handleChange = (e : any) => this.setState({[e.target.id]: e.target.value});
+  handleChange = (e: any) => this.setState({ [e.target.id]: e.target.value });
 
   handleCert (e : any) {
     e.preventDefault();
@@ -185,7 +185,7 @@ export default class Form extends React.Component<IFormProps> {
                       id='paid2'
                       checkboxState={this.state.paid2}
                       date={this.state.paymentDate2}
-                      handleChange={(date : any) => this.handleDateChange(date, 'paymentDate2')}
+                      handleChange={(date: Date) => this.handleDateChange(date, 'paymentDate2')}
                       handleCheckboxChange={(e : any) => {
                         if (!e.target.checked) {
                           this.setState({ paymentDate2: null});
@@ -199,15 +199,15 @@ export default class Form extends React.Component<IFormProps> {
                       checkboxState={this.state.proformaReceived2}
                       proformaReceivedDate={this.state.proformaReceived2}
                       date={this.state.proformaReceivedDate2}
-                      handleCheckboxChange={(e : any) => {
+                      handleCheckboxChange={(e: any) => {
                         if (!e.target.checked) {
                           this.setState({ proformaReceivedDate2: '', proformaNumber2: '' });
                         }
                         this.handleCheckboxChange(e);
-                        }
                       }
-                      handleDateChange={(date : any) => this.handleDateChange(date, 'proformaReceivedDate2')}
-                      handleNumberChange={(date : any) => this.handleChange(date)}
+                      }
+                      handleDateChange={(date: Date) => this.handleDateChange(date, 'proformaReceivedDate2')}
+                      handleNumberChange={(e: React.SyntheticEvent) => this.handleChange(e) }
                       numberId={'proformaNumber2'}
                       number={this.state.proformaNumber2}
                     />
@@ -215,12 +215,10 @@ export default class Form extends React.Component<IFormProps> {
                 </div>
               </div>
                 <div className="form-row">
-                  <Article col='col' value={this.asSelectable(this.state.article)}
-                    options={select_options.articles}
-                    handleChange={(e : any) => this.handleSelectChange([e], 'article')}
-                    handleSlaveChange={(product : any, code : any, brand : any) => {
-                      this.setState({ product, code, brand });
-                    }}
+                <Article col='col' value={this.asSelectable(this.state.article)}
+                  options={select_options.articles}
+                  handleChange={(e: any) => this.handleSelectChange([e], 'article')}
+                  handleSlaveChange={ ({product, code, brand}) => this.setState({ product, code, brand }) }
                   />
                   <BaseInput value={this.state.product} id='product' col="col-4" label='Product' handleChange={this.handleChange} />
                   <BaseInput value={this.state.code} id='code' label='Code' handleChange={this.handleChange} />

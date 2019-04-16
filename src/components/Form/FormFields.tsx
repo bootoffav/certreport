@@ -37,7 +37,11 @@ const BaseInput = (props : {
     </div>
   </div>
 
-const Price = (props : any) =>
+const Price: React.FunctionComponent<{
+  id: string;
+  value: number;
+  handleChange: (e: any) => void;
+}> = props =>
   <div className="form-group">
     Price
     <div className="input-group">
@@ -98,11 +102,7 @@ const Pi = (props: any) =>
   </div>
 
 
-interface SecondPaymentProps {
-  children: any[];
-}
-
-const SecondPayment = (props : SecondPaymentProps) => {
+const SecondPayment: React.FunctionComponent<{ children: any[] }> = (props) => {
   return <div className="form-group">
     Payment #2
     <button type="button" className="btn btn-sm btn-block btn-light form-control SecondPayment_button" data-toggle="modal" data-target="#secondPayment">
@@ -137,55 +137,42 @@ interface ArticleProps {
   options: any[];
   value: any;
   col: string | undefined;
-  handleSlaveChange: (
+  handleSlaveChange: ({}: {
     product: string,
     code: string,
-    brand: string) => void;
+    brand: string;
+  }) => void;
   handleChange: (a: any) => void;
 }
 
 class Article extends React.Component<ArticleProps> {
-  prop_map = {
-    code: 'PROPERTY_380',
-    weight: 'PROPERTY_384',
-    product: 'PROPERTY_386',
-    brand: 'SECTION_ID'
-  };
-
-  brand_map : {
-    [key: string]: string;
-  } = {
-    8568: 'XMF',
-    8574: 'XMT',
-    8572: 'XMS'
-  };
-
-  formatGroupLabel = (data : any) => (
+  formatGroupLabel = (data: any) => (
     <div className="Article_groupStyles">
       <span>{data.label}</span>
       <span className="Article_groupBadgeStyles">{data.options.length}</span>
     </div>
   );
 
-  onChange = async (e : any) => {
-    let product = await B24.get_product(e.value);
-    this.props.handleSlaveChange(
-      `${ product[this.prop_map.product] ? product[this.prop_map.product].value : '' }, ${ product[this.prop_map.weight] ? product[this.prop_map.weight].value : '' }`,
-      product[this.prop_map.code] ? product[this.prop_map.code].value : '',
-      this.brand_map[ product[this.prop_map.brand] ]
-    );
-    this.props.handleChange(e);
-  }
+  onChange = async ({ value, label }: { value: any; label: any }) => {
+    const brand_map: {
+      [key: number]: string;
+    } = {
+      8568: 'XMF',
+      8574: 'XMT',
+      8572: 'XMS'
+    };
 
-  findCurrentValue = () => {
-    let result;
-    this.props.options.forEach((section : any) => {
-      let sectionResult = section.options.find((el : any) => el.label === this.props.value);
-      if (sectionResult) {
-        result = sectionResult;
-      }
-    });
-    return result;
+    const {
+      PROPERTY_386,
+      PROPERTY_384,
+      PROPERTY_380,
+      SECTION_ID
+    } = await B24.get_product(value);
+    const product = `${PROPERTY_386.value || ''}, ${PROPERTY_384.value || ''}`;
+    const code = PROPERTY_380.value || '';
+    const brand = brand_map[SECTION_ID] || '';
+    this.props.handleSlaveChange({product, code, brand});
+    this.props.handleChange({value, label});
   }
 
   render() {

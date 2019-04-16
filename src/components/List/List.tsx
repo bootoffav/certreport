@@ -6,11 +6,11 @@ import ReactTable, { Column } from "react-table";
 import { Link } from 'react-router-dom';
 import Task, { Stage } from '../../Task/Task';
 import '../../css/style.css';
-import { Toolbar } from '../Toolbar/Toolbar';
+import { Toolbar, filter } from '../Toolbar/Toolbar';
 // import { Export } from '../Export/Export';
 import { ColumnSearch, BrandFilter } from '../Filters';
 import CacheManager from '../../CacheManager';
-import Settings from '../Settings/Settings';
+import { Settings } from '../Settings/Settings';
 
 
 
@@ -215,7 +215,7 @@ export default class List extends React.Component {
       ? allTasks
       : uncompletedTasks;
     
-    const visibleTasks: Task[] = Toolbar.filter(tasks);
+    const visibleTasks: Task[] = filter(tasks);
     const totalPrice: number = visibleTasks.reduce((sum: number, task: any) => sum + Number(task.state.price), 0);
     this.visibleColumns();
     this.setState({
@@ -267,7 +267,7 @@ export default class List extends React.Component {
 
   //level 2 filter
   toolbarFilter = (requiredStage: Stage | undefined = undefined) => {
-    let visibleTasks: Task[] = Toolbar.filter(this.state.filteredTasksLevel1, requiredStage);
+    let visibleTasks: Task[] = filter(this.state.filteredTasksLevel1, requiredStage);
     let totalPrice: number = visibleTasks.reduce((sum: number, task: any) => sum + Number(task.state.price), 0);
     this.visibleColumns(requiredStage);
     this.setState({ visibleTasks, totalPrice, requiredStage });
@@ -350,7 +350,9 @@ export default class List extends React.Component {
               localStorage.setItem('showCompletedTasks', Number(!this.state.showCompletedTasks).toString());
               this.setState({ showCompletedTasks: !this.state.showCompletedTasks });
             }}
-            onClose={() => this.updateState(this.state.allTasks)}
+            onClose={() => {
+              this.updateState(this.state.allTasks);
+            }}
           />
         </div>
       </div>
