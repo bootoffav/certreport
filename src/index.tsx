@@ -23,7 +23,7 @@ const App: React.FunctionComponent = () => {
   return (
     <div className="container-fluid">
       <Router>
-        <div>
+        <>
           <nav className="rounded-bottom navbar navbar-light">
             <div className="container-fluid d-flex">
               <div className="col-1">
@@ -48,7 +48,7 @@ const App: React.FunctionComponent = () => {
           <Route exact path="/" component={List} />
           <Route exact path="/add" component={Form} />
           <Route exact path="/edit/:id" component={Form} />
-        </div>
+        </>
       </Router>
     </div>
   );

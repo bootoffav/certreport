@@ -29,6 +29,10 @@ label, p {
     animation: spin 2s linear infinite;
   }
 
+.tab-pane {
+    height: 500px;
+}
+
   /* Safari */
 @-webkit-keyframes spin {
     0% { -webkit-transform: rotate(0deg); }

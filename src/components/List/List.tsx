@@ -50,7 +50,9 @@ export default class List extends React.Component {
       </div>
       <div id="cacheStateLoader" className="p-1 align-self-center"
       >{notUpdated
-        ? <Loader type='Circles' color='blueviolet' height='30' width='30' />
+        ? <div className="spinner-border text-primary" role="status">
+            <span className="sr-only">Loading...</span>
+          </div>
         : ''}
       </div>
     </>
