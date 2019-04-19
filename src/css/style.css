@@ -11,6 +11,10 @@ label, p {
     background-color: rgba(166, 188, 212, 0.5)
 }
 
+a.nav-item {
+    font-size: 1.1em;
+}
+
 .oi-thumb-up {
     color: green;
 }

@@ -1,5 +1,5 @@
-import React, { ReactNode, JSXElementConstructor } from 'react';
-import './Standards.css';
+import React from 'react';
+import { inherits } from 'util';
 
 const Standards: React.FunctionComponent<{
   standards: string;
@@ -9,8 +9,20 @@ const Standards: React.FunctionComponent<{
   resultChange: (el: React.SyntheticEvent) => void;
 }> = (props) => {
 
-  const standards = props.standards.split(', ');
-
+  if (props.standards === '') {
+    return <div className="d-flex justify-content-center align-items-center h-100">
+      <h5 className="text-uppercase">No standards choosen</h5>
+    </div>;
+    }
+  
+    const standards = props.standards.split(', ');
+    
+    /**
+     * Return JSX element for standard in form of accordion
+     * @param standard string represantation of Standard
+     * @param i used as key for React
+   * @returns {JSX}
+   */
   const renderStandard = (standard: string, i: any) => {
     const id = standard.replace(/\s/g, '');
     return <div key={i}>

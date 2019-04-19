@@ -173,6 +173,11 @@ class Task implements ITask {
     return parsedState as IState;
   }
   
+  /**
+   * Create object for managing Standard results, cleans up standards from pass/fail
+   * @param standards Array of standards as strings
+   * @returns [ standards for state, object with Standard Results]
+   */
   parseStandardResults(standards: string[]): [string, {}] {
     let standardsResults: {
       [k: string]: string;
