@@ -2,7 +2,9 @@ import { IState } from './defaults';
 import { dateConverter as dC } from '././helpers';
 
 class StateAdapter {
-  constructor(state : IState) {
+  standardsResult: any;
+
+  constructor(state: IState) {
      Object.assign(this, state);
   }
 
@@ -51,6 +53,25 @@ class StateAdapter {
     }
     return stageForTitle;
   }
+
+  get standardsWithResults(): string {
+    let standards: string = '';
+    
+    for (const [st, res] of Object.entries(this.standardsResult)) {
+      standards += `${st} (${res}), `;
+    }
+    // @ts-ignore
+    for (let st of this.standards.split(', ')) {
+      if (!Object.keys(this.standardsResult).includes(st)) {
+        standards += `${st}, `;
+      }
+    }
+
+    standards = standards.slice(0, -2);
+    return standards;
+  }
+
+  set standardsWithResults(e) {}
 
   get secondPayment() {
     // @ts-ignore

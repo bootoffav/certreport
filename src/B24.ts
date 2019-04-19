@@ -85,7 +85,7 @@ class B24 {
           `${state.width ? '[B]Width of sample, meters:[/B] ' + state.width + '\n' : ''}` +
           `${state.partNumber ? '[B]Part number:[/B] ' + state.partNumber + '\n' : ''}` +
           `${state.rollNumber ? '[B]Roll number:[/B] ' + state.rollNumber + '\n' : ''}` +
-          `${state.standards ? '[B]Standard:[/B] ' + state.standards + '\n' : ''}` +
+          `${state.standards ? '[B]Standard:[/B] ' + stAd.standardsWithResults + '\n' : ''}` +
           `${state.price ? '[B]Price:[/B] ' + state.price + ' €\n' : ''}` +
           `${stAd.secondPayment ? '[B]Second payment:[/B] ' + stAd.secondPayment + '\n' : ''}` +
           `${state.paymentDate ? '[B]Payment date:[/B] ' + state.paymentDate + '\n' : ''}` +
@@ -164,12 +164,8 @@ class B24 {
       do {
         tasks = tasks.concat(await fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.list?` +
         qs.stringify({
-          order: {
-            ID: 'desc'
-          },
-          filter: {
-            TAG: 'certification'
-          },
+          order: { ID: 'desc' },
+          filter: { TAG: 'certification' },
           start: B24.start
         }))
         .then(response => response.json())

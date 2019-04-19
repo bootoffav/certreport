@@ -11,6 +11,7 @@ import { select_options, emptyState } from '../../defaults';
 import { IState } from '../../defaults';
 import Export from '../Export/Export';
 import { dateConverter } from '../../helpers';
+import Standards from '../Standards/Standards';
 
 interface IFormState extends IState {
   requestStatus: Status;
@@ -395,7 +396,14 @@ export default class Form extends React.Component<IFormProps> {
   }
 
   renderStandards() {
-    return <></>;
+    return <Standards standards={this.state.standards} standardsResult={this.state.standardsResult}
+      resultChange={
+        ({ currentTarget }: any) => {
+          const standardsResult = { ...this.state.standardsResult, [currentTarget.dataset.standard]: currentTarget.value }
+          this.setState({ standardsResult });
+        }
+      }
+    />;
   }
 
   renderFormFooter() {
@@ -414,7 +422,7 @@ export default class Form extends React.Component<IFormProps> {
     <div className="container">
       <Notification status={this.state.requestStatus} />
       <form onSubmit={(e) => this.handleCert(e)}>
-        <nav className="mt-2">
+        <nav className="mt-4">
           <div className="nav nav-tabs" id="nav-tab" role="tablist">
             <a className="nav-item nav-link active" id="nav-basicInfo-tab" data-toggle="tab" href="#nav-basicInfo" role="tab" aria-controls="nav-basicInfo" aria-selected="true">Basic Info</a>
             <a className="nav-item nav-link" id="nav-dates-tab" data-toggle="tab" href="#nav-dates" role="tab" aria-controls="nav-dates" aria-selected="false">Dates</a>

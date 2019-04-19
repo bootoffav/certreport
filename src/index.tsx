@@ -24,7 +24,7 @@ const App: React.FunctionComponent = () => {
     <div className="container-fluid">
       <Router>
         <>
-          <nav className="rounded-bottom navbar navbar-light">
+          <nav className="rounded-bottom navbar navbar-light shadow">
             <div className="container-fluid d-flex">
               <div className="col-1">
                 <a className="navbar-brand" href="/">

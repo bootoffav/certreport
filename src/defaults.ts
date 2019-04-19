@@ -37,6 +37,9 @@ let select_options : {
 };
 
 export interface IState {
+  standardsResult: {
+    [key: string]: 'pass' | 'fail';
+  },
   link : string;
   testingTime: string;
   serialNumber: string;
@@ -87,6 +90,7 @@ export interface IState {
 }
 
 const emptyState : IState = {
+  standardsResult: {},
   resume: undefined,
   link: '',
   paid: false,

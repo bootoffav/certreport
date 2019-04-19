@@ -29,7 +29,7 @@ it('can distinguish data from other description text', function () {
 [B]Width of sample, meters:[/B] 1.5
 [B]Part number:[/B] 2
 [B]Roll number:[/B] 2
-[B]Standard:[/B] EN 1149-3, EN 20471 (Contrast)
+[B]Standard:[/B] EN 1149-3 (fail), EN 20471 (Contrast) (pass)
 [B]Price:[/B] 12 €
 [B]Testing company:[/B] Satra (UK)
 [B]Material needed:[/B] 15 lineal meters
@@ -60,6 +60,10 @@ it('can parse Task properly', () => {
   expect(state.partNumber).toBe('2');
   expect(state.rollNumber).toBe('2');
   expect(state.standards).toBe('EN 1149-3, EN 20471 (Contrast)');
+  expect(state.standardsResult).toEqual({
+    'EN 1149-3': 'fail',
+    'EN 20471 (Contrast)': 'pass'
+  });
   expect(state.price).toBe('12');
   expect(state.testingCompany).toBe('Satra (UK)');
   expect(state.materialNeeded).toBe('15 lineal meters');
@@ -81,6 +85,6 @@ it('can parse Task properly', () => {
 });
 
 it('can correctly determine Stage', () => {
-  expect(Stage[task.stage]).toBe('Sample Arrived');
+  expect(task.state.stage).toBe('8. Certificate ready');
 });
 

@@ -105,7 +105,14 @@ class Task implements ITask {
       .slice(1);
 
     for (let i = 0; i < props.length; i++) parsedState[prop_map[props[i]]] = vals[i];
-    
+
+    if (parsedState.standards) {
+      [
+        parsedState.standards,
+        parsedState.standardsResult
+      ] = this.parseStandardResults(parsedState.standards.split(', '));
+    }
+
     if (parsedState.proforma) {
       [ parsedState.proformaReceivedDate, parsedState.proformaNumber ] = parsedState.proforma.split(', ');
       parsedState.proformaReceived = true;
@@ -164,7 +171,28 @@ class Task implements ITask {
     parsedState.UF_CRM_TASK = uf_crm_task;
 
     return parsedState as IState;
-};
+  }
+  
+  parseStandardResults(standards: string[]): [string, {}] {
+    let standardsResults: {
+      [k: string]: string;
+    } = {};
+    let parsedStandards = '';
+
+    for (let st of standards) {
+      const reqRes = /pass|fail/.exec(st);
+      if (reqRes !== null) {
+        const prop = reqRes.input.slice(0, reqRes.index-2);
+        const value = reqRes[0];
+        standardsResults[prop] = value;
+        parsedStandards += `${prop}, `;
+      } else {
+        parsedStandards += `${st}, `;
+      }
+    }
+
+    return [parsedStandards.slice(0, -2), standardsResults];
+  }
 
   determineStage(): string {
     if (this.state.readyOn && !this.state.sentOn) return '0. Sample to be prepared';

@@ -162,7 +162,7 @@ class Article extends React.Component<ArticleProps> {
       8572: 'XMS'
     };
 
-    this.props.handleChange({value, label});
+    this.props.handleChange({ value, label });
     const {
       PROPERTY_386,
       PROPERTY_384,

@@ -1081,6 +1081,13 @@
   dependencies:
     "@types/jest-diff" "*"
 
+"@types/jquery@^3.3.29":
+  version "3.3.29"
+  resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-3.3.29.tgz#680a2219ce3c9250483722fccf5570d1e2d08abd"
+  integrity sha512-FhJvBninYD36v3k6c+bVk1DSZwh7B5Dpb/Pyk3HKVsiohn0nhbefZZ+3JXbWQhFyt0MxSl2jRDdGQPHeOHFXrQ==
+  dependencies:
+    "@types/sizzle" "*"
+
 "@types/jspdf@^1.2.2":
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/@types/jspdf/-/jspdf-1.2.2.tgz#bb827def0130e72f0692749b0db0c25a7f261840"
@@ -1173,6 +1180,11 @@
   dependencies:
     "@types/prop-types" "*"
     csstype "^2.2.0"
+
+"@types/sizzle@*":
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/@types/sizzle/-/sizzle-2.3.2.tgz#a811b8c18e2babab7d542b3365887ae2e4d9de47"
+  integrity sha512-7EJYyKTL7tFR8+gDbB6Wwz/arpGa0Mywk1TJbNzKzHtzbwVmY4HR9WqS5VV7dsBUKQmPNr192jHr/VpBluj/hg==
 
 "@types/tapable@1.0.2":
   version "1.0.2"
