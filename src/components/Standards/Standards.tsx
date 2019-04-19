@@ -11,7 +11,7 @@ const Standards: React.FunctionComponent<{
 
   if (props.standards === '') {
     return <div className="d-flex justify-content-center align-items-center h-100">
-      <h5 className="text-uppercase">No standards choosen</h5>
+      <h5 className="text-uppercase">No standard chosen</h5>
     </div>;
     }
   
@@ -28,10 +28,11 @@ const Standards: React.FunctionComponent<{
     return <div key={i}>
       <div className="card">
         <div className="card-header" id={`heading_${id}`}>
+          <div className="d-flex">
           <button className="btn btn-link" onClick={(e) => e.preventDefault()} data-toggle="collapse" data-target={`#collapse_${id}`} aria-expanded="true" aria-controls={`collapse_${id}`}>
             {standard}
           </button>
-          <div className="form-check form-check-inline">
+          <div className="ml-auto form-check form-check-inline">
             <input
               className="form-check-input"
               type="radio"
@@ -56,6 +57,7 @@ const Standards: React.FunctionComponent<{
               value="pass"
             />
             <label className="form-check-label"><span className="oi oi-thumb-up"></span></label>
+          </div>
           </div>
         </div>
 

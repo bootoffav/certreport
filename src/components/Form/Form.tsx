@@ -116,7 +116,7 @@ export default class Form extends React.Component<IFormProps> {
     return <>
     <div className="d-flex">
       <BaseInput value={this.state.applicantName} placeholder='SHANGHAI XM GROUP LTD' id='applicantName' label='Applicant name' handleChange={this.handleChange} />
-      <div className="flex-fill ml-2">
+      <div className="w-25 mx-2">
         <div className="form-group">
           Testing company
           <Select
@@ -128,7 +128,7 @@ export default class Form extends React.Component<IFormProps> {
           />
         </div>
       </div>
-      <div className="ml-2">
+      <div className="w-25">
         <div className="form-group">
           Standards
           <Select isMulti
@@ -140,7 +140,7 @@ export default class Form extends React.Component<IFormProps> {
           />
         </div>
       </div>
-      <div className="flex-fill mx-2">
+      <div className="w-25 mx-2">
         <div className="form-group">
           Stage
           <Select
