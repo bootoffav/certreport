@@ -1,6 +1,6 @@
 body {
     font-size: 12px;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+    font-family: 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
 }
 
 label, p {
@@ -23,18 +23,8 @@ a.nav-item {
     color: red;
 }
 
-.loader {
-    border: 4px solid #f3f3f3;
-    border-radius: 50%;
-    border-top: 4px solid yellowgreen;
-    width: 30px;
-    height: 30px;
-    -webkit-animation: spin 2s linear infinite; /* Safari */
-    animation: spin 2s linear infinite;
-  }
-
 .tab-pane {
-    height: 500px;
+    height: 550px;
 }
 
   /* Safari */

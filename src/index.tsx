@@ -4,8 +4,9 @@ import 'open-iconic/font/css/open-iconic-bootstrap.min.css';
 import 'react-table/react-table.css';
 import React, { ReactNode } from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
+import { BrowserRouter as Router, Route, NavLink, Switch } from "react-router-dom";
 import Form from './components/Form/Form';
+import View from './components/View/View';
 import List from './components/List/List';
 import netlifyIdentity from 'netlify-identity-widget';
 import './css/style.css';
@@ -45,9 +46,12 @@ const App: React.FunctionComponent = () => {
               </div>
             </div>
           </nav>
-          <Route exact path="/" component={List} />
-          <Route exact path="/add" component={Form} />
-          <Route exact path="/edit/:id" component={Form} />
+          <Switch>
+            <Route exact path="/" component={List} />
+            <Route exact path="/add" component={Form} />
+            {/* <Route exact path="/:id" component={View} /> */}
+            <Route exact path="/edit/:id" component={Form} />
+          </Switch>
         </>
       </Router>
     </div>

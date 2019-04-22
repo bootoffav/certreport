@@ -112,8 +112,8 @@ export default class Form extends React.Component<IFormProps> {
     }), 3000);
   }
 
-  renderBasicInfo() {
-    return <>
+  renderBasicInfo = () =>
+    <>
     <div className="d-flex">
       <BaseInput value={this.state.applicantName} placeholder='SHANGHAI XM GROUP LTD' id='applicantName' label='Applicant name' handleChange={this.handleChange} />
       <div className="w-25 mx-2">
@@ -261,10 +261,9 @@ export default class Form extends React.Component<IFormProps> {
       <BaseInput value={this.state.certificate} className="flex-grow-1" id='certificate' required={false} label='Certificate' handleChange={this.handleChange} />
     </div>
     </>;
-  }
 
-  renderDates() {
-    return <>
+  renderDates = () =>
+    <>
       <div className="d-flex justify-content-center mb-4">
           <PickDate date={this.state.readyOn} label='Sample to be prepared:'
             handleChange={(date: Date) => this.handleDateChange(date, 'readyOn')}/>
@@ -321,10 +320,9 @@ export default class Form extends React.Component<IFormProps> {
         </div>
       </div>
     </>
-  }
 
-  renderPayments() {
-    return <>
+  renderPayments = () =>
+    <>
       <div className="d-flex justify-content-center">
         <Price value={this.state.price} id='price' label="Payment #1"handleChange={this.handleChange} />
         <Paid
@@ -393,10 +391,9 @@ export default class Form extends React.Component<IFormProps> {
           />
       </div>
     </>
-  }
 
-  renderStandards() {
-    return <Standards standards={this.state.standards} standardsResult={this.state.standardsResult}
+  renderStandards = () =>
+    <Standards standards={this.state.standards} standardsResult={this.state.standardsResult}
       resultChange={
         ({ currentTarget }: any) => {
           const standardsResult = { ...this.state.standardsResult, [currentTarget.dataset.standard]: currentTarget.value }
@@ -404,10 +401,9 @@ export default class Form extends React.Component<IFormProps> {
         }
       }
     />;
-  }
 
-  renderFormFooter() {
-    return <div className="mt-2 d-flex justify-content-around form-row">
+  renderFormFooter = () =>
+    <div className="mt-2 d-flex justify-content-around form-row">
       <div className="col-2">
         <button type="submit"
           className="btn btn-danger btn-block"
@@ -416,7 +412,6 @@ export default class Form extends React.Component<IFormProps> {
       <Export type="pdf" data={this.state}/>
       {/* <Export type="xls" data={this.state}/> */}
     </div>
-  }
 
   render = () => 
     <div className="container">

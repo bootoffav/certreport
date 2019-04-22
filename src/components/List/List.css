@@ -1,8 +1,3 @@
-#cacheStateLabel {
-  color: royalblue;
-  font-size: 1.2em;
-}
-
 .EditLinkIsDisabled {
   cursor: not-allowed;
   opacity: 0.6;

@@ -41,22 +41,12 @@ export default class List extends React.Component {
 
   static State: React.FunctionComponent<{
     notUpdated: boolean;
-  }> = ({ notUpdated }) => (
-    <>
-      <div id="cacheStateLabel" className="p-1 align-self-center"
-      >{notUpdated
-        ? 'contacting Bitrix24, receiving updates'
-        : 'state is actual'}
-      </div>
-      <div id="cacheStateLoader" className="p-1 align-self-center"
-      >{notUpdated
-        ? <div className="spinner-border text-primary" role="status">
-            <span className="sr-only">Loading...</span>
-          </div>
-        : ''}
-      </div>
-    </>
-  );
+  }> = ({ notUpdated }) =>
+    notUpdated ?
+    <div className="d-flex align-items-center">
+      <div className="spinner-border spinner-border-sm text-primary" role="status"></div>
+    </div>
+    : <></>
 
   columns: any[] = [{
     Header: '#',
@@ -228,7 +218,8 @@ export default class List extends React.Component {
   }
 
   //level 1 filter
-  brandFilter = (brand: string) : void => {
+  brandFilter = (e: React.SyntheticEvent<HTMLButtonElement>): void => {
+    const brand = e.currentTarget.innerText;
     let brandFilter: HTMLElement | null = document.getElementById('brandFilter');
     brandFilter ? brandFilter.innerText = `Brand: ${brand}` : '';
     let filtered;
