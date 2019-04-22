@@ -1,12 +1,13 @@
-import React, { DOMElement } from 'react';
-import { PickDate, BaseInput, Article, Price, Paid, Pi } from "./FormFields";
+import React from 'react';
+import swal from 'sweetalert';
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 import Select from 'react-select';
+import m from 'moment';
+import { PickDate, BaseInput, Article, Price, Paid, Pi } from "./FormFields";
 import B24 from '../../B24';
 import Notification, { Status } from '../Notification/Notification';
 import SerialNumber from '../SerialNumber/SerialNumber';
-import m from 'moment';
 import { select_options, emptyState } from '../../defaults';
 import { IState } from '../../defaults';
 import Export from '../Export/Export';
@@ -72,22 +73,29 @@ export default class Form extends React.Component<IFormProps> {
 
   handleChange = (e: any) => this.setState({ [e.target.id]: e.target.value });
 
-  handleCert (e : any) {
+  handleCert(e: any) {
     e.preventDefault();
-    if (window.confirm('Are you sure?')) {
-      this.setState({ requestStatus: Status.Loading });
-      this.task_id
-      ? B24.updateTask(this.state, this.task_id)
-        .then(
-          () => this.afterSuccessfulSubmit(),
-          () => this.afterUnsuccessfulSubmit()
-        )
-      : B24.createTask(this.state)
-        .then(
-          () => this.afterSuccessfulSubmit(),
-          () => this.afterUnsuccessfulSubmit()
-        )
-    }
+    swal({
+      title: "Are you sure?",
+      icon: "info",
+      buttons: ["Cancel", "OK"]
+    })
+      .then((OK) => {
+        if (OK) {
+          this.setState({ requestStatus: Status.Loading });
+          this.task_id
+            ? B24.updateTask(this.state, this.task_id)
+              .then(
+                () => this.afterSuccessfulSubmit(),
+                () => this.afterUnsuccessfulSubmit()
+              )
+            : B24.createTask(this.state)
+              .then(
+                () => this.afterSuccessfulSubmit(),
+                () => this.afterUnsuccessfulSubmit()
+              )
+        }
+      });
   }
 
   asSelectable = (value : string) => {
@@ -407,7 +415,7 @@ export default class Form extends React.Component<IFormProps> {
       <div className="col-2">
         <button type="submit"
           className="btn btn-danger btn-block"
-        >Create / Update</button>
+        >SAVE</button>
       </div>
       <Export type="pdf" data={this.state}/>
       {/* <Export type="xls" data={this.state}/> */}

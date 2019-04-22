@@ -2,16 +2,17 @@ import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'open-iconic/font/css/open-iconic-bootstrap.min.css';
 import 'react-table/react-table.css';
-import React, { ReactNode } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, NavLink, Switch } from "react-router-dom";
+
+
 import Form from './components/Form/Form';
 import View from './components/View/View';
 import List from './components/List/List';
 import netlifyIdentity from 'netlify-identity-widget';
 import './css/style.css';
 import { initApp } from './defaults';
-
 
 netlifyIdentity.init();
 netlifyIdentity.on('login', user => {
