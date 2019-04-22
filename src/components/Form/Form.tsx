@@ -272,60 +272,25 @@ export default class Form extends React.Component<IFormProps> {
 
   renderDates = () =>
     <>
-      <div className="d-flex justify-content-center mb-4">
-          <PickDate date={this.state.readyOn} label='Sample to be prepared:'
-            handleChange={(date: Date) => this.handleDateChange(date, 'readyOn')}/>
-          <PickDate date={this.state.sentOn} label='Sample has sent:'
-              handleChange={(date: Date) => this.handleDateChange(date, 'sentOn')} />
-          <PickDate date={this.state.receivedOn} label='Sample has received by lab:'
-            handleChange={(date: Date) => this.handleDateChange(date, 'receivedOn')}/>
-          <PickDate date={this.state.startedOn} label='Test is started:'
-              handleChange={(date: Date) => this.handleDateChange(date, 'startedOn')} />
+      <div className="d-flex justify-content-center m-2">
+        <PickDate date={this.state.readyOn} label='Sample to be prepared:'
+          handleChange={(date: Date) => this.handleDateChange(date, 'readyOn')}/>
+        <PickDate date={this.state.sentOn} label='Sample has sent:'
+            handleChange={(date: Date) => this.handleDateChange(date, 'sentOn')} />
+        <PickDate date={this.state.receivedOn} label='Sample has received by lab:'
+          handleChange={(date: Date) => this.handleDateChange(date, 'receivedOn')}/>
+        <PickDate date={this.state.startedOn} label='Test is started:'
+            handleChange={(date: Date) => this.handleDateChange(date, 'startedOn')} />
       </div>
-
-      <div className="d-flex justify-content-around">
-        <span className="pl-1">
-          Tests to be finished / really finished on:
-        </span> 
-        <span>
-          Certificate to be received / really received on:
-        </span>
-      </div>
-
       <div className="d-flex justify-content-center">
-        <div className="form-group mx-2">
-          <DatePicker className="form-control"
-            placeholderText="plan"
-            dateFormat="dd.MM.yyyy"
-            selected={this.state.testFinishedOnPlanDate ? new Date(dateConverter(this.state.testFinishedOnPlanDate)) : undefined}
-            onChange={(date : Date) => this.handleDateChange(date, 'testFinishedOnPlanDate')}
-          />
-        </div>
-        <div className="form-group mx-2">
-          <DatePicker className="form-control"
-            placeholderText="fact"
-            dateFormat="dd.MM.yyyy"
-            selected={this.state.testFinishedOnRealDate ? new Date(dateConverter(this.state.testFinishedOnRealDate)) : undefined}
-            onChange={(date: Date) => this.handleDateChange(date, 'testFinishedOnRealDate')}
-          />
-        </div>
-      
-        <div className="form-group mx-2">
-          <DatePicker className="form-control"
-            placeholderText="plan"
-            dateFormat="dd.MM.yyyy"
-            selected={this.state.certReceivedOnPlanDate ? new Date(dateConverter(this.state.certReceivedOnPlanDate)) : undefined}
-            onChange={(date: Date) => this.handleDateChange(date, 'certReceivedOnPlanDate')}
-        />
-        </div>
-        <div className="form-group mx-2">
-          <DatePicker className="form-control"
-            placeholderText="fact"
-            dateFormat="dd.MM.yyyy"
-            selected={this.state.certReceivedOnRealDate ? new Date(dateConverter(this.state.certReceivedOnRealDate)) : undefined}
-            onChange={(date: Date) => this.handleDateChange(date, 'certReceivedOnRealDate')}
-          />
-        </div>
+        <PickDate date={this.state.testFinishedOnPlanDate} label='Tests to be finished:'
+          handleChange={(date: Date) => this.handleDateChange(date, 'testFinishedOnPlanDate')} />
+        <PickDate date={this.state.testFinishedOnRealDate} label='Test really finished on:'
+          handleChange={(date: Date) => this.handleDateChange(date, 'testFinishedOnRealDate')} />
+        <PickDate date={this.state.certReceivedOnPlanDate} label='Certificate to be received:'
+          handleChange={(date: Date) => this.handleDateChange(date, 'certReceivedOnPlanDate')} />
+        <PickDate date={this.state.certReceivedOnRealDate} label='Certificate really received on:'
+          handleChange={(date: Date) => this.handleDateChange(date, 'certReceivedOnRealDate')} />
       </div>
     </>
 
