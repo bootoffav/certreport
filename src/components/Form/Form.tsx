@@ -8,7 +8,7 @@ import { PickDate, BaseInput, Article, Price, Paid, Pi } from "./FormFields";
 import B24 from '../../B24';
 import Notification, { Status } from '../Notification/Notification';
 import SerialNumber from '../SerialNumber/SerialNumber';
-import { select_options, emptyState } from '../../defaults';
+import { selectOptions, emptyState } from '../../defaults';
 import { IState } from '../../defaults';
 import Export from '../Export/Export';
 import { dateConverter } from '../../helpers';
@@ -132,7 +132,7 @@ export default class Form extends React.Component<IFormProps> {
             onChange={e => {
               this.handleSelectChange(e, 'testingCompany')}
             }
-            options={select_options.testingCompany}
+            options={selectOptions.testingCompany}
           />
         </div>
       </div>
@@ -144,7 +144,7 @@ export default class Form extends React.Component<IFormProps> {
             onChange={e => {
               this.handleSelectChange(e, 'standards')}
             }
-            options={select_options.standards}
+            options={selectOptions.standards}
           />
         </div>
       </div>
@@ -156,7 +156,7 @@ export default class Form extends React.Component<IFormProps> {
             onChange={e => {
               this.handleSelectChange(e, 'stage')}
             }
-            options={select_options.stages}
+            options={selectOptions.stages}
           />
         </div>
       </div>
@@ -193,7 +193,7 @@ export default class Form extends React.Component<IFormProps> {
       <div className="flex-fill">
         <Article
         value={this.asSelectable(this.state.article)}
-        options={select_options.articles}
+        options={selectOptions.articles}
         handleChange={(e: any) => this.handleSelectChange([e], 'article')}
         handleSlaveChange={ ({product, code, brand}) => this.setState({ product, code, brand }) }
         />
@@ -207,7 +207,7 @@ export default class Form extends React.Component<IFormProps> {
       <div className="flex-grow-1">
         Brand
         <Select value={this.asSelectable(this.state.brand)} onChange={e => this.handleSelectChange([e], 'brand')}
-          options={select_options.brand}
+          options={selectOptions.brand}
         />
       </div>
       <BaseInput value={this.state.materialNeeded} className="flex-grow-1 mx-2" id='materialNeeded' label='Material needed' handleChange={this.handleChange} />
@@ -423,5 +423,3 @@ export default class Form extends React.Component<IFormProps> {
       </form>
     </div>
 }
-
-export { select_options };

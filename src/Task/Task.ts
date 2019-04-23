@@ -1,4 +1,4 @@
-import { select_options, emptyState, IState } from '../defaults';
+import { selectOptions, emptyState, IState } from '../defaults';
 
 interface ITask {
   state: {}
@@ -166,7 +166,7 @@ class Task implements ITask {
     }
     
     parsedState.brand = uf_crm_task.filter((v : any) => ['C_10033', 'C_10035', 'C_10037', 'C_10041'].includes(v)).join();
-    parsedState.brand = select_options.brand.find(el => el.value === parsedState.brand).label;
+    parsedState.brand = selectOptions.brand.find(el => el.value === parsedState.brand).label;
     parsedState.otherTextInDescription = otherTextInDescription;
     parsedState.UF_CRM_TASK = uf_crm_task;
 

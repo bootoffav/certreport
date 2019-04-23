@@ -1,25 +1,23 @@
 import B24 from './B24';
 
-let select_options : {
+let selectOptions: {
   brand: any[];
   standards: any[];
   testingCompany: any[];
-  created: Date;
   articles: [];
   stages: any[];
   [key: string]: any;
 } = {
   brand: [
-    {value: 'C_10033', label: 'XMT'},
-    {value: 'C_10035', label: 'XMF'},
-    {value: 'C_10037', label: 'XMS'},
-    {value: 'C_10041', label: 'XMG'}
+    { value: 'C_10033', label: 'XMT'},
+    { value: 'C_10035', label: 'XMF'},
+    { value: 'C_10037', label: 'XMS'},
+    { value: 'C_10041', label: 'XMG'}
   ],
-  standards: [],
   testingCompany: [
-    {value: 'Aitex (Spain)', label: 'Aitex (Spain)'},
-    {value: 'Aitex (China)', label: 'Aitex (China)'},
-    {value: 'Satra (UK)', label: 'Satra (UK)'}
+    { value: 'Aitex (Spain)', label: 'Aitex (Spain)'},
+    { value: 'Aitex (China)', label: 'Aitex (China)'},
+    { value: 'Satra (UK)', label: 'Satra (UK)'}
   ],
   stages: [
     { value: '0. Sample to be prepared', label: '0. Sample to be prepared' },
@@ -32,8 +30,8 @@ let select_options : {
     { value: '7. Test-report ready', label: '7. Test-report ready' },
     { value: '8. Certificate ready', label: '8. Certificate ready' }
   ],
-  created: new Date(),
-  articles: []
+  standards: JSON.parse(localStorage.getItem('standards') || '[]'),
+  articles: JSON.parse(localStorage.getItem('articles') || '[]')
 };
 
 export interface IState {
@@ -141,21 +139,16 @@ const emptyState : IState = {
 };
 
 function initApp() {
-  let fromStorage;
-  let saveAndApply = (data : any, itemName : string) => {
-    localStorage.setItem(itemName, JSON.stringify(data));
-    select_options[itemName] = data;
+  const saveAndApply = (data: any[], item: string) => {
+    localStorage.setItem(item, JSON.stringify(data));
+    selectOptions[item] = data;
   }
 
   B24.get_products().then(data => saveAndApply(data, 'articles'));
   B24.get_standards().then(data => saveAndApply(data, 'standards'));
 
-  ['articles', 'standards'].forEach(itemName => {
-    let fromStorage : any = localStorage.getItem(itemName)
-    let parsed = JSON.parse(fromStorage);
-    if (typeof parsed === 'string') {
-      select_options[itemName] = fromStorage;
-    }
-  });
+  let fromStorage: string | null;
+  ['articles', 'standards'].forEach(item => fromStorage = localStorage.getItem(item) && (selectOptions[item] = fromStorage));
 }
-export { emptyState, select_options, initApp };
+
+export { emptyState, selectOptions, initApp };
