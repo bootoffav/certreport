@@ -90,13 +90,13 @@ const Pi = (props: any) =>
         selected={selected(props.date)}
         dateFormat="dd.MM.yyyy"
         onChange={props.handleDateChange}
-        placeholderText={props.checkboxState ? 'Receiving date' : ''}
+        placeholderText={props.checkboxState && 'Receiving date'}
         todayButton={"Today"}
       />
       <input type="text" className="form-control"
         disabled={!props.checkboxState}
         onChange={props.handleNumberChange}
-        placeholder={props.checkboxState ? '#' : ''}
+        placeholder={props.checkboxState && '#'}
         id={props.numberId} value={props.number}
       />
     </div>

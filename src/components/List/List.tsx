@@ -56,7 +56,7 @@ export default class List extends React.Component {
   }, {
     Header: '##',
     id: 'serialNumber',
-    accessor: (row: any) => row.state.serialNumber ? String(row.state.serialNumber) : '',
+    accessor: (row: any) => row.state.serialNumber && String(row.state.serialNumber),
     width: 55,
     Cell: (props: any) => <a
       href={`https://xmtextiles.bitrix24.ru/company/personal/user/460/tasks/task/view/${props.original.ID}/`}

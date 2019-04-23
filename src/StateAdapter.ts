@@ -75,27 +75,27 @@ class StateAdapter {
 
   get secondPayment() {
     // @ts-ignore
-    return (`${this.price2 ? this.price2 + ' €, ' : ''}` +
+    return (`${this.price2 && this.price2 + ' €, '}` +
       //@ts-ignore
-      `${this.paymentDate2 ? this.paymentDate2 + ', ' : ''}` +
+      `${this.paymentDate2 && this.paymentDate2 + ', '}` +
       //@ts-ignore
-      `${this.proformaReceivedDate2 ? this.proformaReceivedDate2 + ', ' : ''}` +
+      `${this.proformaReceivedDate2 && this.proformaReceivedDate2 + ', '}` +
       //@ts-ignore
-      `${this.proformaNumber2 ? this.proformaNumber2 + ', ' : ''}`).slice(0, -2);
+      `${this.proformaNumber2 && this.proformaNumber2 + ', '}`).slice(0, -2);
   }
 
   get testFinishedOn() {
     //@ts-ignore
-    return (`${this.testFinishedOnPlanDate ? this.testFinishedOnPlanDate + ', ' : ''}` +
+    return (`${this.testFinishedOnPlanDate && this.testFinishedOnPlanDate + ', '}` +
       //@ts-ignore
-      `${this.testFinishedOnRealDate ? this.testFinishedOnRealDate + ', ': ''}`).slice(0, -2);
+      `${this.testFinishedOnRealDate && this.testFinishedOnRealDate + ', '}`).slice(0, -2);
   }
 
   get certReceivedOn() {
     //@ts-ignore
-    return (`${this.certReceivedOnPlanDate ? this.certReceivedOnPlanDate + ', ' : ''}` +
+    return (`${this.certReceivedOnPlanDate && this.certReceivedOnPlanDate + ', '}` +
       //@ts-ignore
-      `${this.certReceivedOnRealDate ? this.certReceivedOnRealDate + ', ' : ''}`).slice(0, -2);
+      `${this.certReceivedOnRealDate && this.certReceivedOnRealDate + ', '}`).slice(0, -2);
   }
 }
 
