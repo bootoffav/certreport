@@ -105,7 +105,7 @@ class B24 {
           `${stAd.testFinishedOn && `[B]tests to be finished on:[/B] ${stAd.testFinishedOn}\n`}` +
           `${stAd.certReceivedOn && `[B]results to be received on:[/B] ${stAd.certReceivedOn}\n`}` +
           `${state.stage && `[B]Stage:[/B] ${state.stage}\n`}` +
-          `${state.resume && `[B]Resume:[/B] ${state.resume}\n`}` +
+          `${state.resume == undefined ? '' : `[B]Resume:[/B] ${state.resume}\n`}` +
           `${state.comments && `[B]Comments:[/B] ${state.comments}\n`}` +
           `${state.link && `[B]Edit:[/B] ${state.link}\n`}` +
           `${dataSeparator}` + (state.otherTextInDescription || ''),
@@ -117,7 +117,7 @@ class B24 {
       const defaultParams = {
         AUDITORS: auditors,
         PARENT_ID: 46902,
-        RESPONSIBLE_ID: 5
+        RESPONSIBLE_ID: 19
       }
 
       const attachPDF = (taskId: string) => {
@@ -210,9 +210,9 @@ class B24 {
     }
 
     static async get_products() {
-      let products = [];
+      const products = [];
 
-      const productSections = new Map([ [8568, 'XMF'], [8574, 'XMT'], [8572, 'XMS'] ]);
+      const productSections = [ [8568, 'XMF'], [8574, 'XMT'], [8572, 'XMS'] ];
       let productsInSection : any[] = [];
 
       for (let [sectionId, brand] of productSections) {

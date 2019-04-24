@@ -173,7 +173,7 @@ export default class List extends React.Component {
     }
     }, {
       Header: 'Price, €',
-      Footer: () => <>Total € <span style={{ float: 'right' }}>{this.formatPrice(this.state.totalPrice)}</span></>,
+      Footer: () => <>Total: <span style={{ float: 'right' }}>{this.formatPrice(this.state.totalPrice)}</span></>,
       id: 'price',
       accessor: 'state.price',
       minWidth: 90,
