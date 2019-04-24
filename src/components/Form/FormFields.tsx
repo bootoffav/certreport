@@ -103,37 +103,6 @@ const Pi = (props: any) =>
   </div>
 
 
-// const SecondPayment: React.FunctionComponent<{ children: any[] }> = (props) => {
-//   return <div className="form-group">
-//     Payment #2
-//     <button type="button" className="btn btn-sm btn-block btn-light form-control SecondPayment_button" data-toggle="modal" data-target="#secondPayment">
-//       show
-//     </button>
-//     <div className="modal fade" id="secondPayment" role="dialog" aria-labelledby="secondPaymentLabel" aria-hidden="true">
-//       <div className="modal-dialog" role="document">
-//         <div className="modal-content">
-//           <div className="modal-header">
-//             <h5 className="modal-title" id="secondPaymentLabel">Second payment</h5>
-//             <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-//               <span aria-hidden="true">&times;</span>
-//             </button>
-//           </div>
-//           <div className="modal-body">
-//             <div className="row">
-//               <div className="col">{props.children[0]}</div>
-//               <div className="col-auto">{props.children[1]}</div>
-//             </div>
-//               {props.children[2]}
-//           </div>
-//           <div className="modal-footer">
-//             <button type="button" className="btn btn-secondary" data-dismiss="modal">Save</button>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   </div>
-// }
-
 interface ArticleProps {
   options: any[];
   value: any;
@@ -183,7 +152,7 @@ class Article extends React.Component<ArticleProps> {
         options={this.props.options}
         formatGroupLabel={this.formatGroupLabel}
       />
-    </div>;
+    </div>
 }
 
 export { PickDate, BaseInput, Article, Price, Paid, Pi };

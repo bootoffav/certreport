@@ -43,12 +43,11 @@ export default class Form extends React.Component<IFormProps> {
   }
 
   componentDidMount() {
-    if (this.props.match.path === '/edit/:id' && (this.props.location.state === undefined)) {
-      B24.get_task(this.task_id).then(r => this.setState({ ...r.state }));
+    if (this.task_id && this.props.location.state === undefined) {
+      B24.get_task(this.task_id)
+        .then(r => this.setState({ ...r.state }));
     }
-    if (!this.state.link) {
-      this.setState({ link: `[URL=https://certreport.xmtextiles.com/edit/${this.task_id}/]this task[/URL]` });
-    }
+    this.state.link || this.setState({ link: `[URL=https://certreport.xmtextiles.com/edit/${this.task_id}/]this task[/URL]` });
   }
 
   handleDateChange = (date: Date | null, prop: string): void =>
@@ -382,7 +381,7 @@ export default class Form extends React.Component<IFormProps> {
           className="btn btn-danger btn-block"
         >SAVE</button>
       </div>
-      <Export type="pdf" data={this.state}/>
+      {/* <Export type="pdf" data={this.state}/> */}
       {/* <Export type="xls" data={this.state}/> */}
     </div>
 

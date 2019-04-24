@@ -42,11 +42,11 @@ class StateAdapter {
         break;
       case '7. Test-report ready':
       // @ts-ignore
-        stageForTitle = `Test-report ready - ${dC(this.testFinishedOnPlanDate, 'DD.MM.YYYY')}`
+        stageForTitle = `Test-report ready - ${dC(this.testFinishedOnRealDate, 'DD.MM.YYYY')}`
         break;
       case '8. Certificate ready':
       // @ts-ignore
-        stageForTitle = `Certificate ready - ${dC(this.certReceivedOnPlanDate, 'DD.MM.YYYY')}`
+        stageForTitle = `Certificate ready - ${dC(this.certReceivedOnRealDate, 'DD.MM.YYYY')}`
         break;
       default:
         stageForTitle = '';
