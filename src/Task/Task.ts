@@ -146,7 +146,7 @@ class Task implements ITask {
       [
         parsedState.pretreatment1,
         parsedState.pretreatment1Result = ''
-      ] = parsedState.pretreatment1.split(', ');
+      ] = this.parsePretreatment1(parsedState.pretreatment1);
     }
 
     if (parsedState.testFinishedOn) {
@@ -197,6 +197,23 @@ class Task implements ITask {
     }
 
     return [parsedStandards.slice(0, -2), standardsResults];
+  }
+
+  /**
+   * @param string for parsing
+   * @returns array, el[0] is value of pretreatment, el[1] is result
+   */
+  parsePretreatment1(pretreatment1Result: string): string[] {
+    const result = /\(pass\)|\(fail\)$/.exec(pretreatment1Result);
+    return result ?
+      [
+        pretreatment1Result.slice(0, -7),
+        result[0].slice(1, -1)
+      ] :
+      [
+        pretreatment1Result,
+        ''
+      ];
   }
 
   determineStage(): string {

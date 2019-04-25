@@ -95,7 +95,7 @@ class B24 {
           `${state.certificate && `[B]Certificate:[/B] ${state.certificate}\n`}` +
           `${state.materialNeeded && `[B]Material needed:[/B] ${state.materialNeeded}\n`}` +
           `${state.testingTime && `[B]Testing time, days:[/B] ${state.testingTime}\n`}` +
-          `${state.pretreatment1 && `[B]Pre-treatment 1:[/B] ${state.pretreatment1}, ${state.pretreatment1Result}\n`}` +
+          `${state.pretreatment1 && `[B]Pre-treatment 1:[/B] ${state.pretreatment1} (${state.pretreatment1Result})\n`}` +
           `${state.pretreatment2 && `[B]Pre-treatment 2:[/B] ${state.pretreatment2}\n`}` +
           `${state.pretreatment3 && `[B]Pre-treatment 3:[/B] ${state.pretreatment3}\n`}` +
           `${state.readyOn && `[B]Sample ready on:[/B] ${state.readyOn}\n`}` +
