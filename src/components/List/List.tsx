@@ -154,8 +154,20 @@ export default class List extends React.Component {
   }, {
     Header: 'Standards',
     id: 'standards',
-    accessor: 'state.standards',
+    accessor: 'state',
     minWidth: 100,
+    Cell: (props: any) =>
+      props.value.standards.split(', ').map((st: string, i: number, stArr: string[]) => {
+        const lastItem = stArr.length != i + 1;
+        switch (props.value.standardsResult[st]) {
+          case undefined:
+            return <>{st}{lastItem ? <br /> : ''}</>
+          case 'pass':
+            return <>{st} <span className="oi oi-thumb-up"></span>{lastItem ? <br /> : ''}</>
+          case 'fail':
+            return <>{st} <span className="oi oi-circle-x"></span>{lastItem ? <br /> : ''}</>
+        }
+      })
   }, {
     Header: 'Result',
     id: 'result',
@@ -178,6 +190,20 @@ export default class List extends React.Component {
       accessor: 'state.price',
       minWidth: 90,
       Cell: (props: any) => <>€<span style={{ float: 'right' }}>{this.formatPrice(props.value)}</span></>
+    }, {
+      Header: 'Pre-treatment Result',
+      id: 'pretreatment1',
+      accessor: 'state.pretreatment1Result',
+      Cell: (props: any) => {
+        switch (props.value) {
+          case 'fail':
+            return <span className="oi oi-circle-x"></span>;
+          case 'pass':
+            return <span className="oi oi-thumb-up"></span>;
+          default:
+            return '';
+        }
+      }
     }];
 
   formatPrice = (price: number): string => price
@@ -259,35 +285,37 @@ export default class List extends React.Component {
   }
 
   //level 2 filter
-  toolbarFilter = (requiredStage: Stage | undefined = undefined) => {
+  toolbarFilter = (requiredStage: Stage | undefined | string = undefined) => {
     let visibleTasks: Task[] = filter(this.state.filteredTasksLevel1, requiredStage);
     let totalPrice: number = visibleTasks.reduce((sum: number, task: any) => sum + Number(task.state.price), 0);
     this.visibleColumns(requiredStage);
     this.setState({ visibleTasks, totalPrice, requiredStage });
   }
 
-  visibleColumns(requiredStage : Stage | undefined = undefined): void {
+  visibleColumns(requiredStage : Stage | undefined | string = undefined): void {
     this.columns.forEach(col => col.show = true);
     let hidden: number[];
-
     switch (requiredStage) {
       case Stage['0. Sample to be prepared']:
-        hidden = [3, 6, 7, 8, 9, 10, 11, 12, 17, 18];
+        hidden = [3, 6, 7, 8, 9, 10, 11, 12, 16, 17, 18];
         break;
       case Stage['1. Sample Sent']:
-        hidden = [3, 5, 7, 8, 9, 10, 11, 12, 17, 19];
+        hidden = [3, 5, 7, 8, 9, 10, 11, 12, 16, 17, 19];
         break;
       case Stage['2. Sample Arrived']:
-        hidden = [3, 5, 6, 8, 9, 10, 11, 12, 17, 19];
+        hidden = [3, 5, 6, 8, 9, 10, 11, 12, 16, 17, 19];
         break;
       case Stage['3. PI Issued']:
-        hidden = [3, 5, 6, 7, 8, 9, 12, 13, 17, 19];
+        hidden = [3, 5, 6, 7, 8, 9, 12, 13, 16, 17, 19];
         break;
       case Stage['4. Payment Done']:
-        hidden = [3, 5, 6, 7, 8, 9, 17];
+        hidden = [3, 5, 6, 7, 8, 9, 16, 17];
         break;
       case Stage['5. Testing is started']:
-        hidden = [3, 5, 6, 7, 9, 10, 11, 12, 17, 18];
+        hidden = [3, 5, 6, 7, 9, 10, 11, 12, 16, 17, 18];
+        break;
+      case 'results':
+        hidden = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 18];
         break;
       // case Stage['6. Pre-treatment done']:
       //   break;
@@ -296,7 +324,7 @@ export default class List extends React.Component {
         hidden = [3, 5, 6, 7, 8, 10, 11, 12];
         break;
       default:
-        hidden = [5, 6, 7, 8, 9, 10, 11, 12];
+        hidden = [5, 6, 7, 8, 9, 10, 11, 12, 16, 19];
     }
 
     this.columns.forEach((col, ind) => {

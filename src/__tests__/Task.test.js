@@ -1,5 +1,5 @@
-import Task, { Stage } from './Task';
-import { descriptions } from './Task.descriptions';
+import Task from '../Task/Task';
+import { descriptions } from './TaskDescriptions.test';
 
 let task;
 

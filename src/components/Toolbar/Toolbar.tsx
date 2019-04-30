@@ -1,11 +1,9 @@
 import React from 'react';
 import Task, { Stage } from '../../Task/Task';
 
-interface Props {
-  onClick: (toolBarProp: Stage | undefined) => void;
-}
-
-const Toolbar: React.FunctionComponent<Props> = (props) =>
+const Toolbar: React.FunctionComponent<{
+  onClick: (toolBarProp: Stage | undefined | string) => void;
+}> = (props) =>
   <div className="row">
     <div id="toolbar" className="col btn-group btn-group-toggle" data-toggle="buttons">
       <label
@@ -48,27 +46,35 @@ const Toolbar: React.FunctionComponent<Props> = (props) =>
         className="btn btn-warning btn-sm"
         onClick={() => props.onClick(Stage['8. Certificate ready'])}
       ><input type="radio" />8. Certificate ready</label>
+      <label
+        className="btn btn-light btn-sm"
+        onClick={() => props.onClick('results')}
+      ><input type="radio" />Results</label>
     </div>
   </div>
 
 const filter = (
-    tasks: Task[],
-    requiredStage: Stage | undefined = undefined,
-    i = 1
-  ) =>
-    requiredStage !== undefined
-      ? tasks
-        //@ts-ignore
-          .filter(t => Stage[t.state.stage] === requiredStage)
-          .map(t => {
-            t.position = i++;
-            return t;
-          })
-      : tasks.map(t => {
+  tasks: Task[],
+  requiredStage: Stage | undefined | string = undefined,
+  i = 1
+): Task[] => {
+  switch (requiredStage) {
+    case undefined:
+    case 'results':
+    case 'overdue':
+      return tasks.map(t => {
         t.position = i++;
         return t;
       });
-
+    default:
+      // @ts-ignore
+      return tasks.filter(t => Stage[t.state.stage] === requiredStage)
+        .map(t => {
+          t.position = i++;
+          return t;
+        });
+  }
+}
 
 
 export { Toolbar, filter };

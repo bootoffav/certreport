@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
-import List from './List';
+import List from '../components/List/List';
 import { configure, shallow } from 'enzyme';
 
 import Adapter from 'enzyme-adapter-react-16';
