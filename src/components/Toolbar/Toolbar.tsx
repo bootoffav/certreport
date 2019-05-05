@@ -50,10 +50,10 @@ const Toolbar: React.FunctionComponent<{
         className="btn btn-light btn-sm"
         onClick={() => props.onClick('results')}
       ><input type="radio" />Results</label>
-      {/* <label
+      <label
         className="btn btn-light btn-sm"
         onClick={() => props.onClick('overdue')}
-      ><input type="radio" />Overdue</label> */}
+      ><input type="radio" />Overdue</label>
     </div>
   </div>
 
@@ -65,11 +65,16 @@ const filter = (
   switch (requiredStage) {
     case undefined:
     case 'results':
-    case 'overdue':
       return tasks.map(t => {
         t.position = i++;
         return t;
       });
+    case 'overdue':
+      return tasks.filter(t => t.overdue)
+        .map(t => {
+          t.position = i++;
+          return t;
+        });
     default:
       // @ts-ignore
       return tasks.filter(t => Stage[t.state.stage] === requiredStage)

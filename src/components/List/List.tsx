@@ -332,33 +332,11 @@ export default class List extends React.Component {
     });
   }
 
-  getTrProps = (state: any, rowInfo: any, column: any): {} => {
-    if (rowInfo !== undefined) {
-      const getResult = (prop: string, days: number): {} =>
-        m(rowInfo.row._original.state[prop]).add(days, 'days') < m()
-        ? { className: "missedDeadline" }
-        : {};
-      
-      switch (this.state.requiredStage) {
-        case Stage['0. Sample to be prepared']:
-          return getResult('readyOn', 2);
-        case Stage['1. Sample Sent']:
-          return getResult('sentOn', 7);
-        case Stage['2. Sample Arrived']:
-          return getResult('receivedOn', 2);
-        case Stage['3. PI Issued']:
-          return getResult('proformaReceivedDate', 2);
-        case Stage['4. Payment Done']:
-          return getResult('paymentDate', 2);
-        case Stage['5. Testing is started']:
-          return getResult('testFinishedOnPlanDate', 21);
-        case Stage['7. Test-report ready']:
-          return getResult('testFinishedOnRealDate', 2);
-        case Stage['8. Certificate ready']:
-          return Boolean(rowInfo.row._original.state.certReceivedOnRealDate) ? {} : getResult('certReceivedOnPlanDate', 1);
-      }
+  getTrProps(state: any, rowInfo: any, column: any) {
+    if (rowInfo == undefined) {
+      return {};
     }
-    return {};
+    return rowInfo.original.overdue ? { className: 'missedDeadline' } : {};
   }
 
   render = () : JSX.Element => <>
@@ -393,7 +371,7 @@ export default class List extends React.Component {
         }
       ]}
       defaultPageSize={20} className='-striped -highlight table'
-      getTrProps={this.getTrProps.bind(this)}
+      getTrProps={this.getTrProps}
     />
   </>
 }

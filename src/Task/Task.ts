@@ -1,4 +1,5 @@
 import { selectOptions, emptyState, IState } from '../defaults';
+import m from 'moment';
 
 interface ITask {
   state: {}
@@ -23,6 +24,7 @@ export enum Stage {
 class Task implements ITask {
   state: IState;
   position?: number;
+  overdue: boolean;
 
   constructor(props: {
     DESCRIPTION: string;
@@ -30,9 +32,8 @@ class Task implements ITask {
   }) {
     Object.assign(this, props);
     this.state = this.parse(props.DESCRIPTION, props.UF_CRM_TASK);
-    if (!this.state.stage) {
-      this.state.stage = this.determineStage();
-    }
+    this.state.stage = this.state.stage || this.determineStage();
+    this.overdue = this.determineOverdue();
   }
 
   parseable_description = (desc: string) => desc.startsWith('[B]Applicant name:[/B]');
@@ -235,6 +236,30 @@ class Task implements ITask {
     if (this.state.certReceivedOnRealDate) return '8. Certificate ready';
     
     return '0. Sample to be prepared'; //default clause if no other case triggered;
+  }
+
+  determineOverdue(): boolean {
+    const today = m();
+    switch (this.state.stage) {
+      case '0. Sample to be prepared':
+        return m(this.state['readyOn']).add(2, 'days') < today;
+      case '1. Sample Sent':
+        return m(this.state['sentOn']).add(7, 'days') < today;
+      case '2. Sample Arrived':
+        return m(this.state['receivedOn']).add(2, 'days') < today;
+      case '3. PI Issued':
+        return m(this.state['proformaReceivedDate']).add(2, 'days') < today;
+      case '4. Payment Done':
+        return m(this.state['paymentDate']).add(2, 'days') < today;
+      case '5. Testing is started':
+        return m(this.state['testFinishedOnPlanDate']).add(21, 'days') < today;
+      case '7. Test-report ready':
+        return m(this.state['testFinishedOnRealDate']).add(2, 'days') < today;
+      case '8. Certificate ready':
+        return Boolean(this.state['certReceivedOnRealDate']) && m(this.state['certReceivedOnPlanDate']).add(1, 'days') < today;
+      default:
+        return false;
+    }
   }
 }
 
