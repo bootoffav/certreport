@@ -9,10 +9,13 @@ configure({ adapter: new Adapter() });
 
 it('shallow rendering the List', () => {
   const wrapper = shallow(<List />);
-})
+});
 
 it('renders to page without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render(<List />, div);
 });
 
+it('can correctly determine overdue state', () => {
+  
+});

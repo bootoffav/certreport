@@ -8,6 +8,8 @@ import { IState } from './defaults';
 
 m.fn.toJSON = function() { return this.format(); }
 const creator_id = process.env.REACT_APP_B24_USER_ID;
+const tag = process.env.REACT_APP_TAG;
+const responsibleId = process.env.REACT_APP_RESPONSIBLE_ID;
 const webhook_key = process.env.REACT_APP_B24_WEBHOOK_KEY;
 const main_url = process.env.REACT_APP_B24_MAIN_URL;
 
@@ -20,7 +22,7 @@ class B24 {
 
     static defaultParams = {
         CREATED_BY: creator_id,
-        TAGS: ['certification'],
+        TAGS: [tag],
         GROUP_ID: 21,
     }
 
@@ -117,7 +119,7 @@ class B24 {
       const defaultParams = {
         AUDITORS: auditors,
         PARENT_ID: 46902,
-        RESPONSIBLE_ID: 19
+        RESPONSIBLE_ID: responsibleId
       }
 
       const attachPDF = (taskId: string) => {
@@ -165,7 +167,7 @@ class B24 {
         tasks = tasks.concat(await fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.list?` +
         qs.stringify({
           order: { ID: 'desc' },
-          filter: { TAG: 'certification' },
+          filter: { TAG: tag },
           start: B24.start
         }))
         .then(response => response.json())

@@ -324,7 +324,7 @@ export default class List extends React.Component {
         hidden = [3, 5, 6, 7, 8, 10, 11, 12];
         break;
       default:
-        hidden = [5, 6, 7, 8, 9, 10, 11, 12, 16, 19];
+        hidden = [5, 6, 7, 8, 9, 10, 11, 12, 13, 16, 19];
     }
 
     this.columns.forEach((col, ind) => {
@@ -351,7 +351,11 @@ export default class List extends React.Component {
         case Stage['4. Payment Done']:
           return getResult('paymentDate', 2);
         case Stage['5. Testing is started']:
-          return getResult('testFinishedOnPlanDate', 1);
+          return getResult('testFinishedOnPlanDate', 21);
+        case Stage['7. Test-report ready']:
+          return getResult('testFinishedOnRealDate', 2);
+        case Stage['8. Certificate ready']:
+          return Boolean(rowInfo.row._original.state.certReceivedOnRealDate) ? {} : getResult('certReceivedOnPlanDate', 1);
       }
     }
     return {};
