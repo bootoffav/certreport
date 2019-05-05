@@ -9,7 +9,7 @@ import { IState } from './defaults';
 m.fn.toJSON = function() { return this.format(); }
 const creator_id = process.env.REACT_APP_B24_USER_ID;
 const tag = process.env.REACT_APP_TAG;
-const responsibleId = process.env.REACT_APP_RESPONSIBLE_ID;
+const responsibleId = process.env.REACT_APP_B24_RESPONSIBLE_ID;
 const webhook_key = process.env.REACT_APP_B24_WEBHOOK_KEY;
 const main_url = process.env.REACT_APP_B24_MAIN_URL;
 
