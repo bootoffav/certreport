@@ -256,10 +256,9 @@ class Task implements ITask {
       case '7. Test-report ready':
         return m(this.state['testFinishedOnRealDate']).add(2, 'days') < today;
       case '8. Certificate ready':
-        return Boolean(this.state['certReceivedOnRealDate']) && m(this.state['certReceivedOnPlanDate']).add(1, 'days') < today;
-      default:
-        return false;
+        return this.state['certReceivedOnRealDate'] ? false : m(this.state['certReceivedOnPlanDate']).add(1, 'days') < today;
     }
+    return true;
   }
 }
 
