@@ -1,5 +1,4 @@
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
 import StateAdapter from '../../StateAdapter';
 import { IState } from '../../defaults';
 
