@@ -226,7 +226,7 @@ function visibleColumns(requiredStage : Stage | undefined | string = undefined):
       hidden = [5, 6, 7, 8, 9, 10, 11, 12, 14, 16, 17, 20];
       break;
     case 'overdue':
-      hidden = [5, 6, 7, 8, 9, 10, 11, 12, 13, 17, 20];
+      hidden = [5, 6, 7, 8, 9, 10, 11, 12, 13, 20];
       break;
     // case Stage['6. Pre-treatment done']:
     //   break;
