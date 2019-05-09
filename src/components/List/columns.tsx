@@ -4,13 +4,13 @@ import { Stage } from '../../Task/Task';
 
 const getColumns = (totalPrice: number, staleData: boolean) =>
   [{
-// 0
+    // 0
     Header: '#',
     id: 'position',
     accessor: 'position',
     width: 40
   }, {
-// 1
+    // 1
     Header: '##',
     id: 'serialNumber',
     accessor: (row: any) => row.state.serialNumber && String(row.state.serialNumber),
@@ -20,75 +20,75 @@ const getColumns = (totalPrice: number, staleData: boolean) =>
       target="_blank" rel="noopener noreferrer"
     >{props.value}</a>
   }, {
-// 2
+    // 2
     Header: 'Brand',
     id: 'brand',
     minWidth: 50,
     accessor: 'state.brand'
   }, {
-// 3
+    // 3
     Header: 'Status',
     id: 'stage',
     minWidth: 100,
     accessor: 'state.stage'
   }, {
-// 4
+    // 4
     Header: 'Task title',
     accessor: 'TITLE',
     id: 'taskName',
     minWidth: 550,
-      Cell: (props: any) => props.original.state.serialNumber
-        ? <Link className={ staleData ? 'EditLinkIsDisabled' : '' }
-          to={
-            staleData
+    Cell: (props: any) => props.original.state.serialNumber
+      ? <Link className={staleData ? 'EditLinkIsDisabled' : ''}
+        to={
+          staleData
             ? '' : {
               pathname: `/edit/${props.original.ID}`,
               state: { ...props.original.state }
             }
-          }
-    >{ props.value }</Link>
-        : <Link to={{
-          pathname: `/edit/${props.original.ID}`,
-          state: { ...props.original.state }
-        }}> { props.value }</Link>
+        }
+      >{props.value}</Link>
+      : <Link to={{
+        pathname: `/edit/${props.original.ID}`,
+        state: { ...props.original.state }
+      }}> {props.value}</Link>
   }, {
-// 5
+    // 5
     Header: 'Sample to be prepared on',
     accessor: 'state.readyOn',
     id: 'readyOn',
     width: 130,
   }, {
-// 6
+    // 6
     Header: 'Sent On',
     accessor: 'state.sentOn',
     id: 'sentOn',
     width: 130,
   }, {
-// 7
+    // 7
     Header: 'Sample has received On',
     accessor: 'state.receivedOn',
     id: 'receivedOn',
     width: 130,
   }, {
-// 8
+    // 8
     Header: 'Tests to be finished On',
     accessor: 'state.finishedOn',
     id: 'receivedOn',
     width: 130,
   }, {
-// 9
+    // 9
     Header: 'Proforma date',
     accessor: 'state.proformaReceivedDate',
     id: 'proformaReceivedDate',
     width: 130,
   }, {
-// 10
+    // 10
     Header: 'Proforma #',
     accessor: 'state.proformaNumber',
     id: 'proformaNumber',
     width: 100,
   }, {
-// 11
+    // 11
     Header: 'Paid',
     id: 'paid',
     accessor: 'state.paymentDate',
@@ -97,43 +97,43 @@ const getColumns = (totalPrice: number, staleData: boolean) =>
       ? <span className="oi oi-check"> </span>
       : ''
   }, {
-// 12
+    // 12
     Header: 'Payment date',
     id: 'paymentDate',
     accessor: 'state.paymentDate',
     width: 130,
   }, {
-// 13
+    // 13
     Header: 'Fabric',
     id: 'article',
     accessor: 'state.article',
     width: 100
   }, {
-// 14
+    // 14
     Header: 'ETD (Test-report)',
     id: 'etdTestReport',
     accessor: 'state.testFinishedOnPlanDate',
     minWidth: 100
   }, {
-// 15
+    // 15
     Header: 'Test report',
     id: 'testReport',
     accessor: 'state.testReport',
     minWidth: 100,
   }, {
-// 16
+    // 16
     Header: 'ETD (Certificate)',
     id: 'etdCertificate',
     accessor: 'state.certReceivedOnPlanDate',
     minWidth: 100
   }, {
-// 17
+    // 17
     Header: 'Certificate',
     id: 'certificate',
     accessor: 'state.certificate',
     minWidth: 100,
   }, {
-// 18
+    // 18
     Header: 'Standards',
     id: 'standards',
     accessor: 'state',
@@ -152,7 +152,7 @@ const getColumns = (totalPrice: number, staleData: boolean) =>
         }
       })
   }, {
-// 19
+    // 19
     Header: 'Result',
     id: 'result',
     accessor: 'state.resume',
@@ -168,7 +168,7 @@ const getColumns = (totalPrice: number, staleData: boolean) =>
       }
     }
   }, {
-// 20
+    // 20
     Header: 'Price, €',
     Footer: <>Total: < span style={{ float: 'right' }}>{formatPrice(totalPrice)}</span></>,
     id: 'price',
@@ -176,7 +176,7 @@ const getColumns = (totalPrice: number, staleData: boolean) =>
     minWidth: 90,
     Cell: (props: any) => <>€<span style={{ float: 'right' }}>{formatPrice(props.value)}</span></>
   }, {
-// 21
+    // 21
     Header: 'Pre-treatment Result',
     id: 'pretreatment1',
     accessor: 'state.pretreatment1Result',
@@ -191,7 +191,7 @@ const getColumns = (totalPrice: number, staleData: boolean) =>
       }
     }
   }
-];
+  ];
 
 function formatPrice(price: number) {
   return price.toLocaleString('en-US', {

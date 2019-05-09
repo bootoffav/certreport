@@ -56,6 +56,7 @@ export default class List extends React.Component {
     if (this.cache.staleData) {
       allTasks = await this.cache.getFromAPI();
       this.cache.setCaches(allTasks);
+      this.columns = getColumns(this.state.totalPrice, this.cache.staleData);
       this.updateState(allTasks);
     }
   }
