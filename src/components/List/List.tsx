@@ -3,10 +3,10 @@ import React from 'react';
 import m from 'moment';
 import Loader from 'react-loader-spinner';
 import ReactTable, { Column } from "react-table";
-import { Link } from 'react-router-dom';
 import Task, { Stage } from '../../Task/Task';
 import '../../css/style.css';
 import { Toolbar, filter } from '../Toolbar/Toolbar';
+import { getColumns, visibleColumns } from './columns';
 // import { Export } from '../Export/Export';
 import { ColumnSearch, BrandFilter } from '../Filters';
 import CacheManager from '../../CacheManager';
@@ -38,6 +38,7 @@ export default class List extends React.Component {
   };
 
   cache = new CacheManager();
+  columns = getColumns(this.state.totalPrice, this.cache.staleData);
 
   static State: React.FunctionComponent<{
     notUpdated: boolean;
@@ -47,172 +48,6 @@ export default class List extends React.Component {
       <div className="spinner-border spinner-border-sm text-primary" role="status"></div>
     </div>
     : <></>
-
-  columns: any[] = [{
-    Header: '#',
-    id: 'position',
-    accessor: 'position',
-    width: 40
-  }, {
-    Header: '##',
-    id: 'serialNumber',
-    accessor: (row: any) => row.state.serialNumber && String(row.state.serialNumber),
-    width: 55,
-    Cell: (props: any) => <a
-      href={`https://xmtextiles.bitrix24.ru/company/personal/user/460/tasks/task/view/${props.original.ID}/`}
-      target="_blank" rel="noopener noreferrer"
-    >
-      {props.value}
-    </a>
-  }, {
-    Header: 'Brand',
-    id: 'brand',
-    minWidth: 50,
-    accessor: 'state.brand'
-  }, {
-    Header: 'Status',
-    id: 'stage',
-    minWidth: 100,
-    accessor: 'state.stage'
-  }, {
-    Header: 'Task title',
-    accessor: 'TITLE',
-    id: 'taskName',
-    minWidth: 550,
-    Cell: (props: any) => props.original.state.serialNumber ?
-      <Link className={this.cache.staleData ? 'EditLinkIsDisabled' : ''}
-        to={
-          this.cache.staleData
-            ? '' : {
-              pathname: `/edit/${props.original.ID}`,
-              state: { ...props.original.state }
-            }
-        }
-      >{props.value}</Link>
-      : <Link to={{
-        pathname: `/edit/${props.original.ID}`,
-        state: { ...props.original.state }
-      }}>{props.value}</Link>
-  }, {
-    Header: 'Sample to be prepared on',
-    accessor: 'state.readyOn',
-    id: 'readyOn',
-    width: 130,
-  }, {
-    Header: 'Sent On',
-    accessor: 'state.sentOn',
-    id: 'sentOn',
-    width: 130,
-  }, {
-    Header: 'Sample has received On',
-    accessor: 'state.receivedOn',
-    id: 'receivedOn',
-    width: 130,
-  }, {
-    Header: 'Tests to be finished On',
-    accessor: 'state.finishedOn',
-    id: 'receivedOn',
-    width: 130,
-  }, {
-    Header: 'Proforma date',
-    accessor: 'state.proformaReceivedDate',
-    id: 'proformaReceivedDate',
-    width: 130,
-  }, {
-    Header: 'Proforma #',
-    accessor: 'state.proformaNumber',
-    id: 'proformaNumber',
-    width: 100,
-  }, {
-    Header: 'Paid',
-    id: 'paid',
-    accessor: 'state.paymentDate',
-    minWidth: 40,
-    Cell: (props: any) => props.value
-      ? <span className="oi oi-check"></span>
-      : ''
-  }, {
-    Header: 'Payment date',
-    id: 'paymentDate',
-    accessor: 'state.paymentDate',
-    width: 130,
-  }, {
-    Header: 'Fabric',
-    id: 'article',
-    accessor: 'state.article',
-    width: 100
-  }, {
-    Header: 'Test report',
-    id: 'testReport',
-    accessor: 'state.testReport',
-    minWidth: 100,
-  }, {
-    Header: 'Certificate',
-    id: 'certificate',
-    accessor: 'state.certificate',
-    minWidth: 100,
-  }, {
-    Header: 'Standards',
-    id: 'standards',
-    accessor: 'state',
-    minWidth: 100,
-    Cell: (props: any) =>
-      props.value.standards.split(', ').map((st: string, i: number, stArr: string[]) => {
-        const lastItem = stArr.length != i + 1;
-        switch (props.value.standardsResult[st]) {
-          case undefined:
-            return <>{st}{lastItem ? <br /> : ''}</>
-          case 'pass':
-            return <>{st} <span className="oi oi-thumb-up"></span>{lastItem ? <br /> : ''}</>
-          case 'fail':
-            return <>{st} <span className="oi oi-circle-x"></span>{lastItem ? <br /> : ''}</>
-        }
-      })
-  }, {
-    Header: 'Result',
-    id: 'result',
-    accessor: 'state.resume',
-    minWidth: 40,
-    Cell: (props: any) => {
-      switch (props.value) {
-        case 'fail':
-          return <span className="oi oi-circle-x"></span>;
-        case 'pass':
-          return <span className="oi oi-thumb-up"></span>;
-        default:
-          return '';
-      }
-    }
-    }, {
-      Header: 'Price, €',
-      Footer: () => <>Total: <span style={{ float: 'right' }}>{this.formatPrice(this.state.totalPrice)}</span></>,
-      id: 'price',
-      accessor: 'state.price',
-      minWidth: 90,
-      Cell: (props: any) => <>€<span style={{ float: 'right' }}>{this.formatPrice(props.value)}</span></>
-    }, {
-      Header: 'Pre-treatment Result',
-      id: 'pretreatment1',
-      accessor: 'state.pretreatment1Result',
-      Cell: (props: any) => {
-        switch (props.value) {
-          case 'fail':
-            return <span className="oi oi-circle-x"></span>;
-          case 'pass':
-            return <span className="oi oi-thumb-up"></span>;
-          default:
-            return '';
-        }
-      }
-    }];
-
-  formatPrice = (price: number): string => price
-      .toLocaleString('en-US', {
-        style: 'currency',
-        currency: 'EUR'
-      })
-    .replace(/,/g, ' ')
-    .replace(/\./g, ',')
 
   async componentDidMount() {
     let allTasks = await this.cache.load();
@@ -235,7 +70,7 @@ export default class List extends React.Component {
     
     const visibleTasks: Task[] = filter(tasks);
     const totalPrice: number = visibleTasks.reduce((sum: number, task: any) => sum + Number(task.state.price), 0);
-    this.visibleColumns();
+    visibleColumns.call(this);
     this.setState({
       allTasks: allTasks,
       filteredTasksLevel1: tasks,
@@ -288,48 +123,8 @@ export default class List extends React.Component {
   toolbarFilter = (requiredStage: Stage | undefined | string = undefined) => {
     let visibleTasks: Task[] = filter(this.state.filteredTasksLevel1, requiredStage);
     let totalPrice: number = visibleTasks.reduce((sum: number, task: any) => sum + Number(task.state.price), 0);
-    this.visibleColumns(requiredStage);
+    visibleColumns.call(this, requiredStage);
     this.setState({ visibleTasks, totalPrice, requiredStage });
-  }
-
-  visibleColumns(requiredStage : Stage | undefined | string = undefined): void {
-    this.columns.forEach(col => col.show = true);
-    let hidden: number[];
-    switch (requiredStage) {
-      case Stage['0. Sample to be prepared']:
-        hidden = [3, 6, 7, 8, 9, 10, 11, 12, 16, 17, 18];
-        break;
-      case Stage['1. Sample Sent']:
-        hidden = [3, 5, 7, 8, 9, 10, 11, 12, 16, 17, 19];
-        break;
-      case Stage['2. Sample Arrived']:
-        hidden = [3, 5, 6, 8, 9, 10, 11, 12, 16, 17, 19];
-        break;
-      case Stage['3. PI Issued']:
-        hidden = [3, 5, 6, 7, 8, 9, 12, 13, 16, 17, 19];
-        break;
-      case Stage['4. Payment Done']:
-        hidden = [3, 5, 6, 7, 8, 9, 16, 17];
-        break;
-      case Stage['5. Testing is started']:
-        hidden = [3, 5, 6, 7, 9, 10, 11, 12, 16, 17, 18];
-        break;
-      case 'results':
-        hidden = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 18];
-        break;
-      // case Stage['6. Pre-treatment done']:
-      //   break;
-      case Stage['7. Test-report ready']:
-      case Stage['8. Certificate ready']:
-        hidden = [3, 5, 6, 7, 8, 10, 11, 12];
-        break;
-      default:
-        hidden = [5, 6, 7, 8, 9, 10, 11, 12, 13, 16, 19];
-    }
-
-    this.columns.forEach((col, ind) => {
-      if (hidden.includes(ind)) col.show = false;
-    });
   }
 
   getTrProps(state: any, rowInfo: any, column: any) {

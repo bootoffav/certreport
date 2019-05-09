@@ -282,11 +282,11 @@ export default class Form extends React.Component<IFormProps> {
             handleChange={(date: Date) => this.handleDateChange(date, 'startedOn')} />
       </div>
       <div className="d-flex justify-content-center">
-        <PickDate date={this.state.testFinishedOnPlanDate} label='Tests to be finished:'
+        <PickDate date={this.state.testFinishedOnPlanDate} label='ETD (Test-report)'
           handleChange={(date: Date) => this.handleDateChange(date, 'testFinishedOnPlanDate')} />
         <PickDate date={this.state.testFinishedOnRealDate} label='Test really finished on:'
           handleChange={(date: Date) => this.handleDateChange(date, 'testFinishedOnRealDate')} />
-        <PickDate date={this.state.certReceivedOnPlanDate} label='Certificate to be received:'
+        <PickDate date={this.state.certReceivedOnPlanDate} label='ETD (Certificate)'
           handleChange={(date: Date) => this.handleDateChange(date, 'certReceivedOnPlanDate')} />
         <PickDate date={this.state.certReceivedOnRealDate} label='Certificate really received on:'
           handleChange={(date: Date) => this.handleDateChange(date, 'certReceivedOnRealDate')} />
