@@ -23,10 +23,6 @@ a.nav-item {
     color: red;
 }
 
-.tab-pane {
-    height: 550px;
-}
-
   /* Safari */
 @-webkit-keyframes spin {
     0% { -webkit-transform: rotate(0deg); }

@@ -375,7 +375,7 @@ export default class Form extends React.Component<IFormProps> {
     />;
 
   renderFormFooter = () =>
-    <div className="mt-2 d-flex justify-content-around form-row">
+    <div className="d-flex justify-content-around form-row m-2">
       <div className="col-2">
         <button type="submit"
           className="btn btn-danger btn-block"
@@ -414,7 +414,7 @@ export default class Form extends React.Component<IFormProps> {
           <div className="tab-pane fade" id="nav-comments" role="tabpanel" aria-labelledby="nav-comments-tab">
             <div className="form-row">
               <label htmlFor='comments'>Comments:</label>
-              <textarea className='form-control' value={this.state.comments} id='comments' rows={Number('15')} onChange={this.handleChange} />
+              <textarea className='form-control' value={this.state.comments} id='comments' rows={15} onChange={this.handleChange} />
             </div>
           </div>
           {this.renderFormFooter()}
