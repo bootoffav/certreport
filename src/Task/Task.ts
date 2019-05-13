@@ -18,7 +18,8 @@ export enum Stage {
   '5. Testing is started',
   '6. Pre-treatment done',
   '7. Test-report ready',
-  '8. Certificate ready'
+  '8. Certificate ready',
+  '9. Ended'
 }
 
 class Task implements ITask {
@@ -260,7 +261,7 @@ class Task implements ITask {
       case '8. Certificate ready':
         return this.state['certReceivedOnRealDate'] ? false : m(this.state['certReceivedOnPlanDate']).add(1, 'days') < today;
     }
-    return true;
+    return false;
   }
 }
 

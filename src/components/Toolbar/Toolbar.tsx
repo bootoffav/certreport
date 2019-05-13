@@ -42,10 +42,24 @@ const Toolbar: React.FunctionComponent<{
         className="btn btn-warning btn-sm"
         onClick={() => props.onClick(Stage['7. Test-report ready'])}
       ><input type="radio" />7. Test-report ready</label>
-      <label
-        className="btn btn-warning btn-sm"
-        onClick={() => props.onClick(Stage['8. Certificate ready'])}
-      ><input type="radio" />8. Certificate ready</label>
+      {Number(localStorage.getItem('includeCompletedTasks'))
+        ?
+        <label
+          className="btn btn-warning btn-sm"
+          onClick={() => props.onClick(Stage['8. Certificate ready'])}
+        ><input type="radio" />8. Certificate ready</label>
+        :
+        ''
+      }
+      {Number(localStorage.getItem('includeEndedTasks'))
+        ?
+        <label
+          className="btn btn-warning btn-sm"
+          onClick={() => props.onClick(Stage['9. Ended'])}
+        ><input type="radio" />9. Ended</label>
+        :
+        ''
+      }
       <label
         className="btn btn-light btn-sm"
         onClick={() => props.onClick('results')}
