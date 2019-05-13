@@ -1,10 +1,29 @@
 import React from 'react';
+import { render } from 'react-dom';
+import { string } from 'prop-types';
 
-export const Settings: React.FunctionComponent<{
+export class Settings extends React.Component<{
   onClose: () => void;
-  toggle: () => void;
-  checked: boolean;
-  }> = (props) => {
+}> {
+  state = {
+    includeCompletedTasks: Boolean(Number(localStorage.getItem('includeCompletedTasks'))),
+    includeEndedTasks: Boolean(Number(localStorage.getItem('includeEndedTasks'))),
+  }
+  
+  toggle = (e: React.SyntheticEvent) => {
+    const what = e.currentTarget.id;
+    if (what) {
+      localStorage.setItem(
+        what,
+        // @ts-ignore
+        Number(!this.state[what]).toString()
+        );
+        // @ts-ignore
+        this.setState({ [what]: !this.state[what] });
+    }
+  }
+
+  render() {
     return <>
       <button type="button" className="btn btn-default" data-toggle="modal" data-target="#modal-settings">
         <span className="oi oi-cog"></span>
@@ -16,14 +35,19 @@ export const Settings: React.FunctionComponent<{
               <h5 className="modal-title" id="exampleModalLabel">General settings</h5>
             </div>
             <div className="modal-body">
-               &nbsp; &nbsp;
-                <input className="form-check-input" type="checkbox" value="" checked={props.checked} id="defaultCheck1" onChange={props.toggle}/>
-                  <label className="form-check-label" htmlFor="defaultCheck1">
-                    Show completed certifications
-                  </label>
+              &nbsp; &nbsp;
+              <input className="form-check-input" type="checkbox" value="" checked={this.state.includeCompletedTasks} id="includeCompletedTasks" onChange={this.toggle} />
+              <label className="form-check-label" htmlFor="includeCompletedTasks">
+                Include completed certifications
+              </label><br />
+              &nbsp; &nbsp;
+              <input className="form-check-input" type="checkbox" value="" checked={this.state.includeEndedTasks} id="includeEndedTasks" onChange={this.toggle} />
+              <label className="form-check-label" htmlFor="includeEndedTasks">
+                Include ended certifications
+                </label><br />
             </div>
             <div className="modal-footer">
-              <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={props.onClose}>Save</button>
+              <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={this.props.onClose}>Save</button>
             </div>
           </div>
         </div>
@@ -31,3 +55,4 @@ export const Settings: React.FunctionComponent<{
       
     </>;
   }
+}

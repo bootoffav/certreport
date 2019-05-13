@@ -18,10 +18,11 @@ interface IListState {
   visibleTasks: Task[];
   allTasks: Task[];
   filteredTasksLevel1: Task[];
-  uncompletedTasks: Task[];
+  tasks: Task[];
   totalPrice: number;
   requiredStage: Stage | undefined;
-  showCompletedTasks: boolean;
+  includeCompletedTasks: boolean;
+  includeEndedTasks: boolean;
 }
 
 export default class List extends React.Component {
@@ -29,12 +30,11 @@ export default class List extends React.Component {
     visibleTasks: [],
     allTasks: [],
     filteredTasksLevel1: [],
-    uncompletedTasks: [],
+    tasks: [],
     totalPrice: 0,
     requiredStage: undefined,
-    showCompletedTasks: Boolean(
-      Number(localStorage.getItem('showCompletedTasks'))
-    )
+    includeCompletedTasks: Boolean(Number(localStorage.getItem('includeCompletedTasks'))),
+    includeEndedTasks: Boolean(Number(localStorage.getItem('includeEndedTasks')))
   };
 
   cache = new CacheManager();
@@ -61,13 +61,19 @@ export default class List extends React.Component {
     }
   }
 
+  generalSettingsFilter = (tasks: Task[]): Task[] => {
+    if (!this.state.includeCompletedTasks) {
+      tasks = tasks.filter((task: Task) => task.state.stage !== Stage[8])
+    }
+    if (!this.state.includeEndedTasks) {
+      tasks = tasks.filter((task: Task) => task.state.stage !== Stage[9])
+    }
+    return tasks;
+  }
+
   updateState = (allTasks : Task[]) : void => {
     //определить задачи по которым будет создан список
-    const uncompletedTasks : Task[] = allTasks.filter((task: Task) => task.state.stage !== Stage[8]); //только те у которых статус не готов
-    
-    const tasks: Task [] = this.state.showCompletedTasks
-      ? allTasks
-      : uncompletedTasks;
+    const tasks: Task[] = this.generalSettingsFilter(allTasks); //только те у которых статус не готов
     
     const visibleTasks: Task[] = filter(tasks);
     const totalPrice: number = visibleTasks.reduce((sum: number, task: any) => sum + Number(task.state.price), 0);
@@ -75,7 +81,7 @@ export default class List extends React.Component {
     this.setState({
       allTasks: allTasks,
       filteredTasksLevel1: tasks,
-      uncompletedTasks, visibleTasks, totalPrice, requiredStage: undefined
+      tasks, visibleTasks, totalPrice, requiredStage: undefined
     });
   }
 
@@ -86,19 +92,15 @@ export default class List extends React.Component {
     brandFilter ? brandFilter.innerText = `Brand: ${brand}` : '';
     let filtered;
 
-    let tasks = this.state.showCompletedTasks
-      ? this.state.allTasks
-      : this.state.uncompletedTasks; //determine general settings set up
-
     switch (brand) {
       case 'All':
-        filtered = tasks;
+        filtered = this.state.tasks;
         break;
       case 'No brand':
-        filtered = tasks.filter((task: any) => !Boolean(task.state.brand));
+        filtered = this.state.tasks.filter((task: any) => !Boolean(task.state.brand));
         break;
       default:
-        filtered = tasks.filter((task: any) => task.state.brand === brand);
+        filtered = this.state.tasks.filter((task: any) => task.state.brand === brand);
     }
 
     this.setState({
@@ -107,13 +109,9 @@ export default class List extends React.Component {
   }
 
   columnFilter = (valueToSearch: string, columnToSearch: string) : void => {
-    let tasks : Task[] = this.state.showCompletedTasks
-      ? this.state.allTasks
-      : this.state.uncompletedTasks; //determine general settings set up
-
     valueToSearch = valueToSearch.toLowerCase();
     this.setState({
-      filteredTasksLevel1: tasks.filter((task: any) => columnToSearch === 'TITLE'
+      filteredTasksLevel1: this.state.tasks.filter((task: any) => columnToSearch === 'TITLE'
         ? task[columnToSearch].toLowerCase().includes(valueToSearch)
         : task.state[columnToSearch].toLowerCase().includes(valueToSearch)
       )
@@ -144,13 +142,12 @@ export default class List extends React.Component {
       <div className="d-inline-flex justify-content-end">
         <List.State notUpdated={this.cache.staleData} />
         <div className="align-self-center">
-          <Settings checked={this.state.showCompletedTasks}
-            toggle={() => {
-              localStorage.setItem('showCompletedTasks', Number(!this.state.showCompletedTasks).toString());
-              this.setState({ showCompletedTasks: !this.state.showCompletedTasks });
-            }}
+          <Settings 
             onClose={() => {
-              this.updateState(this.state.allTasks);
+              this.setState({
+                includeCompletedTasks: Boolean(Number(localStorage.getItem('includeCompletedTasks'))),
+                includeEndedTasks: Boolean(Number(localStorage.getItem('includeEndedTasks')))
+              }, () => this.updateState(this.state.allTasks));
             }}
           />
         </div>
