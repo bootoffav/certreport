@@ -135,7 +135,7 @@ export default class List extends React.Component {
       <div className="d-inline-flex justify-content-end">
         <List.State notUpdated={this.cache.staleData} />
         <div className="align-self-center">
-          <Settings onClose={this.updateState} />
+          <Settings onClose={() => this.updateState()} />
         </div>
       </div>
     </div>
