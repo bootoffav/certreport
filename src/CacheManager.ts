@@ -3,7 +3,7 @@ import { emptyState } from './defaults';
 import Task from './Task/Task';
 
 interface ICacheManager {
-  load: () => any;
+  // load: () => any;
   staleData: boolean;
   getFromCache: (cacheType: Storage) => Task[];
   setCaches: (tasks: Task[]) => void;
@@ -11,20 +11,15 @@ interface ICacheManager {
 
 
 class CacheManager implements ICacheManager {
-  async load() {
-    let allTasks;
-    if (sessionStorage.hasOwnProperty('tasks')) {
-      return this.getFromCache(sessionStorage);
-    }
-    if (localStorage.hasOwnProperty('tasks')) {
-      return this.getFromCache(localStorage);
-    }
+  // load() {
+  //   if (sessionStorage.hasOwnProperty('tasks')) {
+  //     return this.getFromCache(sessionStorage);
+  //   }
+  //   if (localStorage.hasOwnProperty('tasks')) {
+  //     return this.getFromCache(localStorage);
+  //   }
 
-    allTasks = await this.getFromAPI();
-    this.setCaches(allTasks);
-
-    return allTasks;
-  }
+  // }
 
   get staleData() : boolean {
     return !sessionStorage.hasOwnProperty('tasks');

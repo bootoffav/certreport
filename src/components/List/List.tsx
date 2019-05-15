@@ -21,8 +21,6 @@ interface IListState {
   tasks: Task[];
   totalPrice: number;
   requiredStage: Stage | undefined;
-  includeCompletedTasks: boolean;
-  includeEndedTasks: boolean;
 }
 
 export default class List extends React.Component {
@@ -33,8 +31,6 @@ export default class List extends React.Component {
     tasks: [],
     totalPrice: 0,
     requiredStage: undefined,
-    includeCompletedTasks: Boolean(Number(localStorage.getItem('includeCompletedTasks'))),
-    includeEndedTasks: Boolean(Number(localStorage.getItem('includeEndedTasks')))
   };
 
   cache = new CacheManager();
@@ -50,36 +46,33 @@ export default class List extends React.Component {
     : <></>
 
   async componentDidMount() {
-    let allTasks = await this.cache.load();
-    this.updateState(allTasks);
-
     if (this.cache.staleData) {
-      allTasks = await this.cache.getFromAPI();
-      this.cache.setCaches(allTasks);
+      this.updateState(this.cache.getFromCache(localStorage));
+      this.cache.setCaches(await this.cache.getFromAPI());
       this.columns = getColumns(this.state.totalPrice, this.cache.staleData);
-      this.updateState(allTasks);
     }
+    this.updateState();
   }
 
   generalSettingsFilter = (tasks: Task[]): Task[] => {
-    if (!this.state.includeCompletedTasks) {
+    if (!Boolean(Number(localStorage.getItem('includeCompletedTasks')))) {
       tasks = tasks.filter((task: Task) => task.state.stage !== Stage[8])
     }
-    if (!this.state.includeEndedTasks) {
+    if (!Boolean(Number(localStorage.getItem('includeEndedTasks')))) {
       tasks = tasks.filter((task: Task) => task.state.stage !== Stage[9])
     }
     return tasks;
   }
 
-  updateState = (allTasks : Task[]) : void => {
-    //определить задачи по которым будет создан список
-    const tasks: Task[] = this.generalSettingsFilter(allTasks); //только те у которых статус не готов
+  updateState = (providedTasks: Task[] | undefined = undefined) => {
+    const tasks: Task[] = this.generalSettingsFilter(
+      providedTasks || this.cache.getFromCache(sessionStorage)
+    );
     
     const visibleTasks: Task[] = filter(tasks);
     const totalPrice: number = visibleTasks.reduce((sum: number, task: any) => sum + Number(task.state.price), 0);
     visibleColumns.call(this);
     this.setState({
-      allTasks: allTasks,
       filteredTasksLevel1: tasks,
       tasks, visibleTasks, totalPrice, requiredStage: undefined
     });
@@ -142,14 +135,7 @@ export default class List extends React.Component {
       <div className="d-inline-flex justify-content-end">
         <List.State notUpdated={this.cache.staleData} />
         <div className="align-self-center">
-          <Settings 
-            onClose={() => {
-              this.setState({
-                includeCompletedTasks: Boolean(Number(localStorage.getItem('includeCompletedTasks'))),
-                includeEndedTasks: Boolean(Number(localStorage.getItem('includeEndedTasks')))
-              }, () => this.updateState(this.state.allTasks));
-            }}
-          />
+          <Settings onClose={this.updateState} />
         </div>
       </div>
     </div>
