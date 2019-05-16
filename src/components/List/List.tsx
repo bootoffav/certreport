@@ -6,7 +6,7 @@ import ReactTable, { Column } from "react-table";
 import Task, { Stage } from '../../Task/Task';
 import '../../css/style.css';
 import { Toolbar, filter } from '../Toolbar/Toolbar';
-import { getColumns, visibleColumns } from './columns';
+import { getColumns } from './columns';
 // import { Export } from '../Export/Export';
 import { ColumnSearch, BrandFilter } from '../Filters';
 import CacheManager from '../../CacheManager';
@@ -34,7 +34,10 @@ export default class List extends React.Component {
   };
 
   cache = new CacheManager();
-  columns = getColumns(this.state.totalPrice, this.cache.staleData);
+  
+  get columns() {
+    return getColumns(this.state.totalPrice, this.cache.staleData, this.state.requiredStage);
+  }
 
   static State: React.FunctionComponent<{
     notUpdated: boolean;
@@ -49,7 +52,6 @@ export default class List extends React.Component {
     if (this.cache.staleData) {
       this.updateState(this.cache.getFromCache(localStorage));
       this.cache.setCaches(await this.cache.getFromAPI());
-      this.columns = getColumns(this.state.totalPrice, this.cache.staleData);
     }
     this.updateState();
   }
@@ -71,7 +73,6 @@ export default class List extends React.Component {
     
     const visibleTasks: Task[] = filter(tasks);
     const totalPrice: number = visibleTasks.reduce((sum: number, task: any) => sum + Number(task.state.price), 0);
-    visibleColumns.call(this);
     this.setState({
       filteredTasksLevel1: tasks,
       tasks, visibleTasks, totalPrice, requiredStage: undefined
@@ -115,7 +116,6 @@ export default class List extends React.Component {
   toolbarFilter = (requiredStage: Stage | undefined | string = undefined) => {
     let visibleTasks: Task[] = filter(this.state.filteredTasksLevel1, requiredStage);
     let totalPrice: number = visibleTasks.reduce((sum: number, task: any) => sum + Number(task.state.price), 0);
-    visibleColumns.call(this, requiredStage);
     this.setState({ visibleTasks, totalPrice, requiredStage });
   }
 

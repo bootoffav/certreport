@@ -2,8 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Stage } from '../../Task/Task';
 
-const getColumns = (totalPrice: number, staleData: boolean) =>
-  [{
+function getColumns(totalPrice: number, staleData: boolean, requiredStage: Stage | 'results' | 'overdue' | undefined) {
+  const columns = [{
     // 0
     Header: '#',
     id: 'position',
@@ -193,15 +193,8 @@ const getColumns = (totalPrice: number, staleData: boolean) =>
   }
   ];
 
-function formatPrice(price: number) {
-  return price.toLocaleString('en-US', {
-    style: 'currency', currency: 'EUR'
-  }).replace(/,/g, ' ').replace(/\./g, ',')
-}
-
-function visibleColumns(requiredStage : Stage | undefined | string = undefined): void {
   // @ts-ignore
-  this.columns.forEach(col => col.show = true);
+  columns.forEach(col => col.show = true);
   let hidden: number[];
   switch (requiredStage) {
     case Stage['0. Sample to be prepared']:
@@ -238,11 +231,18 @@ function visibleColumns(requiredStage : Stage | undefined | string = undefined):
       hidden = [5, 6, 7, 8, 9, 10, 11, 12, 14, 16, 18, 21];
   }
 
-  // @ts-ignore
-  this.columns.forEach((col, ind) => {
+  columns.forEach((col, ind) => {
     // @ts-ignore
     if (hidden.includes(ind)) col.show = false;
   });
+
+  return columns;
 }
 
-export { getColumns, visibleColumns };
+function formatPrice(price: number) {
+  return price.toLocaleString('en-US', {
+    style: 'currency', currency: 'EUR'
+  }).replace(/,/g, ' ').replace(/\./g, ',')
+}
+
+export { getColumns };
