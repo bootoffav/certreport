@@ -48,6 +48,10 @@ class StateAdapter {
       // @ts-ignore
         stageForTitle = `Certificate ready - ${dC(this.certReceivedOnRealDate, 'DD.MM.YYYY')}`
         break;
+      case '9. Ended':
+      // @ts-ignore
+        stageForTitle = this.certificate;
+        break;
       default:
         stageForTitle = '';
     }
