@@ -161,6 +161,28 @@ class B24 {
         });
     }
 
+  static fileUpload(
+    taskId: string | undefined,
+    name: string,
+    content: string
+  ) {
+    if (taskId) {
+      return fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.addfile/`, {
+        method: 'post',
+        body: qs.stringify({
+          TASK_ID: taskId,
+          FILE: {
+            NAME: name,
+            CONTENT: btoa(content)
+          }
+        })
+      })
+        .then(response => response.json())
+    } else {
+      throw ('Task Id is not defined');
+    }
+  }
+
     static async get_tasks() {
       let tasks : {}[] = [];
       do {

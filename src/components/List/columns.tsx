@@ -130,7 +130,10 @@ function getColumns(totalPrice: number, staleData: boolean, requiredStage: Stage
     // 17
     Header: 'Certificate',
     id: 'certificate',
-    accessor: 'state.certificate',
+    accessor: (row: any) => 
+      ['7. Test-report ready', '8. Certificate ready', '9. Ended'].includes(row.state.stage)
+        ? row.UF_TASK_WEBDAV_FILES.map((file: any, key: number) => <><a key={key} href={`https://xmtextiles.bitrix24.ru${file.DOWNLOAD_URL}`}>{file.NAME}</a><br /></>)
+      : row.state.certificate,
     minWidth: 100,
   }, {
     // 18

@@ -15,7 +15,7 @@ a.nav-item {
     font-size: 1.1em;
 }
 
-.oi-thumb-up {
+.oi-thumb-up, .oi-circle-check {
     color: green;
 }
 

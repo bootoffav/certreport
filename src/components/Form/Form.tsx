@@ -13,6 +13,7 @@ import { IState } from '../../defaults';
 import Export from '../Export/Export';
 import { dateConverter } from '../../helpers';
 import Standards from '../Standards/Standards';
+import FileUploads from '../FileUploads/FileUploads';
 
 interface IFormState extends IState {
   requestStatus: Status;
@@ -384,6 +385,12 @@ export default class Form extends React.Component<IFormProps> {
       {/* <Export type="pdf" data={this.state}/> */}
       {/* <Export type="xls" data={this.state}/> */}
     </div>
+  
+  renderFileUploads() {
+    return <div className="tab-pane fade" id="nav-fileUploads" role="tabpanel" aria-labelledby="nav-fileUploads-tab">
+      <FileUploads taskId={this.task_id} />
+    </div>;
+  }
 
   render = () => 
     <div className="container">
@@ -396,6 +403,10 @@ export default class Form extends React.Component<IFormProps> {
             <a className="nav-item nav-link" id="nav-payments-tab" data-toggle="tab" href="#nav-payments" role="tab" aria-controls="nav-payments" aria-selected="false">Payments</a>
             <a className="nav-item nav-link" id="nav-Standards-tab" data-toggle="tab" href="#nav-Standards" role="tab" aria-controls="nav-Standards" aria-selected="false">Standards</a>
             <a className="nav-item nav-link" id="nav-comments-tab" data-toggle="tab" href="#nav-comments" role="tab" aria-controls="nav-comments" aria-selected="false">Comments</a>
+            {['7. Test-report ready',
+              '8. Certificate ready',
+              '9. Ended'].includes(this.state.stage) &&
+              <a className="nav-item nav-link" id="nav-fileUploads-tab" data-toggle="tab" href="#nav-fileUploads" role="tab" aria-controls="nav-fileUploads" aria-selected="false">File Uploads</a>}
           </div>
         </nav>
         <div className="tab-content mt-3" id="nav-tabContent">
@@ -417,6 +428,10 @@ export default class Form extends React.Component<IFormProps> {
               <textarea className='form-control' value={this.state.comments} id='comments' rows={15} onChange={this.handleChange} />
             </div>
           </div>
+          {['7. Test-report ready',
+            '8. Certificate ready',
+            '9. Ended'
+            ].includes(this.state.stage) && this.renderFileUploads()}
           {this.renderFormFooter()}
         </div>
       </form>
