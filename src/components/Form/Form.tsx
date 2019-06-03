@@ -129,7 +129,7 @@ export default class Form extends React.Component<IFormProps> {
           Testing company
           <Select
             value={this.asSelectable(this.state.testingCompany)}
-            onChange={e => {
+            onChange={(e: any) => {
               this.handleSelectChange(e, 'testingCompany')}
             }
             options={selectOptions.testingCompany}
@@ -141,7 +141,7 @@ export default class Form extends React.Component<IFormProps> {
           Standards
           <Select isMulti
             value={this.asSelectable(this.state.standards)}
-            onChange={e => {
+            onChange={(e: any) => {
               this.handleSelectChange(e, 'standards')}
             }
             options={selectOptions.standards}
@@ -153,7 +153,7 @@ export default class Form extends React.Component<IFormProps> {
           Stage
           <Select
             value={this.asSelectable(this.state.stage)}
-            onChange={e => {
+            onChange={(e: any) => {
               this.handleSelectChange(e, 'stage')}
             }
             options={selectOptions.stages}
@@ -206,7 +206,7 @@ export default class Form extends React.Component<IFormProps> {
     <div className="d-flex">
       <div className="flex-grow-1">
         Brand
-        <Select value={this.asSelectable(this.state.brand)} onChange={e => this.handleSelectChange([e], 'brand')}
+        <Select value={this.asSelectable(this.state.brand)} onChange={(e: any) => this.handleSelectChange([e], 'brand')}
           options={selectOptions.brand}
         />
       </div>
@@ -383,7 +383,7 @@ export default class Form extends React.Component<IFormProps> {
         >SAVE</button>
       </div>
       {/* <Export type="pdf" data={this.state}/> */}
-      {/* <Export type="xls" data={this.state}/> */}
+      <Export type="xls" data={this.state}/>
     </div>
   
   renderFileUploads() {
