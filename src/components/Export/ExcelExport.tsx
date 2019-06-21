@@ -292,14 +292,15 @@ export default class ExcelExport implements IExcelFabricTestForm {
     this.currentRow++;
 
     // 4 row
-    for (let standard of this.data.standards.split(', ')) {
-      this.sh.getCell('A' + this.currentRow).border = { left: bThick, right: bThin, bottom: bThin };
-      this.sh.getCell('A' + this.currentRow).value = standard;
-      this.sh.mergeCells(`B${this.currentRow}:H${this.currentRow}`);
-      this.sh.getCell('B' + this.currentRow).border = { bottom: bThin, right: bThin };
-      this.sh.getCell('E' + this.currentRow).border = { bottom: bThin, right: bThick };
-      this.currentRow++;
-    }
+    
+    // for (let standard of this.data.standards.split(', ')) {
+    //   this.sh.getCell('A' + this.currentRow).border = { left: bThick, right: bThin, bottom: bThin };
+    //   this.sh.getCell('A' + this.currentRow).value = standard;
+    //   this.sh.mergeCells(`B${this.currentRow}:H${this.currentRow}`);
+    //   this.sh.getCell('B' + this.currentRow).border = { bottom: bThin, right: bThin };
+    //   this.sh.getCell('E' + this.currentRow).border = { bottom: bThin, right: bThick };
+    //   this.currentRow++;
+    // }
 
     // next rows after all Standards
     this.sh.mergeCells(`A${this.currentRow}:I${this.currentRow}`);

@@ -1,36 +1,44 @@
 import React from 'react';
-import PDF from './PDF';
+// import PDF from './PDF';
+import PDFExport from './PDF/PDFExport';
 import { IState } from '../../defaults';
 import ExcelExport from './ExcelExport';
 
 interface ExportProps {
-  type: string;
   data: IState;
 }
 
 class Export extends React.Component<ExportProps> {
 
-  export() {
-    switch (this.props.type) {
-      // case 'pdf':
+  export(e: any) {
+    e.preventDefault();
+    switch (e.currentTarget.dataset.type) {
+      case 'pdf':
+        // alert('not yet implemeted');
+        new PDFExport(this.props.data).save();
+        break;
       //   return new PDF(this.props.data).pdf.save(`${this.props.data.serialNumber} - ${this.props.data.applicantName}.pdf`);
-      default:
-        return new ExcelExport(this.props.data).save();
+      case 'xls':
+        new ExcelExport(this.props.data).save();
+        break;
     }
   }
 
   render() {
     return (
-    <>
-      <div className="col-2">
-        <button className="btn btn-info btn-block"
-          onClick={e => {
-            e.preventDefault();
-            this.export();
-          }}
-        >Application form</button>
+      <div id="toolbar" className="col-3 btn-group btn-group-toggle" data-toggle="buttons">
+        <label
+          className="btn btn-light btn-sm"
+          data-type="pdf"
+          onClick={this.export.bind(this)}
+          ><input type="radio" />PDF (40% done)</label>
+        <label
+          className="btn btn-light btn-sm"
+          data-type="xls"
+          onClick={this.export.bind(this)}
+        ><input type="radio" />Excel</label>
       </div>
-    </>);
+    );
   }
 }
 

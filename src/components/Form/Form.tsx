@@ -383,7 +383,7 @@ export default class Form extends React.Component<IFormProps> {
         >SAVE</button>
       </div>
       {/* <Export type="pdf" data={this.state}/> */}
-      <Export type="xls" data={this.state}/>
+      <Export data={this.state}/>
     </div>
   
   renderFileUploads() {
