@@ -382,7 +382,6 @@ export default class Form extends React.Component<IFormProps> {
           className="btn btn-danger btn-block"
         >SAVE</button>
       </div>
-      {/* <Export type="pdf" data={this.state}/> */}
       <Export data={this.state}/>
     </div>
   
