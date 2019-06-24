@@ -31,7 +31,7 @@ class Export extends React.Component<ExportProps> {
           className="btn btn-light btn-sm"
           data-type="pdf"
           onClick={this.export.bind(this)}
-          ><input type="radio" />PDF (80% done)</label>
+          ><input type="radio" />PDF</label>
         <label
           className="btn btn-light btn-sm"
           data-type="xls"

@@ -7,5 +7,13 @@ const tableLayout = {
     }
 };
 
+const fonts = {
+  TimesNewRoman: {
+    normal: 'times-new-roman.ttf',
+    bold: 'times-new-roman-bold.ttf',
+    italics: 'times-new-roman-italic.ttf',
+    bolditalics: 'times-new-roman-bolditalic.ttf'
+  }
+};
 
-export { tableLayout };
+export { tableLayout, fonts };
