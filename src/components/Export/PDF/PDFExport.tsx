@@ -2,33 +2,33 @@ import React from 'react';
 import pdfMake from "pdfmake/build/pdfmake";
 import { vfs } from './vfs_fonts.js';
 
-import { tableLayout, fonts } from './settings';
+import { tableLayout, fonts, tableStyle } from './settings';
 import { footerImage } from './footer-image';
 import { IState } from '../../../defaults';
 
 
 const square = {
-  text: `${String.fromCharCode(0x2B1C)}`, fontSize: 10,
+  text: `${String.fromCharCode(0x2B1C)}`, fontSize: 16
 };
 
 class PDFExport extends React.Component<IState> {
   companyProfile = {
     table: {
-      widths: [100, '*'],
+      widths: [120, '*'],
       body: [
         ['Applicant of report', { text: this.props.applicantName, fillColor: '#FFFF08' }],
         ['Contact Person', { text: 'Vitaly Aliev', fillColor: '#FFFF08' }],
         ['Contact email', { text: 'vit@xmtextiles.com', fillColor: '#FFFF08' }]
       ]
     },
-    layout: 'basic'
+    layout: 'basic', style: tableStyle
   };
 
   header = [
     {
       text: 'Fabric Test Application Form',
       style: {
-        fontSize: 16,
+        fontSize: 14,
         bold: true,
         alignment: 'center'
       },
@@ -38,20 +38,20 @@ class PDFExport extends React.Component<IState> {
         { text: 'Company profile', fontSize: 11, bold: true },
         ' (Applicant information in report)'
       ],
-      style: { alignment: 'center', margin: [10, 10, 10, 10] },
+      style: { alignment: 'center' },
     }
   ];
 
   sampleInformation = {
     table: {
-      widths: [100, 80, '*', 40, 40, 40],
+      widths: [120, 80, '*', 40, 40, 40],
       body: [
         // 1 row of header
         [
           {
             text: [
               { text: 'Sample Information', fontSize: 11, bold: true },
-              ' (Test sample information in report)'
+              { text: ' (Test sample information in report)' },
             ],
             colSpan: 6,
             style: { alignment: 'center' }
@@ -103,12 +103,13 @@ class PDFExport extends React.Component<IState> {
         ['Others (if any)', '', '', '', '', ''],
       ],
     },
-    layout: 'basic'
+    layout: 'basic',
+    style: tableStyle
   };
   
   testRequirement = {
     table: {
-      widths: [100, 40, 40, 40, 40, 40, 40, 40, '*'],
+      widths: [120, 35, 35, 35, 35, 35, 35, 35, '*'],
       body: [
         // 1 row of header
         [
@@ -120,7 +121,7 @@ class PDFExport extends React.Component<IState> {
           {
             text: [
               { text: '*Test according to completed Standard Requirement (mandatory test included)', fontSize: 11, bold: true },
-              { text: ' - Please mark "√" in below □ to confirm your standardlized and optional requirement.', bold: true }
+              { text: ' - Please mark "V" in below □ to confirm your standardlized and optional requirement.', bold: true }
             ],
             colSpan: 9, fillColor: '#FFFF08'
           },
@@ -132,13 +133,13 @@ class PDFExport extends React.Component<IState> {
           { text: 'Optional Test Item under Standard', colSpan: 7, alignment: 'center' },
           {}, {}, {}, {}, {}, {}, 'Notice (if any)'],
         [
-          { text: [square, ' EN 11611'], alignment: 'center' },
+          { text: [square, ' EN 11611'] },
           { text: [square, ' A1'], alignment: 'center' },
           { text: [square, ' A2'], alignment: 'center' },
           { text: '', colSpan: 5 }, {}, {}, {}, {},
           ''],
         [
-          { text: [square, ' EN 11612'], alignment: 'center' },
+          { text: [square, ' EN 11612'] },
           { text: [square, ' A1'], alignment: 'center' },
           { text: [square, ' A2'], alignment: 'center' },
           { text: [square, ' B'], alignment: 'center' },
@@ -148,41 +149,41 @@ class PDFExport extends React.Component<IState> {
           { text: [square, ' F'], alignment: 'center' },
           ''],
         [
-          { text: [square, ' EN 1149-5'], alignment: 'center' },
+          { text: [square, ' EN 1149-5'] },
           { text: [square, ' EN 1149-1'], colSpan: 2, alignment: 'center' }, {},
           { text: [square, ' EN 1149-3'], colSpan: 2, alignment: 'center' }, {},
           { text: '', colSpan: 3 }, {}, {},
           ''
         ],
         [
-          { text: [square, ' EN 61482-1-2'], alignment: 'center' },
+          { text: [square, ' EN 61482-1-2'] },
           { text: [square, ' Class1'], colSpan: 2, alignment: 'center' }, {},
           { text: [square, ' Class2'], colSpan: 2, alignment: 'center' }, {},
           { text: '', colSpan: 3 }, {}, {},
           ''
         ],
         [
-          { text: [square, ' EN 20471'], alignment: 'center' },
+          { text: [square, ' EN 20471'] },
           { text: `According to Standard Mandotory Test Requirement`, colSpan: 7 }, {}, {}, {}, {}, {}, {},
           ''
         ],
         [
-          { text: [square, ' EN 14116'], alignment: 'center' },
+          { text: [square, ' EN 14116'] },
           { text: `According to Standard Mandotory Test Requirement`, colSpan: 7 }, {}, {}, {}, {}, {}, {},
           ''
         ],
         [
-          { text: [square, ' EN 343'], alignment: 'center' },
+          { text: [square, ' EN 343'] },
           { text: `According to Standard Mandotory Test Requirement`, colSpan: 7 }, {}, {}, {}, {}, {}, {},
           ''
         ],
         [
-          { text: [square, ' Other Standard 1'], alignment: 'center' },
+          { text: [square, ' Other Standard 1'] },
           { text: `According to Standard Mandotory Test Requirement`, colSpan: 7 }, {}, {}, {}, {}, {}, {},
           ''
         ],
         [
-          { text: [square, ' Other Standard 2'], alignment: 'center' },
+          { text: [square, ' Other Standard 2'] },
           { text: `According to Standard Mandotory Test Requirement`, colSpan: 7 }, {}, {}, {}, {}, {}, {},
           ''
         ],
@@ -222,15 +223,20 @@ class PDFExport extends React.Component<IState> {
         ]
       ],
     },
-    layout: 'basic'
+    layout: 'basic', style: tableStyle
   };
 
   washPreTreatment = {
     table: {
-      widths: [100, '*', 90, '*', '*', '*', '*', '*', '*'],
+      widths: [120, '*', 90, '*', '*', '*', '*', '*', '*'],
       body: [
         [{
-          text: 'Wash Pre-treatment Requirement - Please mark down "√" in below □ for your wash requirement',
+          text: ['Wash Pre-treatment Requirement - Please mark down ',
+            'V ',
+            'in below ',
+            square,
+            ' for your wash requirement'
+          ],
           colSpan: 9
         }, {}, {}, {}, {}, {}, {}, {}, {}],
         [
@@ -279,9 +285,9 @@ class PDFExport extends React.Component<IState> {
             color: 'red', colSpan: 9, fontSize: 7
           }, {}, {}, {}, {}, {}, {}, {}, {}
         ]
-      ],
-      layout: 'basic'
-    }
+      ]
+    },
+    layout: 'basic', style: tableStyle
   };
 
   footer = [
@@ -296,36 +302,35 @@ class PDFExport extends React.Component<IState> {
         },
         {
           width: '*',
-          text: 'Applicant: ________________________________',
+          text: 'Applicant: ____________________________',
           margin: [0, 6],
         }]
     },
     {
       columns: [
         {
-          width: 100,
+          width: 120,
           text: 'PI/ OFFER in: ',
           fillColor: '#FFFF08',
           color: 'red'
         },
         {
           width: '*',
-          text: [ square, ' EUR /   ', square, '   USD  /' ]
+          text: [ square, ' EUR /   ', square, '   USD  ', square, '   /   RMB' ]
         }]
     }, {
       columns: [
         {
-          width: 100,
+          width: 120,
           text: 'Test Certificate: ',
           fillColor: '#FFFF08',
           color: 'red'
         },
         {
           width: '*',
-          text: [ square, ' NO /   ', square, '   Required' ]
+          text: [ square, ' NO   /   ', square, '   Required' ]
       }]
     }, {
-      // margin: [0, 6],
       text: [
         'According to EA Resolution 2014(33)31, All the information of the test report is forbidden to make any change once be issued. So that it is ',
         { text: 'very important', color: 'red' },
@@ -346,22 +351,22 @@ class PDFExport extends React.Component<IState> {
     content: [
       this.header,
       this.companyProfile,
-      { text: '', margin: [0, 1] },
+      { text: '', margin: [0, 0.5] },
       this.sampleInformation,
-      { text: '', margin: [0, 1] },
+      { text: '', margin: [0, 0.5] },
       this.testRequirement,
-      { text: '', margin: [0, 1] },
+      { text: '', margin: [0, 0.5] },
       this.washPreTreatment,
-      { text: '', margin: [0, 1] },
+      { text: '', margin: [0, 0.5] },
       this.footer
     ],
     defaultStyle: {
-      fontSize: 8,
-      pageMargins: [10, 10],
+      fontSize: 10,
       font: 'TimesNewRoman',
     },
+    pageMargins: [30, 15] as [number, number]
   };
-
+  
   save() {
     pdfMake.createPdf(this.docDefinition, tableLayout, fonts, vfs).open();
   }
