@@ -513,7 +513,7 @@ export default class ExcelExport implements IExcelFabricTestForm {
     this.wb.xlsx.writeBuffer()
       .then((buffer: any) => fileSaver(
         new Blob([buffer], { type: "application/octet-stream" }),
-        `${this.data.serialNumber} - ${this.data.applicantName}.xlsx`)
+        `Fabric Test Application Form_${this.data.serialNumber}_${this.data.article}.xlsx`)
       );
     }
   

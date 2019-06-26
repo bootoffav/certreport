@@ -360,6 +360,10 @@ class PDFExport extends React.Component<IState> {
       { text: '', margin: [0, 0.5] },
       this.footer
     ],
+    info: {
+      title: `Fabric Test Application Form_${this.props.serialNumber}_${this.props.article}.pdf`,
+      author: 'XM Group',
+    },
     defaultStyle: {
       fontSize: 10,
       font: 'TimesNewRoman',
@@ -368,7 +372,9 @@ class PDFExport extends React.Component<IState> {
   };
   
   save() {
-    pdfMake.createPdf(this.docDefinition, tableLayout, fonts, vfs).open();
+    pdfMake
+      .createPdf(this.docDefinition, tableLayout, fonts, vfs)
+      .download(`Fabric Test Application Form_${this.props.serialNumber}_${this.props.article}.pdf`);
   }
 }
 
