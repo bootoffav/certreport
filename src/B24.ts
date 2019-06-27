@@ -2,8 +2,8 @@ import qs from 'qs';
 import m from 'moment';
 import { dataSeparator } from './Task/Task';
 import Task from './Task/Task';
-import PDF from './components/Export/PDF';
 import StateAdapter from './StateAdapter';
+import PDFExport from './components/Export/PDF/PDFExport';
 import { IState } from './defaults';
 
 m.fn.toJSON = function() { return this.format(); }
@@ -20,59 +20,59 @@ class B24 {
 
   private static _start : undefined;
 
-    static defaultParams = {
-        CREATED_BY: creator_id,
-        TAGS: [tag],
-        GROUP_ID: 21,
-    }
+  static defaultParams = {
+      CREATED_BY: creator_id,
+      TAGS: [tag],
+      GROUP_ID: 21,
+  }
 
-    static get start() {
-      return this._start;
-    }
+  static get start() {
+    return this._start;
+  }
 
-    static set start(start) {
-      this._start = start;
-    }
+  static set start(start) {
+    this._start = start;
+  }
 
-    static step = (json : any) => {
-      B24.start = json.next;
-      return json.result;
+  static step = (json : any) => {
+    B24.start = json.next;
+    return json.result;
+  };
+
+  static makeUfCrmTaskField = (state : any) => {
+    const brands_map : {
+      [key: string]: string;
+    } = {
+      XMS: 'C_10037',
+      XMF: 'C_10035',
+      XMT: 'C_10033',
+      XMG: 'C_10041'
     };
-
-    static makeUfCrmTaskField = (state : any) => {
-      const brands_map : {
-        [key: string]: string;
-      } = {
-        XMS: 'C_10037',
-        XMF: 'C_10035',
-        XMT: 'C_10033',
-        XMG: 'C_10041'
-      };
-      let UF_CRM_TASK = [];
-      
-      if (state.UF_CRM_TASK) {
-        state.UF_CRM_TASK.forEach((item : string)=> {
-          if (![
-            'C_10033',
-            'C_10035',
-            'C_10037',
-            'C_10041',
-            'CO_6295'
-          ].includes(item)
-          ) {
-            UF_CRM_TASK.push(item);
-          }
-        });
-      }
-      
-      UF_CRM_TASK.push(brands_map[state.brand], 'CO_6295');
-      
-      return UF_CRM_TASK;
+    let UF_CRM_TASK = [];
+    
+    if (state.UF_CRM_TASK) {
+      state.UF_CRM_TASK.forEach((item : string)=> {
+        if (![
+          'C_10033',
+          'C_10035',
+          'C_10037',
+          'C_10041',
+          'CO_6295'
+        ].includes(item)
+        ) {
+          UF_CRM_TASK.push(item);
+        }
+      });
     }
     
-    static formTaskFields = (state : IState) => {
-      let stAd = new StateAdapter(state);
-      return {
+    UF_CRM_TASK.push(brands_map[state.brand], 'CO_6295');
+    
+    return UF_CRM_TASK;
+  }
+    
+  static formTaskFields = (state : IState) => {
+    let stAd = new StateAdapter(state);
+    return {
       ...B24.defaultParams,
       UF_CRM_TASK: B24.makeUfCrmTaskField(state),
       TITLE: `${state.serialNumber}_${state.testingCompany} - ${state.standards} - ${state.article}, ${state.colour} ` +
@@ -115,51 +115,67 @@ class B24 {
     }
   };
 
-    static createTask = (state : any) => {
-      const defaultParams = {
-        AUDITORS: auditors,
-        PARENT_ID: 46902,
-        RESPONSIBLE_ID: responsibleId
-      }
-
-      const attachPDF = (taskId: string) => {
-        fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.addfile/`, {
-          method: 'post',
-          body: qs.stringify({
-            TASK_ID: taskId,
-            FILE: {
-              NAME: `${state.serialNumber} - ${state.applicantName}.pdf`,
-              CONTENT: btoa(new PDF(state).pdf.output())
-            }
-          })
-        })
-      }
-      
-      const taskData = { ...B24.formTaskFields(state), ...defaultParams };
-      return fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.add/`, {
-        method: 'post',
-        headers: { 'content-type': 'application/x-www-form-urlencoded' },
-        body: qs.stringify([ taskData ])
-      })
-        .then(r => r.json())
-        .then(response => {
-          attachPDF(response.result);
-          state.link = `[URL=https://certreport.xmtextiles.com/edit/${response.result}/]this task[/URL]`;
-          B24.updateTask(state, response.result); //to include link for editing
-        });
-    }
-
-    static updateTask(state : any, task_id : string | null = null) {
-        if (task_id === null) {
-            throw new Error('task id is not defined');
+  static async handleApplicationForm(taskId: string, state: IState) {
+    const fileName = `Fabric Test Application Form_${state.serialNumber}_${state.article}.pdf`;
+    await fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.getfiles?` + qs.stringify({ TASKID: taskId }))
+      .then(res => res.json())
+      .then(res => 
+        res.result.forEach((file: any) => {
+          // 29 is 'Fabric Test Application Form_'
+          if ('NAME' in file && fileName.substr(0, 29) === file.NAME.substr(0, 29)) {
+            // remove this file from task
+            fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.deletefile?` + qs.stringify({ TASK_ID: taskId, ATTACHMENT_ID: file.ATTACHMENT_ID }));
+            // delete from Bitrix
+            fetch(`${main_url}/${creator_id}/${webhook_key}/disk.file.delete?` + qs.stringify({ id: file.FILE_ID }));
+          }
         }
-        const task_data = B24.formTaskFields(state);
-        return fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.update/`, {
-          method: 'post',
-          headers: { 'content-type': 'application/x-www-form-urlencoded' },
-          body: qs.stringify([task_id, task_data])
-        });
+      ));
+    new PDFExport(state).create().getBase64(base64 => {
+      fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.addfile/`, {
+        method: 'post',
+        body: qs.stringify({
+          TASK_ID: taskId,
+          FILE: {
+            NAME: fileName,
+            CONTENT: base64
+          }
+        })
+      })
+    });
+  }
+
+  static createTask = (state : any) => {
+    const defaultParams = {
+      AUDITORS: auditors,
+      PARENT_ID: 46902,
+      RESPONSIBLE_ID: responsibleId
     }
+
+    const taskData = { ...B24.formTaskFields(state), ...defaultParams };
+    return fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.add/`, {
+      method: 'post',
+      headers: { 'content-type': 'application/x-www-form-urlencoded' },
+      body: qs.stringify([taskData])
+    })
+      .then(r => r.json())
+      .then(res => {
+        state.link = `[URL=https://certreport.xmtextiles.com/edit/${res.result}/]this task[/URL]`;
+        B24.updateTask(state, res.result); //to include link for editing
+    });
+  }
+
+  static updateTask(state : any, task_id : string | null = null) {
+    if (task_id === null) {
+        throw new Error('task id is not defined');
+    }
+    const task_data = B24.formTaskFields(state);
+    B24.handleApplicationForm(task_id, state);
+    return fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.update/`, {
+      method: 'post',
+      headers: { 'content-type': 'application/x-www-form-urlencoded' },
+      body: qs.stringify([task_id, task_data])
+    })
+  }
 
   static fileUpload(
     taskId: string | undefined,
@@ -177,7 +193,7 @@ class B24 {
           }
         })
       })
-        .then(response => response.json())
+        .then(res => res.json())
     } else {
       throw ('Task Id is not defined');
     }
@@ -192,7 +208,7 @@ class B24 {
           filter: { TAG: tag },
           start: B24.start
         }))
-        .then(response => response.json())
+        .then(res => res.json())
         .then(B24.step));
       } while (B24.start !== undefined);
       return tasks;
@@ -227,7 +243,7 @@ class B24 {
             select: ['NAME'],
             start: B24.start
           }))
-          .then(response => response.json())
+          .then(res => res.json())
           .then(B24.step));
       } while (B24.start !== undefined);
       return standards.map(standard => ({ value: standard.NAME, label: standard.NAME }));
@@ -252,7 +268,7 @@ class B24 {
               select: ['ID', 'NAME'],
               start: B24.start
             }))
-          .then(response => response.json())
+          .then(res => res.json())
           .then(B24.step));
         } while (B24.start !== undefined);
         productsInSection = productsInSection.map(product => ({
@@ -276,7 +292,7 @@ class B24 {
     }
 
     return fetch(`${ main_url }/${ creator_id }/${ webhook_key }/crm.product.get?id=${ id }`)
-      .then(response => response.json())
+      .then(res => res.json())
       .then(json => json.result);
   }
 }

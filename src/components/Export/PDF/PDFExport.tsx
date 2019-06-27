@@ -372,9 +372,11 @@ class PDFExport extends React.Component<IState> {
   };
   
   save() {
-    pdfMake
-      .createPdf(this.docDefinition, tableLayout, fonts, vfs)
-      .download(`Fabric Test Application Form_${this.props.serialNumber}_${this.props.article}.pdf`);
+    this.create().download(`Fabric Test Application Form_${this.props.serialNumber}_${this.props.article}.pdf`);
+  }
+
+  create() {
+    return pdfMake.createPdf(this.docDefinition, tableLayout, fonts, vfs);
   }
 }
 
