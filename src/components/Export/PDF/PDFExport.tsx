@@ -2,7 +2,7 @@ import React from 'react';
 import pdfMake from "pdfmake/build/pdfmake";
 import { vfs } from './vfs_fonts.js';
 
-import { tableLayout, fonts, tableStyle } from './settings';
+import { tableLayout, fonts } from './settings';
 import { footerImage } from './footer-image';
 import { IState } from '../../../defaults';
 
@@ -10,8 +10,17 @@ import { IState } from '../../../defaults';
 const square = {
   text: `${String.fromCharCode(0x2B1C)}`, fontSize: 16
 };
+const checkedSquare = { text: '', style: { font: 'Icons' } };
+const emptySquare = { text: '', style: { font: 'Icons' } };
+
 
 class PDFExport extends React.Component<IState> {
+
+  fabricAppForm = document.getElementById('FabricApplicationForm');
+
+  // @ts-ignore
+  renderProperSquare = (id: string) => this.fabricAppForm.querySelector(id).checked ? checkedSquare : emptySquare;
+  
   companyProfile = {
     table: {
       widths: [120, '*'],
@@ -21,7 +30,7 @@ class PDFExport extends React.Component<IState> {
         ['Contact email', { text: 'vit@xmtextiles.com', fillColor: '#FFFF08' }]
       ]
     },
-    layout: 'basic', style: tableStyle
+    layout: 'basic'
   };
 
   header = [
@@ -104,7 +113,6 @@ class PDFExport extends React.Component<IState> {
       ],
     },
     layout: 'basic',
-    style: tableStyle
   };
   
   testRequirement = {
@@ -133,63 +141,66 @@ class PDFExport extends React.Component<IState> {
           { text: 'Optional Test Item under Standard', colSpan: 7, alignment: 'center' },
           {}, {}, {}, {}, {}, {}, 'Notice (if any)'],
         [
-          { text: [square, ' EN 11611'] },
-          { text: [square, ' A1'], alignment: 'center' },
-          { text: [square, ' A2'], alignment: 'center' },
+          {
+            text: [this.renderProperSquare('#testRequirement_EN-11611'), ' EN 11611']
+          },
+          {
+            text: [this.renderProperSquare('#testRequirement_A1'), ' A1'] },
+          { text: [this.renderProperSquare('#testRequirement_A2'), ' A2'] },
           { text: '', colSpan: 5 }, {}, {}, {}, {},
           ''],
         [
-          { text: [square, ' EN 11612'] },
-          { text: [square, ' A1'], alignment: 'center' },
-          { text: [square, ' A2'], alignment: 'center' },
-          { text: [square, ' B'], alignment: 'center' },
-          { text: [square, ' C'], alignment: 'center' },
-          { text: [square, ' D'], alignment: 'center' },
-          { text: [square, ' E'], alignment: 'center' },
-          { text: [square, ' F'], alignment: 'center' },
+          { text: [this.renderProperSquare('#testRequirement_EN-11612'), ' EN 11612'] },
+          { text: [this.renderProperSquare('#testRequirement_2_A1'), ' A1'] },
+          { text: [this.renderProperSquare('#testRequirement_2_A2'), ' A2'] },
+          { text: [this.renderProperSquare('#testRequirement_B'), ' B'] },
+          { text: [this.renderProperSquare('#testRequirement_C'), ' C'] },
+          { text: [this.renderProperSquare('#testRequirement_D'), ' D'] },
+          { text: [this.renderProperSquare('#testRequirement_E'), ' E'] },
+          { text: [this.renderProperSquare('#testRequirement_F'), ' F'] },
           ''],
         [
-          { text: [square, ' EN 1149-5'] },
-          { text: [square, ' EN 1149-1'], colSpan: 2, alignment: 'center' }, {},
-          { text: [square, ' EN 1149-3'], colSpan: 2, alignment: 'center' }, {},
+          { text: [this.renderProperSquare('#testRequirement_EN-1149-5'), ' EN 1149-5'] },
+          { text: [this.renderProperSquare('#testRequirement_EN-1149-1'), ' EN 1149-1'], colSpan: 2}, {},
+          { text: [this.renderProperSquare('#testRequirement_EN-1149-3'), ' EN 1149-3'], colSpan: 2 }, {},
           { text: '', colSpan: 3 }, {}, {},
           ''
         ],
         [
-          { text: [square, ' EN 61482-1-2'] },
-          { text: [square, ' Class1'], colSpan: 2, alignment: 'center' }, {},
-          { text: [square, ' Class2'], colSpan: 2, alignment: 'center' }, {},
+          { text: [this.renderProperSquare('#testRequirement_EN-61482-1-2'), ' EN 61482-1-2'] },
+          { text: [this.renderProperSquare('#testRequirement_Class-1'), ' Class 1'], colSpan: 2 }, {},
+          { text: [this.renderProperSquare('#testRequirement_Class-2'), ' Class 2'], colSpan: 2 }, {},
           { text: '', colSpan: 3 }, {}, {},
           ''
         ],
         [
-          { text: [square, ' EN 20471'] },
+          { text: [this.renderProperSquare('#testRequirement_EN-20471'), ' EN 20471'] },
           { text: `According to Standard Mandotory Test Requirement`, colSpan: 7 }, {}, {}, {}, {}, {}, {},
           ''
         ],
         [
-          { text: [square, ' EN 14116'] },
+          { text: [this.renderProperSquare('#testRequirement_EN-14116'), ' EN 14116'] },
           { text: `According to Standard Mandotory Test Requirement`, colSpan: 7 }, {}, {}, {}, {}, {}, {},
           ''
         ],
         [
-          { text: [square, ' EN 343'] },
+          { text: [this.renderProperSquare('#testRequirement_EN-343'), ' EN 343'] },
           { text: `According to Standard Mandotory Test Requirement`, colSpan: 7 }, {}, {}, {}, {}, {}, {},
           ''
         ],
         [
-          { text: [square, ' Other Standard 1'] },
+          { text: [this.renderProperSquare('#testRequirement_Other-Standard-1'), ' Other Standard 1'] },
           { text: `According to Standard Mandotory Test Requirement`, colSpan: 7 }, {}, {}, {}, {}, {}, {},
           ''
         ],
         [
-          { text: [square, ' Other Standard 2'] },
+          { text: [this.renderProperSquare('#testRequirement_Other-Standard-2'), ' Other Standard 2'] },
           { text: `According to Standard Mandotory Test Requirement`, colSpan: 7 }, {}, {}, {}, {}, {}, {},
           ''
         ],
         [
           {
-            text: [square, ' Separate report for each standard - If you need to separate report for you several standard test requirement.'],
+            text: [emptySquare, ' Separate report for each standard - If you need to separate report for you several standard test requirement.'],
             colSpan: 9, fillColor: '#FFFF08'
           },
           {}, {}, {}, {}, {}, {}, {}, {}
@@ -223,7 +234,7 @@ class PDFExport extends React.Component<IState> {
         ]
       ],
     },
-    layout: 'basic', style: tableStyle
+    layout: 'basic'
   };
 
   washPreTreatment = {
@@ -231,12 +242,7 @@ class PDFExport extends React.Component<IState> {
       widths: [120, '*', 90, '*', '*', '*', '*', '*', '*'],
       body: [
         [{
-          text: ['Wash Pre-treatment Requirement - Please mark down ',
-            'V ',
-            'in below ',
-            square,
-            ' for your wash requirement'
-          ],
+          text: ['Wash Pre-treatment Requirement - Please mark down V in below ', emptySquare, ' for your wash requirement'],
           colSpan: 9
         }, {}, {}, {}, {}, {}, {}, {}, {}],
         [
@@ -249,23 +255,23 @@ class PDFExport extends React.Component<IState> {
           'Domestic Wash(ISO 6330)',
           { text: '', fillColor: '#FFFF08' },
           { text: '', fillColor: '#FFFF08' },
-          { text: [square, ' A'], fillColor: '#FFFF08' },
-          { text: [square, ' B'], fillColor: '#FFFF08' },
-          { text: [square, ' C'], fillColor: '#FFFF08' },
-          { text: [square, ' D'], fillColor: '#FFFF08' },
-          { text: [square, ' E'], fillColor: '#FFFF08' },
-          { text: [square, ' F'], fillColor: '#FFFF08' },
+          { text: [this.renderProperSquare('#washPreTreatment_A'), ' A'], fillColor: '#FFFF08' },
+          { text: [this.renderProperSquare('#washPreTreatment_B'), ' B'], fillColor: '#FFFF08' },
+          { text: [this.renderProperSquare('#washPreTreatment_C'), ' C'], fillColor: '#FFFF08' },
+          { text: [this.renderProperSquare('#washPreTreatment_D'), ' D'], fillColor: '#FFFF08' },
+          { text: [this.renderProperSquare('#washPreTreatment_E'), ' E'], fillColor: '#FFFF08' },
+          { text: [this.renderProperSquare('#washPreTreatment_F'), ' F'], fillColor: '#FFFF08' },
         ],
         [
           'Industrial Wash (ISO 15797)',
           { text: '', fillColor: '#FFFF08' },
           { text: 'According to standard', alignment: 'center' },
           {
-            text: [square, ' Tumble Dry'],
+            text: [this.renderProperSquare('#washPreTreatment_Tumble-Dry'), ' Tumble Dry'],
             alignment: 'center', fillColor: '#FFFF08', colSpan: 3
           }, {}, {},
           {
-            text: [square, ' Tunnel Dry'],
+            text: [this.renderProperSquare('#washPreTreatment_Tunnel-Dry'), ' Tunnel Dry'],
             alignment: 'center', fillColor: '#FFFF08', colSpan: 3
           }, {}, {}
         ],
@@ -287,7 +293,7 @@ class PDFExport extends React.Component<IState> {
         ]
       ]
     },
-    layout: 'basic', style: tableStyle
+    layout: 'basic'
   };
 
   footer = [
@@ -316,7 +322,11 @@ class PDFExport extends React.Component<IState> {
         },
         {
           width: '*',
-          text: [ square, ' EUR /   ', square, '   USD  ', square, '   /   RMB' ]
+          text: [
+            this.renderProperSquare('#footer_EUR'), ' EUR /   ',
+            this.renderProperSquare('#footer_USD'), '   USD /   ',
+            this.renderProperSquare('#footer_RMB'), '   RMB'
+          ]
         }]
     }, {
       columns: [
@@ -328,7 +338,7 @@ class PDFExport extends React.Component<IState> {
         },
         {
           width: '*',
-          text: [ square, ' NO   /   ', square, '   Required' ]
+          text: [ this.renderProperSquare('#washPreTreatment_A'), ' NO   /   ', this.renderProperSquare('#washPreTreatment_A'), '   Required' ]
       }]
     }, {
       text: [
@@ -372,7 +382,8 @@ class PDFExport extends React.Component<IState> {
   };
   
   save() {
-    this.create().download(`Fabric Test Application Form_${this.props.serialNumber}_${this.props.article}.pdf`);
+    // this.create().download(`Fabric Test Application Form_${this.props.serialNumber}_${this.props.article}.pdf`);
+    this.create().open();
   }
 
   create() {

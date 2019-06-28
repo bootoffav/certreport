@@ -130,7 +130,7 @@ class B24 {
           }
         }
       ));
-    new PDFExport(state).create().getBase64(base64 => {
+    new PDFExport(state).create().getBase64((base64: string) => {
       fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.addfile/`, {
         method: 'post',
         body: qs.stringify({
