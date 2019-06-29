@@ -39,7 +39,7 @@ const BaseInput = (props : {
 
 const Price: React.FunctionComponent<{
   id: string;
-  value: number;
+  value: string;
   label: string;
   handleChange: (e: any) => void;
 }> = props =>

@@ -130,26 +130,28 @@ class FabricApplicationForm extends React.Component {
 
   formFooter: React.FunctionComponent = () =>
     <table id="footer" className="table table-sm table-borderless">
-      <tr>
-        <td>PI/OFFER in:</td>
-        <td>
-          <FabricApplicationForm.checkBox
-            table='footer'
-            label='EUR' />
-          /&nbsp;&nbsp;&nbsp;
-          <FabricApplicationForm.checkBox
-            table='footer'
-            label='USD' />
-          /&nbsp;&nbsp;&nbsp;
-          <FabricApplicationForm.checkBox
-            table={'footer'}
-            label={'RMB'} />
-        </td>
-      </tr>
-      <tr>
-        <td>Test Certificate:</td>
-        <td><FabricApplicationForm.checkBox table="footer" label='NO' />/   <FabricApplicationForm.checkBox table='footer' label='Required'/></td>
-      </tr>
+      <tbody>
+        <tr>
+          <td>PI/OFFER in:</td>
+          <td>
+            <FabricApplicationForm.checkBox
+              table='footer'
+              label='EUR' />
+            /&nbsp;&nbsp;&nbsp;
+            <FabricApplicationForm.checkBox
+              table='footer'
+              label='USD' />
+            /&nbsp;&nbsp;&nbsp;
+            <FabricApplicationForm.checkBox
+              table={'footer'}
+              label={'RMB'} />
+          </td>
+        </tr>
+        <tr>
+          <td>Test Certificate:</td>
+          <td><FabricApplicationForm.checkBox table="footer" label='NO' />/   <FabricApplicationForm.checkBox table='footer' label='Required'/></td>
+        </tr>
+      </tbody>
     </table>
   render() {
     return <section id='FabricApplicationForm'>

@@ -89,15 +89,18 @@ class B24 {
           `${state.rollNumber && `[B]Roll number:[/B] ${state.rollNumber}\n`}` +
           `${state.standards && `[B]Standard:[/B] ${stAd.standardsWithResults}\n`}` +
           `${state.price && `[B]Price:[/B] ${state.price} €\n`}` +
+          `${state.paymentDate ? `[B]Payment date:[/B] ${state.paymentDate}\n` : ''}` +
           `${stAd.secondPayment && `[B]Second payment:[/B] ${stAd.secondPayment}\n`}` +
-          `${state.paymentDate && `[B]Payment date:[/B] ${state.paymentDate}\n`}` +
           `${state.testingCompany && `[B]Testing company:[/B] ${state.testingCompany}\n`}` +
           `${state.proformaReceivedDate && state.proformaNumber && `[B]Proforma:[/B] ${state.proformaReceivedDate}, ${state.proformaNumber}\n`}` +
           `${state.testReport && `[B]Test report:[/B] ${state.testReport}\n`}` +
           `${state.certificate && `[B]Certificate:[/B] ${state.certificate}\n`}` +
           `${state.materialNeeded && `[B]Material needed:[/B] ${state.materialNeeded}\n`}` +
           `${state.testingTime && `[B]Testing time, days:[/B] ${state.testingTime}\n`}` +
-          `${state.pretreatment1 && `[B]Pre-treatment 1:[/B] ${state.pretreatment1} (${state.pretreatment1Result})\n`}` +
+          // `${state.pretreatment1 && `[B]Pre-treatment 1:[/B] ${state.pretreatment1} (${state.pretreatment1Result})\n`}` +
+          `${state.pretreatment1 && `[B]Pre-treatment 1:[/B] ${state.pretreatment1}` } ` +
+          `${state.pretreatment1Result && `(${ state.pretreatment1Result })`}` +
+          '\n' +
           `${state.pretreatment2 && `[B]Pre-treatment 2:[/B] ${state.pretreatment2}\n`}` +
           `${state.pretreatment3 && `[B]Pre-treatment 3:[/B] ${state.pretreatment3}\n`}` +
           `${state.readyOn && `[B]Sample ready on:[/B] ${state.readyOn}\n`}` +

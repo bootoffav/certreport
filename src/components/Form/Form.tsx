@@ -398,11 +398,13 @@ export default class Form extends React.Component<IFormProps> {
       <form onSubmit={(e) => this.handleCert(e)}>
         <nav className="mt-4">
           <div className="nav nav-tabs" id="nav-tab" role="tablist">
-            <a className="nav-item nav-link" id="nav-basicInfo-tab" data-toggle="tab" href="#nav-basicInfo" role="tab" aria-controls="nav-basicInfo" aria-selected="true">Basic Info</a>
+            <a className="nav-item nav-link active" id="nav-basicInfo-tab" data-toggle="tab" href="#nav-basicInfo" role="tab" aria-controls="nav-basicInfo" aria-selected="true">Basic Info</a>
             <a className="nav-item nav-link" id="nav-dates-tab" data-toggle="tab" href="#nav-dates" role="tab" aria-controls="nav-dates" aria-selected="false">Dates</a>
             <a className="nav-item nav-link" id="nav-payments-tab" data-toggle="tab" href="#nav-payments" role="tab" aria-controls="nav-payments" aria-selected="false">Payments</a>
             <a className="nav-item nav-link" id="nav-Standards-tab" data-toggle="tab" href="#nav-Standards" role="tab" aria-controls="nav-Standards" aria-selected="false">Standards</a>
-            <a className="nav-item nav-link active" id="nav-FabricApplicationForm-tab" data-toggle="tab" href="#nav-FabricApplicationForm" role="tab" aria-controls="nav-FabricApplicationForm" aria-selected="false">Fabric Application Form</a>
+            <a className="nav-item nav-link" id="nav-FabricApplicationForm-tab" data-toggle="tab" href="#nav-FabricApplicationForm" role="tab" aria-controls="nav-FabricApplicationForm" aria-selected="false">
+              Fabric Application Form <span className="badge badge-pill badge-warning">NEW</span>
+            </a>
             <a className="nav-item nav-link" id="nav-comments-tab" data-toggle="tab" href="#nav-comments" role="tab" aria-controls="nav-comments" aria-selected="false">Comments</a>
             {['7. Test-report ready',
               '8. Certificate ready',
@@ -411,7 +413,7 @@ export default class Form extends React.Component<IFormProps> {
           </div>
         </nav>
         <div className="tab-content mt-3" id="nav-tabContent">
-          <div className="tab-pane fade" id="nav-basicInfo" role="tabpanel" aria-labelledby="nav-basicInfo-tab">
+          <div className="tab-pane fade show active" id="nav-basicInfo" role="tabpanel" aria-labelledby="nav-basicInfo-tab">
             {this.renderBasicInfo()}
           </div>
           <div className="tab-pane fade" id="nav-dates" role="tabpanel" aria-labelledby="nav-dates-tab">
@@ -423,7 +425,7 @@ export default class Form extends React.Component<IFormProps> {
           <div className="tab-pane fade" id="nav-Standards" role="tabpanel" aria-labelledby="nav-Standards-tab">
             {this.renderStandards()}
           </div>
-          <div className="tab-pane fade show active" id="nav-FabricApplicationForm" role="tabpanel" aria-labelledby="nav-FabricApplicationForm-tab">
+          <div className="tab-pane fade" id="nav-FabricApplicationForm" role="tabpanel" aria-labelledby="nav-FabricApplicationForm-tab">
             {<FabricApplicationForm />}
           </div>
           <div className="tab-pane fade" id="nav-comments" role="tabpanel" aria-labelledby="nav-comments-tab">

@@ -46,14 +46,14 @@ export interface IState {
   testingCompany: string;
   stage: string;
   standards : string;
-  price: number;
+  price: string;
   paid: boolean;
   paymentDate : string;
   proformaReceived: string;
   proforma: string;
   proformaReceivedDate: string;
   proformaNumber: string;
-  price2: number;
+  price2: string;
   paid2: boolean;
   paymentDate2: string;
   proformaReceived2: string;
@@ -127,8 +127,8 @@ const emptyState : IState = {
   standards: '',
   testingCompany: '',
   brand: '',
-  price: 0,
-  price2: 0,
+  price: '',
+  price2: '',
   comments: '',
   testReport: '',
   certificate: '',
