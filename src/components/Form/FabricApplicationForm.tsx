@@ -202,14 +202,14 @@ class FabricApplicationForm extends React.Component<{
           </td>
           <td colSpan={2}>
             <FabricApplicationForm.checkBox label={'Class 1'}
-              checked={this.getCheckboxState('testRequirement', 3, 'Class 1')}
-              onChange={() => this.toggleCheckboxState('testRequirement', 3, 'Class 1')}
+              checked={this.getCheckboxState('testRequirement', 3, 'Class-1')}
+              onChange={() => this.toggleCheckboxState('testRequirement', 3, 'Class-1')}
             />
           </td>
           <td colSpan={2}>
             <FabricApplicationForm.checkBox label={'Class 2'}
-              checked={this.getCheckboxState('testRequirement', 3, 'Class 1')}
-              onChange={() => this.toggleCheckboxState('testRequirement', 3, 'Class 1')}
+              checked={this.getCheckboxState('testRequirement', 3, 'Class-2')}
+              onChange={() => this.toggleCheckboxState('testRequirement', 3, 'Class-2')}
             />
           </td>
           <td colSpan={3}></td>
