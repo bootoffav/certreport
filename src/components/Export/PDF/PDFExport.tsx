@@ -338,7 +338,7 @@ class PDFExport extends React.Component<IState> {
         },
         {
           width: '*',
-          text: [ this.renderProperSquare('#washPreTreatment_A'), ' NO   /   ', this.renderProperSquare('#washPreTreatment_A'), '   Required' ]
+          text: [ this.renderProperSquare('#footer_NO'), ' NO   /   ', this.renderProperSquare('#footer_Required'), '   Required' ]
       }]
     }, {
       text: [

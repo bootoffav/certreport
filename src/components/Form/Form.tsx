@@ -401,7 +401,7 @@ export default class Form extends React.Component<IFormProps> {
             <a className="nav-item nav-link active" id="nav-basicInfo-tab" data-toggle="tab" href="#nav-basicInfo" role="tab" aria-controls="nav-basicInfo" aria-selected="true">Basic Info</a>
             <a className="nav-item nav-link" id="nav-dates-tab" data-toggle="tab" href="#nav-dates" role="tab" aria-controls="nav-dates" aria-selected="false">Dates</a>
             <a className="nav-item nav-link" id="nav-payments-tab" data-toggle="tab" href="#nav-payments" role="tab" aria-controls="nav-payments" aria-selected="false">Payments</a>
-            <a className="nav-item nav-link" id="nav-Standards-tab" data-toggle="tab" href="#nav-Standards" role="tab" aria-controls="nav-Standards" aria-selected="false">Standards</a>
+            <a className="nav-item nav-link" id="nav-standards-tab" data-toggle="tab" href="#nav-standards" role="tab" aria-controls="nav-standards" aria-selected="false">Standards</a>
             <a className="nav-item nav-link" id="nav-FabricApplicationForm-tab" data-toggle="tab" href="#nav-FabricApplicationForm" role="tab" aria-controls="nav-FabricApplicationForm" aria-selected="false">
               Fabric Application Form <span className="badge badge-pill badge-warning">NEW</span>
             </a>
@@ -412,34 +412,39 @@ export default class Form extends React.Component<IFormProps> {
               <a className="nav-item nav-link" id="nav-fileUploads-tab" data-toggle="tab" href="#nav-fileUploads" role="tab" aria-controls="nav-fileUploads" aria-selected="false">File Uploads</a>}
           </div>
         </nav>
-        <div className="tab-content mt-3" id="nav-tabContent">
-          <div className="tab-pane fade show active" id="nav-basicInfo" role="tabpanel" aria-labelledby="nav-basicInfo-tab">
+        <main className="tab-content mt-3" id="nav-tabContent">
+          <section className="tab-pane fade show active" id="nav-basicInfo" role="tabpanel" aria-labelledby="nav-basicInfo-tab">
             {this.renderBasicInfo()}
-          </div>
-          <div className="tab-pane fade" id="nav-dates" role="tabpanel" aria-labelledby="nav-dates-tab">
+          </section>
+          <section className="tab-pane fade" id="nav-dates" role="tabpanel" aria-labelledby="nav-dates-tab">
             {this.renderDates()}
-          </div>
-          <div className="tab-pane fade" id="nav-payments" role="tabpanel" aria-labelledby="nav-payments-tab">
+          </section>
+          <section className="tab-pane fade" id="nav-payments" role="tabpanel" aria-labelledby="nav-payments-tab">
             {this.renderPayments()}
-          </div>
-          <div className="tab-pane fade" id="nav-Standards" role="tabpanel" aria-labelledby="nav-Standards-tab">
+          </section>
+          <section className="tab-pane fade" id="nav-standards" role="tabpanel" aria-labelledby="nav-standards-tab">
             {this.renderStandards()}
-          </div>
-          <div className="tab-pane fade" id="nav-FabricApplicationForm" role="tabpanel" aria-labelledby="nav-FabricApplicationForm-tab">
-            {<FabricApplicationForm />}
-          </div>
-          <div className="tab-pane fade" id="nav-comments" role="tabpanel" aria-labelledby="nav-comments-tab">
+          </section>
+          <section className="tab-pane fade" id="nav-FabricApplicationForm" role="tabpanel" aria-labelledby="nav-FabricApplicationForm-tab">
+            {<FabricApplicationForm
+              state={this.state.fabricAppForm}
+              updateParent={(state: string) => this.setState({
+                fabricAppForm: state
+              })}
+            />}
+          </section>
+          <section className="tab-pane fade" id="nav-comments" role="tabpanel" aria-labelledby="nav-comments-tab">
             <div className="form-row">
               <label htmlFor='comments'>Comments:</label>
               <textarea className='form-control' value={this.state.comments} id='comments' rows={15} onChange={this.handleChange} />
             </div>
-          </div>
+          </section>
           {['7. Test-report ready',
             '8. Certificate ready',
             '9. Ended'
             ].includes(this.state.stage) && this.renderFileUploads()}
           {this.renderFormFooter()}
-        </div>
+        </main>
       </form>
     </div>
 }

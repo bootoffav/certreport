@@ -38,7 +38,13 @@ let selectOptions: {
 export interface IState {
   standardsResult: {
     [key: string]: 'pass' | 'fail';
-  },
+  };
+  // fabricAppForm: {
+  //   testRequirement: string[],
+  //   washPreTreatment: string[],
+  //   footer: string[]
+  // };
+  fabricAppForm: string;
   link : string;
   testingTime: string;
   serialNumber: string;
@@ -90,6 +96,7 @@ export interface IState {
 
 const emptyState : IState = {
   standardsResult: {},
+  fabricAppForm: ';;;;;;;;; ;; ;;',
   resume: undefined,
   link: '',
   paid: false,

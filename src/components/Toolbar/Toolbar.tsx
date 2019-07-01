@@ -78,8 +78,8 @@ const filter = (
 ): Task[] => {
   switch (requiredStage) {
     case undefined:
-    case 'results':
-      return tasks.map(t => {
+      case 'results':
+        return tasks.map(t => {
         t.position = i++;
         return t;
       });

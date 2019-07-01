@@ -1,13 +1,10 @@
 import './List.css';
 import React from 'react';
-import m from 'moment';
-import Loader from 'react-loader-spinner';
-import ReactTable, { Column } from "react-table";
+import ReactTable from "react-table";
 import Task, { Stage } from '../../Task/Task';
 import '../../css/style.css';
 import { Toolbar, filter } from '../Toolbar/Toolbar';
 import { getColumns } from './columns';
-// import { Export } from '../Export/Export';
 import { ColumnSearch, BrandFilter } from '../Filters';
 import CacheManager from '../../CacheManager';
 import { Settings } from '../Settings/Settings';
@@ -139,7 +136,6 @@ export default class List extends React.Component {
         </div>
       </div>
     </div>
-    {/* <Export type="xls" data={this.state.visibleTasks} /> */}
     <Toolbar onClick={this.toolbarFilter} />
     <ReactTable
       data={this.state.visibleTasks} columns={this.columns}
@@ -149,7 +145,7 @@ export default class List extends React.Component {
           desc: false
         }
       ]}
-      defaultPageSize={20} className='-striped -highlight table'
+      className='-striped -highlight table'
       getTrProps={this.getTrProps}
     />
   </>

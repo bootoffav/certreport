@@ -93,6 +93,7 @@ class Task implements ITask {
       'Resume': 'resume',
       'Stage': 'stage',
       'Comments': 'comments',
+      'Aitex Form': 'fabricAppForm',
       'Edit': 'link',
       'Second payment': 'secondPayment'
     }
@@ -225,18 +226,11 @@ class Task implements ITask {
     if (this.state.receivedOn && !this.state.proformaReceived && !this.state.startedOn) return '2. Sample Arrived';
     if (this.state.proformaReceived && !this.state.paid) return '3. PI Issued';
     if (this.state.paid && !this.state.testFinishedOnPlanDate) return '4. Payment Done';
-    
-    // if (this.state.startedOn && !this.state.paid && !this.state.proformaReceived) {
-    //   if (new Date(this.state.startedOn) < new Date) {
-    //     return Stage['Testing is started'];
-    //   }
-    // }
-    
     if (this.state.testFinishedOnPlanDate && !this.state.testFinishedOnRealDate) return '5. Testing is started';
     if (this.state.testFinishedOnRealDate && !this.state.certReceivedOnRealDate) return '6. Test-report ready';
     if (this.state.certReceivedOnRealDate) return '8. Certificate ready';
     
-    return '0. Sample to be prepared'; //default clause if no other case triggered;
+    return '0. Sample to be prepared';
   }
 
   determineOverdue(): boolean {

@@ -97,7 +97,6 @@ class B24 {
           `${state.certificate && `[B]Certificate:[/B] ${state.certificate}\n`}` +
           `${state.materialNeeded && `[B]Material needed:[/B] ${state.materialNeeded}\n`}` +
           `${state.testingTime && `[B]Testing time, days:[/B] ${state.testingTime}\n`}` +
-          // `${state.pretreatment1 && `[B]Pre-treatment 1:[/B] ${state.pretreatment1} (${state.pretreatment1Result})\n`}` +
           `${state.pretreatment1 && `[B]Pre-treatment 1:[/B] ${state.pretreatment1}` } ` +
           `${state.pretreatment1Result && `(${ state.pretreatment1Result })`}` +
           '\n' +
@@ -112,6 +111,7 @@ class B24 {
           `${state.stage && `[B]Stage:[/B] ${state.stage}\n`}` +
           `${state.resume == undefined ? '' : `[B]Resume:[/B] ${state.resume}\n`}` +
           `${state.comments && `[B]Comments:[/B] ${state.comments}\n`}` +
+          `${state.fabricAppForm && `[B]Aitex Form:[/B] ${state.fabricAppForm}\n`}` +
           `${state.link && `[B]Edit:[/B] ${state.link}\n`}` +
           `${dataSeparator}` + (state.otherTextInDescription || ''),
       DEADLINE: m(state.certReceivedOnPlanDate).toISOString()
