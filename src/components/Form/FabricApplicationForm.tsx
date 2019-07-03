@@ -2,9 +2,12 @@ import React from 'react';
 import _ from 'lodash';
 import './FabricApplicationForm.css';
 
+
 class FabricApplicationForm extends React.Component<{
   state: string;
   updateParent: (state: string) => void;
+}, {
+  [key: string]: any;
 }> {
 
   constructor(props: any) {
@@ -17,33 +20,32 @@ class FabricApplicationForm extends React.Component<{
 
     this.state = {
       testRequirement: testRequirement.split(';')
-      .map((row: string) => row.split(',')).slice(0, -1),
+        .map((row: string) => row.split(',')).slice(0, -1),
       washPreTreatment: washPreTreatment.split(';')
-      .map((row: string) => row.split(',')).slice(0, -1),
+        .map((row: string) => row.split(',')).slice(0, -1),
       footer: footer.split(';')
-      .map((row: string) => row.split(',')).slice(0, -1)
+        .map((row: string) => row.split(',')).slice(0, -1),
+      cycles: [5, 5]
     }
     // debugger;
   }
-  
-  // @ts-ignore
+
+  tables = ['testRequirement', 'washPreTreatment', 'footer'];
+
   getCheckboxState = (table: string, row: number, label: string): boolean => this.state[table][row].includes(label);
 
   propagateUpdate = () => {
     let flattenState = '';
-    ['testRequirement', 'washPreTreatment', 'footer'].forEach(table => {
-      // @ts-ignore
+    this.tables.forEach(table => {
       this.state[table].forEach((row: string[]) => {
         flattenState += row.join(',') + ';';
       });
       flattenState += ' ';
     });
-    // send to parent component;
     this.props.updateParent(flattenState.trim());
   };
 
   toggleCheckboxState = (table: string, row: number, label: string) => {
-    // @ts-ignore
     if (this.state[table][row].includes(label)) {
       //удаляем
       this.setState((state: any, props) => {
@@ -243,12 +245,21 @@ class FabricApplicationForm extends React.Component<{
         </tr>
         <tr>
           <td>
-            <FabricApplicationForm.checkBox label={'Other Standard 1'}
-              checked={this.getCheckboxState('testRequirement', 7, 'Other-Standard-1')}
-              onChange={() => this.toggleCheckboxState('testRequirement', 7, 'Other-Standard-1')}
+            <div className="custom-control custom-switch">
+              <input type="checkbox" className="custom-control-input" id="testRequirement_Other-Standard-1"
+                checked={this.getCheckboxState('testRequirement', 7, 'Other-Standard-1')}
+                onChange={() => this.toggleCheckboxState('testRequirement', 7, 'Other-Standard-1')}
+              />
+              <label className="custom-control-label" htmlFor="testRequirement_Other-Standard-1">Other Standard 1</label>
+            </div>
+          </td>
+          <td colSpan={7}>
+            <input className="form-control form-control-sm input-xs" type="text"
+              id='testRequirement_Other-Standard-1-desciption'
+              defaultValue="According to Standard Mandotory Test Requirement"
+              disabled={!this.getCheckboxState('testRequirement', 7, 'Other-Standard-1')}
             />
           </td>
-          <td colSpan={7}>According to Standard Mandotory Test Requirement</td>
         </tr>
         <tr>
           <td>
@@ -273,13 +284,28 @@ class FabricApplicationForm extends React.Component<{
         <tr className="text-center">
           <td>Wash Method</td>
           <td>Cycles</td>
-          <td>Wash Temperature</td>
+          <td>Wash Temperature &#8451;</td>
           <td colSpan={6}>Dry Method</td>
         </tr>
         <tr>
           <td>Domestic Wash(ISO 6330)</td>
-          <td></td>
-          <td></td>
+          <td>
+            <input type="number"
+              className="form-control form-control-sm input-xs"
+              id="washPreTreatment_0_cycles"
+              value={this.state.cycles[0]}
+              onChange={({ currentTarget }) => {
+                this.setState({ cycles: [currentTarget.value, this.state.cycles[1]] });
+              }}
+            />
+          </td>
+          <td>
+            <input type="number"
+              className="form-control form-control-sm input-xs"
+              id="washPreTreatment_0_temperature"
+              defaultValue="60"
+            />
+          </td>
           <td>
             <FabricApplicationForm.checkBox
               table={'washPreTreatment'}
@@ -331,7 +357,16 @@ class FabricApplicationForm extends React.Component<{
         </tr>
         <tr>
           <td>Industrial Wash(ISO 15797)</td>
-          <td></td>
+          <td>
+            <input type="number"
+              className="form-control form-control-sm input-xs"
+              id="washPreTreatment_1_cycles"
+              value={this.state.cycles[1]}
+              onChange={({ currentTarget }) => {
+                this.setState({ cycles: [this.state.cycles[0], currentTarget.value] });
+              }}
+            />
+          </td>
           <td>According to standard</td>
           <td colSpan={3}>
             <FabricApplicationForm.checkBox

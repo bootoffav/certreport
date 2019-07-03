@@ -190,7 +190,14 @@ class PDFExport extends React.Component<IState> {
         ],
         [
           { text: [this.renderProperSquare('#testRequirement_Other-Standard-1'), ' Other Standard 1'] },
-          { text: `According to Standard Mandotory Test Requirement`, colSpan: 7 }, {}, {}, {}, {}, {}, {},
+          {
+            text: 
+            // @ts-ignore
+              (this.fabricAppForm.querySelector('#testRequirement_Other-Standard-1') as HTMLInputElement).checked
+                ? (document.getElementById('testRequirement_Other-Standard-1-desciption') as HTMLInputElement).value
+                : 'According to Standard Mandotory Test Requirement'
+            , colSpan: 7
+            }, {}, {}, {}, {}, {}, {},
           ''
         ],
         [
@@ -248,13 +255,13 @@ class PDFExport extends React.Component<IState> {
         [
           { text: 'Wash Method', alignment: 'center' },
           { text: 'Cycles', alignment: 'center' },
-          { text: 'Wash Temparature', alignment: 'center' },
+          { text: 'Wash Temperature', alignment: 'center' },
           { text: 'Dry Method', colSpan: 6, alignment: 'center' }, {}, {}, {}, {}, {}
         ],
         [
           'Domestic Wash(ISO 6330)',
-          { text: '', fillColor: '#FFFF08' },
-          { text: '', fillColor: '#FFFF08' },
+          { text: (document.getElementById('washPreTreatment_0_cycles') as HTMLInputElement).value, fillColor: '#FFFF08', alignment: 'center' },
+          { text: `${(document.getElementById('washPreTreatment_0_temperature') as HTMLInputElement).value}C`, fillColor: '#FFFF08', alignment: 'center' },
           { text: [this.renderProperSquare('#washPreTreatment_A'), ' A'], fillColor: '#FFFF08' },
           { text: [this.renderProperSquare('#washPreTreatment_B'), ' B'], fillColor: '#FFFF08' },
           { text: [this.renderProperSquare('#washPreTreatment_C'), ' C'], fillColor: '#FFFF08' },
@@ -264,7 +271,7 @@ class PDFExport extends React.Component<IState> {
         ],
         [
           'Industrial Wash (ISO 15797)',
-          { text: '', fillColor: '#FFFF08' },
+          { text: (document.getElementById('washPreTreatment_1_cycles') as HTMLInputElement).value, fillColor: '#FFFF08', alignment: 'center' },
           { text: 'According to standard', alignment: 'center' },
           {
             text: [this.renderProperSquare('#washPreTreatment_Tumble-Dry'), ' Tumble Dry'],
