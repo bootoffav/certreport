@@ -101,7 +101,7 @@ class PDFExport extends React.Component<IState> {
           {}, {}, {}, {}],
         [
           'Others (if any)',
-          { text: '', colSpan: 5, fillColor: '#FFFF08' },
+          { text: this.props.partNumber || '', colSpan: 5, fillColor: '#FFFF08' },
           {}, {}, {}, {}],
         [
           { text: '*Multilayer Fabric (if any)', colSpan: 6, fontSize: 11, bold: true, alignment: 'center' },
