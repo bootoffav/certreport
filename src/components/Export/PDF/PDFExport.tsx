@@ -389,8 +389,8 @@ class PDFExport extends React.Component<IState> {
   };
   
   save() {
-    // this.create().download(`Fabric Test Application Form_${this.props.serialNumber}_${this.props.article}.pdf`);
-    this.create().open();
+    this.create().download(`Fabric Test Application Form_${this.props.serialNumber}_${this.props.article}.pdf`);
+    // this.create().open();
   }
 
   create() {
