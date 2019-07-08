@@ -1,7 +1,6 @@
 import React from 'react';
 import swal from 'sweetalert';
 import "react-datepicker/dist/react-datepicker.css";
-import DatePicker from "react-datepicker";
 import Select from 'react-select';
 import m from 'moment';
 import { PickDate, BaseInput, Article, Price, Paid, Pi } from "./FormFields";
@@ -11,7 +10,6 @@ import SerialNumber from '../SerialNumber/SerialNumber';
 import { selectOptions, emptyState } from '../../defaults';
 import { IState } from '../../defaults';
 import Export from '../Export/Export';
-import { dateConverter } from '../../helpers';
 import Standards from '../Standards/Standards';
 import FileUploads from '../FileUploads/FileUploads';
 import FabricApplicationForm from './FabricApplicationForm';

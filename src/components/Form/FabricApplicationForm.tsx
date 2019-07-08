@@ -1,5 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
+// import faunadb, { query as q } from "faunadb";
+
 import './FabricApplicationForm.css';
 
 
@@ -12,6 +14,20 @@ class FabricApplicationForm extends React.Component<{
 
   constructor(props: any) {
     super(props);
+    // var state2;
+   
+    // var client = new faunadb.Client({ secret: 'fnADSXc9vKACBPW-bTRSrlEbS2ne3CpQakIolenf' });
+    
+    // // client.query(q.Get(q.Ref(q.Class("aitexForm"), "236849082355679751")))
+    // //   .then((ret) => {
+    // //     state2 = ret;
+    // //     debugger;
+    // //   }).then(() => {
+    // //     debugger;
+    // //   });
+   
+    // client.query(q.Delete(q.Index("getTask_byID")))
+    //   .then((ret) => console.log(ret))
     var [
       testRequirement = '',
       washPreTreatment = '',
@@ -25,9 +41,8 @@ class FabricApplicationForm extends React.Component<{
         .map((row: string) => row.split(',')).slice(0, -1),
       footer: footer.split(';')
         .map((row: string) => row.split(',')).slice(0, -1),
-      cycles: [5, 5]
+      cycles: [5, '']
     }
-    // debugger;
   }
 
   tables = ['testRequirement', 'washPreTreatment', 'footer'];
