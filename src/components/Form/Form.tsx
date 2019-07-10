@@ -70,7 +70,7 @@ export default class Form extends React.Component<IFormProps> {
     });
   }
 
-  handleChange = (e: any) => this.setState({ [e.target.id]: e.target.value });
+  handleChange = (e: any) => ['price', 'price2'].includes(e.target.id) ? this.setState({ [e.target.id]: e.target.value.replace(',', '.') }) : this.setState({ [e.target.id]: e.target.value });
 
   handleCert(e: any) {
     e.preventDefault();
