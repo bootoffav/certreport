@@ -75,7 +75,7 @@ class B24 {
     return {
       ...B24.defaultParams,
       UF_CRM_TASK: B24.makeUfCrmTaskField(state),
-      TITLE: `${state.serialNumber}_${state.testingCompany} - ${state.standards} - ${state.article}, ${state.colour} ` +
+      TITLE: `${state.serialNumber}_${state.testingCompany} - ${state.standards} (${state.pretreatment1}) - ${state.article}, ${state.colour} ` +
           `(send ${state.sentOn} - plan ${state.testFinishedOnPlanDate}) = ${state.price} € | ${stAd.getStageForTitle()}`,
       DESCRIPTION: `${state.applicantName && `[B]Applicant name:[/B] ${state.applicantName}\n`}` +
           `${state.product && `[B]Product:[/B] ${state.product}\n`}` +
@@ -206,11 +206,13 @@ class B24 {
       let tasks : {}[] = [];
       do {
         tasks = tasks.concat(await fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.list?` +
-        qs.stringify({
-          order: { ID: 'desc' },
-          filter: { TAG: tag },
-          start: B24.start
-        }))
+          qs.stringify({
+            order: { ID: 'desc' },
+            filter: { TAG: tag },
+            start: B24.start
+          }),
+          // { mode: 'no-cors' }
+        )
         .then(res => res.json())
         .then(B24.step));
       } while (B24.start !== undefined);
