@@ -162,7 +162,7 @@ class B24 {
     })
       .then(r => r.json())
       .then(res => {
-        state.link = `[URL=https://certreport.xmtextiles.com/edit/${res.result}/]this task[/URL]`;
+        state.link = `[URL=certreport.xmtextiles.com/edit/${res.result}/]this task[/URL]`;
         B24.updateTask(state, res.result); //to include link for editing
     });
   }
