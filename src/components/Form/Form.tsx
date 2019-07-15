@@ -401,7 +401,7 @@ export default class Form extends React.Component<IFormProps> {
             <a className="nav-item nav-link" id="nav-payments-tab" data-toggle="tab" href="#nav-payments" role="tab" aria-controls="nav-payments" aria-selected="false">Payments</a>
             <a className="nav-item nav-link" id="nav-standards-tab" data-toggle="tab" href="#nav-standards" role="tab" aria-controls="nav-standards" aria-selected="false">Standards</a>
             <a className="nav-item nav-link" id="nav-FabricApplicationForm-tab" data-toggle="tab" href="#nav-FabricApplicationForm" role="tab" aria-controls="nav-FabricApplicationForm" aria-selected="false">
-              Fabric Application Form <span className="badge badge-pill badge-warning">NEW</span>
+              Fabric Application Form
             </a>
             <a className="nav-item nav-link" id="nav-comments-tab" data-toggle="tab" href="#nav-comments" role="tab" aria-controls="nav-comments" aria-selected="false">Comments</a>
             {['7. Test-report ready',

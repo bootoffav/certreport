@@ -210,9 +210,7 @@ class B24 {
             order: { ID: 'desc' },
             filter: { TAG: tag },
             start: B24.start
-          }),
-          // { mode: 'no-cors' }
-        )
+          }))
         .then(res => res.json())
         .then(B24.step));
       } while (B24.start !== undefined);

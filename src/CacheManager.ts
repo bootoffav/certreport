@@ -68,10 +68,15 @@ class CacheManager implements ICacheManager {
       .then(async (filtered : IFiltered) => {
         let parsedTasks: Task[] = [];
 
+        const interval = () => new Promise(res => setTimeout(() => res(), 1500));
+
         do {
           const iterable = filtered.new.splice(0, 6)
             .map(task => B24.get_task(task.ID)); //6 is maximum amount of http connections for major browsers;
-          parsedTasks = [...parsedTasks, ...await Promise.all(iterable)];
+          parsedTasks = [
+            ...parsedTasks,
+            ...await interval().then(() => Promise.all(iterable))
+          ];
         } while (filtered.new.length !== 0);
         
         filtered.old.forEach((task: any) => {
