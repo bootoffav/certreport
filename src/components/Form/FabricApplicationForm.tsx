@@ -1,33 +1,27 @@
 import React from 'react';
 import _ from 'lodash';
-// import faunadb, { query as q } from "faunadb";
+import faunadb, { query as q } from "faunadb";
 
 import './FabricApplicationForm.css';
 
 
 class FabricApplicationForm extends React.Component<{
   state: string;
+  taskId: string;
   updateParent: (state: string) => void;
 }, {
   [key: string]: any;
 }> {
-
+  DBClient: any;
   constructor(props: any) {
     super(props);
-    // var state2;
-   
-    // var client = new faunadb.Client({ secret: 'fnADSXc9vKACBPW-bTRSrlEbS2ne3CpQakIolenf' });
-    
-    // // client.query(q.Get(q.Ref(q.Class("aitexForm"), "236849082355679751")))
-    // //   .then((ret) => {
-    // //     state2 = ret;
-    // //     debugger;
-    // //   }).then(() => {
-    // //     debugger;
-    // //   });
-   
-    // client.query(q.Delete(q.Index("getTask_byID")))
-    //   .then((ret) => console.log(ret))
+    if (typeof process.env.REACT_APP_FAUNADB_KEY !== 'string') {
+      throw new Error('Problem with db key');
+    }
+
+    this.DBClient = new faunadb.Client({
+      secret: process.env.REACT_APP_FAUNADB_KEY
+    });
     var [
       testRequirement = '',
       washPreTreatment = '',
@@ -41,8 +35,37 @@ class FabricApplicationForm extends React.Component<{
         .map((row: string) => row.split(',')).slice(0, -1),
       footer: footer.split(';')
         .map((row: string) => row.split(',')).slice(0, -1),
-      cycles: [5, '']
+      cycles: [5, ''],
+      washTemp: 60,
+      otherStandard1: 'According to Standard Mandotory Test Requirement'
     }
+    this.getDataFromDB();
+  }
+
+  getDataFromDB() {
+    this.DBClient.query(q.Get(q.Match(q.Index('id'), +this.props.taskId))).then((res: any) => {
+      this.setState({
+        // @ts-ignore
+        cycles: [res.data.cycles1, res.data.cycles2], washTemp: res.data.washTemp,
+        // @ts-ignore
+        otherStandard1: res.data.otherStandard1, ref: res.ref.value.id
+      });
+    });
+  }
+
+  // saveToDB(prop: string, value: string) {
+  saveToDB() {
+    this.DBClient.query(q.Update(q.Ref(q.Class("aitexForm"), this.state.ref),
+      {
+        data:
+        {
+          cycles1: this.state.cycles[0],
+          cycles2: this.state.cycles[1],
+          washTemp: this.state.washTemp,
+          otherStandard1: this.state.otherStandard1
+        }
+      }
+    ));
   }
 
   tables = ['testRequirement', 'washPreTreatment', 'footer'];
@@ -269,9 +292,14 @@ class FabricApplicationForm extends React.Component<{
             </div>
           </td>
           <td colSpan={7}>
-            <input className="form-control form-control-sm input-xs" type="text"
-              id='testRequirement_Other-Standard-1-desciption'
-              defaultValue="According to Standard Mandotory Test Requirement"
+            <input className="form-control form-control-sm input-xs"
+              id='testRequirement_Other-Standard-1-description'
+              value={this.state.otherStandard1}
+              onChange={({ currentTarget }) => {
+                this.setState({
+                  otherStandard1: currentTarget.value
+                });
+              }}
               disabled={!this.getCheckboxState('testRequirement', 7, 'Other-Standard-1')}
             />
           </td>
@@ -318,7 +346,12 @@ class FabricApplicationForm extends React.Component<{
             <input type="number"
               className="form-control form-control-sm input-xs"
               id="washPreTreatment_0_temperature"
-              defaultValue="60"
+              value={this.state.washTemp}
+              onChange={({ currentTarget }) => {
+                this.setState({
+                  washTemp: currentTarget.value
+                });
+              }}
             />
           </td>
           <td>
@@ -429,6 +462,14 @@ class FabricApplicationForm extends React.Component<{
               checked={this.getCheckboxState('footer', 0, 'RMB')}
               onChange={() => this.toggleCheckboxState('footer', 0, 'RMB')}
             />
+          </td>
+          <td rowSpan={2}>
+            <button
+              className="float-right btn btn-info btn-sm"
+              onClick={(e) => {
+                e.preventDefault();
+                this.saveToDB();
+              }}>save table data</button>
           </td>
         </tr>
         <tr>
