@@ -13,6 +13,7 @@ class FabricApplicationForm extends React.Component<{
   [key: string]: any;
 }> {
   DBClient: any;
+
   constructor(props: any) {
     super(props);
     if (typeof process.env.REACT_APP_FAUNADB_KEY !== 'string') {
@@ -39,28 +40,40 @@ class FabricApplicationForm extends React.Component<{
       washTemp: 60,
       otherStandard1: 'According to Standard Mandotory Test Requirement'
     }
+
     this.getDataFromDB();
   }
 
   getDataFromDB() {
-    this.DBClient.query(q.Get(q.Match(q.Index('id'), +this.props.taskId))).then((res: any) => {
-      this.setState({
-        // @ts-ignore
-        cycles: [res.data.cycles1, res.data.cycles2], washTemp: res.data.washTemp,
-        // @ts-ignore
-        otherStandard1: res.data.otherStandard1, ref: res.ref.value.id
+    this.DBClient.query(q.Get(q.Match(q.Index('id'), +this.props.taskId)))
+      .then((res: any) => {
+        this.setState({
+          // @ts-ignore
+          cycles: res.data.cycles, washTemp: res.data.washTemp, otherStandard1: res.data.otherStandard1, ref: res.ref.value.id
+        });
+      })
+      .catch((res: any) => {
+        this.DBClient.query(
+          q.Create(q.Class('aitexForm'),
+            {
+              data: {
+                id: +this.props.taskId,
+                cycles: [5, ''],
+                washTemp: 60,
+                otherStandard1: 'According to Standard Mandotory Test Requirement'
+              }
+            })).then((res: any) => this.setState({
+              ref: res.ref.value.id
+            }))
       });
-    });
   }
 
-  // saveToDB(prop: string, value: string) {
   saveToDB() {
     this.DBClient.query(q.Update(q.Ref(q.Class("aitexForm"), this.state.ref),
       {
         data:
         {
-          cycles1: this.state.cycles[0],
-          cycles2: this.state.cycles[1],
+          cycles: this.state.cycles,
           washTemp: this.state.washTemp,
           otherStandard1: this.state.otherStandard1
         }
