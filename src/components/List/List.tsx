@@ -5,7 +5,7 @@ import Task, { Stage } from '../../Task/Task';
 import '../../css/style.css';
 import { Toolbar, filter } from '../Toolbar/Toolbar';
 import { getColumns } from './columns';
-import { ColumnSearch, BrandFilter } from '../Filters';
+import { ColumnSearch, BrandFilter, DateFilter } from '../Filters';
 import CacheManager from '../../CacheManager';
 import { Settings } from '../Settings/Settings';
 
@@ -109,6 +109,19 @@ export default class List extends React.Component {
     }, () => this.toolbarFilter(this.state.requiredStage));
   }
 
+  dateFilter = (startDate: Date | null, endDate: Date | null) => {
+    if (startDate == null || endDate == null) {
+      return;
+    }
+    const tasksInRAnge = this.state.tasks.filter((task: any) => {
+      const creationDate = new Date(task.CREATED_DATE);
+      return startDate < creationDate && endDate > creationDate
+    });
+    this.setState({
+      filteredTasksLevel1: tasksInRAnge
+    }, () => this.toolbarFilter(this.state.requiredStage));
+  }
+
   //level 2 filter
   toolbarFilter = (requiredStage: Stage | undefined | string = undefined) => {
     let visibleTasks: Task[] = filter(this.state.filteredTasksLevel1, requiredStage);
@@ -128,6 +141,7 @@ export default class List extends React.Component {
       <div className="d-inline-flex justify-content-start">
         <BrandFilter filter={this.brandFilter} />
         <ColumnSearch filter={this.columnFilter} />
+        <DateFilter filter={this.dateFilter} />
       </div>
       <div className="d-inline-flex justify-content-end">
         <List.State notUpdated={this.cache.staleData} />

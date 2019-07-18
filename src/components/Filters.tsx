@@ -1,5 +1,5 @@
-import React, { DOMElement } from 'react';
-
+import React from 'react';
+import DatePicker from "react-datepicker";
 
 class ColumnSearch extends React.Component<{
     filter: (columnToSeach: string, valueToSearch: string) => void
@@ -73,4 +73,37 @@ const BrandFilter: React.FunctionComponent<{
       </div>
     </div>
 
-export { ColumnSearch, BrandFilter };
+class DateFilter extends React.Component<{
+  filter: (startDate: Date | null, endDate: Date | null) => void;
+}> {
+  state = {
+    startDate: null,
+    endDate: null,
+  }
+
+  render() {
+    return <div className="mx-2">
+      <DatePicker
+        selected={this.state.startDate}
+        selectsStart
+        startDate={this.state.startDate}
+        endDate={this.state.endDate}
+        onChange={(e: Date) => this.setState({ startDate: e })}
+      />
+      <DatePicker
+        selected={this.state.endDate}
+        selectsEnd
+        startDate={this.state.startDate}
+        endDate={this.state.endDate}
+        onChange={(e: Date) => {
+          this.setState({ endDate: e },
+            () => this.props.filter(this.state.startDate, this.state.endDate)
+          )
+        }}
+        minDate={this.state.startDate}
+      />
+    </div>
+  }
+}
+  
+export { ColumnSearch, BrandFilter, DateFilter };
