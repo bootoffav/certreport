@@ -194,7 +194,7 @@ class PDFExport extends React.Component<IState> {
             text: 
             // @ts-ignore
               (this.fabricAppForm.querySelector('#testRequirement_Other-Standard-1') as HTMLInputElement).checked
-                ? (document.getElementById('testRequirement_Other-Standard-1-desciption') as HTMLInputElement).value
+                ? (document.getElementById('testRequirement_Other-Standard-1-description') as HTMLInputElement).value
                 : 'According to Standard Mandotory Test Requirement'
             , colSpan: 7
             }, {}, {}, {}, {}, {}, {},
