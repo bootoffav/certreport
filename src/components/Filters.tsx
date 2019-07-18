@@ -1,5 +1,6 @@
 import React from 'react';
 import DatePicker from "react-datepicker";
+import './Filters.css';
 
 class ColumnSearch extends React.Component<{
     filter: (columnToSeach: string, valueToSearch: string) => void
@@ -82,26 +83,38 @@ class DateFilter extends React.Component<{
   }
 
   render() {
-    return <div className="mx-2">
-      <DatePicker
-        selected={this.state.startDate}
-        selectsStart
-        startDate={this.state.startDate}
-        endDate={this.state.endDate}
-        onChange={(e: Date) => this.setState({ startDate: e })}
-      />
-      <DatePicker
-        selected={this.state.endDate}
-        selectsEnd
-        startDate={this.state.startDate}
-        endDate={this.state.endDate}
-        onChange={(e: Date) => {
-          this.setState({ endDate: e },
-            () => this.props.filter(this.state.startDate, this.state.endDate)
-          )
-        }}
-        minDate={this.state.startDate}
-      />
+    return <div className="form-row mx-3" id="dateRange">
+      
+      <div className="d-flex align-items-center">
+        <div className="text-uppercase">Date Filter:</div>
+      </div>
+      <div className="col">
+        <DatePicker
+          className="col form-control"
+          selected={this.state.startDate}
+          selectsStart
+          startDate={this.state.startDate}
+          endDate={this.state.endDate}
+          onChange={(e: Date) => this.setState({ startDate: e })}
+          placeholderText="from"
+        />
+      </div>
+      <div className="col">
+        <DatePicker
+          className="col form-control"
+          selected={this.state.endDate}
+          selectsEnd
+          startDate={this.state.startDate}
+          endDate={this.state.endDate}
+          onChange={(e: Date) => {
+            this.setState({ endDate: e },
+              () => this.props.filter(this.state.startDate, this.state.endDate)
+            )
+          }}
+          placeholderText="to"
+          minDate={this.state.startDate}
+        />
+      </div>
     </div>
   }
 }

@@ -109,17 +109,23 @@ export default class List extends React.Component {
     }, () => this.toolbarFilter(this.state.requiredStage));
   }
 
-  dateFilter = (startDate: Date | null, endDate: Date | null) => {
-    if (startDate == null || endDate == null) {
+  dateFilter = (startDate: Date | null, endDate: Date | null): void => {
+    if (endDate === null) {
+      this.setState({
+        filteredTasksLevel1: this.state.tasks
+      }, () => this.toolbarFilter(this.state.requiredStage));
       return;
     }
-    const tasksInRAnge = this.state.tasks.filter((task: any) => {
-      const creationDate = new Date(task.CREATED_DATE);
-      return startDate < creationDate && endDate > creationDate
-    });
-    this.setState({
-      filteredTasksLevel1: tasksInRAnge
-    }, () => this.toolbarFilter(this.state.requiredStage));
+    if (startDate !== null && endDate !== null) {
+      const tasksInRange = this.state.tasks.filter((task: any) => {
+        const creationDate = new Date(task.CREATED_DATE);
+        return startDate < creationDate && endDate > creationDate
+      });
+
+      this.setState({
+        filteredTasksLevel1: tasksInRange
+      }, () => this.toolbarFilter(this.state.requiredStage));
+    }
   }
 
   //level 2 filter
