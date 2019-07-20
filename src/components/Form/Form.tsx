@@ -13,6 +13,7 @@ import Export from '../Export/Export';
 import Standards from '../Standards/Standards';
 import FileUploads from '../FileUploads/FileUploads';
 import FabricApplicationForm from './FabricApplicationForm';
+import { DB } from '../../DBManager';
 
 interface IFormState extends IState {
   requestStatus: Status;
@@ -74,6 +75,7 @@ export default class Form extends React.Component<IFormProps> {
 
   handleCert(e: any) {
     e.preventDefault();
+    DB.updateInstance(this.state.DBState.ref, this.state.DBState);
     swal({
       title: "Are you sure?",
       icon: "info",
@@ -278,14 +280,16 @@ export default class Form extends React.Component<IFormProps> {
           handleChange={(date: Date) => this.handleDateChange(date, 'readyOn')}/>
         <PickDate date={this.state.sentOn} label='Sample has sent:'
             handleChange={(date: Date) => this.handleDateChange(date, 'sentOn')} />
+      </div>
+      <div className="d-flex justify-content-center">
         <PickDate date={this.state.receivedOn} label='Sample has received by lab:'
           handleChange={(date: Date) => this.handleDateChange(date, 'receivedOn')}/>
         <PickDate date={this.state.startedOn} label='Test is started:'
             handleChange={(date: Date) => this.handleDateChange(date, 'startedOn')} />
-      </div>
-      <div className="d-flex justify-content-center">
         <PickDate date={this.state.testFinishedOnPlanDate} label='ETD (Test-report)'
           handleChange={(date: Date) => this.handleDateChange(date, 'testFinishedOnPlanDate')} />
+      </div>
+      <div className="d-flex justify-content-center">
         <PickDate date={this.state.testFinishedOnRealDate} label='Test really finished on:'
           handleChange={(date: Date) => this.handleDateChange(date, 'testFinishedOnRealDate')} />
         <PickDate date={this.state.certReceivedOnPlanDate} label='ETD (Certificate)'
@@ -429,9 +433,11 @@ export default class Form extends React.Component<IFormProps> {
             {<FabricApplicationForm
               state={this.state.fabricAppForm}
               taskId={this.task_id || ''}
-              updateParent={(state: string) => this.setState({
-                fabricAppForm: state
-              })}
+              updateParent={(state: string, DBState: any) => {
+                this.setState({
+                  fabricAppForm: state, DBState
+                })
+              }}
             />}
           </section>
           <section className="tab-pane fade" id="nav-comments" role="tabpanel" aria-labelledby="nav-comments-tab">

@@ -45,6 +45,7 @@ export interface IState {
   //   washPreTreatment: string[],
   //   footer: string[]
   // };
+  DBState: any;
   fabricAppForm: string;
   link : string;
   testingTime: string;
@@ -98,6 +99,7 @@ export interface IState {
 
 const emptyState : IState = {
   standardsResult: {},
+  DBState: {},
   fabricAppForm: ';;;;;;;;; ;; ;;',
   resume: undefined,
   link: '',

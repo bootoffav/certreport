@@ -1,6 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import faunadb, { query as q } from "faunadb";
+import { DB } from '../../DBManager';
 
 import './FabricApplicationForm.css';
 
@@ -8,7 +9,7 @@ import './FabricApplicationForm.css';
 class FabricApplicationForm extends React.Component<{
   state: string;
   taskId: string;
-  updateParent: (state: string) => void;
+  updateParent: (state: string, DBState: any) => void;
 }, {
   [key: string]: any;
 }> {
@@ -20,9 +21,6 @@ class FabricApplicationForm extends React.Component<{
       throw new Error('Problem with db key');
     }
 
-    this.DBClient = new faunadb.Client({
-      secret: process.env.REACT_APP_FAUNADB_KEY
-    });
     var [
       testRequirement = '',
       washPreTreatment = '',
@@ -41,44 +39,12 @@ class FabricApplicationForm extends React.Component<{
       otherStandard1: 'According to Standard Mandotory Test Requirement'
     }
 
-    this.getDataFromDB();
-  }
-
-  getDataFromDB() {
-    this.DBClient.query(q.Get(q.Match(q.Index('id'), +this.props.taskId)))
-      .then((res: any) => {
-        this.setState({
-          // @ts-ignore
-          cycles: res.data.cycles, washTemp: res.data.washTemp, otherStandard1: res.data.otherStandard1, ref: res.ref.value.id
-        });
-      })
-      .catch((res: any) => {
-        this.DBClient.query(
-          q.Create(q.Class('aitexForm'),
-            {
-              data: {
-                id: +this.props.taskId,
-                cycles: [5, ''],
-                washTemp: 60,
-                otherStandard1: 'According to Standard Mandotory Test Requirement'
-              }
-            })).then((res: any) => this.setState({
-              ref: res.ref.value.id
-            }))
+    DB.getData(this.props.taskId).then((res: any) => {
+      this.setState({
+        // @ts-ignore
+        cycles: res.data.cycles, washTemp: res.data.washTemp, otherStandard1: res.data.otherStandard1, ref: res.ref.value.id
       });
-  }
-
-  saveToDB() {
-    this.DBClient.query(q.Update(q.Ref(q.Class("aitexForm"), this.state.ref),
-      {
-        data:
-        {
-          cycles: this.state.cycles,
-          washTemp: this.state.washTemp,
-          otherStandard1: this.state.otherStandard1
-        }
-      }
-    ));
+    });
   }
 
   tables = ['testRequirement', 'washPreTreatment', 'footer'];
@@ -93,7 +59,7 @@ class FabricApplicationForm extends React.Component<{
       });
       flattenState += ' ';
     });
-    this.props.updateParent(flattenState.trim());
+    this.props.updateParent(flattenState.trim(), this.state);
   };
 
   toggleCheckboxState = (table: string, row: number, label: string) => {
@@ -311,7 +277,7 @@ class FabricApplicationForm extends React.Component<{
               onChange={({ currentTarget }) => {
                 this.setState({
                   otherStandard1: currentTarget.value
-                });
+                }, this.propagateUpdate);
               }}
               disabled={!this.getCheckboxState('testRequirement', 7, 'Other-Standard-1')}
             />
@@ -351,7 +317,7 @@ class FabricApplicationForm extends React.Component<{
               id="washPreTreatment_0_cycles"
               value={this.state.cycles[0]}
               onChange={({ currentTarget }) => {
-                this.setState({ cycles: [currentTarget.value, this.state.cycles[1]] });
+                this.setState({ cycles: [currentTarget.value, this.state.cycles[1]] }, this.propagateUpdate);
               }}
             />
           </td>
@@ -363,7 +329,7 @@ class FabricApplicationForm extends React.Component<{
               onChange={({ currentTarget }) => {
                 this.setState({
                   washTemp: currentTarget.value
-                });
+                }, this.propagateUpdate);
               }}
             />
           </td>
@@ -424,7 +390,7 @@ class FabricApplicationForm extends React.Component<{
               id="washPreTreatment_1_cycles"
               value={this.state.cycles[1]}
               onChange={({ currentTarget }) => {
-                this.setState({ cycles: [this.state.cycles[0], currentTarget.value] });
+                this.setState({ cycles: [this.state.cycles[0], currentTarget.value] }, this.propagateUpdate);
               }}
             />
           </td>
@@ -475,14 +441,6 @@ class FabricApplicationForm extends React.Component<{
               checked={this.getCheckboxState('footer', 0, 'RMB')}
               onChange={() => this.toggleCheckboxState('footer', 0, 'RMB')}
             />
-          </td>
-          <td rowSpan={2}>
-            <button
-              className="float-right btn btn-info btn-sm"
-              onClick={(e) => {
-                e.preventDefault();
-                this.saveToDB();
-              }}>save table data</button>
           </td>
         </tr>
         <tr>
