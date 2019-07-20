@@ -36,14 +36,15 @@ class DB {
 
   static updateInstance(
     ref: string,
-    { cycles, washTemp, otherStandard1 }: any
+    { cycles, washTemp, otherStandard1, flatten }: any
   ) {
     DB.client().query(q.Update(q.Ref(q.Class("aitexForm"), ref),
       {
         data:
         {
           cycles, washTemp,
-          otherStandard1
+          otherStandard1,
+          aitexForm: flatten
         }
       }
     ));

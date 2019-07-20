@@ -1,15 +1,13 @@
 import React from 'react';
 import _ from 'lodash';
-import faunadb, { query as q } from "faunadb";
 import { DB } from '../../DBManager';
 
 import './FabricApplicationForm.css';
 
 
 class FabricApplicationForm extends React.Component<{
-  state: string;
   taskId: string;
-  updateParent: (state: string, DBState: any) => void;
+  updateParent: (DBState: any) => void;
 }, {
   [key: string]: any;
 }> {
@@ -17,32 +15,38 @@ class FabricApplicationForm extends React.Component<{
 
   constructor(props: any) {
     super(props);
-    if (typeof process.env.REACT_APP_FAUNADB_KEY !== 'string') {
-      throw new Error('Problem with db key');
-    }
-
-    var [
-      testRequirement = '',
-      washPreTreatment = '',
-      footer = ''
-    ] = props.state.split(' ');
-
+    
+    // default state right before Promise resolves at componentDidMount
     this.state = {
-      testRequirement: testRequirement.split(';')
-        .map((row: string) => row.split(',')).slice(0, -1),
-      washPreTreatment: washPreTreatment.split(';')
-        .map((row: string) => row.split(',')).slice(0, -1),
-      footer: footer.split(';')
-        .map((row: string) => row.split(',')).slice(0, -1),
+      flatten: '',
+      testRequirement: ['','','','','','','','',''],
+      washPreTreatment: ['',''],
+      footer: ['',''],
       cycles: [5, ''],
       washTemp: 60,
       otherStandard1: 'According to Standard Mandotory Test Requirement'
     }
+  }
 
+  componentDidMount() {
     DB.getData(this.props.taskId).then((res: any) => {
+      const [
+        testRequirement = '',
+        washPreTreatment = '',
+        footer = ''
+      ] = res.data.aitexForm.split(' ');
       this.setState({
-        // @ts-ignore
-        cycles: res.data.cycles, washTemp: res.data.washTemp, otherStandard1: res.data.otherStandard1, ref: res.ref.value.id
+        testRequirement: testRequirement.split(';')
+          .map((row: string) => row.split(',')).slice(0, -1),
+        washPreTreatment: washPreTreatment.split(';')
+          .map((row: string) => row.split(',')).slice(0, -1),
+        footer: footer.split(';')
+          .map((row: string) => row.split(',')).slice(0, -1),
+        cycles: res.data.cycles,
+        washTemp: res.data.washTemp,
+        otherStandard1: res.data.otherStandard1,
+        ref: res.ref.value.id,
+        flatten: res.data.aitexForm
       });
     });
   }
@@ -52,14 +56,14 @@ class FabricApplicationForm extends React.Component<{
   getCheckboxState = (table: string, row: number, label: string): boolean => this.state[table][row].includes(label);
 
   propagateUpdate = () => {
-    let flattenState = '';
+    let flatten = '';
     this.tables.forEach(table => {
       this.state[table].forEach((row: string[]) => {
-        flattenState += row.join(',') + ';';
+        flatten += row.join(',') + ';';
       });
-      flattenState += ' ';
+      flatten += ' ';
     });
-    this.props.updateParent(flattenState.trim(), this.state);
+    this.setState({ flatten: flatten.trim() }, () => this.props.updateParent(this.state));
   };
 
   toggleCheckboxState = (table: string, row: number, label: string) => {
@@ -215,8 +219,8 @@ class FabricApplicationForm extends React.Component<{
         <tr>
           <td>
             <FabricApplicationForm.checkBox label={'EN 61482-1-2'}
-              checked={this.getCheckboxState('testRequirement', 3, 'EN 61482-1-2')}
-              onChange={() => this.toggleCheckboxState('testRequirement', 3, 'EN 61482-1-2')}
+              checked={this.getCheckboxState('testRequirement', 3, 'EN-61482-1-2')}
+              onChange={() => this.toggleCheckboxState('testRequirement', 3, 'EN-61482-1-2')}
             />
           </td>
           <td colSpan={2}>

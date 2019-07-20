@@ -431,13 +431,8 @@ export default class Form extends React.Component<IFormProps> {
           </section>
           <section className="tab-pane fade" id="nav-FabricApplicationForm" role="tabpanel" aria-labelledby="nav-FabricApplicationForm-tab">
             {<FabricApplicationForm
-              state={this.state.fabricAppForm}
               taskId={this.task_id || ''}
-              updateParent={(state: string, DBState: any) => {
-                this.setState({
-                  fabricAppForm: state, DBState
-                })
-              }}
+              updateParent={(DBState: any) => this.setState({ DBState })}
             />}
           </section>
           <section className="tab-pane fade" id="nav-comments" role="tabpanel" aria-labelledby="nav-comments-tab">

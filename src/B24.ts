@@ -112,7 +112,6 @@ class B24 {
           `${state.stage && `[B]Stage:[/B] ${state.stage}\n`}` +
           `${state.resume == undefined ? '' : `[B]Resume:[/B] ${state.resume}\n`}` +
           `${state.comments && `[B]Comments:[/B] ${state.comments}\n`}` +
-          `${state.fabricAppForm && `[B]Aitex Form:[/B] ${state.fabricAppForm}\n`}` +
           `${state.link && `[B]Edit:[/B] ${state.link}\n`}` +
           `${dataSeparator}` + (state.otherTextInDescription || ''),
       DEADLINE: m(state.certReceivedOnPlanDate).toISOString()

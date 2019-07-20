@@ -95,7 +95,6 @@ class Task implements ITask {
       'Resume': 'resume',
       'Stage': 'stage',
       'Comments': 'comments',
-      'Aitex Form': 'fabricAppForm',
       'Edit': 'link',
       'Second payment': 'secondPayment'
     }

@@ -40,13 +40,7 @@ export interface IState {
   standardsResult: {
     [key: string]: 'pass' | 'fail';
   };
-  // fabricAppForm: {
-  //   testRequirement: string[],
-  //   washPreTreatment: string[],
-  //   footer: string[]
-  // };
   DBState: any;
-  fabricAppForm: string;
   link : string;
   testingTime: string;
   serialNumber: string;
@@ -100,7 +94,6 @@ export interface IState {
 const emptyState : IState = {
   standardsResult: {},
   DBState: {},
-  fabricAppForm: ';;;;;;;;; ;; ;;',
   resume: undefined,
   link: '',
   paid: false,
