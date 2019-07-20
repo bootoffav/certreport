@@ -12,6 +12,10 @@ class StateAdapter {
     let stageForTitle: string;
     // @ts-ignore
     switch (this.stage) {
+      case '00. Paused':
+        // @ts-ignore
+        stageForTitle = `Paused - ${dC(this.pausedUntil, 'DD.MM.YYYY')}`
+        break;
       case '0. Sample to be prepared':
       // @ts-ignore
         stageForTitle = `Sample to be prepared - ${dC(this.readyOn, 'DD.MM.YYYY')}`

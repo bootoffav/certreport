@@ -12,6 +12,10 @@ const Toolbar: React.FunctionComponent<{
       ><input type="radio" />All</label>
       <label
         className="btn btn-warning btn-sm"
+        onClick={() => props.onClick(Stage['00. Paused'])}
+      ><input type="radio" />00. Paused</label>
+      <label
+        className="btn btn-warning btn-sm"
         onClick={() => props.onClick(Stage['0. Sample to be prepared'])}
       ><input type="radio" />0. Sample to be prepared</label>
       <label

@@ -10,6 +10,7 @@ interface ITask {
 const dataSeparator = '-------------------------------------------------';
 
 export enum Stage {
+  '00. Paused',
   '0. Sample to be prepared',
   '1. Sample Sent',
   '2. Sample Arrived',
@@ -84,6 +85,7 @@ class Task implements ITask {
       'Pre-treatment 1': 'pretreatment1',
       'Pre-treatment 2': 'pretreatment2',
       'Pre-treatment 3': 'pretreatment3',
+      'Paused Until': 'pausedUntil',
       'Sample ready on': 'readyOn',
       'to be sent on': 'sentOn',
       'to be received on': 'receivedOn',

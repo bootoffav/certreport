@@ -20,6 +20,7 @@ let selectOptions: {
     { value: 'Satra (UK)', label: 'Satra (UK)'}
   ],
   stages: [
+    { value: '00. Paused', label: '00. Paused' },
     { value: '0. Sample to be prepared', label: '0. Sample to be prepared' },
     { value: '1. Sample Sent', label: '1. Sample Sent' },
     { value: '2. Sample Arrived', label: '2. Sample Arrived' },
@@ -81,6 +82,7 @@ export interface IState {
   partNumber: string;
   rollNumber: string;
   brand: string;
+  pausedUntil: string;
   readyOn: string;
   sentOn: string;
   receivedOn: string;
@@ -108,6 +110,7 @@ const emptyState : IState = {
   width: '1.5',
   proformaReceivedDate: '',
   proformaReceivedDate2: '',
+  pausedUntil: '',
   readyOn: '',
   sentOn: '',
   receivedOn: '',

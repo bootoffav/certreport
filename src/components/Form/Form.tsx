@@ -272,6 +272,8 @@ export default class Form extends React.Component<IFormProps> {
   renderDates = () =>
     <>
       <div className="d-flex justify-content-center m-2">
+        <PickDate date={this.state.pausedUntil} label='Paused until:'
+          handleChange={(date: Date) => this.handleDateChange(date, 'pausedUntil')}/>
         <PickDate date={this.state.readyOn} label='Sample to be prepared:'
           handleChange={(date: Date) => this.handleDateChange(date, 'readyOn')}/>
         <PickDate date={this.state.sentOn} label='Sample has sent:'

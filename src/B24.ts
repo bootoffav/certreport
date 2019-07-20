@@ -102,6 +102,7 @@ class B24 {
           '\n' +
           `${state.pretreatment2 && `[B]Pre-treatment 2:[/B] ${state.pretreatment2}\n`}` +
           `${state.pretreatment3 && `[B]Pre-treatment 3:[/B] ${state.pretreatment3}\n`}` +
+          `${state.pausedUntil && `[B]Paused Until:[/B] ${state.pausedUntil}\n`}` +
           `${state.readyOn && `[B]Sample ready on:[/B] ${state.readyOn}\n`}` +
           `${state.sentOn && `[B]to be sent on:[/B] ${state.sentOn}\n`}` +
           `${state.receivedOn && `[B]to be received on:[/B] ${state.receivedOn}\n`}` +
