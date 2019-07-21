@@ -19,9 +19,9 @@ class FabricApplicationForm extends React.Component<{
     // default state right before Promise resolves at componentDidMount
     this.state = {
       flatten: '',
-      testRequirement: ['','','','','','','','',''],
-      washPreTreatment: ['',''],
-      footer: ['',''],
+      testRequirement: [[],[],[],[],[],[],[],[],[]],
+      washPreTreatment: [[],[]],
+      footer: [[],[]],
       cycles: [5, ''],
       washTemp: 60,
       otherStandard1: 'According to Standard Mandotory Test Requirement'
