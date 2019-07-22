@@ -92,6 +92,7 @@ class DateFilter extends React.Component<{
         <DatePicker
           className="col form-control"
           selected={this.state.startDate}
+          dateFormat="dd.MM.yyyy"
           selectsStart
           startDate={this.state.startDate}
           endDate={this.state.endDate}
@@ -103,6 +104,7 @@ class DateFilter extends React.Component<{
         <DatePicker
           className="col form-control"
           selected={this.state.endDate}
+          dateFormat="dd.MM.yyyy"
           selectsEnd
           startDate={this.state.startDate}
           endDate={this.state.endDate}
