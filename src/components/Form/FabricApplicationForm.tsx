@@ -30,24 +30,29 @@ class FabricApplicationForm extends React.Component<{
 
   componentDidMount() {
     DB.getData(this.props.taskId).then((res: any) => {
-      const [
-        testRequirement = '',
-        washPreTreatment = '',
-        footer = ''
-      ] = res.data.aitexForm.split(' ');
-      this.setState({
-        testRequirement: testRequirement.split(';')
-          .map((row: string) => row.split(',')).slice(0, -1),
-        washPreTreatment: washPreTreatment.split(';')
-          .map((row: string) => row.split(',')).slice(0, -1),
-        footer: footer.split(';')
-          .map((row: string) => row.split(',')).slice(0, -1),
-        cycles: res.data.cycles,
-        washTemp: res.data.washTemp,
-        otherStandard1: res.data.otherStandard1,
-        ref: res.ref.value.id,
-        flatten: res.data.aitexForm
-      });
+      try {
+        const [
+          testRequirement = '',
+          washPreTreatment = '',
+          footer = ''
+        ] = res.data.aitexForm.split(' ');
+        this.setState({
+          testRequirement: testRequirement.split(';')
+            .map((row: string) => row.split(',')).slice(0, -1),
+          washPreTreatment: washPreTreatment.split(';')
+            .map((row: string) => row.split(',')).slice(0, -1),
+          footer: footer.split(';')
+            .map((row: string) => row.split(',')).slice(0, -1),
+        });
+      } finally {
+        this.setState({
+          cycles: res.data.cycles,
+          washTemp: res.data.washTemp,
+          otherStandard1: res.data.otherStandard1,
+          ref: res.ref.value.id,
+          flatten: res.data.aitexForm
+        });
+      }
     });
   }
 

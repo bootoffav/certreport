@@ -17,6 +17,7 @@ import { DB } from '../../DBManager';
 
 interface IFormState extends IState {
   requestStatus: Status;
+  EN11612Detail?: any; 
 }
 
 interface IFormProps {
@@ -75,26 +76,29 @@ export default class Form extends React.Component<IFormProps> {
 
   handleCert(e: any) {
     e.preventDefault();
-    DB.updateInstance(this.state.DBState.ref, this.state.DBState);
     swal({
       title: "Are you sure?",
       icon: "info",
       buttons: ["Cancel", "OK"]
     })
-      .then((OK) => {
-        if (OK) {
-          this.setState({ requestStatus: Status.Loading });
-          this.task_id
-            ? B24.updateTask(this.state, this.task_id)
-              .then(
-                () => this.afterSuccessfulSubmit(),
-                () => this.afterUnsuccessfulSubmit()
-              )
-            : B24.createTask(this.state)
-              .then(
-                () => this.afterSuccessfulSubmit(),
-                () => this.afterUnsuccessfulSubmit()
-              )
+    .then((OK) => {
+      if (OK) {
+        this.setState({ requestStatus: Status.Loading });
+        DB.updateInstance(this.state.DBState.ref, {
+          ...this.state.DBState,
+          EN11612: this.state.EN11612Detail
+        });
+        this.task_id
+          ? B24.updateTask(this.state, this.task_id)
+            .then(
+              () => this.afterSuccessfulSubmit(),
+              () => this.afterUnsuccessfulSubmit()
+            )
+          : B24.createTask(this.state)
+            .then(
+              () => this.afterSuccessfulSubmit(),
+              () => this.afterUnsuccessfulSubmit()
+            )
         }
       });
   }
@@ -372,6 +376,7 @@ export default class Form extends React.Component<IFormProps> {
 
   renderStandards = () =>
     <Standards standards={this.state.standards} standardsResult={this.state.standardsResult}
+      updateParent={(state: any) => this.setState({ EN11612Detail: state})}
       resultChange={
         ({ currentTarget }: any) => {
           const standardsResult = { ...this.state.standardsResult, [currentTarget.dataset.standard]: currentTarget.value }
