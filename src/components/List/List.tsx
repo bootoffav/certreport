@@ -8,7 +8,7 @@ import { getColumns } from './columns';
 import { ColumnSearch, BrandFilter, DateFilter } from '../Filters';
 import CacheManager from '../../CacheManager';
 import { Settings } from '../Settings/Settings';
-
+import TaskNamesExport from '../Export/PDF/TaskNamesExport';
 
 
 interface IListState {
@@ -151,6 +151,7 @@ export default class List extends React.Component {
       </div>
       <div className="d-inline-flex justify-content-end">
         <List.State notUpdated={this.cache.staleData} />
+        <TaskNamesExport tasks={this.state.visibleTasks} />
         <div className="align-self-center">
           <Settings onClose={() => this.updateState()} />
         </div>

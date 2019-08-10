@@ -3,7 +3,7 @@ import m from 'moment';
 import { dataSeparator } from './Task/Task';
 import Task from './Task/Task';
 import StateAdapter from './StateAdapter';
-import PDFExport from './components/Export/PDF/PDFExport';
+import AppFormExport from './components/Export/PDF/AppFormExport';
 import { IState } from './defaults';
 
 m.fn.toJSON = function() { return this.format(); }
@@ -133,7 +133,7 @@ class B24 {
           }
         }
       ));
-    new PDFExport(state).create().getBase64((base64: string) => {
+    new AppFormExport(state).create().getBase64((base64: string) => {
       fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.addfile/`, {
         method: 'post',
         body: qs.stringify({

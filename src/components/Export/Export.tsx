@@ -1,5 +1,5 @@
 import React from 'react';
-import PDFExport from './PDF/PDFExport';
+import AppFormExport from './PDF/AppFormExport';
 import { IState } from '../../defaults';
 import ExcelExport from './ExcelExport';
 
@@ -13,7 +13,7 @@ class Export extends React.Component<ExportProps> {
     e.preventDefault();
     switch (e.currentTarget.dataset.type) {
       case 'pdf':
-        new PDFExport(this.props.data).save();
+        new AppFormExport(this.props.data).save();
         break;
       case 'xls':
         new ExcelExport(this.props.data).save();

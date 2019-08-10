@@ -7,14 +7,11 @@ import { footerImage } from './footer-image';
 import { IState } from '../../../defaults';
 
 
-const square = {
-  text: `${String.fromCharCode(0x2B1C)}`, fontSize: 16
-};
 const checkedSquare = { text: '', style: { font: 'Icons' } };
 const emptySquare = { text: '', style: { font: 'Icons' } };
 
 
-class PDFExport extends React.Component<IState> {
+class AppFormExport extends React.Component<IState> {
 
   fabricAppForm = document.getElementById('FabricApplicationForm');
 
@@ -398,4 +395,4 @@ class PDFExport extends React.Component<IState> {
   }
 }
 
-export { PDFExport as default };
+export { AppFormExport as default };
