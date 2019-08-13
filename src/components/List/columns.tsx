@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Stage } from '../../Task/Task';
+import { dateConverter } from '../../helpers';
 
 function getColumns(totalPrice: number, staleData: boolean, requiredStage: Stage | 'results' | 'overdue' | undefined) {
   const columns = [{
@@ -36,7 +37,16 @@ function getColumns(totalPrice: number, staleData: boolean, requiredStage: Stage
     Header: 'Date of cert. receiving',
     id: 'certReceivedDate',
     accessor: 'state.certReceivedOnRealDate',
-    minWidth: 100
+    minWidth: 100,
+    sortMethod: (a: any, b: any) => {
+      if (dateConverter(a) > dateConverter(b)) {
+        return 1;
+      }
+      if (dateConverter(a) < dateConverter(b)) {
+        return -1;
+      }
+      return 0;
+    }
   }, {
     // 5
     Header: 'Task title',
