@@ -118,8 +118,8 @@ export default class List extends React.Component {
     }
     if (startDate !== null && endDate !== null) {
       const tasksInRange = this.state.tasks.filter((task: any) => {
-        const creationDate = new Date(task.CREATED_DATE);
-        return startDate < creationDate && endDate > creationDate
+        const comparingDate = new Date(task.state.certReceivedOnRealDate);
+        return startDate < comparingDate && endDate > comparingDate
       });
 
       this.setState({
