@@ -54,6 +54,21 @@ function getColumns(totalPrice: number, staleData: boolean, requiredStage: Stage
     }
   }, {
     // 6
+    Header: 'Test-report received',
+    id: 'testReceivedDate',
+    accessor: 'state.testFinishedOnRealDate',
+    minWidth: 100,
+    sortMethod: (a: any, b: any) => {
+      if (dateConverter(a) > dateConverter(b)) {
+        return 1;
+      }
+      if (dateConverter(a) < dateConverter(b)) {
+        return -1;
+      }
+      return 0;
+    }
+  }, {
+    // 7
     Header: 'Task title',
     accessor: 'TITLE',
     id: 'taskName',
@@ -73,43 +88,43 @@ function getColumns(totalPrice: number, staleData: boolean, requiredStage: Stage
         state: { ...props.original.state }
       }}> {props.value}</Link>
   }, {
-    // 7
+    // 8
     Header: 'Sample to be prepared on',
     accessor: 'state.readyOn',
     id: 'readyOn',
     width: 130,
   }, {
-    // 8
+    // 9
     Header: 'Sent On',
     accessor: 'state.sentOn',
     id: 'sentOn',
     width: 130,
   }, {
-    // 9
+    // 10
     Header: 'Sample has received On',
     accessor: 'state.receivedOn',
     id: 'receivedOn',
     width: 130,
   }, {
-    // 10
+    // 11
     Header: 'Tests to be finished On',
     accessor: 'state.finishedOn',
     id: 'receivedOn',
     width: 130,
   }, {
-    // 11
+    // 12
     Header: 'Proforma date',
     accessor: 'state.proformaReceivedDate',
     id: 'proformaReceivedDate',
     width: 130,
   }, {
-    // 12
+    // 13
     Header: 'Proforma #',
     accessor: 'state.proformaNumber',
     id: 'proformaNumber',
     width: 100,
   }, {
-    // 13
+    // 14
     Header: 'Paid',
     id: 'paid',
     accessor: 'state.paymentDate',
@@ -118,37 +133,37 @@ function getColumns(totalPrice: number, staleData: boolean, requiredStage: Stage
       ? <span className="oi oi-check"> </span>
       : ''
   }, {
-    // 14
+    // 15
     Header: 'Payment date',
     id: 'paymentDate',
     accessor: 'state.paymentDate',
     width: 130,
   }, {
-    // 15
+    // 16
     Header: 'Fabric',
     id: 'article',
     accessor: 'state.article',
     width: 100
   }, {
-    // 16
+    // 17
     Header: 'ETD (Test-report)',
     id: 'etdTestReport',
     accessor: 'state.testFinishedOnPlanDate',
     minWidth: 100
   }, {
-    // 17
+    // 18
     Header: 'Test report',
     id: 'testReport',
     accessor: 'state.testReport',
     minWidth: 100,
   }, {
-    // 18
+    // 19
     Header: 'ETD (Certificate)',
     id: 'etdCertificate',
     accessor: 'state.certReceivedOnPlanDate',
     minWidth: 100
   }, {
-    // 19
+    // 20
     Header: 'Certificate',
     id: 'certificate',
     accessor: (row: any) => 
@@ -157,7 +172,7 @@ function getColumns(totalPrice: number, staleData: boolean, requiredStage: Stage
       : row.state.certificate,
     minWidth: 100,
   }, {
-    // 20
+    // 21
     Header: 'Standards',
     id: 'standards',
     accessor: 'state',
@@ -176,7 +191,7 @@ function getColumns(totalPrice: number, staleData: boolean, requiredStage: Stage
         }
       })
   }, {
-    // 21
+    // 22
     Header: 'Result',
     id: 'result',
     accessor: 'state.resume',
@@ -192,7 +207,7 @@ function getColumns(totalPrice: number, staleData: boolean, requiredStage: Stage
       }
     }
   }, {
-    // 22
+    // 23
     Header: 'Price, €',
     Footer: <>Total: < span style={{ float: 'right' }}>{formatPrice(totalPrice)}</span></>,
     id: 'price',
@@ -200,7 +215,7 @@ function getColumns(totalPrice: number, staleData: boolean, requiredStage: Stage
     minWidth: 90,
     Cell: (props: any) => <>€<span style={{ float: 'right' }}>{formatPrice(props.value)}</span></>
   }, {
-    // 23
+    // 24
     Header: 'Pre-treatment Result',
     id: 'pretreatment1',
     accessor: 'state.pretreatment1Result',
@@ -222,41 +237,40 @@ function getColumns(totalPrice: number, staleData: boolean, requiredStage: Stage
   let hidden: number[];
   switch (requiredStage) {
     case Stage['00. Paused']:
-      hidden = [3, 4, 5, 8, 9, 10, 11, 12, 13, 14, 16, 18, 19, 20, 21];
+      hidden = [3, 4, 5, 6, 9, 10, 11, 12, 13, 14, 15, 17, 19, 20, 21, 22];
       break;
     case Stage['0. Sample to be prepared']:
-      hidden = [3, 4, 5, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, 20, 21];
+      hidden = [3, 4, 5, 6, 9, 10, 11, 12, 13, 14, 15, 16, 17, 19, 20, 21, 22];
       break;
     case Stage['1. Sample Sent']:
-      hidden = [3, 4, 5, 9, 10, 11, 12, 13, 14, 16, 18, 20, 21, 23];
+      hidden = [3, 4, 5, 6, 10, 11, 12, 13, 14, 15, 17, 19, 21, 22, 24];
       break;
     case Stage['2. Sample Arrived']:
-      hidden = [3, 4, 5, 7, 10, 11, 12, 13, 14, 16, 18, 20, 21, 23];
-        // hidden = [3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 15, 17, 19, 20, 22];
+      hidden = [3, 4, 5, 6, 8, 11, 12, 13, 14, 15, 17, 19, 21, 22, 24];
       break;
     case Stage['3. PI Issued']:
-      hidden = [3, 4, 7, 8, 9, 10, 13, 15, 17, 19, 20, 22];
+      hidden = [3, 4, 5, 6, 8, 9, 10, 11, 14, 16, 18, 20, 21, 23, 24];
       break;
     case Stage['4. Payment Done']:
-      hidden = [3, 4, 7, 8, 9, 10, 15, 17, 18, 20];
+      hidden = [3, 4, 5, 6, 8, 9, 10, 11, 16, 17, 18, 20, 22, 24];
       break;
     case Stage['5. Testing is started']:
-      hidden = [3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 19, 20, 21];
+      hidden = [3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 20, 21, 22, 24];
       break;
     case 'results':
-      hidden = [4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 16, 18, 19, 22];
+      hidden = [4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 15, 17, 19, 20, 23];
       break;
     case 'overdue':
-      hidden = [5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 22];
+      hidden = [5, 6, 8, 9, 10, 11, 12, 13, 14, 15, 16, 23];
       break;
     case Stage['7. Test-report ready']:
-      hidden = [3, 4, 5, 7, 8, 9, 11, 12, 13, 15, 17];
+      hidden = [3, 4, 5, 8, 9, 10, 12, 13, 14, 16, 18];
       break;
     case Stage['8. Certificate ready']:
-      hidden = [3, 4, 7, 8, 9, 11, 12, 13, 15, 17];
+      hidden = [3, 4, 6, 8, 9, 10, 12, 13, 14, 16, 18];
       break;
     default:
-      hidden = [4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 16, 18, 20, 23];
+      hidden = [4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 15, 17, 19, 21, 24];
   }
 
   columns.forEach((col, ind) => {
