@@ -27,6 +27,7 @@ class Task implements ITask {
   state: IState;
   position?: number;
   overdue: boolean;
+  lastActionDate: string | undefined;
 
   constructor(props: {
     DESCRIPTION: string;
@@ -35,7 +36,7 @@ class Task implements ITask {
     Object.assign(this, props);
     this.state = this.parse(props.DESCRIPTION, props.UF_CRM_TASK);
     this.state.stage = this.state.stage || this.determineStage();
-    this.overdue = this.determineOverdue();
+    [this.overdue, this.lastActionDate ] = this.determineOverdue();
   }
 
   parseable_description = (desc: string) => desc.startsWith('[B]Applicant name:[/B]');
@@ -234,29 +235,31 @@ class Task implements ITask {
     return '0. Sample to be prepared';
   }
 
-  determineOverdue(): boolean {
+  determineOverdue(): [boolean, string | undefined] {
     const today = m();
     switch (this.state.stage) {
       case '0. Sample to be prepared':
-        return m(this.state['readyOn']).add(2, 'days') < today;
+        return [m(this.state['readyOn']).add(2, 'days') < today, this.state['readyOn']];
       case '1. Sample Sent':
-        return m(this.state['sentOn']).add(7, 'days') < today;
+        return [m(this.state['sentOn']).add(7, 'days') < today, this.state['sentOn']];
       case '2. Sample Arrived':
-        return m(this.state['receivedOn']).add(2, 'days') < today;
+        return [m(this.state['receivedOn']).add(2, 'days') < today, this.state['receivedOn'] ];
       case '3. PI Issued':
-        return m(this.state['proformaReceivedDate']).add(2, 'days') < today;
+        return [m(this.state['proformaReceivedDate']).add(2, 'days') < today, this.state['proformaReceivedDate']];
       case '4. Payment Done':
-        return m(this.state['paymentDate']).add(2, 'days') < today;
+        return [m(this.state['paymentDate']).add(2, 'days') < today, this.state['paymentDate']];
       case '5. Testing is started':
         return this.state['testFinishedOnPlanDate'] == ''
-          ? m(this.state['startedOn']).add(21, 'days') < today
-          : m(this.state['testFinishedOnPlanDate']).add(2, 'days') < today
+          ? [m(this.state['startedOn']).add(21, 'days') < today, this.state['startedOn']]
+          : [m(this.state['testFinishedOnPlanDate']).add(2, 'days') < today, this.state['testFinishedOnPlanDate']]
       case '7. Test-report ready':
-        return m(this.state['testFinishedOnRealDate']).add(2, 'days') < today;
+        return [m(this.state['testFinishedOnRealDate']).add(2, 'days') < today, this.state['testFinishedOnRealDate']];
       case '8. Certificate ready':
-        return this.state['certReceivedOnRealDate'] ? false : m(this.state['certReceivedOnPlanDate']).add(1, 'days') < today;
+        return this.state['certReceivedOnRealDate']
+          ? [false, undefined]
+          : [m(this.state['certReceivedOnPlanDate']).add(1, 'days') < today, this.state['certReceivedOnPlanDate']];
     }
-    return false;
+    return [false, undefined];
   }
 }
 

@@ -139,6 +139,9 @@ export default class List extends React.Component {
     if (rowInfo == undefined) {
       return {};
     }
+    // if (rowInfo.original.overdue) {
+    //   debugger;
+    // }
     return rowInfo.original.overdue ? { className: 'missedDeadline' } : {};
   }
 
