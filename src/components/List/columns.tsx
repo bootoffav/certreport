@@ -258,13 +258,13 @@ function getColumns(totalPrice: number, staleData: boolean, requiredStage: Stage
       hidden = [3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 20, 21, 22, 24];
       break;
     case 'results':
-      hidden = [4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 15, 17, 19, 20, 23];
+      hidden = [5, 6, 8, 9, 10, 11, 12, 13, 14, 15, 17, 19, 20, 23];
       break;
     case 'overdue':
       hidden = [5, 6, 8, 9, 10, 11, 12, 13, 14, 15, 16, 23];
       break;
     case Stage['7. Test-report ready']:
-      hidden = [3, 4, 5, 8, 9, 10, 12, 13, 14, 16, 18];
+      hidden = [3, 5, 8, 9, 10, 12, 13, 14, 16, 18];
       break;
     case Stage['8. Certificate ready']:
       hidden = [3, 4, 6, 8, 9, 10, 12, 13, 14, 16, 18];
