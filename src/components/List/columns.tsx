@@ -3,6 +3,20 @@ import { Link } from 'react-router-dom';
 import { Stage } from '../../Task/Task';
 import { dateConverter } from '../../helpers';
 
+function sortDates(a: string | undefined, b: string | undefined): number {
+  if (a === undefined) return -1;
+  if (a !== undefined && b !== undefined) {
+    console.log(a, b);
+    if (dateConverter(a) > dateConverter(b)) {
+      return 1;
+    }
+    if (dateConverter(a) < dateConverter(b)) {
+      return -1;
+    }
+  }
+  return 0;
+}
+
 function getColumns(totalPrice: number, staleData: boolean, requiredStage: Stage | 'results' | 'overdue' | undefined) {
   const columns = [{
     // 0
@@ -36,37 +50,22 @@ function getColumns(totalPrice: number, staleData: boolean, requiredStage: Stage
     //4
     Header: 'Last action date',
     id: 'lastActionDate',
-    accessor: 'lastActionDate'
+    accessor: 'lastActionDate',
+    sortMethod: sortDates
   }, {
     // 5
     Header: 'Cert received',
     id: 'certReceivedDate',
     accessor: 'state.certReceivedOnRealDate',
     minWidth: 100,
-    sortMethod: (a: any, b: any) => {
-      if (dateConverter(a) > dateConverter(b)) {
-        return 1;
-      }
-      if (dateConverter(a) < dateConverter(b)) {
-        return -1;
-      }
-      return 0;
-    }
+    sortMethod: sortDates
   }, {
     // 6
     Header: 'Test-report received',
     id: 'testReceivedDate',
     accessor: 'state.testFinishedOnRealDate',
     minWidth: 100,
-    sortMethod: (a: any, b: any) => {
-      if (dateConverter(a) > dateConverter(b)) {
-        return 1;
-      }
-      if (dateConverter(a) < dateConverter(b)) {
-        return -1;
-      }
-      return 0;
-    }
+    sortMethod: sortDates
   }, {
     // 7
     Header: 'Task title',
