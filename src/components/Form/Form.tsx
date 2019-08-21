@@ -49,6 +49,31 @@ export default class Form extends React.Component<IFormProps> {
       B24.get_task(this.task_id)
         .then(r => this.setState({ ...r.state }));
     }
+
+    //load data for FabricApplicationForm and Standards
+    // @ts-ignore
+    DB.getData(this.task_id).then((res: any) => {
+      const DBState: any = {};
+      this.setState({ EN11612Detail: res.data.EN11612Detail });
+      try {
+        const [
+          testRequirement = '',
+          washPreTreatment = '',
+          footer = ''
+        ] = res.data.aitexForm.split(' ');
+        DBState.testRequirement = testRequirement.split(';').map((row: string) => row.split(',')).slice(0, -1);
+        DBState.washPreTreatment = washPreTreatment.split(';').map((row: string) => row.split(',')).slice(0, -1);
+        DBState.footer = footer.split(';').map((row: string) => row.split(',')).slice(0, -1);
+      } finally {
+        DBState.cycles = res.data.cycles;
+        DBState.washTemp = res.data.washTemp;
+        DBState.otherStandard1 = res.data.otherStandard1;
+        DBState.ref = res.ref.value.id;
+        DBState.flatten = res.data.aitexForm;
+        this.setState({ DBState });
+      }
+    });
+
     this.state.link || this.setState({ link: `[URL=https://certreport.xmtextiles.com/edit/${this.task_id}/]this task[/URL]` });
   }
 
@@ -86,7 +111,7 @@ export default class Form extends React.Component<IFormProps> {
         this.setState({ requestStatus: Status.Loading });
         DB.updateInstance(this.state.DBState.ref, {
           ...this.state.DBState,
-          EN11612: this.state.EN11612Detail
+          EN11612Detail: this.state.EN11612Detail
         });
         this.task_id
           ? B24.updateTask(this.state, this.task_id)
@@ -376,6 +401,7 @@ export default class Form extends React.Component<IFormProps> {
 
   renderStandards = () =>
     <Standards standards={this.state.standards} standardsResult={this.state.standardsResult}
+      EN11612Detail={this.state.EN11612Detail}
       updateParent={(state: any) => this.setState({ EN11612Detail: state})}
       resultChange={
         ({ currentTarget }: any) => {
@@ -437,6 +463,7 @@ export default class Form extends React.Component<IFormProps> {
           <section className="tab-pane fade" id="nav-FabricApplicationForm" role="tabpanel" aria-labelledby="nav-FabricApplicationForm-tab">
             {<FabricApplicationForm
               taskId={this.task_id || ''}
+              state={this.state.DBState}
               updateParent={(DBState: any) => this.setState({ DBState })}
             />}
           </section>

@@ -36,16 +36,17 @@ class DB {
 
   static updateInstance(
     ref: string,
-    { cycles, washTemp, otherStandard1, flatten, EN11612 }: any
+    { cycles, washTemp, otherStandard1, flatten: aitexForm, EN11612Detail }: any
   ) {
     DB.client().query(q.Update(q.Ref(q.Class("aitexForm"), ref), {
       data: {
-        cycles, washTemp,
+        cycles,
+        washTemp,
         otherStandard1,
-        aitexForm: flatten,
-        EN11612
-      }}
-    )).catch((e: any) => {
+        aitexForm,
+        EN11612Detail
+      }
+    })).catch((e: any) => {
       console.log('Something wrong with updateIntance');
     });
   }

@@ -14,10 +14,16 @@ type IEN11612Detail = {
 
 class EN11612Detail extends React.Component<{
   updateParent: (state: IEN11612Detail) => void;
+  state?: IEN11612Detail;
 }>  {
   blocks = ['A1', 'A2', 'B', 'C', 'D', 'E', 'F'];
-  state: IEN11612Detail = {};
-  
+  // default
+  state = {};
+
+  componentWillReceiveProps(nextProps: any) {
+    this.setState({ ...nextProps.state });
+  }
+
   onChange = ({ currentTarget }: any) => this.setState({
     [currentTarget.name]: currentTarget.dataset['result']
   }, () => this.props.updateParent(this.state));
@@ -36,6 +42,8 @@ class EN11612Detail extends React.Component<{
                 type="radio"
                 name={name}
                 data-result='fail'
+                // @ts-ignore
+                checked={this.state[name] === 'fail'}
                 onChange={this.onChange}
               />
               <label className="form-check-label"><span className="oi oi-circle-x"></span></label>
@@ -46,6 +54,8 @@ class EN11612Detail extends React.Component<{
                 type="radio"
                 name={name}
                 data-result='pass'
+                // @ts-ignore
+                checked={this.state[name] === 'pass'}
                 onChange={this.onChange}
               />
               <label className="form-check-label"><span className="oi oi-thumb-up"></span></label>
@@ -64,6 +74,7 @@ type StandardsProps = {
     [key: string]: string;
   }
   resultChange: (el: React.SyntheticEvent) => void;
+  EN11612Detail?: any;
 };
 
 function Standards(props: StandardsProps) {
@@ -121,10 +132,9 @@ function Standards(props: StandardsProps) {
 
         <div id={`collapse_${id}`} className="collapse show" aria-labelledby={`heading_${id}`} data-parent="#accordionStandards">
           <div className="card-body">
-            {standard === 'EN 11612'}
-             {/* && <EN11612Detail
+            {standard === 'EN 11612' && <EN11612Detail state={props.EN11612Detail}
               // @ts-ignore
-              updateParent={props.updateParent} />} */}
+              updateParent={props.updateParent} />}
           </div>
         </div>
       </div>

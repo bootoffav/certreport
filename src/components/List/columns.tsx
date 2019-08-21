@@ -6,7 +6,6 @@ import { dateConverter } from '../../helpers';
 function sortDates(a: string | undefined, b: string | undefined): number {
   if (a === undefined) return -1;
   if (a !== undefined && b !== undefined) {
-    console.log(a, b);
     if (dateConverter(a) > dateConverter(b)) {
       return 1;
     }

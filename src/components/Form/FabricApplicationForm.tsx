@@ -4,56 +4,38 @@ import { DB } from '../../DBManager';
 
 import './FabricApplicationForm.css';
 
+type FabricApplicationFormState = {
+  flatten: string;
+  testRequirement: [][];
+  washPreTreatment: [][];
+  footer: [][];
+  cycles: string[];
+  washTemp: number;
+  otherStandard1: string;
+  [key: string]: any;
+};
 
 class FabricApplicationForm extends React.Component<{
   taskId: string;
+  state: FabricApplicationFormState;
   updateParent: (DBState: any) => void;
 }, {
   [key: string]: any;
 }> {
   DBClient: any;
 
-  constructor(props: any) {
-    super(props);
-    
-    // default state right before Promise resolves at componentDidMount
-    this.state = {
-      flatten: '',
-      testRequirement: [[],[],[],[],[],[],[],[],[]],
-      washPreTreatment: [[],[]],
-      footer: [[],[]],
-      cycles: [5, ''],
-      washTemp: 60,
-      otherStandard1: 'According to Standard Mandotory Test Requirement'
-    }
+  state: FabricApplicationFormState = {
+    flatten: '',
+    testRequirement: [[],[],[],[],[],[],[],[],[]],
+    washPreTreatment: [[],[]],
+    footer: [[],[]],
+    cycles: ['5', ''],
+    washTemp: 60,
+    otherStandard1: 'According to Standard Mandotory Test Requirement'
   }
 
-  componentDidMount() {
-    DB.getData(this.props.taskId).then((res: any) => {
-      try {
-        const [
-          testRequirement = '',
-          washPreTreatment = '',
-          footer = ''
-        ] = res.data.aitexForm.split(' ');
-        this.setState({
-          testRequirement: testRequirement.split(';')
-            .map((row: string) => row.split(',')).slice(0, -1),
-          washPreTreatment: washPreTreatment.split(';')
-            .map((row: string) => row.split(',')).slice(0, -1),
-          footer: footer.split(';')
-            .map((row: string) => row.split(',')).slice(0, -1),
-        });
-      } finally {
-        this.setState({
-          cycles: res.data.cycles,
-          washTemp: res.data.washTemp,
-          otherStandard1: res.data.otherStandard1,
-          ref: res.ref.value.id,
-          flatten: res.data.aitexForm
-        });
-      }
-    });
+  componentWillReceiveProps(nextProps: any) {
+    this.setState({ ...nextProps.state });
   }
 
   tables = ['testRequirement', 'washPreTreatment', 'footer'];
