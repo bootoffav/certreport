@@ -8,6 +8,7 @@ export class Settings extends React.Component<{
   state = {
     includeCompletedTasks: Boolean(Number(localStorage.getItem('includeCompletedTasks'))),
     includeEndedTasks: Boolean(Number(localStorage.getItem('includeEndedTasks'))),
+    includeTasksWithoutNumbers: Boolean(Number(localStorage.getItem('includeTasksWithoutNumbers'))),
   }
   
   toggle = (e: React.SyntheticEvent) => {
@@ -44,6 +45,11 @@ export class Settings extends React.Component<{
               <input className="form-check-input" type="checkbox" value="" checked={this.state.includeEndedTasks} id="includeEndedTasks" onChange={this.toggle} />
               <label className="form-check-label" htmlFor="includeEndedTasks">
                 Include ended certifications
+                </label><br />
+              &nbsp; &nbsp;
+              <input className="form-check-input" type="checkbox" value="" checked={this.state.includeTasksWithoutNumbers} id="includeTasksWithoutNumbers" onChange={this.toggle} />
+              <label className="form-check-label" htmlFor="includeTasksWithoutNumbers">
+                Include tasks without _Aitex/Satra numbers
                 </label><br />
             </div>
             <div className="modal-footer">

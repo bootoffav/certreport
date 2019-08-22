@@ -60,6 +60,9 @@ export default class List extends React.Component {
     if (!Boolean(Number(localStorage.getItem('includeEndedTasks')))) {
       tasks = tasks.filter((task: Task) => task.state.stage !== Stage[9])
     }
+    if (!Boolean(Number(localStorage.getItem('includeTasksWithoutNumbers')))) {
+      tasks = tasks.filter((task: any) => /\d{3}_/.test(task.TITLE.substring(0, 4)))
+    }
     return tasks;
   }
 
