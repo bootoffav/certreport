@@ -91,30 +91,35 @@ function getColumns(totalPrice: number, staleData: boolean, requiredStage: Stage
     accessor: 'state.readyOn',
     id: 'readyOn',
     width: 130,
+    sortMethod: sortDates
   }, {
     // 9
     Header: 'Sent On',
     accessor: 'state.sentOn',
     id: 'sentOn',
     width: 130,
+    sortMethod: sortDates
   }, {
     // 10
     Header: 'Sample has received On',
     accessor: 'state.receivedOn',
     id: 'receivedOn',
     width: 130,
+    sortMethod: sortDates
   }, {
     // 11
     Header: 'Tests to be finished On',
     accessor: 'state.finishedOn',
     id: 'receivedOn',
     width: 130,
+    sortMethod: sortDates
   }, {
     // 12
     Header: 'Proforma date',
     accessor: 'state.proformaReceivedDate',
     id: 'proformaReceivedDate',
     width: 130,
+    sortMethod: sortDates
   }, {
     // 13
     Header: 'Proforma #',
@@ -129,13 +134,15 @@ function getColumns(totalPrice: number, staleData: boolean, requiredStage: Stage
     minWidth: 40,
     Cell: (props: any) => props.value
       ? <span className="oi oi-check"> </span>
-      : ''
+      : '',
+    sortMethod: sortDates
   }, {
     // 15
     Header: 'Payment date',
     id: 'paymentDate',
     accessor: 'state.paymentDate',
     width: 130,
+    sortMethod: sortDates
   }, {
     // 16
     Header: 'Fabric',
@@ -147,7 +154,8 @@ function getColumns(totalPrice: number, staleData: boolean, requiredStage: Stage
     Header: 'ETD (Test-report)',
     id: 'etdTestReport',
     accessor: 'state.testFinishedOnPlanDate',
-    minWidth: 100
+    minWidth: 100,
+    sortMethod: sortDates
   }, {
     // 18
     Header: 'Test report',
@@ -159,7 +167,8 @@ function getColumns(totalPrice: number, staleData: boolean, requiredStage: Stage
     Header: 'ETD (Certificate)',
     id: 'etdCertificate',
     accessor: 'state.certReceivedOnPlanDate',
-    minWidth: 100
+    minWidth: 100,
+    sortMethod: sortDates
   }, {
     // 20
     Header: 'Certificate',
