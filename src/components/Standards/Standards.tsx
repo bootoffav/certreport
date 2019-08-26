@@ -20,7 +20,7 @@ class EN11612Detail extends React.Component<{
   // default
   state = {};
 
-  componentWillReceiveProps(nextProps: any) {
+  UNSAFE_componentWillReceiveProps(nextProps: any) {
     this.setState({ ...nextProps.state });
   }
 

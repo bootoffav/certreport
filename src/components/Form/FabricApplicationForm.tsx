@@ -34,7 +34,7 @@ class FabricApplicationForm extends React.Component<{
     otherStandard1: 'According to Standard Mandotory Test Requirement'
   }
 
-  componentWillReceiveProps(nextProps: any) {
+  UNSAFE_componentWillReceiveProps(nextProps: any) {
     this.setState({ ...nextProps.state });
   }
 

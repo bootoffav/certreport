@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import DatePicker from "react-datepicker";
 import './Filters.css';
 
@@ -74,51 +74,47 @@ const BrandFilter: React.FunctionComponent<{
       </div>
     </div>
 
-class DateFilter extends React.Component<{
-  filter: (startDate: Date | null, endDate: Date | null) => void;
-}> {
-  state = {
-    startDate: null,
-    endDate: null,
+function DateFilter(
+  { filter }: {
+    filter: (startDate: Date | null, endDate: Date | null) => void;
+  }) {
+
+  const[startDate, setStartDate] = useState<Date | null>(null);
+  const[endDate, setEndDate] = useState<Date | null>(null);
+
+  return <div className="form-row mx-3" id="dateRange">
+    <div className="d-flex align-items-center">
+      <div className="text-uppercase">Date Filter:</div>
+    </div>
+    <div className="col">
+      <DatePicker
+        className="col form-control"
+        selected={startDate}
+        dateFormat="dd.MM.yyyy"
+        selectsStart
+        startDate={startDate}
+        endDate={endDate}
+        onChange={setStartDate}
+        placeholderText="from"
+      />
+    </div>
+    <div className="col">
+      <DatePicker
+        className="col form-control"
+        selected={endDate}
+        dateFormat="dd.MM.yyyy"
+        selectsEnd
+        startDate={startDate}
+        endDate={endDate}
+        onChange={(date) => {
+          setEndDate(date);
+          filter(startDate, date)
+        }}
+        placeholderText="to"
+        minDate={startDate}
+      />
+    </div>
+  </div>
   }
 
-  render() {
-    return <div className="form-row mx-3" id="dateRange">
-      
-      <div className="d-flex align-items-center">
-        <div className="text-uppercase">Date Filter:</div>
-      </div>
-      <div className="col">
-        <DatePicker
-          className="col form-control"
-          selected={this.state.startDate}
-          dateFormat="dd.MM.yyyy"
-          selectsStart
-          startDate={this.state.startDate}
-          endDate={this.state.endDate}
-          onChange={(e: Date) => this.setState({ startDate: e })}
-          placeholderText="from"
-        />
-      </div>
-      <div className="col">
-        <DatePicker
-          className="col form-control"
-          selected={this.state.endDate}
-          dateFormat="dd.MM.yyyy"
-          selectsEnd
-          startDate={this.state.startDate}
-          endDate={this.state.endDate}
-          onChange={(e: Date) => {
-            this.setState({ endDate: e },
-              () => this.props.filter(this.state.startDate, this.state.endDate)
-            )
-          }}
-          placeholderText="to"
-          minDate={this.state.startDate}
-        />
-      </div>
-    </div>
-  }
-}
-  
 export { ColumnSearch, BrandFilter, DateFilter };
