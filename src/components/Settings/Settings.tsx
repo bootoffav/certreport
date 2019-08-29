@@ -4,7 +4,9 @@ import Task, { Stage } from '../../Task/Task';
 export class Settings extends React.Component<{
   onClose: () => void;
 }> {
-  state = {
+  state: {
+    [key: string]: boolean
+  } = {
     includeCompletedTasks: Boolean(Number(localStorage.getItem('includeCompletedTasks'))),
     includeEndedTasks: Boolean(Number(localStorage.getItem('includeEndedTasks'))),
     includeTasksWithoutNumbers: Boolean(Number(localStorage.getItem('includeTasksWithoutNumbers'))),
@@ -16,11 +18,9 @@ export class Settings extends React.Component<{
     if (what) {
       localStorage.setItem(
         what,
-        // @ts-ignore
         Number(!this.state[what]).toString()
       );
       this.setState(
-        // @ts-ignore
         { [what]: !this.state[what] },
         () => what === 'showOnlyOngoingCertifications' && this.adjustDependentCheckboxes()
       );

@@ -41,7 +41,7 @@
     "react-select": "^2.1.2",
     "react-table": "^6.8.6",
     "sweetalert": "^2.1.2",
-    "typescript": "^3.3.4000"
+    "typescript": "3.5.3"
   },
   "scripts": {
     "start": "react-scripts start",

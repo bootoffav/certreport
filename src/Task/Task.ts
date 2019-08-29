@@ -28,6 +28,7 @@ class Task implements ITask {
   position?: number;
   overdue: boolean;
   lastActionDate: string | undefined;
+  nextActionDate: string;
 
   constructor(props: {
     DESCRIPTION: string;
@@ -36,7 +37,8 @@ class Task implements ITask {
     Object.assign(this, props);
     this.state = this.parse(props.DESCRIPTION, props.UF_CRM_TASK);
     this.state.stage = this.state.stage || this.determineStage();
-    [this.overdue, this.lastActionDate ] = this.determineOverdue();
+    [this.overdue, this.lastActionDate] = this.determineOverdue();
+    this.nextActionDate = this.getNextActionDate();
   }
 
   parseable_description = (desc: string) => desc.startsWith('[B]Applicant name:[/B]');
@@ -233,6 +235,33 @@ class Task implements ITask {
     if (this.state.certReceivedOnRealDate) return '8. Certificate ready';
     
     return '0. Sample to be prepared';
+  }
+
+  getNextActionDate() {
+    switch (this.state.stage) {
+      case '00. Paused':
+      case '6. Pre-treatment done':
+      case '7. Test-report ready':
+        break;
+      case '0. Sample to be prepared':
+        return this.state['sentOn'] || 'No date';
+      case '1. Sample Sent':
+        return this.state['receivedOn'] || 'No date';
+      case '2. Sample Arrived':
+        return this.state['proformaReceivedDate'] || 'No date';
+      case '3. PI Issued':
+        return this.state['paymentDate'] || 'No date';
+      case '4. Payment Done':
+        return this.state['startedOn'] || 'No date';
+      case '5. Testing is started':
+        return this.state['testFinishedOnPlanDate'] || 'No date';
+      case '8. Certificate ready':
+        return this.state['certReceivedOnPlanDate'] || 'No date';
+      case '9. Ended':
+        break;
+    }
+
+    return 'No Date';
   }
 
   determineOverdue(): [boolean, string | undefined] {
