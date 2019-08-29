@@ -7,7 +7,7 @@ import { Toolbar, filter } from '../Toolbar/Toolbar';
 import { getColumns } from './columns';
 import { ColumnSearch, BrandFilter, DateFilter } from '../Filters';
 import CacheManager from '../../CacheManager';
-import { Settings } from '../Settings/Settings';
+import { Settings, generalSettingsFilter } from '../Settings/Settings';
 import TaskNamesExport from '../Export/PDF/TaskNamesExport';
 
 
@@ -53,21 +53,8 @@ export default class List extends React.Component {
     this.updateState();
   }
 
-  generalSettingsFilter = (tasks: Task[]): Task[] => {
-    if (!Boolean(Number(localStorage.getItem('includeCompletedTasks')))) {
-      tasks = tasks.filter((task: Task) => task.state.stage !== Stage[8])
-    }
-    if (!Boolean(Number(localStorage.getItem('includeEndedTasks')))) {
-      tasks = tasks.filter((task: Task) => task.state.stage !== Stage[9])
-    }
-    if (!Boolean(Number(localStorage.getItem('includeTasksWithoutNumbers')))) {
-      tasks = tasks.filter((task: any) => /\d{3}_/.test(task.TITLE.substring(0, 4)))
-    }
-    return tasks;
-  }
-
   updateState = (providedTasks: Task[] | undefined = undefined) => {
-    const tasks: Task[] = this.generalSettingsFilter(
+    const tasks: Task[] = generalSettingsFilter(
       providedTasks || this.cache.getFromCache(sessionStorage)
     );
     
@@ -142,9 +129,6 @@ export default class List extends React.Component {
     if (rowInfo == undefined) {
       return {};
     }
-    // if (rowInfo.original.overdue) {
-    //   debugger;
-    // }
     return rowInfo.original.overdue ? { className: 'missedDeadline' } : {};
   }
 

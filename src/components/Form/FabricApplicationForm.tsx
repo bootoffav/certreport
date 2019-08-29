@@ -56,7 +56,7 @@ class FabricApplicationForm extends React.Component<{
   toggleCheckboxState = (table: string, row: number, label: string) => {
     if (this.state[table][row].includes(label)) {
       //удаляем
-      this.setState((state: any, props) => {
+      this.setState((state: any) => {
         const replacer = [...state[table]];
         replacer.splice(row, 1, _.without(state[table][row], label));
         return { [table]: replacer };
