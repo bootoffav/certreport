@@ -22,7 +22,7 @@ class TaskNamesExport extends React.Component<{
     });
   }
 
-  export() {
+  export = () => {
     let docDefinition = {
       content: this.generateContent(),
       defaultStyle: {
@@ -40,7 +40,7 @@ class TaskNamesExport extends React.Component<{
   render() {
     return <button
       className="btn btn-sm btn-outline-success"
-      onClick={this.export.bind(this)}
+      onClick={this.export}
     >PDF of task names</button>
   }
 }

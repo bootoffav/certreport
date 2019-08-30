@@ -10,13 +10,13 @@ import CacheManager from '../../CacheManager';
 import { Settings, generalSettingsFilter } from '../Settings/Settings';
 import TaskNamesExport from '../Export/PDF/TaskNamesExport';
 
-
 interface IListState {
   visibleTasks: Task[];
   allTasks: Task[];
   filteredTasksLevel1: Task[];
   tasks: Task[];
   totalPrice: number;
+  sortedData: Task[] | undefined;
   requiredStage: Stage | undefined;
 }
 
@@ -26,9 +26,11 @@ export default class List extends React.Component {
     allTasks: [],
     filteredTasksLevel1: [],
     tasks: [],
+    sortedData: undefined, //used for Task PDF list (ejected out of react-table ref)
     totalPrice: 0,
     requiredStage: undefined,
   };
+  ref: any;
 
   cache = new CacheManager();
   
@@ -141,7 +143,9 @@ export default class List extends React.Component {
       </div>
       <div className="d-inline-flex justify-content-end">
         <List.State notUpdated={this.cache.staleData} />
-        <TaskNamesExport tasks={this.state.visibleTasks} />
+        <TaskNamesExport
+          tasks={this.state.sortedData || this.state.visibleTasks}
+        />
         <div className="align-self-center">
           <Settings onClose={() => this.updateState()} />
         </div>
@@ -156,6 +160,10 @@ export default class List extends React.Component {
           desc: false
         }
       ]}
+      onSortedChange={() => this.setState({
+        sortedData: this.ref.getResolvedState().sortedData.map(({ _original }: any) => _original)
+      })}
+      ref={(ref) => this.ref = ref}
       className='-striped -highlight table'
       getTrProps={this.getTrProps}
     />
