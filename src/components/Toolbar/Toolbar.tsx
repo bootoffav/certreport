@@ -78,30 +78,17 @@ const Toolbar: React.FunctionComponent<{
 const filter = (
   tasks: Task[],
   requiredStage: Stage | undefined | string = undefined,
-  i = 1
 ): Task[] => {
   switch (requiredStage) {
     case undefined:
-      case 'results':
-        return tasks.map(t => {
-        t.position = i++;
-        return t;
-      });
+    case 'results':
+      return tasks;
     case 'overdue':
-      return tasks.filter(t => t.overdue)
-        .map(t => {
-          t.position = i++;
-          return t;
-        });
+      return tasks.filter(t => t.overdue);
     default:
       // @ts-ignore
-      return tasks.filter(t => Stage[t.state.stage] === requiredStage)
-        .map(t => {
-          t.position = i++;
-          return t;
-        });
+      return tasks.filter(t => Stage[t.state.stage] === requiredStage);
   }
 }
-
 
 export { Toolbar, filter };

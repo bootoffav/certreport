@@ -21,6 +21,7 @@ function getColumns(totalPrice: number, staleData: boolean, requiredStage: Stage
     // 0
     Header: '#',
     id: 'position',
+    sortable: false,
     accessor: 'position',
     width: 40
   }, {
@@ -181,34 +182,33 @@ function getColumns(totalPrice: number, staleData: boolean, requiredStage: Stage
     id: 'certificate',
     accessor: (row: any) => 
       ['7. Test-report ready', '8. Certificate ready', '9. Ended'].includes(row.state.stage)
-        ? row.UF_TASK_WEBDAV_FILES.map((file: any, key: number) => <><a key={key} href={`https://xmtextiles.bitrix24.ru${file.DOWNLOAD_URL}`}>{file.NAME}</a><br /></>)
+        ? row.UF_TASK_WEBDAV_FILES.map((file: any, key: number) => <div key={key}><a href={`https://xmtextiles.bitrix24.ru${file.DOWNLOAD_URL}`}>{file.NAME}</a></div>)
       : row.state.certificate,
     minWidth: 100,
   }, {
     // 22
     Header: 'Standards',
     id: 'standards',
-    accessor: 'state',
+    accessor: 'state.standards',
     minWidth: 100,
-    Cell: (props: any) =>
-      props.value.standards.split(', ').map((st: string, i: number, stArr: string[]) => {
+    Cell: ({ original }: any) =>
+      original.state.standards.split(', ').map((st: string, i: number, stArr: string[]) => {
         const lastItem = stArr.length != i + 1;
-        switch (props.value.standardsResult[st]) {
+        switch (original.state.standardsResult[st]) {
           case undefined:
             return <>{st}{lastItem ? <br /> : ''}</ >
           case 'pass':
-            return <>{st} < span className="oi oi-thumb-up" > </span>{lastItem ? <br /> : ''
-            }</>
+            return <>{st} <span className="oi oi-thumb-up"></span>{lastItem ? <br /> : ''}</>
           case 'fail':
-            return <>{st} < span className="oi oi-circle-x" > </span>{lastItem ? <br /> : ''}</>
+            return <>{st} <span className="oi oi-circle-x"></span>{lastItem ? <br /> : ''}</>
         }
       })
-  }, {
+    }, {
     // 23
     Header: 'Result',
     id: 'result',
     accessor: 'state.resume',
-    minWidth: 40,
+    minWidth: 50,
     Cell: (props: any) => {
       switch (props.value) {
         case 'fail':

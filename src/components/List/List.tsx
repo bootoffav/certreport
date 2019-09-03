@@ -8,7 +8,7 @@ import { getColumns } from './columns';
 import { ColumnSearch, BrandFilter, DateFilter } from '../Filters';
 import CacheManager from '../../CacheManager';
 import { Settings, generalSettingsFilter } from '../Settings/Settings';
-import TaskNamesExport from '../Export/PDF/TaskNamesExport';
+import ListExport from '../Export/PDF/ListExport';
 
 interface IListState {
   visibleTasks: Task[];
@@ -134,8 +134,8 @@ export default class List extends React.Component {
     return rowInfo.original.overdue ? { className: 'missedDeadline' } : {};
   }
 
-  render = () : JSX.Element => <>
-    <div className="mb-1 mt-2 d-flex justify-content-between">
+  render = (): JSX.Element => <>
+      <div className="mb-1 mt-2 d-flex justify-content-between">
       <div className="d-inline-flex justify-content-start">
         <BrandFilter filter={this.brandFilter} />
         <ColumnSearch filter={this.columnFilter} />
@@ -143,29 +143,32 @@ export default class List extends React.Component {
       </div>
       <div className="d-inline-flex justify-content-end">
         <List.State notUpdated={this.cache.staleData} />
-        <TaskNamesExport
-          tasks={this.state.sortedData || this.state.visibleTasks}
+        <ListExport
+          tasks={this.state.visibleTasks}
+          // @ts-ignore
+          columns={this.columns.filter(column => column.show)}
+          stage={this.state.requiredStage}
         />
         <div className="align-self-center">
           <Settings onClose={() => this.updateState()} />
         </div>
       </div>
     </div>
-    <Toolbar onClick={this.toolbarFilter} />
-    <ReactTable
+      <Toolbar onClick={this.toolbarFilter} />
+      <ReactTable
       data={this.state.visibleTasks} columns={this.columns}
-      defaultSorted={[
-        {
-          id: 'position',
-          desc: false
-        }
-      ]}
+      resolveData={(data: any, i = 1) =>
+        data.map((row: any) => {
+          row.position = i++;
+          return row;
+        })
+      }
       onSortedChange={() => this.setState({
-        sortedData: this.ref.getResolvedState().sortedData.map(({ _original }: any) => _original)
+        visibleTasks: this.ref.getResolvedState().sortedData.map(({ _original }: any) => _original)
       })}
       ref={(ref) => this.ref = ref}
       className='-striped -highlight table'
       getTrProps={this.getTrProps}
-    />
-  </>
+      />
+    </>
 }
