@@ -1,5 +1,6 @@
 import React from 'react';
 import pdfMake from "pdfmake/build/pdfmake";
+import m from 'moment';
 import { vfs } from './vfs_fonts.js';
 import { Stage } from '../../../Task/Task';
 
@@ -61,7 +62,17 @@ class ListExport extends React.Component<{
   }
 
   export = () => {
-    this.stage = Stage[this.props.stage] || 'ALL';
+    switch (this.props.stage) {
+      case 'overdue':
+        this.stage = `Overdue Certifications in Testing Lab (on ${m().format('DD.MM.YYYY')})`;
+        break;
+      case 'results':
+        this.stage = 'Results';
+        break;
+      default:
+        this.stage = Stage[this.props.stage] || 'ALL';
+    }
+
     let docDefinition = {
       content: this.generateContent(),
       defaultStyle: {
@@ -74,7 +85,7 @@ class ListExport extends React.Component<{
     return pdfMake.createPdf(
       // @ts-ignore
       docDefinition, tableLayout, fonts, vfs
-      ).download(`CertReport: ${this.stage}.pdf`);
+      ).download(`${this.stage}.pdf`);
   }
 
   render() {

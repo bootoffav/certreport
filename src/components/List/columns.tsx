@@ -196,11 +196,11 @@ function getColumns(totalPrice: number, staleData: boolean, requiredStage: Stage
         const lastItem = stArr.length != i + 1;
         switch (original.state.standardsResult[st]) {
           case undefined:
-            return <>{st}{lastItem ? <br /> : ''}</ >
+            return <div key={i}>{st}{lastItem ? <br /> : ''}</div>
           case 'pass':
-            return <>{st} <span className="oi oi-thumb-up"></span>{lastItem ? <br /> : ''}</>
+            return <div key={i}>{st} <span className="oi oi-thumb-up"></span>{lastItem ? <br /> : ''}</div>
           case 'fail':
-            return <>{st} <span className="oi oi-circle-x"></span>{lastItem ? <br /> : ''}</>
+            return <div key={i}>{st} <span className="oi oi-circle-x"></span>{lastItem ? <br /> : ''}</div>
         }
       })
     }, {
