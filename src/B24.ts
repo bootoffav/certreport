@@ -202,20 +202,20 @@ class B24 {
     }
   }
 
-    static async get_tasks() {
-      let tasks : {}[] = [];
-      do {
-        tasks = tasks.concat(await fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.list?` +
-          qs.stringify({
-            order: { ID: 'desc' },
-            filter: { TAG: tag },
-            start: B24.start
-          }))
-        .then(res => res.json())
-        .then(B24.step));
-      } while (B24.start !== undefined);
-      return tasks;
-    }
+  static async get_tasks() {
+    let tasks : {}[] = [];
+    do {
+      tasks = tasks.concat(await fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.list?` +
+        qs.stringify({
+          order: { ID: 'desc' },
+          filter: { TAG: tag },
+          start: B24.start
+        }))
+      .then(res => res.json())
+      .then(B24.step));
+    } while (B24.start !== undefined);
+    return tasks;
+  }
 
   static get_task(id : string | undefined) {
     if (id === null) {

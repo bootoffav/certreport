@@ -171,22 +171,35 @@ function getColumns(totalPrice: number, staleData: boolean, requiredStage: Stage
     minWidth: 100,
   }, {
     // 20
+    Header: 'Test really finished on',
+    id: 'testFinishedOnRealDate',
+    accessor: 'state.testFinishedOnRealDate',
+    minWidth: 100,
+  }, {
+    // 21
     Header: 'ETD (Certificate)',
     id: 'etdCertificate',
     accessor: 'state.certReceivedOnPlanDate',
     minWidth: 100,
     sortMethod: sortDates
   }, {
-    // 21
+    // 22
     Header: 'Certificate',
     id: 'certificate',
     accessor: (row: any) => 
-      ['7. Test-report ready', '8. Certificate ready', '9. Ended'].includes(row.state.stage)
-        ? row.UF_TASK_WEBDAV_FILES.map((file: any, key: number) => <div key={key}><a href={`https://xmtextiles.bitrix24.ru${file.DOWNLOAD_URL}`}>{file.NAME}</a></div>)
-      : row.state.certificate,
+    ['7. Test-report ready', '8. Certificate ready', '9. Ended'].includes(row.state.stage)
+    ? row.UF_TASK_WEBDAV_FILES.map((file: any, key: number) => <div key={key}><a href={`https://xmtextiles.bitrix24.ru${file.DOWNLOAD_URL}`}>{file.NAME}</a></div>)
+    : row.state.certificate,
     minWidth: 100,
   }, {
-    // 22
+    // 23
+    Header: 'Certificate really received on',
+    id: 'certReceivedOnRealDate',
+    accessor: 'state.certReceivedOnRealDate',
+    minWidth: 100,
+    sortMethod: sortDates
+  }, {
+    // 24
     Header: 'Standards',
     id: 'standards',
     accessor: 'state.standards',
@@ -204,7 +217,7 @@ function getColumns(totalPrice: number, staleData: boolean, requiredStage: Stage
         }
       })
     }, {
-    // 23
+    // 25
     Header: 'Result',
     id: 'result',
     accessor: 'state.resume',
@@ -220,7 +233,7 @@ function getColumns(totalPrice: number, staleData: boolean, requiredStage: Stage
       }
     }
   }, {
-    // 24
+    // 26
     Header: 'Price, €',
     Footer: <>Total: < span style={{ float: 'right' }}>{formatPrice(totalPrice)}</span></>,
     id: 'price',
@@ -228,7 +241,7 @@ function getColumns(totalPrice: number, staleData: boolean, requiredStage: Stage
     minWidth: 90,
     Cell: (props: any) => <>€<span style={{ float: 'right' }}>{formatPrice(props.value)}</span></>
   }, {
-    // 25
+    // 26
     Header: 'Pre-treatment Result',
     id: 'pretreatment1',
     accessor: 'state.pretreatment1Result',
@@ -250,40 +263,40 @@ function getColumns(totalPrice: number, staleData: boolean, requiredStage: Stage
   let hidden: number[];
   switch (requiredStage) {
     case Stage['00. Paused']:
-      hidden = [3, 4, 5, 6, 7, 10, 11, 12, 13, 14, 15, 16, 18, 20, 21, 22, 23];
+      hidden = [3, 4, 5, 6, 7, 10, 11, 12, 13, 14, 15, 16, 18, 20, 21, 22, 23, 24, 25];
       break;
     case Stage['0. Sample to be prepared']:
-      hidden = [3, 4, 5, 6, 7, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 21, 22, 23];
+      hidden = [3, 4, 5, 6, 7, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 21, 22, 23, 24, 25];
       break;
     case Stage['1. Sample Sent']:
-      hidden = [3, 4, 5, 6, 7, 11, 12, 13, 14, 15, 16, 18, 20, 22, 23, 25];
+      hidden = [3, 4, 5, 6, 7, 11, 12, 13, 14, 15, 16, 18, 20, 21, 23, 24, 25, 27];
       break;
     case Stage['2. Sample Arrived']:
-      hidden = [3, 4, 5, 6, 7, 9, 12, 13, 14, 15, 16, 18, 20, 22, 23, 25];
+      hidden = [3, 4, 5, 6, 7, 9, 12, 13, 14, 15, 16, 18, 20, 21, 23, 24, 25, 27];
       break;
     case Stage['3. PI Issued']:
-      hidden = [3, 4, 5, 6, 7, 9, 10, 11, 12, 15, 17, 19, 21, 22, 24, 25];
+      hidden = [3, 4, 5, 6, 7, 9, 10, 11, 12, 15, 17, 19, 20, 22, 23, 24, 26, 27];
       break;
     case Stage['4. Payment Done']:
-      hidden = [3, 4, 5, 6, 7, 9, 10, 11, 12, 17, 18, 19, 21, 23, 25];
+      hidden = [3, 4, 5, 6, 7, 9, 10, 11, 12, 17, 18, 19, 20, 22, 23, 25, 27];
       break;
     case Stage['5. Testing is started']:
-      hidden = [3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 21, 22, 23, 25];
+      hidden = [3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 20, 22, 23, 25, 27];
       break;
     case 'results':
-      hidden = [6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 18, 20, 21, 24];
+      hidden = [6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 18, 20, 21, 22, 23, 26];
       break;
     case 'overdue':
-      hidden = [6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 24];
+      hidden = [6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 19, 22, 26];
       break;
     case Stage['7. Test-report ready']:
-      hidden = [3, 4, 5, 6, 9, 10, 11, 12, 13, 14, 15, 16, 17, 19];
+      hidden = [3, 4, 5, 6, 9, 10, 11, 12, 13, 14, 15, 16, 17, 19, 23];
       break;
     case Stage['8. Certificate ready']:
-      hidden = [3, 4, 5, 7, 9, 10, 11, 13, 14, 15, 17, 19];
+      hidden = [3, 4, 5, 7, 9, 10, 11, 13, 14, 15, 17, 19, 20];
       break;
     default:
-      hidden = [4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 18, 20, 22, 25];
+      hidden = [4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 18, 20, 22, 23, 24, 27];
   }
 
   columns.forEach((col, ind) => {
