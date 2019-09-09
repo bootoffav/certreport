@@ -278,7 +278,7 @@ class Task implements ITask {
       case '4. Payment Done':
         return [m(this.state['paymentDate']).add(2, 'days') < today, this.state['paymentDate']];
       case '5. Testing is started':
-        return [m(this.state['startedOn']).add(21, 'days') < today, this.state['startedOn']];
+        return [m(this.state['testFinishedOnPlanDate']) < today, this.state['startedOn']];
       case '7. Test-report ready':
         return [m(this.state['testFinishedOnRealDate']).add(2, 'days') < today, this.state['testFinishedOnRealDate']];
       case '8. Certificate ready':
