@@ -285,6 +285,8 @@ class Task implements ITask {
         return this.state['certReceivedOnRealDate']
           ? [false, this.state['certReceivedOnRealDate']]
           : [m(this.state['certReceivedOnPlanDate']).add(1, 'days') < today, this.state['certReceivedOnPlanDate']];
+      case '9. Ended':
+        return [false, this.state['certReceivedOnRealDate'] || 'No Date'];
     }
     return [false, undefined];
   }
