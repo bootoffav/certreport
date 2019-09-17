@@ -241,7 +241,6 @@ class Task implements ITask {
     switch (this.state.stage) {
       case '00. Paused':
       case '6. Pre-treatment done':
-      case '7. Test-report ready':
         break;
       case '0. Sample to be prepared':
         return this.state['sentOn'] || 'No date';
@@ -255,6 +254,8 @@ class Task implements ITask {
         return this.state['startedOn'] || 'No date';
       case '5. Testing is started':
         return this.state['testFinishedOnPlanDate'] || 'No date';
+      case '7. Test-report ready':
+        return this.state['certReceivedOnPlanDate'] || 'No date';
       case '8. Certificate ready':
         return '-' || 'No date';
       case '9. Ended':
@@ -280,7 +281,13 @@ class Task implements ITask {
       case '5. Testing is started':
         return [m(this.state['testFinishedOnPlanDate']) < today, this.state['startedOn']];
       case '7. Test-report ready':
-        return [m(this.state['testFinishedOnRealDate']).add(2, 'days') < today, this.state['testFinishedOnRealDate']];
+        if (this.state['certReceivedOnPlanDate']) {
+          return [
+            m(this.state['certReceivedOnPlanDate']).add(1, 'days') < today,
+            this.state['testFinishedOnRealDate']
+          ];
+        }
+        return [m(this.state['testFinishedOnPlanDate']).add(2, 'days') < today, this.state['testFinishedOnPlanDate']];
       case '8. Certificate ready':
         return this.state['certReceivedOnRealDate']
           ? [false, this.state['certReceivedOnRealDate']]
