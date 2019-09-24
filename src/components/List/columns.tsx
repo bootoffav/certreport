@@ -206,15 +206,14 @@ function getColumns(totalPrice: number, staleData: boolean, requiredStage: Stage
     minWidth: 100,
     Cell: ({ original }: any) =>
       original.state.standards.split(', ').map((st: string, i: number, stArr: string[]) => {
-        const lastItem = stArr.length != i + 1;
+        const lastItem = stArr.length !== i + 1;
         switch (original.state.standardsResult[st]) {
-          case undefined:
-            return <div key={i}>{st}{lastItem ? <br /> : ''}</div>
           case 'pass':
             return <div key={i}>{st} <span className="oi oi-thumb-up"></span>{lastItem ? <br /> : ''}</div>
           case 'fail':
             return <div key={i}>{st} <span className="oi oi-circle-x"></span>{lastItem ? <br /> : ''}</div>
         }
+        return <div key={i}>{st}{lastItem ? <br /> : ''}</div>
       })
     }, {
     // 25
@@ -284,7 +283,7 @@ function getColumns(totalPrice: number, staleData: boolean, requiredStage: Stage
       hidden = [3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 20, 22, 23, 25, 27];
       break;
     case 'results':
-      hidden = [6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 18, 20, 21, 22, 23, 26];
+      hidden = [6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 18, 20, 21, 23, 26];
       break;
     case 'overdue':
       hidden = [6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 19, 22, 26];

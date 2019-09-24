@@ -28,10 +28,8 @@ function dateConverter(oldFormat: string, format: string | undefined = undefined
   switch (format) {
     case 'DD.MM.YYYY':
       return `${oldFormat.slice(0, 2)}.${months[oldFormat.slice(2, 5)]}.${oldFormat.slice(5)}`;
-      break;
     case undefined:
       return `${oldFormat.slice(5)}-${months[oldFormat.slice(2, 5)]}-${oldFormat.slice(0, 2)}`;
-      break;
     default:
       return '';
   }

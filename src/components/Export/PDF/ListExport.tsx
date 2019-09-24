@@ -31,7 +31,7 @@ class ListExport extends React.Component<{
       })
     );
     const widths = this.props.columns.map(({ accessor, minWidth, width}: any) => 
-      accessor == 'TITLE' ? 'auto' : minWidth || width || '*'
+      accessor === 'TITLE' ? 'auto' : minWidth || width || '*'
     );
 
     return [

@@ -1,7 +1,6 @@
 import React from 'react';
 import B24 from '../../B24';
 import ReactDOM from 'react-dom';
-import { string } from 'prop-types';
 
 class FileUploads extends React.Component<{
   taskId: string | undefined;

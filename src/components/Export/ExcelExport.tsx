@@ -502,6 +502,7 @@ export default class ExcelExport implements IExcelFabricTestForm {
     this.currentRow++;
 
     this.sh.mergeCells(`A${this.currentRow}:I${this.currentRow}`);
+    // eslint-disable-next-line
     this.sh.getCell('A' + this.currentRow).value = 'According to EA Resolution 2014(33)31, all the information of the test report is \
     forbidden to make any change once be issued. So that it is very important to confirm all your test/report information for your \
     application and keep us informed if there are any change before report issued. If there are any more inquire or doubt, please \

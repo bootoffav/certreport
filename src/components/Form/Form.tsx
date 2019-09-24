@@ -258,7 +258,7 @@ export default class Form extends React.Component<IFormProps> {
           <input type='text' required={true} className="form-control"
             id='pretreatment1' value={this.state.pretreatment1} onChange={this.handleChange}/>
           <div className="input-group-append">
-            <div className="input-group-text">
+            <div className="input-group-text pretreatment1Result">
               <div className="form-check form-check-inline">
                 <input type="radio" name="pretreatment1Result" id="pretreatment1Fail"
                   checked={this.state.pretreatment1Result === 'fail'}
@@ -281,6 +281,10 @@ export default class Form extends React.Component<IFormProps> {
               />
               <label className="form-check-label ml-2" htmlFor="pretreatment1Pass"><span className="oi oi-thumb-up"></span></label>
             </div>
+            <button type="button"
+              className="btn btn-sm btn-link"
+              onClick={() => this.setState({ pretreatment1Result: ''})}
+              >Reset</button>
           </div>
         </div>
         </div>

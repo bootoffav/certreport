@@ -71,8 +71,8 @@ export default class List extends React.Component {
   //level 1 filter
   brandFilter = (e: React.SyntheticEvent<HTMLButtonElement>): void => {
     const brand = e.currentTarget.innerText;
-    let brandFilter: HTMLElement | null = document.getElementById('brandFilter');
-    brandFilter ? brandFilter.innerText = `Brand: ${brand}` : '';
+    const brandFilter = document.getElementById('brandFilter');
+    if (brandFilter !== null) brandFilter.innerText = `Brand: ${brand}`;
     let filtered;
 
     switch (brand) {
@@ -128,7 +128,7 @@ export default class List extends React.Component {
   }
 
   getTrProps(state: any, rowInfo: any, column: any) {
-    if (rowInfo == undefined) {
+    if (rowInfo === undefined) {
       return {};
     }
     return rowInfo.original.overdue ? { className: 'missedDeadline' } : {};
