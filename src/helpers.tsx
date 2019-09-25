@@ -35,5 +35,11 @@ function dateConverter(oldFormat: string, format: string | undefined = undefined
   }
 }
 
+function removeEmptyProps(obj: any) {
+  Object.keys(obj)
+    .forEach(key => (obj[key] === '') && delete obj[key]);
 
-export { dateConverter };
+  return obj;
+}
+
+export { dateConverter, removeEmptyProps };

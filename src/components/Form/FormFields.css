@@ -20,3 +20,10 @@
 .pretreatment1Result {
   padding: 0 0.5rem;
 }
+
+.btn-reset {
+  color: #7c7e835c;
+}
+.btn-reset:hover {
+  color: #a00170;
+}

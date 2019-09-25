@@ -7,13 +7,13 @@ import { PickDate, BaseInput, Article, Price, Paid, Pi } from "./FormFields";
 import B24 from '../../B24';
 import Notification, { Status } from '../Notification/Notification';
 import SerialNumber from '../SerialNumber/SerialNumber';
-import { selectOptions, emptyState } from '../../defaults';
-import { IState } from '../../defaults';
+import { selectOptions, emptyState, IState } from '../../defaults';
 import Export from '../Export/Export';
 import Standards from '../Standards/Standards';
 import FileUploads from '../FileUploads/FileUploads';
 import FabricApplicationForm from './FabricApplicationForm';
 import { DB } from '../../DBManager';
+import { removeEmptyProps } from '../../helpers';
 
 interface IFormState extends IState {
   requestStatus: Status;
@@ -282,7 +282,7 @@ export default class Form extends React.Component<IFormProps> {
               <label className="form-check-label ml-2" htmlFor="pretreatment1Pass"><span className="oi oi-thumb-up"></span></label>
             </div>
             <button type="button"
-              className="btn btn-sm btn-link"
+              className="btn btn-sm btn-link btn-reset"
               onClick={() => this.setState({ pretreatment1Result: ''})}
               >Reset</button>
           </div>
@@ -410,6 +410,7 @@ export default class Form extends React.Component<IFormProps> {
       resultChange={
         ({ currentTarget }: any) => {
           const standardsResult = { ...this.state.standardsResult, [currentTarget.dataset.standard]: currentTarget.value }
+          removeEmptyProps(standardsResult);
           this.setState({ standardsResult });
         }
       }

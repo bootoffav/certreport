@@ -1,7 +1,6 @@
 import React from 'react';
 import './Standards.css';
 
-
 type IEN11612Detail = {
   A1?: 'pass' | 'fail';
   A2?: 'pass' | 'fail';
@@ -17,11 +16,13 @@ class EN11612Detail extends React.Component<{
   state?: IEN11612Detail;
 }>  {
   blocks = ['A1', 'A2', 'B', 'C', 'D', 'E', 'F'];
-  // default
   state = {};
 
-  UNSAFE_componentWillReceiveProps(nextProps: any) {
-    this.setState({ ...nextProps.state });
+  UNSAFE_componentWillReceiveProps({ state: newState }: any) {
+    newState.reset ?
+    this.setState((s: any) => Object.keys(s).map(k => s[k] = null),
+      () => this.props.updateParent(this.state))
+    : this.setState({ ...newState });
   }
 
   onChange = ({ currentTarget }: any) => this.setState({
@@ -93,6 +94,7 @@ function Standards(props: StandardsProps) {
    * @returns {JSX}
    */
   function renderStandard(standard: string, i: any) {
+    const EN11612 = standard === 'EN 11612' ? props.EN11612Detail : {};
     const id = standard.replace(/\s/g, '');
     return <div key={i}>
       <div className="card">
@@ -127,12 +129,19 @@ function Standards(props: StandardsProps) {
               />
               <label className="form-check-label"><span className="oi oi-thumb-up"></span></label>
             </div>
+            <button type="button"
+              className="btn btn-sm btn-link btn-reset"
+              data-standard={standard}
+              onClick={(e) => {
+                props.resultChange(e);
+                EN11612.reset = true;
+              }}
+            >Reset</button>
           </div>
         </div>
-
-        <div id={`collapse_${id}`} className="collapse show" aria-labelledby={`heading_${id}`} data-parent="#accordionStandards">
+        <div id={`collapse_${id}`} className={standard === 'EN 11612' ? 'show' : 'collapse'} aria-labelledby={`heading_${id}`} data-parent="#accordionStandards">
           <div className="card-body">
-            {standard === 'EN 11612' && <EN11612Detail state={props.EN11612Detail}
+            {standard === 'EN 11612' && <EN11612Detail state={EN11612}
               // @ts-ignore
               updateParent={props.updateParent} />}
           </div>
@@ -143,7 +152,5 @@ function Standards(props: StandardsProps) {
 
   return <div className="accordion" id="accordionStandards">{standards.map(renderStandard)}</div>;
 }
-
-
 
 export default Standards;
