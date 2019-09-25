@@ -19,10 +19,7 @@ class EN11612Detail extends React.Component<{
   state = {};
 
   UNSAFE_componentWillReceiveProps({ state: newState }: any) {
-    newState.reset ?
-    this.setState((s: any) => Object.keys(s).map(k => s[k] = null),
-      () => this.props.updateParent(this.state))
-    : this.setState({ ...newState });
+    this.setState({ ...newState });
   }
 
   onChange = ({ currentTarget }: any) => this.setState({
@@ -134,7 +131,7 @@ function Standards(props: StandardsProps) {
               data-standard={standard}
               onClick={(e) => {
                 props.resultChange(e);
-                EN11612.reset = true;
+                for (let p in EN11612) EN11612[p] = null;
               }}
             >Reset</button>
           </div>
