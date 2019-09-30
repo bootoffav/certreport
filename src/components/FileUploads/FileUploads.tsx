@@ -15,20 +15,23 @@ class FileUploads extends React.Component<{
     this.setState({ uploading: true });
     const amountOfFiles = e.target.files.length;
     let uploadedFiles = 0;
+
+    const renderToUI = (uploadedResponse: any, file: any) => {
+      uploadedFiles++;
+      uploaded.push({ name: file.name, result: uploadedResponse.result ? true : false })
+      ReactDOM.render(<Loading uploaded={uploaded} />, document.getElementById('loaded'));
+      if (uploadedFiles === amountOfFiles) {
+        this.setState({ uploading: false });
+      }
+    }
+    
     for (let file of e.target.files) {
       const reader = new FileReader();
       reader.readAsBinaryString(file);
       reader.onload = () => {
         // @ts-ignore
         B24.fileUpload(this.props.taskId, file.name, reader.result)
-          .then((uploadedResponse: any) => {
-            uploadedFiles++;
-            uploaded.push({ name: file.name, result: uploadedResponse.result ? true : false })
-            ReactDOM.render(<Loading uploaded={uploaded} />, document.getElementById('loaded'));
-            if (uploadedFiles === amountOfFiles) {
-              this.setState({ uploading: false });
-            }
-          });
+          .then((res: any) => renderToUI(res, file));
       }
     }
   }

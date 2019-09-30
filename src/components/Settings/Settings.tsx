@@ -1,39 +1,55 @@
 import React from 'react';
 import Task, { Stage } from '../../Task/Task';
+import SettingsOR from './SettingsOR';
 
 export class Settings extends React.Component<{
   onClose: () => void;
 }> {
+
+  getStateFromLocalStorage(label: string): boolean {
+    return Boolean(Number(localStorage.getItem(label)));
+  }
+
   state: {
     [key: string]: boolean
   } = {
-    includeCompletedTasks: Boolean(Number(localStorage.getItem('includeCompletedTasks'))),
-    includeEndedTasks: Boolean(Number(localStorage.getItem('includeEndedTasks'))),
-    includeTasksWithoutNumbers: Boolean(Number(localStorage.getItem('includeTasksWithoutNumbers'))),
-    showOnlyOngoingCertifications: Boolean(Number(localStorage.getItem('showOnlyOngoingCertifications'))),
+    settingsOR: this.getStateFromLocalStorage('settingsOR'),
+    showOnlyOngoingCertifications: this.getStateFromLocalStorage('showOnlyOngoingCertifications'),
+    showOnlyFailedCertifications: this.getStateFromLocalStorage('showOnlyFailedCertifications'),
   }
 
-  toggle = (e: React.SyntheticEvent) => {
-    const what = e.currentTarget.id;
-    if (what) {
-      localStorage.setItem(
-        what,
-        Number(!this.state[what]).toString()
-      );
-      this.setState(
-        { [what]: !this.state[what] },
-        () => what === 'showOnlyOngoingCertifications' && this.adjustDependentCheckboxes()
-      );
-    }
+  toggle = (event: React.SyntheticEvent) => {
+    const { id } = event.currentTarget as HTMLInputElement;
+    this.setState((state: any) => {
+      Object.keys(state).forEach(key => state[key] = id === key);
+      return state;
+    });
   }
 
-  componentDidMount() {
-    this.adjustDependentCheckboxes();
+  save = () => {
+    Object.keys(this.state).forEach(key => {
+      this.state[key]
+        ? localStorage.setItem(key, '1')
+        : localStorage.removeItem(key);
+    });
+    this.props.onClose();
   }
 
-  adjustDependentCheckboxes = () => ['includeCompletedTasks', 'includeEndedTasks', 'includeTasksWithoutNumbers']
-    // @ts-ignore
-    .forEach(checkbox => document.getElementById(checkbox).disabled = this.state.showOnlyOngoingCertifications);
+  reset() {
+    localStorage.removeItem('showOnlyOngoingCertifications');
+    localStorage.removeItem('showOnlyFailedCertifications');
+    localStorage.removeItem('settingsOR');
+    localStorage.removeItem('includeCompletedTasks');
+    localStorage.removeItem('includeEndedTasks');
+    localStorage.removeItem('includeTasksWithoutNumbers');
+
+
+    // state
+    this.setState((state: any) => {
+      Object.keys(state).forEach((k: any) => state[k] = false);
+      return state;
+    });
+  }
 
   render() {
     return <>
@@ -44,33 +60,53 @@ export class Settings extends React.Component<{
         <div className="modal-dialog" role="document">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title" id="exampleModalLabel">General settings</h5>
+              <h5 className="modal-title mx-auto" id="exampleModalLabel">General settings</h5>
+              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
             </div>
             <div className="modal-body">
-              &nbsp; &nbsp;
-              <input className="form-check-input" type="checkbox" value="" checked={this.state.showOnlyOngoingCertifications} id="showOnlyOngoingCertifications"
-                onChange={this.toggle} />
-              <label className="form-check-label" htmlFor="showOnlyOngoingCertifications">
-                Show Only Ongoing Certifications
-              </label><br />
-              &nbsp; &nbsp;
-              <input className="form-check-input" type="checkbox" value="" checked={this.state.includeCompletedTasks} id="includeCompletedTasks" onChange={this.toggle} />
-              <label className="form-check-label" htmlFor="includeCompletedTasks">
-                Include completed certifications
-              </label><br />
-              &nbsp; &nbsp;
-              <input className="form-check-input" type="checkbox" value="" checked={this.state.includeEndedTasks} id="includeEndedTasks" onChange={this.toggle} />
-              <label className="form-check-label" htmlFor="includeEndedTasks">
-                Include ended certifications
-                </label><br />
-              &nbsp; &nbsp;
-              <input className="form-check-input" type="checkbox" value="" checked={this.state.includeTasksWithoutNumbers} id="includeTasksWithoutNumbers" onChange={this.toggle} />
-              <label className="form-check-label" htmlFor="includeTasksWithoutNumbers">
-                Include tasks without _Aitex/Satra numbers
-                </label><br />
+              <div className="form-check">
+                <input className="form-check-input" type="radio"
+                  name="generalSettings" id="showOnlyOngoingCertifications"
+                  checked={this.state.showOnlyOngoingCertifications}
+                  onChange={this.toggle.bind(this)}
+                />
+                <label className="form-check-label" htmlFor="showOnlyOngoingCertifications">
+                  Show Only Ongoing Certifications
+                </label>
+              </div>
+              <hr />
+              
+              <div className="form-check">
+                <input className="form-check-input" type="radio"
+                  name="generalSettings" id="showOnlyFailedCertifications"
+                  checked={this.state.showOnlyFailedCertifications} 
+                  onChange={this.toggle.bind(this)}
+                />
+                <label className="form-check-label" htmlFor="showOnlyFailedCertifications">
+                  Show Only Failed Certifications
+                </label>
+              </div>
+              <hr />
+
+              <div className="form-check">
+                <input className="form-check-input" type="radio"
+                  name="generalSettings" id="settingsOR"
+                  checked={this.state.settingsOR}
+                  onChange={this.toggle.bind(this)}
+                />
+                <label className="form-check-label" htmlFor="OR">
+                  OR:
+                </label>
+              </div>
+              <div className="px-4">
+                <SettingsOR enabled={this.state.settingsOR}/>
+              </div>
             </div>
             <div className="modal-footer">
-              <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={this.props.onClose}>Save</button>
+              <button type="button" className="btn btn-light" onClick={(e) => this.reset()}>Reset</button>
+              <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={this.save}>Save</button>
             </div>
           </div>
         </div>
@@ -79,7 +115,31 @@ export class Settings extends React.Component<{
   }
 }
 
-export function generalSettingsFilter(tasks: Task[]): Task[] {
+export function generalSettingsFilter(tasks: Task[]) {
+
+  if (Number(localStorage.getItem('settingsOR'))) {
+
+    const filters: any = {
+      includeCompletedTasks: (tasks: any) => tasks.filter(({ state }: Task) => state.stage !== Stage[8]),
+      includeEndedTasks: (tasks: any) => tasks.filter(({ state }: Task) => 
+        state.stage !== Stage[9] && state.stage !== Stage[10]
+      ),
+      includeTasksWithoutNumbers: (tasks: any) => tasks.filter(({ TITLE }: any) => /\d{3}_/.test(TITLE.substring(0, 4)))
+    };
+
+    const filterRules: any = {
+      includeCompletedTasks: Number(localStorage.getItem('includeCompletedTasks')),
+      includeEndedTasks: Number(localStorage.getItem('includeEndedTasks')),
+      includeTasksWithoutNumbers: Number(localStorage.getItem('includeTasksWithoutNumbers'))
+    };
+
+    for (let rule in filterRules) {
+      if (!filterRules[rule]) (tasks = filters[rule](tasks));
+    }
+
+    return tasks;
+  }
+  
   if (Number(localStorage.getItem('showOnlyOngoingCertifications'))) {
     const excludeTheseStages = [
       '00. Paused',
@@ -89,14 +149,10 @@ export function generalSettingsFilter(tasks: Task[]): Task[] {
     ];
     return tasks.filter((task: Task) => !excludeTheseStages.includes(task.state.stage));
   }
-  if (!Boolean(Number(localStorage.getItem('includeCompletedTasks')))) {
-    tasks = tasks.filter((task: Task) => task.state.stage !== Stage[8])
+  
+  if (Number(localStorage.getItem('showOnlyFailedCertifications'))) {
+    return tasks.filter((task: any) => task.state.resume === 'fail');
   }
-  if (!Boolean(Number(localStorage.getItem('includeEndedTasks')))) {
-    tasks = tasks.filter((task: Task) => task.state.stage !== Stage[9]);
-  }
-  if (!Boolean(Number(localStorage.getItem('includeTasksWithoutNumbers')))) {
-    tasks = tasks.filter((task: any) => /\d{3}_/.test(task.TITLE.substring(0, 4)))
-  }
+
   return tasks;
 }

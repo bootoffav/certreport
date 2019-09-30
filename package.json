@@ -30,6 +30,7 @@
     "open-iconic": "^1.1.1",
     "pdfmake": "^0.1.57",
     "popper.js": "^1.14.5",
+    "prop-types": "^15.5.0",
     "qs": "^6.6.0",
     "rc-tooltip": "^3.7.3",
     "react": "^16.6.3",
@@ -41,8 +42,7 @@
     "react-select": "^2.1.2",
     "react-table": "^6.8.6",
     "sweetalert": "^2.1.2",
-    "typescript": "~3.5.3",
-    "prop-types": "^15.5.0"
+    "typescript": "~3.5.3"
   },
   "scripts": {
     "start": "react-scripts start",
