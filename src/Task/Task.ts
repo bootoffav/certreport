@@ -130,21 +130,24 @@ class Task implements ITask {
     parsedState.paid = parsedState.paymentDate ? true : false;
 
     if (parsedState.secondPayment) {
-      [
-        parsedState.price2,
-        parsedState.paymentDate2,
-        parsedState.proformaReceivedDate2,
-        parsedState.proformaNumber2
+      const [
+        price2,
+        paymentDate2,
+        proformaReceivedDate2,
+        proformaNumber2
       ] = parsedState.secondPayment.split(', ');
 
-      parsedState.price2 = parsedState.price2 ? parsedState.price2.split(' ')[0] : '';
+
+      parsedState.price2 = price2 ? price2.split(' ')[0] : '';
+      parsedState.paymentDate2 = paymentDate2 || '';
+      parsedState.paid2 = Boolean(paymentDate2);
       
-      parsedState.paymentDate2 = parsedState.paymentDate2 || '';
-      parsedState.paid2 = parsedState.paymentDate2 ? true : false;
-      
-      parsedState.proformaReceivedDate2 = parsedState.proformaReceivedDate2 || '';
-      parsedState.proformaNumber2 = parsedState.proformaNumber2 || '';
-      parsedState.proformaReceived2 = parsedState.proformaReceivedDate2 ? true : false;
+      parsedState.proformaReceivedDate2 = proformaReceivedDate2 || '';
+      parsedState.proformaNumber2 =
+        proformaNumber2 + parsedState.secondPayment.substr(parsedState.secondPayment.indexOf(proformaNumber2) + proformaNumber2.length)
+        ||
+        '';
+      parsedState.proformaReceived2 = Boolean(proformaReceivedDate2);
       
       delete parsedState.secondPayment;
     }

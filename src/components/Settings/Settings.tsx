@@ -36,12 +36,10 @@ export class Settings extends React.Component<{
   }
 
   reset() {
-    localStorage.removeItem('showOnlyOngoingCertifications');
-    localStorage.removeItem('showOnlyFailedCertifications');
-    localStorage.removeItem('settingsOR');
-    localStorage.removeItem('includeCompletedTasks');
-    localStorage.removeItem('includeEndedTasks');
-    localStorage.removeItem('includeTasksWithoutNumbers');
+    [ 'showOnlyOngoingCertifications', 'showOnlyFailedCertifications',
+      'settingsOR', 'includeCompletedTasks', 'includeEndedTasks',
+      'includeTasksWithoutNumbers'
+    ].forEach(item => localStorage.removeItem(item));
 
 
     // state
