@@ -143,10 +143,14 @@ class Task implements ITask {
       parsedState.paid2 = Boolean(paymentDate2);
       
       parsedState.proformaReceivedDate2 = proformaReceivedDate2 || '';
-      parsedState.proformaNumber2 =
-        proformaNumber2 + parsedState.secondPayment.substr(parsedState.secondPayment.indexOf(proformaNumber2) + proformaNumber2.length)
-        ||
-        '';
+      
+      try {
+        parsedState.proformaNumber2 =
+          proformaNumber2 + parsedState.secondPayment.substr(parsedState.secondPayment.indexOf(proformaNumber2) + proformaNumber2.length) || '';
+      } catch {
+        parsedState.proformaNumber2 = '';
+      } 
+      
       parsedState.proformaReceived2 = Boolean(proformaReceivedDate2);
       
       delete parsedState.secondPayment;
