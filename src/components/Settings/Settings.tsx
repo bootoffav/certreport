@@ -2,6 +2,19 @@ import React from 'react';
 import Task, { Stage } from '../../Task/Task';
 import SettingsOR from './SettingsOR';
 
+type IState = {
+  settingsOR: boolean;
+  showOnlyOngoingCertifications: boolean;
+  showOnlyFailedCertifications: boolean;
+  OR: {
+    includeCompletedTasks: boolean;
+    includeEndedTasks: boolean;
+    includeTasksWithoutNumbers: boolean;
+    [key: string]: any;
+  },
+  [key: string]: any;
+};
+
 export class Settings extends React.Component<{
   onClose: () => void;
 }> {
@@ -10,24 +23,43 @@ export class Settings extends React.Component<{
     return Boolean(Number(localStorage.getItem(label)));
   }
 
-  state: {
-    [key: string]: boolean
-  } = {
+  state: IState = {
     settingsOR: this.getStateFromLocalStorage('settingsOR'),
     showOnlyOngoingCertifications: this.getStateFromLocalStorage('showOnlyOngoingCertifications'),
     showOnlyFailedCertifications: this.getStateFromLocalStorage('showOnlyFailedCertifications'),
+    OR: {
+      includeCompletedTasks: this.getStateFromLocalStorage('includeCompletedTasks'),
+      includeEndedTasks: this.getStateFromLocalStorage('includeEndedTasks'),
+      includeTasksWithoutNumbers: this.getStateFromLocalStorage('includeTasksWithoutNumbers')
+    }
   }
 
   toggle = (event: React.SyntheticEvent) => {
     const { id } = event.currentTarget as HTMLInputElement;
     this.setState((state: any) => {
-      Object.keys(state).forEach(key => state[key] = id === key);
+      Object.keys(state).forEach(key => {
+        if (key === 'OR') return;
+        state[key] = id === key
+      });
       return state;
     });
   }
 
+  toggleOR = (e: any) => {
+    const { id, checked } = e.currentTarget;
+    this.setState(
+      (state: IState) => state.OR[id] = checked,
+      () => Object.keys(this.state.OR).forEach(key => {
+        this.state.OR[key]
+          ? localStorage.setItem(key, '1')
+          : localStorage.removeItem(key);
+      })
+    );
+  }
+
   save = () => {
     Object.keys(this.state).forEach(key => {
+      if (key === 'OR') return;
       this.state[key]
         ? localStorage.setItem(key, '1')
         : localStorage.removeItem(key);
@@ -41,10 +73,14 @@ export class Settings extends React.Component<{
       'includeTasksWithoutNumbers'
     ].forEach(item => localStorage.removeItem(item));
 
-
-    // state
-    this.setState((state: any) => {
-      Object.keys(state).forEach((k: any) => state[k] = false);
+    this.setState((state: IState) => {
+      Object.keys(state).forEach((k: string) => {
+        if (k === 'OR') return;
+        state[k] = false
+      });
+      state.OR.includeCompletedTasks = false;
+      state.OR.includeEndedTasks = false;
+      state.OR.includeTasksWithoutNumbers = false;
       return state;
     });
   }
@@ -68,7 +104,7 @@ export class Settings extends React.Component<{
                 <input className="form-check-input" type="radio"
                   name="generalSettings" id="showOnlyOngoingCertifications"
                   checked={this.state.showOnlyOngoingCertifications}
-                  onChange={this.toggle.bind(this)}
+                  onChange={this.toggle}
                 />
                 <label className="form-check-label" htmlFor="showOnlyOngoingCertifications">
                   Show Only Ongoing Certifications
@@ -80,7 +116,7 @@ export class Settings extends React.Component<{
                 <input className="form-check-input" type="radio"
                   name="generalSettings" id="showOnlyFailedCertifications"
                   checked={this.state.showOnlyFailedCertifications} 
-                  onChange={this.toggle.bind(this)}
+                  onChange={this.toggle}
                 />
                 <label className="form-check-label" htmlFor="showOnlyFailedCertifications">
                   Show Only Failed Certifications
@@ -92,14 +128,16 @@ export class Settings extends React.Component<{
                 <input className="form-check-input" type="radio"
                   name="generalSettings" id="settingsOR"
                   checked={this.state.settingsOR}
-                  onChange={this.toggle.bind(this)}
+                  onChange={this.toggle}
                 />
                 <label className="form-check-label" htmlFor="OR">
                   OR:
                 </label>
               </div>
               <div className="px-4">
-                <SettingsOR enabled={this.state.settingsOR}/>
+                <SettingsOR enabled={this.state.settingsOR}
+                  toggle={this.toggleOR}
+                  state={this.state.OR} />
               </div>
             </div>
             <div className="modal-footer">
