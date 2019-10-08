@@ -479,10 +479,7 @@ export default class Form extends React.Component<IFormProps> {
               <textarea className='form-control' value={this.state.comments} id='comments' rows={15} onChange={this.handleChange} />
             </div>
           </section>
-          {['7. Test-report ready',
-            '8. Certificate ready',
-            '9. Ended'
-            ].includes(this.state.stage) && this.renderFileUploads()}
+          {this.renderFileUploads()}
           {this.renderFormFooter()}
         </main>
       </form>
