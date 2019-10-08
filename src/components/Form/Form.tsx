@@ -445,11 +445,12 @@ export default class Form extends React.Component<IFormProps> {
             <a className="nav-item nav-link" id="nav-FabricApplicationForm-tab" data-toggle="tab" href="#nav-FabricApplicationForm" role="tab" aria-controls="nav-FabricApplicationForm" aria-selected="false">
               Fabric Application Form
             </a>
-            <a className="nav-item nav-link" id="nav-comments-tab" data-toggle="tab" href="#nav-comments" role="tab" aria-controls="nav-comments" aria-selected="false">Comments</a>
-            {['7. Test-report ready',
-              '8. Certificate ready',
-              '9. Ended'].includes(this.state.stage) &&
-              <a className="nav-item nav-link" id="nav-fileUploads-tab" data-toggle="tab" href="#nav-fileUploads" role="tab" aria-controls="nav-fileUploads" aria-selected="false">File Uploads</a>}
+            <a className="nav-item nav-link" id="nav-comments-tab" data-toggle="tab" href="#nav-comments" role="tab" aria-controls="nav-comments" aria-selected="false">
+              Comments
+            </a>
+            <a className="nav-item nav-link" id="nav-fileUploads-tab" data-toggle="tab" href="#nav-fileUploads" role="tab" aria-controls="nav-fileUploads" aria-selected="false">
+              File Uploads
+            </a>
           </div>
         </nav>
         <main className="tab-content mt-3" id="nav-tabContent">
