@@ -17,6 +17,7 @@ let selectOptions: {
   testingCompany: [
     { value: 'Aitex (Spain)', label: 'Aitex (Spain)'},
     { value: 'Aitex (China)', label: 'Aitex (China)'},
+    { value: 'BTTG (UK)', label: 'BTTG (UK)'},
     { value: 'Satra (UK)', label: 'Satra (UK)'}
   ],
   stages: [
