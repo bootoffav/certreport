@@ -147,7 +147,7 @@ class ListExport extends React.Component<{
       content: this.generateContent(),
       defaultStyle: {
         fontSize: 14,
-        font: 'Roboto',
+        font: 'Arial',
       },
       pageOrientation: 'landscape',
       pageSize: 'A3'

@@ -380,14 +380,13 @@ class AppFormExport extends React.Component<IState> {
     },
     defaultStyle: {
       fontSize: 10,
-      font: 'TimesNewRoman',
+      font: 'Arial',
     },
     pageMargins: [30, 15] as [number, number]
   };
   
   save() {
     this.create().download(`Fabric Test Application Form_${this.props.serialNumber}_${this.props.article}.pdf`);
-    // this.create().open();
   }
 
   create() {
