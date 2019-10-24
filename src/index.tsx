@@ -10,20 +10,29 @@ import List from './components/List/List';
 import netlifyIdentity from 'netlify-identity-widget';
 import './css/style.css';
 import { initApp } from './defaults';
+import { AppState, AppContext } from './AppState';
+import Dashboard from './components/Dashboard/Dashboard';
+import { Error404Page } from 'tabler-react';
+
+const appState = new AppState();
 
 const App: React.FunctionComponent = () => {
   initApp();
   return (
     <div className="container-fluid">
       <Router>
-        <>
+        <AppContext.Provider value={{
+          allTasks: appState.allTasks
+        }}>
           <nav className="rounded-bottom navbar navbar-light shadow">
             <div className="container-fluid d-flex">
-              <a className="navbar-brand" href="/">
-                <img src="/img/logo.png" width="150" alt="Site logo"/>
-              </a>
+              <NavLink className="navbar-brand" exact to="/dashboard">
+                <img src="/img/logo.png" width={150} alt="site-logo"/>
+              </NavLink>
               <span className="navbar-text">
-                <a href="/">XMT XMF XMS fabrics certification processes gathered together in one place!</a>
+                <NavLink to="/">
+                  XMT XMF XMS fabrics certification processes gathered together in one place!
+                  </NavLink>
               </span>
               <ul className="navbar-nav">
                 <li className="nav-item">
@@ -33,11 +42,13 @@ const App: React.FunctionComponent = () => {
             </div>
           </nav>
           <Switch>
-            <Route exact path="/" component={List} />
-            <Route exact path="/add" component={Form} />
+              <Route exact path="/dashboard" component={Dashboard} />
+              <Route exact path="/" component={List} />
+              <Route exact path="/add" component={Form} />
             <Route exact path="/edit/:id" component={Form} />
+            <Route path="*" component={Error404Page} />
           </Switch>
-        </>
+          </AppContext.Provider>
       </Router>
     </div>
   );

@@ -9,6 +9,7 @@ import { ColumnSearch, BrandFilter, DateFilter } from '../Filters';
 import CacheManager from '../../CacheManager';
 import { Settings, generalSettingsFilter } from '../Settings/Settings';
 import ListExport from '../Export/PDF/ListExport';
+import { AppContext } from '../../AppState';
 
 interface IListState {
   visibleTasks: Task[];
@@ -21,6 +22,7 @@ interface IListState {
 }
 
 export default class List extends React.Component {
+  static contextType = AppContext;
   state: IListState = {
     visibleTasks: [],
     allTasks: [],
@@ -48,16 +50,12 @@ export default class List extends React.Component {
     : <></>
 
   async componentDidMount() {
-    if (this.cache.staleData) {
-      this.updateState(this.cache.getFromCache(localStorage));
-      this.cache.setCaches(await this.cache.getFromAPI());
-    }
     this.updateState();
   }
 
-  updateState = (providedTasks: Task[] | undefined = undefined) => {
+  updateState = () => {
     const tasks: Task[] = generalSettingsFilter(
-      providedTasks || this.cache.getFromCache(sessionStorage)
+      this.context.allTasks
     );
     
     const visibleTasks: Task[] = filter(tasks);
