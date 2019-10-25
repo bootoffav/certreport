@@ -10,16 +10,13 @@ interface ICacheManager {
 
 
 class CacheManager implements ICacheManager {
-  get staleData() : boolean {
+  get staleData(): boolean {
     return !sessionStorage.hasOwnProperty('tasks');
   }
 
-  getFromCache = (cacheType: Storage) : Task[] => {
+  getFromCache = (cacheType: Storage): Task[] => {
     const fromCache: string | null = cacheType.getItem('tasks');
-    if (typeof fromCache === 'string') {
-      return JSON.parse(fromCache);
-    }
-    return [];
+    return typeof fromCache === 'string' ? JSON.parse(fromCache) : [];
   }
 
   setCaches = (tasks : Task[]) => {
@@ -29,6 +26,8 @@ class CacheManager implements ICacheManager {
 
     localStorage.setItem('tasks', stringifiedTasks);
     sessionStorage.setItem('tasks', stringifiedTasks);
+
+    return tasks;
   }
  
   getFromAPI() {

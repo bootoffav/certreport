@@ -94,7 +94,10 @@ function DateFilter(
         selectsStart
         startDate={startDate}
         endDate={endDate}
-        onChange={setStartDate}
+        onChange={(date) => {
+          setStartDate(date);
+          filter(date, endDate)
+        }}
         placeholderText="from"
       />
     </div>

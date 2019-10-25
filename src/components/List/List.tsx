@@ -6,10 +6,8 @@ import '../../css/style.css';
 import { Toolbar, filter } from '../Toolbar/Toolbar';
 import { getColumns } from './columns';
 import { ColumnSearch, BrandFilter, DateFilter } from '../Filters';
-import CacheManager from '../../CacheManager';
 import { Settings, generalSettingsFilter } from '../Settings/Settings';
 import ListExport from '../Export/PDF/ListExport';
-import { AppContext } from '../../AppState';
 
 interface IListState {
   visibleTasks: Task[];
@@ -21,8 +19,7 @@ interface IListState {
   requiredStage: Stage | undefined;
 }
 
-export default class List extends React.Component {
-  static contextType = AppContext;
+export default class List extends React.Component<{ tasks: any; staleData: boolean; }> {
   state: IListState = {
     visibleTasks: [],
     allTasks: [],
@@ -34,28 +31,32 @@ export default class List extends React.Component {
   };
   ref: any;
 
-  cache = new CacheManager();
-  
   get columns() {
-    return getColumns(this.state.totalPrice, this.cache.staleData, this.state.requiredStage);
+    return getColumns(this.state.totalPrice, this.state.requiredStage);
   }
 
   static State: React.FunctionComponent<{
-    notUpdated: boolean;
-  }> = ({ notUpdated }) =>
-    notUpdated ?
-    <div className="d-flex align-items-center">
-      <div className="spinner-border spinner-border-sm text-primary" role="status"></div>
-    </div>
-    : <></>
+    staleData: boolean;
+  }> = ({ staleData }) => {
+    return staleData ?
+      <div className="d-flex align-items-center">
+        <div className="spinner-border spinner-border-sm text-primary" role="status"></div>
+      </div>
+      : <></>
+  }
 
   async componentDidMount() {
     this.updateState();
   }
 
-  updateState = () => {
+  UNSAFE_componentWillReceiveProps({ tasks }: any) {
+    this.updateState(tasks);
+  }
+
+  updateState = (providedTasks?: any) => {
     const tasks: Task[] = generalSettingsFilter(
-      this.context.allTasks
+      // this.context.allTasks
+      providedTasks || this.props.tasks
     );
     
     const visibleTasks: Task[] = filter(tasks);
@@ -89,36 +90,36 @@ export default class List extends React.Component {
     }, () => this.toolbarFilter(this.state.requiredStage));
   }
 
-  columnFilter = (valueToSearch: string, columnToSearch: string) : void => {
-    valueToSearch = valueToSearch.toLowerCase();
+  columnFilter = (searchVal: string, columnToSearch: string) : void => {
+    let foundTasks;
+    searchVal = searchVal.toLowerCase();
+    foundTasks = this.state.tasks.filter((task: any) => columnToSearch === 'TITLE'
+      ? task[columnToSearch].toLowerCase().includes(searchVal)
+      : task.state[columnToSearch].toLowerCase().includes(searchVal)
+    );
+    
     this.setState({
-      filteredTasksLevel1: this.state.tasks.filter((task: any) => columnToSearch === 'TITLE'
-        ? task[columnToSearch].toLowerCase().includes(valueToSearch)
-        : task.state[columnToSearch].toLowerCase().includes(valueToSearch)
-      )
+      filteredTasksLevel1: foundTasks
     }, () => this.toolbarFilter(this.state.requiredStage));
+  
   }
 
   dateFilter = (startDate: Date | null, endDate: Date | null): void => {
-    if (endDate === null) {
-      this.setState({
-        filteredTasksLevel1: this.state.tasks
-      }, () => this.toolbarFilter(this.state.requiredStage));
-      return;
-    }
-    if (startDate !== null && endDate !== null) {
-      const tasksInRange = this.state.tasks.filter((task: any) => {
+    let tasksForUpdate: any;
+    if (startDate === null || endDate === null) {
+      tasksForUpdate = this.state.tasks;
+    } else {
+      tasksForUpdate = this.state.tasks.filter((task: any) => {
         const comparingDate = new Date(task.state.certReceivedOnRealDate);
         return startDate < comparingDate && endDate > comparingDate
       });
-
-      this.setState({
-        filteredTasksLevel1: tasksInRange
-      }, () => this.toolbarFilter(this.state.requiredStage));
     }
+
+    this.setState({
+      filteredTasksLevel1: tasksForUpdate
+    }, () => this.toolbarFilter(this.state.requiredStage));
   }
 
-  //level 2 filter
   toolbarFilter = (requiredStage: Stage | undefined | string = undefined) => {
     let visibleTasks: Task[] = filter(this.state.filteredTasksLevel1, requiredStage);
     let totalPrice: number = visibleTasks.reduce((sum: number, task: any) => sum + Number(task.state.price), 0);
@@ -140,7 +141,7 @@ export default class List extends React.Component {
         <DateFilter filter={this.dateFilter} />
       </div>
       <div className="d-inline-flex justify-content-end">
-        <List.State notUpdated={this.cache.staleData} />
+        <List.State staleData={this.props.staleData} />
         <ListExport
           tasks={this.state.visibleTasks}
           // @ts-ignore

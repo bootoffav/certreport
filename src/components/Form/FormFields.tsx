@@ -106,11 +106,7 @@ const Pi = (props: any) =>
 interface ArticleProps {
   options: any[];
   value: any;
-  handleSlaveChange: ({}: {
-    product: string,
-    code: string,
-    brand: string;
-  }) => void;
+  handleSlaveChange: (product: string, code: string, brand: string) => void;
   handleChange: (a: any) => void;
 }
 
@@ -141,7 +137,7 @@ class Article extends React.Component<ArticleProps> {
     const product = `${PROPERTY_386.value || ''}, ${PROPERTY_384.value || ''}`;
     const code = PROPERTY_380.value || '';
     const brand = brand_map[SECTION_ID] || '';
-    this.props.handleSlaveChange({product, code, brand});
+    this.props.handleSlaveChange(product, code, brand);
   }
 
   render = () =>

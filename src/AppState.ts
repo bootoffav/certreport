@@ -1,8 +1,6 @@
 import React from 'react';
 import CacheManager from './CacheManager';
 
-const AppContext = React.createContext({});
-
 class AppState {
   cache: CacheManager;
   allTasks: any;
@@ -18,17 +16,18 @@ class AppState {
 
   getFromAPI() {
     this.cache.getFromAPI()
-      .then(tasks => {
-        this.allTasks = tasks;
-        return tasks;
-      })
-      .then(this.cache.setCaches)
-      .then(() => window.location.reload());
+    .then(tasks => {
+      this.allTasks = tasks;
+      return tasks;
+    })
+    .then(this.cache.setCaches)
+      // .then(() => window.location.reload());
     return [];
   }
 
 }
 
+const AppContext = React.createContext({});
 
 
 export { AppContext, AppState };

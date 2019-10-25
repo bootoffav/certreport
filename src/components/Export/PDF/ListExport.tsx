@@ -1,6 +1,6 @@
 import React from 'react';
 import pdfMake from "pdfmake/build/pdfmake";
-import m from 'moment';
+import dayjs from 'dayjs';
 import { vfs } from './vfs_fonts.js';
 import { Stage } from '../../../Task/Task';
 
@@ -134,7 +134,7 @@ class ListExport extends React.Component<{
   export = () => {
     switch (this.props.stage) {
       case 'overdue':
-        this.stage = `Overdue Certifications in Testing Lab (on ${m().format('DD.MM.YYYY')})`;
+        this.stage = `Overdue Certifications in Testing Lab (on ${dayjs().format('DD.MM.YYYY')})`;
         break;
       case 'results':
         this.stage = 'Results';

@@ -2,7 +2,7 @@ import React from 'react';
 import swal from 'sweetalert';
 import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select';
-import m from 'moment';
+import dayjs from 'dayjs';
 import { PickDate, BaseInput, Article, Price, Paid, Pi } from "./FormFields";
 import B24 from '../../B24';
 import Notification, { Status } from '../Notification/Notification';
@@ -17,7 +17,8 @@ import { removeEmptyProps } from '../../helpers';
 
 interface IFormState extends IState {
   requestStatus: Status;
-  EN11612Detail?: any; 
+  EN11612Detail?: any;
+  hasError: boolean;
 }
 
 interface IFormProps {
@@ -33,7 +34,7 @@ interface IFormProps {
   };
 }
 
-export default class Form extends React.Component<IFormProps> {
+class Form extends React.Component<IFormProps> {
   task_id: string | undefined;
   state: IFormState;
 
@@ -44,41 +45,45 @@ export default class Form extends React.Component<IFormProps> {
     this.state.requestStatus = Status.FillingForm;
   }
 
+  componentDidUpdate = () => {
+    if (this.state.hasError) throw new Error('Task not found');
+  }
+
   componentDidMount() {
     if (this.task_id && this.props.location.state === undefined) {
-      B24.get_task(this.task_id)
-        .then(r => this.setState({ ...r.state }));
+        B24.get_task(this.task_id)
+          .then(r => this.setState({ ...r.state }))
+          .catch((e) => this.setState({ hasError: true }));
     }
 
-    //load data for FabricApplicationForm and Standards
-    // @ts-ignore
-    DB.getData(this.task_id).then((res: any) => {
-      const DBState: any = {};
-      this.setState({ EN11612Detail: res.data.EN11612Detail });
-      try {
-        const [
-          testRequirement = '',
-          washPreTreatment = '',
-          footer = ''
-        ] = res.data.aitexForm.split(' ');
-        DBState.testRequirement = testRequirement.split(';').map((row: string) => row.split(',')).slice(0, -1);
-        DBState.washPreTreatment = washPreTreatment.split(';').map((row: string) => row.split(',')).slice(0, -1);
-        DBState.footer = footer.split(';').map((row: string) => row.split(',')).slice(0, -1);
-      } finally {
-        DBState.cycles = res.data.cycles;
-        DBState.washTemp = res.data.washTemp;
-        DBState.otherStandard1 = res.data.otherStandard1;
-        DBState.ref = res.ref.value.id;
-        DBState.flatten = res.data.aitexForm;
-        this.setState({ DBState });
-      }
-    });
-
-    this.state.link || this.setState({ link: `[URL=https://certreport.xmtextiles.com/edit/${this.task_id}/]this task[/URL]` });
+    if (this.task_id) {
+      DB.getData(this.task_id).then((res: any) => {
+        const DBState: any = {};
+        this.setState({ EN11612Detail: res.data.EN11612Detail });
+        try {
+          const [
+            testRequirement = '',
+            washPreTreatment = '',
+            footer = ''
+          ] = res.data.aitexForm.split(' ');
+          DBState.testRequirement = testRequirement.split(';').map((row: string) => row.split(',')).slice(0, -1);
+          DBState.washPreTreatment = washPreTreatment.split(';').map((row: string) => row.split(',')).slice(0, -1);
+          DBState.footer = footer.split(';').map((row: string) => row.split(',')).slice(0, -1);
+        } catch (e) { } finally {
+          DBState.cycles = res.data.cycles;
+          DBState.washTemp = res.data.washTemp;
+          DBState.otherStandard1 = res.data.otherStandard1;
+          DBState.ref = res.ref.value.id;
+          DBState.flatten = res.data.aitexForm;
+          this.setState({ DBState });
+        }
+      });
+      this.state.link || this.setState({ link: `[URL=https://certreport.xmtextiles.com/edit/${this.task_id}/]this task[/URL]` });
+    }
   }
 
   handleDateChange = (date: Date | null, prop: string): void =>
-    this.setState({ [prop]: date === null ? '' : m(date).format('DDMMMYYYY') });
+    this.setState({ [prop]: date === null ? '' : dayjs(date).format('DDMMMYYYY') });
 
 
   handleCheckboxChange = ({ currentTarget }: React.SyntheticEvent) : void =>
@@ -225,7 +230,7 @@ export default class Form extends React.Component<IFormProps> {
         value={this.asSelectable(this.state.article)}
         options={selectOptions.articles}
         handleChange={(e: any) => this.handleSelectChange([e], 'article')}
-        handleSlaveChange={ ({product, code, brand}) => this.setState({ product, code, brand }) }
+        handleSlaveChange={ (product, code, brand) => this.setState({ product, code, brand }) }
         />
       </div>
       <BaseInput value={this.state.product} className="ml-2 flex-grow-1" id='product' label='Product' handleChange={this.handleChange} />
@@ -425,14 +430,14 @@ export default class Form extends React.Component<IFormProps> {
       </div>
       <Export data={this.state}/>
     </div>
-  
+
   renderFileUploads() {
     return <div className="tab-pane fade" id="nav-fileUploads" role="tabpanel" aria-labelledby="nav-fileUploads-tab">
       <FileUploads taskId={this.task_id} />
     </div>;
   }
 
-  render = () => 
+  render = () =>
     <div className="container">
       <Notification status={this.state.requestStatus} />
       <form onSubmit={(e) => this.handleCert(e)}>
@@ -485,3 +490,5 @@ export default class Form extends React.Component<IFormProps> {
       </form>
     </div>
 }
+
+export default Form;

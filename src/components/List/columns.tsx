@@ -16,7 +16,7 @@ function sortDates(a: string | undefined, b: string | undefined): number {
   return 0;
 }
 
-function getColumns(totalPrice: number, staleData: boolean, requiredStage: Stage | 'results' | 'overdue' | undefined) {
+function getColumns(totalPrice: number, requiredStage: Stage | 'results' | 'overdue' | undefined) {
   const columns = [{
     // 0
     Header: '#',
@@ -79,14 +79,11 @@ function getColumns(totalPrice: number, staleData: boolean, requiredStage: Stage
     id: 'taskName',
     minWidth: 550,
     Cell: (props: any) => props.original.state.serialNumber
-      ? <Link className={staleData ? 'EditLinkIsDisabled' : ''}
-        to={
-          staleData
-            ? '' : {
-              pathname: `/edit/${props.original.ID}`,
-              state: { ...props.original.state }
-            }
-        }
+      ? <Link
+        to={{
+          pathname: `/edit/${props.original.ID}`,
+          state: { ...props.original.state }
+        }}
       >{props.value}</Link>
       : <Link to={{
         pathname: `/edit/${props.original.ID}`,

@@ -1,5 +1,5 @@
 import React from 'react';
-import _ from 'lodash';
+import { without } from 'lodash';
 
 import './FabricApplicationForm.css';
 
@@ -53,22 +53,17 @@ class FabricApplicationForm extends React.Component<{
   };
 
   toggleCheckboxState = (table: string, row: number, label: string) => {
-    if (this.state[table][row].includes(label)) {
-      //удаляем
-      this.setState((state: any) => {
-        const replacer = [...state[table]];
-        replacer.splice(row, 1, _.without(state[table][row], label));
-        return { [table]: replacer };
-      }, this.propagateUpdate);
-      } else {
-      // добавляем
-      this.setState((state: any) => {
-        const replacer = [...state[table]];
-        replacer.splice(row, 1, [...state[table][row], label]);
-        return { [table]: replacer };
-      }, this.propagateUpdate);
-    }
+    const replacer = this.state[table];
 
+    replacer.splice(
+      row,
+      1,
+      replacer[row].includes(label)
+        ? without(replacer[row], label)
+        : [...replacer[row], label]
+    )
+
+    this.setState({[table]: replacer}, this.propagateUpdate);
   }
 
   static checkBox: React.FunctionComponent<{
@@ -134,8 +129,8 @@ class FabricApplicationForm extends React.Component<{
         <tr>
           <td>
             <FabricApplicationForm.checkBox label={'EN 11612'}
-              checked={this.getCheckboxState('testRequirement', 0, 'EN-11612')}
-              onChange={() => this.toggleCheckboxState('testRequirement', 0, 'EN-11612')}
+              checked={this.getCheckboxState('testRequirement', 1, 'EN-11612')}
+              onChange={() => this.toggleCheckboxState('testRequirement', 1, 'EN-11612')}
             />
           </td>
           <td>

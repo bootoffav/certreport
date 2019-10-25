@@ -1,12 +1,12 @@
 import React from 'react';
-import { AppContext } from '../../AppState';
+// import { AppContext } from '../../AppState';
 import { Grid, Card } from 'tabler-react';
 import { Doughnut } from 'react-chartjs-2';
 import { getData } from './dataprocessing';
 import { doughnutConf } from './configs';
 
-class Dashboard extends React.Component {
-  static contextType = AppContext;
+class Dashboard extends React.Component<{ tasks: any; }> {
+  // static contextType = AppContext;
   render() {
     return (
       <div className="mt-1">
@@ -36,7 +36,7 @@ class Dashboard extends React.Component {
               title={<div className="text-center">Tasks by stages</div>}
               body={
                 <Doughnut
-                  data={() => getData(this.context.allTasks, 'byStages')}
+                  data={() => getData(this.props.tasks, 'byStages')}
                   options={doughnutConf.options}
                 />
               }

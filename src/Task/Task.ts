@@ -1,5 +1,5 @@
 import { selectOptions, emptyState, IState } from '../defaults';
-import m from 'moment';
+import dayjs from 'dayjs';
 
 interface ITask {
   state: {}
@@ -273,32 +273,32 @@ class Task implements ITask {
   }
 
   determineOverdue(): [boolean, string | undefined] {
-    const today = m();
+    const today = dayjs();
     switch (this.state.stage) {
       case '0. Sample to be prepared':
-        return [m(this.state['readyOn']).add(2, 'days') < today, this.state['readyOn']];
+        return [dayjs(this.state['readyOn']).add(2, 'day') < today, this.state['readyOn']];
       case '1. Sample Sent':
-        return [m(this.state['sentOn']).add(7, 'days') < today, this.state['sentOn']];
+        return [dayjs(this.state['sentOn']).add(7, 'day') < today, this.state['sentOn']];
       case '2. Sample Arrived':
-        return [m(this.state['receivedOn']).add(2, 'days') < today, this.state['receivedOn'] ];
+        return [dayjs(this.state['receivedOn']).add(2, 'day') < today, this.state['receivedOn'] ];
       case '3. PI Issued':
-        return [m(this.state['proformaReceivedDate']).add(2, 'days') < today, this.state['proformaReceivedDate']];
+        return [dayjs(this.state['proformaReceivedDate']).add(2, 'day') < today, this.state['proformaReceivedDate']];
       case '4. Payment Done':
-        return [m(this.state['paymentDate']).add(2, 'days') < today, this.state['paymentDate']];
+        return [dayjs(this.state['paymentDate']).add(2, 'day') < today, this.state['paymentDate']];
       case '5. Testing is started':
-        return [m(this.state['testFinishedOnPlanDate']) < today, this.state['startedOn']];
+        return [dayjs(this.state['testFinishedOnPlanDate']) < today, this.state['startedOn']];
       case '7. Test-report ready':
         if (this.state['certReceivedOnPlanDate']) {
           return [
-            m(this.state['certReceivedOnPlanDate']).add(1, 'days') < today,
+            dayjs(this.state['certReceivedOnPlanDate']).add(1, 'day') < today,
             this.state['testFinishedOnRealDate']
           ];
         }
-        return [m(this.state['testFinishedOnPlanDate']).add(2, 'days') < today, this.state['testFinishedOnPlanDate']];
+        return [dayjs(this.state['testFinishedOnPlanDate']).add(2, 'day') < today, this.state['testFinishedOnPlanDate']];
       case '8. Certificate ready':
         return this.state['certReceivedOnRealDate']
           ? [false, this.state['certReceivedOnRealDate']]
-          : [m(this.state['certReceivedOnPlanDate']).add(1, 'days') < today, this.state['certReceivedOnPlanDate']];
+          : [dayjs(this.state['certReceivedOnPlanDate']).add(1, 'day') < today, this.state['certReceivedOnPlanDate']];
       case '9. Ended':
         return [
           false,

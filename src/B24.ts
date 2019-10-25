@@ -1,12 +1,11 @@
 import qs from 'qs';
-import m from 'moment';
+import dayjs from 'dayjs';
 import { dataSeparator } from './Task/Task';
 import Task from './Task/Task';
 import StateAdapter from './StateAdapter';
 import AppFormExport from './components/Export/PDF/AppFormExport';
 import { IState } from './defaults';
 
-m.fn.toJSON = function() { return this.format(); }
 const creator_id = process.env.REACT_APP_B24_USER_ID;
 const tag = process.env.REACT_APP_TAG;
 const responsibleId = process.env.REACT_APP_B24_RESPONSIBLE_ID;
@@ -114,7 +113,7 @@ class B24 {
           `${state.comments && `[B]Comments:[/B] ${state.comments}\n`}` +
           `${state.link && `[B]Edit:[/B] ${state.link}\n`}` +
           `${dataSeparator}` + (state.otherTextInDescription || ''),
-      DEADLINE: m(state.certReceivedOnPlanDate).toISOString()
+      DEADLINE: dayjs(state.certReceivedOnPlanDate).toISOString()
     }
   };
 
@@ -223,7 +222,7 @@ class B24 {
     }
 
     return fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.getdata?ID=${id}`)
-      .then(rsp=> rsp.json())
+      .then(rsp => rsp.json())
       .then(rsp => new Task(rsp.result));
   }
 
