@@ -13,8 +13,12 @@ import CacheManager from './CacheManager';
 import List from './components/List/List';
 import ErrorBoundary from './ErrorBoundary';
 
+initApp();
+
+
 const Form = lazy(() => import('./components/Form/Form'));
 const Dashboard = lazy(() => import('./components/Dashboard/Dashboard'));
+
 
 class App extends React.Component {
   cache = new CacheManager();
@@ -40,7 +44,6 @@ class App extends React.Component {
     </div>
 
   render() {
-    initApp();
     return (
       <div className="container-fluid">
         <Router>

@@ -1,4 +1,5 @@
 import B24 from './B24';
+import * as Sentry from '@sentry/browser';
 
 let selectOptions: {
   brand: any[];
@@ -146,6 +147,7 @@ const emptyState : IState = {
 };
 
 function initApp() {
+  Sentry.init({ dsn: "https://09c5935753774acabba136bf59c9e31f@sentry.io/1796060" });
   const saveAndApply = (data: any[], item: string) => {
     localStorage.setItem(item, JSON.stringify(data));
     selectOptions[item] = data;
