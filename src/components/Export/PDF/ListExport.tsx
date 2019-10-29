@@ -10,6 +10,8 @@ class ListExport extends React.Component<{
   tasks: any;
   columns: any;
   stage: any;
+  startDate?: Date;
+  endDate?: Date;
 }> {
   stage: string | undefined;
 
@@ -23,7 +25,7 @@ class ListExport extends React.Component<{
       '#', '##', 'Brand', 'Status', 'L. A. D.', 'Task title',
       'Fabric', 'Test report', 'Certificate', 'Result'
     ].map(this.boldText),
-    widths: [20, 40, 50, 60, 70, '*', 100, 100, 200, 100]
+    widths: [20, 40, 50, 60, 70, '*', 120, 100, 200, 100]
   });
 
   generateContent() {
@@ -60,7 +62,7 @@ class ListExport extends React.Component<{
     text,
     fontSize: 16,
     alignment: 'center',
-    bold: true
+    bold: true,
   });
 
   // crap code to refactor ASAP
@@ -146,7 +148,7 @@ class ListExport extends React.Component<{
     let docDefinition = {
       content: this.generateContent(),
       defaultStyle: {
-        fontSize: 14,
+        fontSize: 12,
         font: 'Arial',
       },
       pageOrientation: 'landscape',
@@ -155,9 +157,19 @@ class ListExport extends React.Component<{
     return pdfMake.createPdf(
       // @ts-ignore
       docDefinition, tableLayout, fonts, vfs
-      ).download(`${this.stage}.pdf`);
+      // ).download(`${this.stage}.pdf`);
+    ).download(this.filename);
   }
 
+  get filename() {
+    if (this.stage === 'Results') {
+      return (this.props.startDate && this.props.endDate)
+        ? `Certification results for ${dayjs(this.props.startDate).format('DDMMMYYYY')} - ${dayjs(this.props.endDate).format('DDMMMYYYY')}.pdf`
+        : `Certification results of all time.pdf`
+    }
+
+    return `${this.stage}.pdf`
+  }
   render() {
     return <button
       className="btn btn-sm btn-outline-success"

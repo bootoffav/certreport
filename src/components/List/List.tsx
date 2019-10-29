@@ -17,6 +17,8 @@ interface IListState {
   totalPrice: number;
   sortedData: Task[] | undefined;
   requiredStage: Stage | undefined;
+  startDate?: Date;
+  endDate?: Date;
 }
 
 export default class List extends React.Component<{ tasks: any; staleData: boolean; }> {
@@ -116,7 +118,7 @@ export default class List extends React.Component<{ tasks: any; staleData: boole
     }
 
     this.setState({
-      filteredTasksLevel1: tasksForUpdate
+      filteredTasksLevel1: tasksForUpdate, startDate, endDate
     }, () => this.toolbarFilter(this.state.requiredStage));
   }
 
@@ -147,6 +149,8 @@ export default class List extends React.Component<{ tasks: any; staleData: boole
           // @ts-ignore
           columns={this.columns.filter(column => column.show)}
           stage={this.state.requiredStage}
+          startDate={this.state.startDate}
+          endDate={this.state.endDate}
         />
         <div className="align-self-center">
           <Settings onClose={() => this.updateState()} />

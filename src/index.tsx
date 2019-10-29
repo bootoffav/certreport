@@ -2,7 +2,7 @@ import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'open-iconic/font/css/open-iconic-bootstrap.min.css';
 import 'react-table/react-table.css';
-import React, { Suspense, lazy } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, NavLink, Switch } from "react-router-dom";
 import netlifyIdentity from 'netlify-identity-widget';
@@ -11,13 +11,15 @@ import { initApp } from './defaults';
 import { Error404Page } from 'tabler-react';
 import CacheManager from './CacheManager';
 import List from './components/List/List';
+import Form from './components/Form/Form';
+import Dashboard from './components/Dashboard/Dashboard';
 import ErrorBoundary from './ErrorBoundary';
 
 initApp();
 
 
-const Form = lazy(() => import('./components/Form/Form'));
-const Dashboard = lazy(() => import('./components/Dashboard/Dashboard'));
+// const Form = lazy(() => import('./components/Form/Form'));
+// const Dashboard = lazy(() => import('./components/Dashboard/Dashboard'));
 
 
 class App extends React.Component {
@@ -47,7 +49,7 @@ class App extends React.Component {
     return (
       <div className="container-fluid">
         <Router>
-          <Suspense fallback={<App.Loading />}>
+          <>
             <nav className="rounded-bottom navbar navbar-light shadow">
               <div className="container-fluid d-flex">
                 <NavLink className="navbar-brand" exact to="/dashboard">
@@ -76,7 +78,7 @@ class App extends React.Component {
               } />
               <Route path="*" component={Error404Page} />
               </Switch>
-          </Suspense>
+          </>
         </Router>
       </div>
     );
