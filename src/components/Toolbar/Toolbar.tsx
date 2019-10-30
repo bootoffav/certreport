@@ -1,15 +1,18 @@
 import React from 'react';
 import Task, { Stage } from '../../Task/Task';
+import { Grid, Button } from 'tabler-react';
 
 const Toolbar: React.FunctionComponent<{
   onClick: (toolBarProp: Stage | undefined | string) => void;
 }> = (props) =>
-  <div className="row">
+  // <div className="row">
+  <Grid.Row>
+    <Grid.Col width={12}>
     <div id="toolbar" className="col btn-group btn-group-toggle" data-toggle="buttons">
       <label
         className="btn btn-light btn-sm active"
         onClick={() => props.onClick(undefined)}
-      ><input type="radio" />All</label>
+        ><input type="radio" />All</label>
       <label
         className="btn btn-warning btn-sm"
         onClick={() => props.onClick(Stage['00. Paused'])}
@@ -72,8 +75,9 @@ const Toolbar: React.FunctionComponent<{
         className="btn btn-light btn-sm"
         onClick={() => props.onClick('overdue')}
       ><input type="radio" />Overdue</label>
-    </div>
-  </div>
+      </div>
+      </Grid.Col>
+  </Grid.Row>
 
 const filter = (
   tasks: Task[],

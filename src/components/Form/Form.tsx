@@ -14,6 +14,7 @@ import FileUploads from '../FileUploads/FileUploads';
 import FabricApplicationForm from './FabricApplicationForm';
 import { DB } from '../../DBManager';
 import { removeEmptyProps } from '../../helpers';
+import { TabbedCard, Tab } from 'tabler-react';
 
 interface IFormState extends IState {
   requestStatus: Status;
@@ -441,52 +442,28 @@ class Form extends React.Component<IFormProps> {
     <div className="container">
       <Notification status={this.state.requestStatus} />
       <form onSubmit={(e) => this.handleCert(e)}>
-        <nav className="mt-4">
-          <div className="nav nav-tabs" id="nav-tab" role="tablist">
-            <a className="nav-item nav-link active" id="nav-basicInfo-tab" data-toggle="tab" href="#nav-basicInfo" role="tab" aria-controls="nav-basicInfo" aria-selected="true">Basic Info</a>
-            <a className="nav-item nav-link" id="nav-dates-tab" data-toggle="tab" href="#nav-dates" role="tab" aria-controls="nav-dates" aria-selected="false">Dates</a>
-            <a className="nav-item nav-link" id="nav-payments-tab" data-toggle="tab" href="#nav-payments" role="tab" aria-controls="nav-payments" aria-selected="false">Payments</a>
-            <a className="nav-item nav-link" id="nav-standards-tab" data-toggle="tab" href="#nav-standards" role="tab" aria-controls="nav-standards" aria-selected="false">Standards</a>
-            <a className="nav-item nav-link" id="nav-FabricApplicationForm-tab" data-toggle="tab" href="#nav-FabricApplicationForm" role="tab" aria-controls="nav-FabricApplicationForm" aria-selected="false">
-              Fabric Application Form
-            </a>
-            <a className="nav-item nav-link" id="nav-comments-tab" data-toggle="tab" href="#nav-comments" role="tab" aria-controls="nav-comments" aria-selected="false">
-              Comments
-            </a>
-            <a className="nav-item nav-link" id="nav-fileUploads-tab" data-toggle="tab" href="#nav-fileUploads" role="tab" aria-controls="nav-fileUploads" aria-selected="false">
-              File Uploads
-            </a>
-          </div>
-        </nav>
-        <main className="tab-content mt-3" id="nav-tabContent">
-          <section className="tab-pane fade show active" id="nav-basicInfo" role="tabpanel" aria-labelledby="nav-basicInfo-tab">
-            {this.renderBasicInfo()}
-          </section>
-          <section className="tab-pane fade" id="nav-dates" role="tabpanel" aria-labelledby="nav-dates-tab">
-            {this.renderDates()}
-          </section>
-          <section className="tab-pane fade" id="nav-payments" role="tabpanel" aria-labelledby="nav-payments-tab">
-            {this.renderPayments()}
-          </section>
-          <section className="tab-pane fade" id="nav-standards" role="tabpanel" aria-labelledby="nav-standards-tab">
-            {this.renderStandards()}
-          </section>
-          <section className="tab-pane fade" id="nav-FabricApplicationForm" role="tabpanel" aria-labelledby="nav-FabricApplicationForm-tab">
+        <TabbedCard initialTab="Basic Info">
+          <Tab title="Basic Info">{this.renderBasicInfo()}</Tab>
+          <Tab title="Dates">{this.renderDates()}</Tab>
+          <Tab title="Payments">{this.renderPayments()}</Tab>
+          <Tab title="Standards">{this.renderStandards()}</Tab>
+          <Tab title="Fabric Application From">
             {<FabricApplicationForm
               taskId={this.task_id || ''}
               state={this.state.DBState}
               updateParent={(DBState: any) => this.setState({ DBState })}
-            />}
-          </section>
-          <section className="tab-pane fade" id="nav-comments" role="tabpanel" aria-labelledby="nav-comments-tab">
-            <div className="form-row">
+              />}</Tab>
+          <Tab title="Comments">
+            {<div className="form-row">
               <label htmlFor='comments'>Comments:</label>
               <textarea className='form-control' value={this.state.comments} id='comments' rows={15} onChange={this.handleChange} />
-            </div>
-          </section>
-          {this.renderFileUploads()}
-          {this.renderFormFooter()}
-        </main>
+            </div>}
+          </Tab>
+        <Tab title="File Uploads">
+          <FileUploads taskId={this.task_id} />
+        </Tab>
+        </TabbedCard>
+        {this.renderFormFooter()}
       </form>
     </div>
 }

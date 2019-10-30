@@ -248,7 +248,7 @@ class FabricApplicationForm extends React.Component<{
         <tr>
           <td>
             <div className="custom-control custom-switch">
-              <input type="checkbox" className="custom-control-input" id="testRequirement_Other-Standard-1"
+              &nbsp;&nbsp;&nbsp;<input type="checkbox" className="custom-control-input" id="testRequirement_Other-Standard-1"
                 checked={this.getCheckboxState('testRequirement', 7, 'Other-Standard-1')}
                 onChange={() => this.toggleCheckboxState('testRequirement', 7, 'Other-Standard-1')}
               />
