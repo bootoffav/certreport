@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Card, StatsCard } from 'tabler-react';
+import { Grid, Card, StatsCard, Header } from 'tabler-react';
 import { Doughnut } from 'react-chartjs-2';
 import { getData } from './dataprocessing';
 import { doughnutConf } from './configs';
@@ -16,10 +16,15 @@ function tasksInRange(tasks: any[], filterParam: string, startDate?: Date, endDa
   if (startDate === undefined || endDate === undefined) return tasks;
 
   const tasksInRange = tasks.filter(task => {
-    const comparingDate = new Date(filterParam === 'certReceivedOnRealDate' ? task.state[filterParam] : task[filterParam]);
+    const comparingDate = new Date(
+      filterParam === 'CREATED_DATE'
+        ? task[filterParam]
+        : task.state[filterParam]
+    );
+
     return startDate < comparingDate && endDate > comparingDate
   });
-  debugger;
+
   return tasksInRange;
 }
 
@@ -63,14 +68,29 @@ class Dashboard extends React.Component<{ tasks: any; }, IDashboard> {
             />
           </Grid.Col>
           <Grid.Col md={6}>
-            <CompletedCertifications
-              tasks={this.props.tasks}
-              startDate={this.state.startDate}
-              endDate={this.state.endDate}
-            />
-            {/* <StatsCard layout={2} movement={5} total="423" label="Completed certifications" /> */}
-            {/* <StatsCard layout={2} movement={5} total="423" label="Completed certifications" /> */}
-            {/* <StatsCard layout={2} movement={5} total="423" label="Completed certifications" /> */}
+            <Grid.Row>
+              <Grid.Col>
+                <CompletedCertifications
+                  tasks={this.props.tasks}
+                  startDate={this.state.startDate}
+                  endDate={this.state.endDate}
+                />
+              </Grid.Col>
+              <Grid.Col>
+                <StartedCertifications
+                  tasks={this.props.tasks}
+                  startDate={this.state.startDate}
+                  endDate={this.state.endDate}
+                />
+              </Grid.Col>
+              <Grid.Col>
+                <AmountSpent
+                  tasks={this.props.tasks}
+                  startDate={this.state.startDate}
+                  endDate={this.state.endDate}
+                />
+              </Grid.Col>
+            </Grid.Row>
           </Grid.Col>
         </Grid.Row>
       </>
@@ -78,11 +98,14 @@ class Dashboard extends React.Component<{ tasks: any; }, IDashboard> {
   }
 }
 
-class CompletedCertifications extends React.Component<{
+interface ICardProps {
   tasks: any[];
   startDate?: Date;
   endDate?: Date;
-}> {
+}
+
+
+class CompletedCertifications extends React.Component<ICardProps> {
 
   get completedCerts() {
     const tasks = tasksInRange(
@@ -111,8 +134,58 @@ class CompletedCertifications extends React.Component<{
   }
 
   render() {
-    return <StatsCard layout={2} movement={this.movement} total={this.completedCerts} label="Completed certifications" />
+    return <StatsCard
+      layout={1}
+      movement={this.movement}
+      total={<div className="display-4">{this.completedCerts}</div> }
+      label="Completed certifications"
+    />
   }
+}
+
+class StartedCertifications extends React.Component<ICardProps> {
+  
+  get ongoingCerts() {
+    const tasks = tasksInRange(this.props.tasks, 'CREATED_DATE', this.props.startDate, this.props.endDate);
+    return tasks.filter(t => ![
+      '7. Test-report ready',
+      '8. Certificate ready',
+      '9. Ended'
+    ].includes(t.state.stage)).length;
+  }
+
+  render() {
+    return <StatsCard
+      layout={1}
+      movement={42}
+      total={<div className="display-4">{this.ongoingCerts}</div> }
+      label="Active Certifications"
+    />
+    }
+  }
+  
+class AmountSpent extends React.Component<ICardProps> {
+
+  get spent() {
+    let spent = 0;
+    let tasks = this.props.startDate || this.props.endDate
+      ? tasksInRange(this.props.tasks, 'CREATED_DATE', this.props.startDate, this.props.endDate)
+      : this.props.tasks;
+    
+    tasks.forEach(({ state }: any) => {
+      spent += +state.price;
+    });
+
+    return spent ? `$${spent.toFixed(2)}` : 'could not count';
+  }
+
+  render = () => 
+    <Card
+      body={<>
+        <Header.H5 className="text-center">Spent this period</Header.H5>
+        <div className="display-4 text-center">{this.spent}</div>
+      </>
+    }/>
 }
 
 export default Dashboard;

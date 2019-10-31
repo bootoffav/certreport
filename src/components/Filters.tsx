@@ -34,7 +34,7 @@ class ColumnSearch extends React.Component<{
       <input type="text" className="form-control" placeholder="search"
         onChange={this.onChange} value={this.state.value}/>
       <div className="input-group-append">
-        <button className="btn btn-outline-success dropdown-toggle" id="columnSearch" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Task name</button>
+        <button className="btn btn-outline-success dropdown-toggle" id="columnSearch" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Task name</button>
         <div className="dropdown-menu">
           <button className="dropdown-item" data-columnsearch="TITLE"
             onClick={this.changeColumn}
