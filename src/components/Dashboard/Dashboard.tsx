@@ -56,7 +56,7 @@ class Dashboard extends React.Component<{ tasks: any; }, IDashboard> {
           </Grid.Col>
         </Grid.Row>
         <Grid.Row cards deck>
-          <Grid.Col md={6}>
+          <Grid.Col md={5}>
             <Card
               title={<div className="text-center">Tasks by stages</div>}
               body={
@@ -69,13 +69,13 @@ class Dashboard extends React.Component<{ tasks: any; }, IDashboard> {
           </Grid.Col>
           <Grid.Col md={6}>
             <Grid.Row>
-              <Grid.Col>
+              {/* <Grid.Col>
                 <CompletedCertifications
                   tasks={this.props.tasks}
                   startDate={this.state.startDate}
                   endDate={this.state.endDate}
                 />
-              </Grid.Col>
+              </Grid.Col> */}
               <Grid.Col>
                 <StartedCertifications
                   tasks={this.props.tasks}
@@ -146,20 +146,21 @@ class CompletedCertifications extends React.Component<ICardProps> {
 class StartedCertifications extends React.Component<ICardProps> {
   
   get ongoingCerts() {
-    const tasks = tasksInRange(this.props.tasks, 'CREATED_DATE', this.props.startDate, this.props.endDate);
-    return tasks.filter(t => ![
-      '7. Test-report ready',
-      '8. Certificate ready',
-      '9. Ended'
-    ].includes(t.state.stage)).length;
+    return tasksInRange(this.props.tasks, 'CREATED_DATE', this.props.startDate, this.props.endDate).length;
+  }
+
+  get movement() {
+    const tasksBeforePeriod = tasksInRange(this.props.tasks, 'CREATED_DATE', new Date('December 17, 2010 03:24:00'), this.props.endDate).length;
+
+    return (this.ongoingCerts * 100 / tasksBeforePeriod).toFixed(2);
   }
 
   render() {
     return <StatsCard
       layout={1}
-      movement={42}
+      movement={this.movement}
       total={<div className="display-4">{this.ongoingCerts}</div> }
-      label="Active Certifications"
+      label="New Certifications"
     />
     }
   }
