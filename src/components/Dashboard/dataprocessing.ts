@@ -1,36 +1,38 @@
 function getData(tasks: any, type: string) {
-    const data: any = {};
-    const stages: {
-      [key: string]: number;
-    } = {
-      'no stage': 0,
-      '00. Paused': 0,
-      '0. Sample to be prepared': 0,
-      '1. Sample Sent': 0,
-      '2. Sample arrived': 0,
-      '3. PI Issued': 0,
-      '4. Payment Done': 0,
-      '5. Testing is started': 0,
-      '6. Pre-treatment done': 0,
-      '7. Test-repost ready': 0,
-      '8. Certificate ready': 0,
-      '9. Ended': 0,
-      'Results': 0,
-      'Overdue': 0
-    };
-    tasks.forEach((task: any) => {
-      task.state.stage === '' ? stages['no stage']++ : stages[task.state.stage]++;
-    })
-    data.labels = Object.keys(stages);
-    const colors = getRandomColors(Object.keys(stages).length);
+  const data: any = {};
+  data.names = {
+    'no stage': [],
+    '00. Paused': [],
+    '0. Sample to be prepared': [],
+    '1. Sample Sent': [],
+    '2. Sample arrived': [],
+    '3. PI Issued': [],
+    '4. Payment Done': [],
+    '5. Testing is started': [],
+    '6. Pre-treatment done': [],
+    '7. Test-report ready': [],
+    '8. Certificate ready': [],
+    '9. Ended': [],
+    'Results': [],
+    'Overdue': []
+  };
 
-    data.datasets = [{
-      data: Object.values(stages),
-      backgroundColor: colors,
-      hoverBackgroundColor: colors,
-    }];
 
-    return data;
+  tasks.forEach((task: any) => {
+    (task.state.stage === '')
+    ? data.names['no stage'].push(task.TITLE.substring(0, 50))
+    : data.names[task.state.stage].push(task.TITLE.substring(0, 50));
+  });
+  data.labels = Object.keys(data.names);
+  const colors = getRandomColors(Object.keys(data.names).length);
+  
+  data.datasets = [{
+    data: Object.keys(data.names).map(stage => data.names[stage].length),
+    backgroundColor: colors,
+    hoverBackgroundColor: colors,
+  }];
+
+  return data;
 }
 
 function getRandomColors(amount: number) {

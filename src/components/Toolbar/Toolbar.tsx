@@ -1,6 +1,5 @@
 import React from 'react';
 import Task, { Stage } from '../../Task/Task';
-import { defaultProps } from 'react-select/lib/Creatable';
 
 const Toolbar: React.FunctionComponent<{
   onClick: (toolBarProp: Stage | undefined | string) => void;
