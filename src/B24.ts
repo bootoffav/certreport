@@ -113,7 +113,7 @@ class B24 {
           `${state.comments && `[B]Comments:[/B] ${state.comments}\n`}` +
           `${state.link && `[B]Edit:[/B] ${state.link}\n`}` +
           `${dataSeparator}` + (state.otherTextInDescription || ''),
-      DEADLINE: dayjs(state.certReceivedOnPlanDate).toISOString()
+      DEADLINE: state.certReceivedOnPlanDate ? dayjs(state.certReceivedOnPlanDate).toISOString() : state.certReceivedOnPlanDate
     }
   };
 
