@@ -94,7 +94,11 @@ export interface IState {
 
 const emptyState : IState = {
   standardsResult: {},
-  DBState: {},
+  DBState: {
+    cycles: [5, ''],
+    washTemp: 60,
+    otherStandard1: 'According to Standard Mandotory Test Requirement'
+  },
   resume: undefined,
   link: '',
   paid: false,
