@@ -154,15 +154,17 @@ class B24 {
     }
 
     const taskData = { ...B24.formTaskFields(state), ...defaultParams };
+
     return fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.add/`, {
       method: 'post',
       headers: { 'content-type': 'application/x-www-form-urlencoded' },
       body: qs.stringify([taskData])
     })
       .then(r => r.json())
-      .then(res => {
-        state.link = `[URL=certreport.xmtextiles.com/edit/${res.result}/]this task[/URL]`;
-        B24.updateTask(state, res.result); //to include link for editing
+      .then(({ result: taskId }) => {
+        state.link = `[URL=certreport.xmtextiles.com/edit/${taskId}/]this task[/URL]`;
+        B24.updateTask(state, taskId); //to include link for editing
+        return taskId;
     });
   }
 

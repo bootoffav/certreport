@@ -15,7 +15,6 @@ type FabricApplicationFormState = {
 };
 
 class FabricApplicationForm extends React.Component<{
-  taskId: string;
   state: FabricApplicationFormState;
   updateParent: (DBState: any) => void;
 }, {

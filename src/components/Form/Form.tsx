@@ -112,26 +112,25 @@ class Form extends React.Component<IFormProps> {
       icon: "info",
       buttons: ["Cancel", "OK"]
     })
-    .then((OK) => {
-      if (OK) {
-        this.setState({ requestStatus: Status.Loading });
-        DB.updateInstance(this.state.DBState.ref, {
-          ...this.state.DBState,
-          EN11612Detail: this.state.EN11612Detail
-        });
-        this.task_id
-          ? B24.updateTask(this.state, this.task_id)
-            .then(
-              () => this.afterSuccessfulSubmit(),
-              () => this.afterUnsuccessfulSubmit()
-            )
-          : B24.createTask(this.state)
-            .then(
-              () => this.afterSuccessfulSubmit(),
-              () => this.afterUnsuccessfulSubmit()
-            )
+      .then(async (OK) => {
+        if (OK) {
+          this.setState({ requestStatus: Status.Loading });
+
+          if (this.task_id) {
+            await B24.updateTask(this.state, this.task_id);
+            await DB.updateInstance(this.state.DBState.ref, {
+              ...this.state.DBState,
+              EN11612Detail: this.state.EN11612Detail
+            });
+            return;
+          }
+
+          const taskId = await B24.createTask(this.state);
+          DB.createInstance(taskId, this.state.DBState);
         }
-      });
+      })
+      .then(this.successfullySubmitted)
+      .catch(this.unsuccessfullySubmitted)
   }
 
   asSelectable = (value : string) => {
@@ -143,13 +142,13 @@ class Form extends React.Component<IFormProps> {
     }
   }
 
-  afterSuccessfulSubmit() {
+  successfullySubmitted = () => {
     this.setState({ requestStatus: Status.Success });
     sessionStorage.removeItem('tasks');
     setTimeout(() => window.location.replace("/"), 2000);
   }
 
-  afterUnsuccessfulSubmit() {
+  unsuccessfullySubmitted = () => {
     this.setState({ requestStatus: Status.Failure });
     setTimeout(() => this.setState({
       requestStatus: Status.FillingForm
@@ -449,7 +448,6 @@ class Form extends React.Component<IFormProps> {
           <Tab title="Standards">{this.renderStandards()}</Tab>
           <Tab title="Fabric Application From">
             {<FabricApplicationForm
-              taskId={this.task_id || ''}
               state={this.state.DBState}
               updateParent={(DBState: any) => this.setState({ DBState })}
               />}</Tab>

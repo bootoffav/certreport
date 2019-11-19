@@ -2,11 +2,8 @@ import faunadb, { query as q } from "faunadb";
 
 class DB {
 
-  static defaultData = {
-    cycles: [5, ''],
-    washTemp: 60,
-    otherStandard1: 'According to Standard Mandotory Test Requirement'
-  };
+  static fdbClass = process.env.REACT_APP_FAUNADB_CLASS || 'aitexForm';
+  static fdbIndex = process.env.REACT_APP_FAUNADB_INDEX || 'id';
 
   static client() {
     if (typeof process.env.REACT_APP_FAUNADB_KEY !== 'string') {
@@ -19,26 +16,29 @@ class DB {
   }
 
   static getData(taskId: string, ) {
-    return DB.client().query(q.Get(q.Match(q.Index('id'), +taskId)))
+    return DB.client().query(q.Get(q.Match(q.Index(this.fdbIndex), +taskId)))
       .then((res: any) => res)
-      .catch(() => 
-        DB.client().query(
-          q.Create(q.Class('aitexForm'),
-            {
-              data: {
-                id: +taskId,
-                ...DB.defaultData
-              }
-            }))
-          .then((res: any) => res)
-      );
+      .catch(console.log);
+  }
+
+  static async createInstance(taskId: string, data: any) {
+    DB.client().query(
+      q.Create(q.Class(this.fdbClass),
+        {
+          data: {
+            id: taskId,
+            ...data
+          }
+        }
+      )
+    )
   }
 
   static updateInstance(
     ref: string,
     { cycles, washTemp, otherStandard1, flatten: aitexForm, EN11612Detail }: any
   ) {
-    DB.client().query(q.Update(q.Ref(q.Class("aitexForm"), ref), {
+    DB.client().query(q.Update(q.Ref(q.Class(this.fdbClass), ref), {
       data: {
         cycles,
         washTemp,
@@ -46,9 +46,8 @@ class DB {
         aitexForm,
         EN11612Detail
       }
-    })).catch((e: any) => {
-      console.log('Something wrong with updateIntance');
-    });
+    }))
+      .catch(console.log);
   }
 }
 
