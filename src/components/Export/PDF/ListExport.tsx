@@ -119,7 +119,6 @@ class ListExport extends React.Component<{
               //   results.push({ text: `PASS - (${fails})`, color: 'red' });
               // }
             }
-            // debugger;
             row.push(results);
             break;
           default:

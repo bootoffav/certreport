@@ -57,7 +57,6 @@ export default class List extends React.Component<{ tasks: any; staleData: boole
 
   updateState = (providedTasks?: any) => {
     const tasks: Task[] = generalSettingsFilter(
-      // this.context.allTasks
       providedTasks || this.props.tasks
     );
     

@@ -9,22 +9,21 @@ type IEN11612Detail = {
   D?: 'pass' | 'fail';
   E?: 'pass' | 'fail';
   F?: 'pass' | 'fail';
+  [key: string]: any;
 }
 
 class EN11612Detail extends React.Component<{
   updateParent: (state: IEN11612Detail) => void;
-  state?: IEN11612Detail;
 }>  {
   blocks = ['A1', 'A2', 'B', 'C', 'D', 'E', 'F'];
-  state = {};
 
-  UNSAFE_componentWillReceiveProps({ state: newState }: any) {
-    this.setState({ ...newState });
+  onChange = ({ currentTarget: { name, dataset } }: any) => {
+    const { updateParent, ...noUpdateParent } = this.props;
+    this.props.updateParent({
+      ...noUpdateParent,
+      [name]: dataset['result']
+    });
   }
-
-  onChange = ({ currentTarget }: any) => this.setState({
-    [currentTarget.name]: currentTarget.dataset['result']
-  }, () => this.props.updateParent(this.state));
 
   render() {
     return <div className="d-flex">
@@ -41,9 +40,9 @@ class EN11612Detail extends React.Component<{
                 name={name}
                 data-result='fail'
                 // @ts-ignore
-                checked={this.state[name] === 'fail'}
+                checked={this.props[name] === 'fail'}
                 onChange={this.onChange}
-              />
+                />
               <label className="form-check-label"><span className="oi oi-circle-x"></span></label>
             </div>&nbsp;&nbsp;&nbsp;
           <div className="form-check">
@@ -53,7 +52,7 @@ class EN11612Detail extends React.Component<{
                 name={name}
                 data-result='pass'
                 // @ts-ignore
-                checked={this.state[name] === 'pass'}
+                checked={this.props[name] === 'pass'}
                 onChange={this.onChange}
               />
               <label className="form-check-label"><span className="oi oi-thumb-up"></span></label>
@@ -66,7 +65,7 @@ class EN11612Detail extends React.Component<{
 }
 
 type StandardsProps = {
-  updateParent: (state: EN11612Detail) => void;
+  updateParent: (state: IEN11612Detail) => void;
   standards: string;
   standardsResult: {
     [key: string]: string;
@@ -138,8 +137,7 @@ function Standards(props: StandardsProps) {
         </div>
         <div id={`collapse_${id}`} className={standard === 'EN 11612' ? 'show' : 'collapse'} aria-labelledby={`heading_${id}`} data-parent="#accordionStandards">
           <div className="card-body">
-            {standard === 'EN 11612' && <EN11612Detail state={EN11612}
-              // @ts-ignore
+            {standard === 'EN 11612' && <EN11612Detail { ...EN11612 }
               updateParent={props.updateParent} />}
           </div>
         </div>

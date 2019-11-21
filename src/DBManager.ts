@@ -21,33 +21,27 @@ class DB {
       .catch(console.log);
   }
 
-  static async createInstance(taskId: string, data: any) {
+  static async createInstance(
+    id: string,
+    state: any
+  ) {
     DB.client().query(
       q.Create(q.Class(this.fdbClass),
         {
           data: {
-            id: taskId,
-            ...data
+            id, ...state
           }
-        }
-      )
+        })
     )
   }
 
   static updateInstance(
     ref: string,
-    { cycles, washTemp, otherStandard1, flatten: aitexForm, EN11612Detail }: any
+    state: any
   ) {
     DB.client().query(q.Update(q.Ref(q.Class(this.fdbClass), ref), {
-      data: {
-        cycles,
-        washTemp,
-        otherStandard1,
-        aitexForm,
-        EN11612Detail
-      }
-    }))
-      .catch(console.log);
+      data: { ...state }
+    })).catch(console.log);
   }
 }
 

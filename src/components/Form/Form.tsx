@@ -50,7 +50,7 @@ class Form extends React.Component<IFormProps> {
     if (this.state.hasError) throw new Error('Task not found');
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     if (this.task_id && this.props.location.state === undefined) {
         B24.get_task(this.task_id)
           .then(r => this.setState({ ...r.state }))
@@ -58,26 +58,14 @@ class Form extends React.Component<IFormProps> {
     }
 
     if (this.task_id) {
-      DB.getData(this.task_id).then((res: any) => {
-        const DBState: any = {};
-        this.setState({ EN11612Detail: res.data.EN11612Detail });
-        try {
-          const [
-            testRequirement = '',
-            washPreTreatment = '',
-            footer = ''
-          ] = res.data.aitexForm.split(' ');
-          DBState.testRequirement = testRequirement.split(';').map((row: string) => row.split(',')).slice(0, -1);
-          DBState.washPreTreatment = washPreTreatment.split(';').map((row: string) => row.split(',')).slice(0, -1);
-          DBState.footer = footer.split(';').map((row: string) => row.split(',')).slice(0, -1);
-        } catch (e) { } finally {
-          DBState.cycles = res.data.cycles;
-          DBState.washTemp = res.data.washTemp;
-          DBState.otherStandard1 = res.data.otherStandard1;
-          DBState.ref = res.ref.value.id;
-          DBState.flatten = res.data.aitexForm;
-          this.setState({ DBState });
-        }
+      const res = await DB.getData(this.task_id);
+      const { EN11612Detail, id, ...DBState } = res.data;
+      this.setState({
+        DBState: {
+          ...DBState,
+          ref: res.ref.value.id
+        },
+        EN11612Detail
       });
       this.state.link || this.setState({ link: `[URL=https://certreport.xmtextiles.com/edit/${this.task_id}/]this task[/URL]` });
     }
@@ -446,11 +434,12 @@ class Form extends React.Component<IFormProps> {
           <Tab title="Dates">{this.renderDates()}</Tab>
           <Tab title="Payments">{this.renderPayments()}</Tab>
           <Tab title="Standards">{this.renderStandards()}</Tab>
-          <Tab title="Fabric Application From">
-            {<FabricApplicationForm
+          <Tab title="Fabric Application Form">
+            <FabricApplicationForm
               state={this.state.DBState}
               updateParent={(DBState: any) => this.setState({ DBState })}
-              />}</Tab>
+            />
+          </Tab>
           <Tab title="Comments">
             {<div className="form-row">
               <label htmlFor='comments'>Comments:</label>

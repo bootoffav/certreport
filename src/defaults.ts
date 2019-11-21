@@ -96,7 +96,10 @@ export interface IState {
 const emptyState : IState = {
   standardsResult: {},
   DBState: {
-    cycles: [5, ''],
+    testRequirement: [[],[],[],[],[],[],[],[],[]],
+    washPreTreatment: [[],[]],
+    footer: [[],[]],
+    cycles: ['5', ''],
     washTemp: 60,
     otherStandard1: 'According to Standard Mandotory Test Requirement'
   },
