@@ -131,8 +131,8 @@ class B24 {
             fetch(`${main_url}/${creator_id}/${webhook_key}/disk.file.delete?` + qs.stringify({ id: file.FILE_ID }));
           }
         }
-      ));
-    new AppFormExport(state).create().getBase64((base64: string) => {
+        ));
+    new AppFormExport({ state }).create().getBase64((base64: string) => {
       fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.addfile/`, {
         method: 'post',
         body: qs.stringify({
@@ -168,7 +168,7 @@ class B24 {
     });
   }
 
-  static updateTask(state : any, task_id : string | null = null) {
+  static updateTask(state: any, task_id: string | null = null) {
     if (task_id === null) {
         throw new Error('task id is not defined');
     }

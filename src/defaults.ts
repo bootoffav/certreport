@@ -43,6 +43,7 @@ export interface IState {
     [key: string]: 'pass' | 'fail';
   };
   DBState: any;
+  EN11612Detail?: any,
   link : string;
   testingTime: string;
   serialNumber: string;
@@ -103,6 +104,7 @@ const emptyState : IState = {
     washTemp: 60,
     otherStandard1: 'According to Standard Mandotory Test Requirement'
   },
+  EN11612Detail: {},
   resume: undefined,
   link: '',
   paid: false,

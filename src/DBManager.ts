@@ -1,4 +1,5 @@
-import faunadb, { query as q } from "faunadb";
+import faunadb, { query as q, errors } from "faunadb";
+import { emptyState } from './defaults';
 
 class DB {
 
@@ -15,32 +16,44 @@ class DB {
     });
   }
 
-  static getData(taskId: string, ) {
-    return DB.client().query(q.Get(q.Match(q.Index(this.fdbIndex), +taskId)))
+  static async getData(taskId: string) {
+    const res = await DB.client().query(q.Get(q.Match(q.Index(this.fdbIndex), +taskId)))
       .then((res: any) => res)
-      .catch(console.log);
+      .catch(async error => {
+        if (error instanceof errors.NotFound) {
+          return await this.createInstance(taskId, emptyState.DBState);
+        }
+        console.log(error);
+      });
+    const props = Object.getOwnPropertyNames(res.data);
+
+    if (!props.includes('testRequirement')) res.data.testRequirement = emptyState.DBState.testRequirement;
+    if (!props.includes('washPreTreatment')) res.data.washPreTreatment = emptyState.DBState.washPreTreatment;
+    if (!props.includes('footer')) res.data.footer = emptyState.DBState.footer;
+
+    return res;
   }
 
   static async createInstance(
     id: string,
     state: any
   ) {
-    DB.client().query(
+    return DB.client().query(
       q.Create(q.Class(this.fdbClass),
         {
           data: {
-            id, ...state
+            id: +id, ...state
           }
         })
     )
   }
 
   static updateInstance(
-    ref: string,
     state: any
   ) {
+    const { ref, ...data } = state;
     DB.client().query(q.Update(q.Ref(q.Class(this.fdbClass), ref), {
-      data: { ...state }
+      data: { ...data }
     })).catch(console.log);
   }
 }

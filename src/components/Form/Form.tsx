@@ -93,32 +93,32 @@ class Form extends React.Component<IFormProps> {
 
   handleChange = (e: any) => ['price', 'price2'].includes(e.target.id) ? this.setState({ [e.target.id]: e.target.value.replace(',', '.') }) : this.setState({ [e.target.id]: e.target.value });
 
-  handleCert(e: any) {
+  async handleCert(e: any) {
     e.preventDefault();
-    swal({
+    const OK = await swal({
       title: "Are you sure?",
       icon: "info",
       buttons: ["Cancel", "OK"]
-    })
-      .then(async (OK) => {
-        if (OK) {
-          this.setState({ requestStatus: Status.Loading });
+    });
 
-          if (this.task_id) {
-            await B24.updateTask(this.state, this.task_id);
-            await DB.updateInstance(this.state.DBState.ref, {
-              ...this.state.DBState,
-              EN11612Detail: this.state.EN11612Detail
-            });
-            return;
-          }
+    if (OK) {
+        this.setState({ requestStatus: Status.Loading });
 
-          const taskId = await B24.createTask(this.state);
-          DB.createInstance(taskId, this.state.DBState);
-        }
-      })
-      .then(this.successfullySubmitted)
-      .catch(this.unsuccessfullySubmitted)
+      if (this.task_id) {
+        DB.updateInstance({
+          ...this.state.DBState,
+          EN11612Detail: this.state.EN11612Detail
+        });
+        B24.updateTask(this.state, this.task_id)
+          .then(this.successfullySubmitted)
+          .catch(this.unsuccessfullySubmitted)
+      } else {
+        const taskId = await B24.createTask(this.state);
+        DB.createInstance(taskId, this.state.DBState)
+          .then(this.successfullySubmitted)
+          .catch(this.unsuccessfullySubmitted)
+      }
+    }
   }
 
   asSelectable = (value : string) => {
@@ -416,7 +416,7 @@ class Form extends React.Component<IFormProps> {
           className="btn btn-danger btn-block"
         >SAVE</button>
       </div>
-      <Export data={this.state}/>
+      <Export state={this.state}/>
     </div>
 
   renderFileUploads() {
