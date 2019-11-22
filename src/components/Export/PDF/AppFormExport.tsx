@@ -191,7 +191,7 @@ class AppFormExport {
             {
               text: 
                 state.DBState.testRequirement[7].includes('Other Standard 1')
-                  ? this.renderProperSquare('testRequirement', 7, 'Other Standard 1')
+                  ? state.DBState.otherStandard1
                   : 'According to Standard Mandotory Test Requirement'
               , colSpan: 7
               }, {}, {}, {}, {}, {}, {},
