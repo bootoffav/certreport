@@ -379,7 +379,7 @@ class AppFormExport {
         author: 'XM Group',
       },
       defaultStyle: {
-        fontSize: 10,
+        fontSize: 9,
         font: 'Arial',
       },
       pageMargins: [30, 15] as [number, number]
