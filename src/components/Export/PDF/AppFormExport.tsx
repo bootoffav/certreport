@@ -13,9 +13,8 @@ class AppFormExport {
   state: any;
   docDefinition: any;
 
-  // @ts-ignore
   renderProperSquare = (table: string, row: number, item: string) => this.state.DBState[table][row].includes(item) ? checkedSquare : emptySquare;
-  
+
   constructor({ state }: any) {
     this.state = state;
     

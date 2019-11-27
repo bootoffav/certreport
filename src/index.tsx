@@ -1,5 +1,6 @@
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import "tabler-react/dist/Tabler.css";
 import 'open-iconic/font/css/open-iconic-bootstrap.min.css';
 import 'react-table/react-table.css';
 import React from 'react';
@@ -16,10 +17,6 @@ import Dashboard from './components/Dashboard/Dashboard';
 import ErrorBoundary from './ErrorBoundary';
 
 initApp();
-
-
-// const Form = lazy(() => import('./components/Form/Form'));
-// const Dashboard = lazy(() => import('./components/Dashboard/Dashboard'));
 
 
 class App extends React.Component {

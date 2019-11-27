@@ -71,50 +71,52 @@ class B24 {
     
   static formTaskFields = (state : IState) => {
     let stAd = new StateAdapter(state);
-    return {
+    const taskFields: any = {
       ...B24.defaultParams,
       UF_CRM_TASK: B24.makeUfCrmTaskField(state),
       TITLE: `${state.serialNumber}_${state.testingCompany} - ${state.standards} (${state.pretreatment1}) - ${state.article}, ${state.colour} ` +
           `(send ${state.sentOn} - plan ${state.testFinishedOnPlanDate}) = ${state.price} € | ${stAd.getStageForTitle()}`,
       DESCRIPTION: `${state.applicantName && `[B]Applicant name:[/B] ${state.applicantName}\n`}` +
-          `${state.product && `[B]Product:[/B] ${state.product}\n`}` +
-          `${state.code && `[B]Code:[/B] ${state.code}\n`}` +
-          `${state.article && `[B]Article:[/B] ${state.article}\n`}` +
-          `${state.colour && `[B]Colour:[/B] ${state.colour}\n`}` +
-          `${state.serialNumber && `[B]Serial number:[/B] ${state.serialNumber}\n`}` +
-          `${state.length && `[B]Length of sample, meters:[/B] ${state.length}\n`}` +
-          `${state.width && `[B]Width of sample, meters:[/B] ${state.width}\n`}` +
-          `${state.partNumber && `[B]Part number:[/B] ${state.partNumber}\n`}` +
-          `${state.rollNumber && `[B]Roll number:[/B] ${state.rollNumber}\n`}` +
-          `${state.standards && `[B]Standard:[/B] ${stAd.standardsWithResults}\n`}` +
-          `${state.price && `[B]Price:[/B] ${state.price} €\n`}` +
-          `${state.paymentDate ? `[B]Payment date:[/B] ${state.paymentDate}\n` : ''}` +
-          `${stAd.secondPayment && `[B]Second payment:[/B] ${stAd.secondPayment}\n`}` +
-          `${state.testingCompany && `[B]Testing company:[/B] ${state.testingCompany}\n`}` +
-          `${state.proformaReceivedDate && state.proformaNumber && `[B]Proforma:[/B] ${state.proformaReceivedDate}, ${state.proformaNumber}\n`}` +
-          `${state.testReport && `[B]Test report:[/B] ${state.testReport}\n`}` +
-          `${state.certificate && `[B]Certificate:[/B] ${state.certificate}\n`}` +
-          `${state.materialNeeded && `[B]Material needed:[/B] ${state.materialNeeded}\n`}` +
-          `${state.testingTime && `[B]Testing time, days:[/B] ${state.testingTime}\n`}` +
-          `${state.pretreatment1 && `[B]Pre-treatment 1:[/B] ${state.pretreatment1}` } ` +
-          `${state.pretreatment1Result && `(${ state.pretreatment1Result })`}` +
-          '\n' +
-          `${state.pretreatment2 && `[B]Pre-treatment 2:[/B] ${state.pretreatment2}\n`}` +
-          `${state.pretreatment3 && `[B]Pre-treatment 3:[/B] ${state.pretreatment3}\n`}` +
-          `${state.pausedUntil && `[B]Paused Until:[/B] ${state.pausedUntil}\n`}` +
-          `${state.readyOn && `[B]Sample ready on:[/B] ${state.readyOn}\n`}` +
-          `${state.sentOn && `[B]to be sent on:[/B] ${state.sentOn}\n`}` +
-          `${state.receivedOn && `[B]to be received on:[/B] ${state.receivedOn}\n`}` +
-          `${state.startedOn && `[B]tests to be started on:[/B] ${state.startedOn}\n`}` +
-          `${stAd.testFinishedOn && `[B]tests to be finished on:[/B] ${stAd.testFinishedOn}\n`}` +
-          `${stAd.certReceivedOn && `[B]results to be received on:[/B] ${stAd.certReceivedOn}\n`}` +
-          `${state.stage && `[B]Stage:[/B] ${state.stage}\n`}` +
-          `${state.resume === undefined ? '' : `[B]Resume:[/B] ${state.resume}\n`}` +
-          `${state.comments && `[B]Comments:[/B] ${state.comments}\n`}` +
-          `${state.link && `[B]Edit:[/B] ${state.link}\n`}` +
-          `${dataSeparator}` + (state.otherTextInDescription || ''),
-      DEADLINE: state.certReceivedOnPlanDate ? dayjs(state.certReceivedOnPlanDate).toISOString() : state.certReceivedOnPlanDate
-    }
+        `${state.product && `[B]Product:[/B] ${state.product}\n`}` +
+        `${state.code && `[B]Code:[/B] ${state.code}\n`}` +
+        `${state.article && `[B]Article:[/B] ${state.article}\n`}` +
+        `${state.colour && `[B]Colour:[/B] ${state.colour}\n`}` +
+        `${state.serialNumber && `[B]Serial number:[/B] ${state.serialNumber}\n`}` +
+        `${state.length && `[B]Length of sample, meters:[/B] ${state.length}\n`}` +
+        `${state.width && `[B]Width of sample, meters:[/B] ${state.width}\n`}` +
+        `${state.partNumber && `[B]Part number:[/B] ${state.partNumber}\n`}` +
+        `${state.rollNumber && `[B]Roll number:[/B] ${state.rollNumber}\n`}` +
+        `${state.standards && `[B]Standard:[/B] ${stAd.standardsWithResults}\n`}` +
+        `${state.price && `[B]Price:[/B] ${state.price} €\n`}` +
+        `${state.paymentDate ? `[B]Payment date:[/B] ${state.paymentDate}\n` : ''}` +
+        `${stAd.secondPayment && `[B]Second payment:[/B] ${stAd.secondPayment}\n`}` +
+        `${state.testingCompany && `[B]Testing company:[/B] ${state.testingCompany}\n`}` +
+        `${state.proformaReceivedDate && state.proformaNumber && `[B]Proforma:[/B] ${state.proformaReceivedDate}, ${state.proformaNumber}\n`}` +
+        `${state.testReport && `[B]Test report:[/B] ${state.testReport}\n`}` +
+        `${state.certificate && `[B]Certificate:[/B] ${state.certificate}\n`}` +
+        `${state.materialNeeded && `[B]Material needed:[/B] ${state.materialNeeded}\n`}` +
+        `${state.testingTime && `[B]Testing time, days:[/B] ${state.testingTime}\n`}` +
+        `${state.pretreatment1 && `[B]Pre-treatment 1:[/B] ${state.pretreatment1}`} ` +
+        `${state.pretreatment1Result && `(${state.pretreatment1Result})`}` +
+        '\n' +
+        `${state.pretreatment2 && `[B]Pre-treatment 2:[/B] ${state.pretreatment2}\n`}` +
+        `${state.pretreatment3 && `[B]Pre-treatment 3:[/B] ${state.pretreatment3}\n`}` +
+        `${state.pausedUntil && `[B]Paused Until:[/B] ${state.pausedUntil}\n`}` +
+        `${state.readyOn && `[B]Sample ready on:[/B] ${state.readyOn}\n`}` +
+        `${state.sentOn && `[B]to be sent on:[/B] ${state.sentOn}\n`}` +
+        `${state.receivedOn && `[B]to be received on:[/B] ${state.receivedOn}\n`}` +
+        `${state.startedOn && `[B]tests to be started on:[/B] ${state.startedOn}\n`}` +
+        `${stAd.testFinishedOn && `[B]tests to be finished on:[/B] ${stAd.testFinishedOn}\n`}` +
+        `${stAd.certReceivedOn && `[B]results to be received on:[/B] ${stAd.certReceivedOn}\n`}` +
+        `${state.stage && `[B]Stage:[/B] ${state.stage}\n`}` +
+        `${state.resume === undefined ? '' : `[B]Resume:[/B] ${state.resume}\n`}` +
+        `${state.comments && `[B]Comments:[/B] ${state.comments}\n`}` +
+        `${state.link && `[B]Edit:[/B] ${state.link}\n`}` +
+        `${dataSeparator}` + (state.otherTextInDescription || ''),
+    };
+    if (state.certReceivedOnPlanDate) taskFields.DEADLINE = dayjs(state.certReceivedOnPlanDate).toISOString(); 
+
+    return taskFields;
   };
 
   static async handleApplicationForm(taskId: string, state: IState) {
@@ -178,7 +180,7 @@ class B24 {
       method: 'post',
       headers: { 'content-type': 'application/x-www-form-urlencoded' },
       body: qs.stringify([task_id, task_data])
-    })
+    });
   }
 
   static fileUpload(

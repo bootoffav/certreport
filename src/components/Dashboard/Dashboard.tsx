@@ -1,12 +1,14 @@
 import React from 'react';
+import { render } from 'react-dom';
+import ReactTable from "react-table";
 import { Grid, Card } from 'tabler-react';
 import { Doughnut } from 'react-chartjs-2';
-import "tabler-react/dist/Tabler.css";
-
 import { DateFilter } from '../Filters';
-import { doughnutConf } from './configs';
+import { doughnutOptions } from './configs';
 import { getData } from './dataprocessing';
 import { AmountOfCertifications, AmountSpent, CompletedCertifications, Products } from './StatCards';
+import { getColumns } from '../List/columns';
+
 
 interface IDashboard {
   tasks: any;
@@ -48,49 +50,76 @@ class Dashboard extends React.Component<{ tasks: any[]; }, IDashboard> {
     });
   }
 
+  get byStages() {
+    return getData(this.state.tasks, 'byStages');
+  }
+
   render() {
     return (
-      <>
       <Grid>
+          <Grid.Row>
+            <Grid.Col width={4} offset={4}>
+              <Card body={ <DateFilter filter={this.dateFilter} /> }/>
+            </Grid.Col>
+          </Grid.Row>
+          <Grid.Row cards deck>
+            <Grid.Col md={5}>
+              <Card
+                title="Task by stages"
+                body={
+                  <Doughnut
+                    data={this.byStages}
+                    options={{
+                      ...doughnutOptions,
+                      onClick: (_: MouseEvent, chartElement: any) => {
+                        const { _model: { label: stage } } = chartElement.pop();
+                        this.renderTableOfDiagramSegment(stage);
+                      }
+                    }}
+                  />
+                }
+              />
+            </Grid.Col>
+            <Grid.Col md={7}>
+              <Grid.Row>
+                <StatCardsContext.Provider value={{
+                  tasks: this.props.tasks,
+                  startDate: this.state.startDate,
+                  endDate: this.state.endDate,
+                }}>
+                  <Grid.Col><CompletedCertifications /></Grid.Col>
+                  <Grid.Col><AmountOfCertifications /></Grid.Col>
+                  <Grid.Col><AmountSpent /></Grid.Col>
+                  <Grid.Col><Products /></Grid.Col>
+                </StatCardsContext.Provider>
+              </Grid.Row>
+            </Grid.Col>
+          </Grid.Row>
         <Grid.Row>
-          <Grid.Col width={4} offset={4}>
-            <Card body={ <DateFilter filter={this.dateFilter} /> }/>
+          <Grid.Col md={12}>
+            <div id="tableOfDiagramSegment"></div>
           </Grid.Col>
         </Grid.Row>
-        <Grid.Row cards deck>
-          <Grid.Col md={5}>
-            <Card
-              title="Task by stages"
-              body={
-                <Doughnut
-                  data={() => getData(this.state.tasks, 'byStages')}
-                  options={doughnutConf.options}
-                />
-              }
-            />
-          </Grid.Col>
-          <Grid.Col md={7}>
-            <Grid.Row>
-              <StatCardsContext.Provider value={{
-                tasks: this.props.tasks,
-                startDate: this.state.startDate,
-                endDate: this.state.endDate,
-              }}>
-                <Grid.Col><CompletedCertifications /></Grid.Col>
-                <Grid.Col><AmountOfCertifications /></Grid.Col>
-                <Grid.Col><AmountSpent /></Grid.Col>
-                <Grid.Col><Products /></Grid.Col>
-              </StatCardsContext.Provider>
-            </Grid.Row>
-          </Grid.Col>
-        </Grid.Row>
-        </Grid>
-        </>
+      </Grid>
     );
   }
+
+  get columns() {
+    return getColumns(0, undefined);
+  }
+
+  renderTableOfDiagramSegment(stage: string) {
+
+    const data = this.state.tasks.filter(t => t.state.stage === stage);
+
+    render(<ReactTable
+      data={data}
+      columns={this.columns}
+      defaultPageSize={10}
+    />, document.getElementById('tableOfDiagramSegment'));
+  }
+
 }
-
-
 export default Dashboard;
 export const StatCardsContext = React.createContext({});
 export { tasksInRange };

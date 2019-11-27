@@ -20,7 +20,7 @@ const Notification: React.FunctionComponent<{
     case Status.Success:
       return <div className="alert alert-success" role="alert">
         <h4 className="alert-heading">Success!</h4>
-        <p>You are being redirected to dashboard!</p>
+        <p>This page will be closed within 3 seconds!</p>
       </div>
     case Status.Failure:
       return <div className="alert alert-danger" role="alert">

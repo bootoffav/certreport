@@ -133,7 +133,7 @@ class Form extends React.Component<IFormProps> {
   successfullySubmitted = () => {
     this.setState({ requestStatus: Status.Success });
     sessionStorage.removeItem('tasks');
-    setTimeout(() => window.location.replace("/"), 2000);
+    setTimeout(window.close, 3000);
   }
 
   unsuccessfullySubmitted = () => {

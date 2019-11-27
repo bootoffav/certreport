@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { Stage } from '../../Task/Task';
 import { dateConverter } from '../../helpers';
 
@@ -78,17 +77,11 @@ function getColumns(totalPrice: number, requiredStage: Stage | 'results' | 'over
     accessor: 'TITLE',
     id: 'taskName',
     minWidth: 550,
-    Cell: (props: any) => props.original.state.serialNumber
-      ? <Link
-        to={{
-          pathname: `/edit/${props.original.ID}`,
-          state: { ...props.original.state }
-        }}
-      >{props.value}</Link>
-      : <Link to={{
-        pathname: `/edit/${props.original.ID}`,
-        state: { ...props.original.state }
-      }}> {props.value}</Link>
+    Cell: (props: any) => 
+      <a
+        href={`/edit/${props.original.ID}`}
+        target="_blank" rel="noopener noreferrer"
+      >{props.value}</a>
   }, {
     // 9
     Header: 'Sample to be prepared on',

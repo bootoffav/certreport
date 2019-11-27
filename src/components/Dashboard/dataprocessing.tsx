@@ -46,4 +46,5 @@ function getRandomColors(amount: number) {
   return colors;
 }
 
+
 export { getData };
