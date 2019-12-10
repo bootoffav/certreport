@@ -166,12 +166,28 @@ class FabricApplicationForm extends React.Component<{
         </tr>
         <tr>
           <td>
-            <FabricApplicationForm.checkBox label={'Other Standard 2'}
+            <div className="custom-control custom-switch">
+              &nbsp;&nbsp;&nbsp;<input type="checkbox" className="custom-control-input" id="testRequirement_Other-Standard-2"
               checked={this.props.state.testRequirement[8].includes('Other Standard 2')}
               onChange={() => this.toggleCheckboxState('testRequirement', 8, 'Other Standard 2')}
+              />
+              <label className="custom-control-label" htmlFor="testRequirement_Other-Standard-2">Other Standard 2</label>
+            </div>
+          </td>
+          <td colSpan={7}>
+            <input className="form-control form-control-sm input-xs"
+              id='testRequirement_Other-Standard-2-description'
+              value={this.props.state.otherStandard2}
+              onChange={
+                ({ currentTarget: { value } }) => 
+                  this.props.updateParent({
+                    ...this.props.state,
+                    otherStandard2: value
+                  })
+              }
+              disabled={!this.props.state.testRequirement[8].includes('Other Standard 2')}
             />
           </td>
-          <td colSpan={7}>According to Standard Mandotory Test Requirement</td>
         </tr>
       </tbody>
     </table>

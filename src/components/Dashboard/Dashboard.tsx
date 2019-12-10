@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import { render } from 'react-dom';
 import ReactTable from "react-table";
 import { Grid, Card } from 'tabler-react';
@@ -112,11 +113,16 @@ class Dashboard extends React.Component<{ tasks: any[]; }, IDashboard> {
 
     const data = this.state.tasks.filter(t => t.state.stage === stage);
 
-    render(<ReactTable
-      data={data}
-      columns={this.columns}
-      defaultPageSize={10}
-    />, document.getElementById('tableOfDiagramSegment'));
+    render(
+      <BrowserRouter>
+        <ReactTable
+          data={data}
+          columns={this.columns}
+          defaultPageSize={10}
+        />
+      </BrowserRouter>,
+      document.getElementById('tableOfDiagramSegment')
+    );
   }
 
 }

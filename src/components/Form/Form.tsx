@@ -45,11 +45,11 @@ class Form extends React.Component<IFormProps> {
     this.state = props.location.state || emptyState;
     this.state.requestStatus = Status.FillingForm;
   }
-
+  
   componentDidUpdate = () => {
     if (this.state.hasError) throw new Error('Task not found');
   }
-
+  
   async componentDidMount() {
     if (this.task_id && this.props.location.state === undefined) {
         B24.get_task(this.task_id)

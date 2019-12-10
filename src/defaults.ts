@@ -102,7 +102,8 @@ const emptyState : IState = {
     footer: [[],[]],
     cycles: ['5', ''],
     washTemp: 60,
-    otherStandard1: 'According to Standard Mandotory Test Requirement'
+    otherStandard1: 'According to Standard Mandotory Test Requirement',
+    otherStandard2: 'According to Standard Mandotory Test Requirement'
   },
   EN11612Detail: {},
   resume: undefined,
