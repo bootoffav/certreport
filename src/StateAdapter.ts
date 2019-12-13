@@ -8,6 +8,28 @@ class StateAdapter {
      Object.assign(this, state);
   }
 
+  getNADForTitle() {
+    // @ts-ignore
+    if (this.stage === '9. Ended') return '';
+
+    const stageMap = {
+      '0. Sample to be prepared': 'sentOn',
+      '1. Sample Sent': 'receivedOn',
+      '2. Sample Arrived': 'proformaReceivedDate',
+      '3. PI Issued': 'paymentDate',
+      '4. Payment Done': 'startedOn',
+      '5. Testing is started': 'testFinishedOnPlanDate',
+      '7. Test-report ready': 'certReceivedOnPlanDate',
+      '00. Paused': '',
+      '6. Pre-treatment done': '',
+      '8. Certificate ready': ''
+    }
+
+    //@ts-ignore
+    return this[stageMap[this.stage]] ? ` | NAD - ${dC(this[stageMap[this.stage]], 'DD.MM.YYYY')}`
+      : ' | No date';
+  }
+
   getStageForTitle = (): string => {
     let stageForTitle: string;
     // @ts-ignore
