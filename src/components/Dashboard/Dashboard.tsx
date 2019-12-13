@@ -111,6 +111,7 @@ class Dashboard extends React.Component<{ tasks: any[]; }, IDashboard> {
 
   renderTableOfDiagramSegment(stage: string) {
 
+    if (stage === 'no stage') stage = '';
     const data = this.state.tasks.filter(t => t.state.stage === stage);
 
     render(
