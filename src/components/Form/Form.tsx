@@ -45,29 +45,27 @@ class Form extends React.Component<IFormProps> {
     this.state = props.location.state || emptyState;
     this.state.requestStatus = Status.FillingForm;
   }
-  
+
   componentDidUpdate = () => {
     if (this.state.hasError) throw new Error('Task not found');
   }
   
   async componentDidMount() {
     if (this.task_id && this.props.location.state === undefined) {
-        B24.get_task(this.task_id)
-          .then(r => this.setState({ ...r.state }))
-          .catch((e) => this.setState({ hasError: true }));
-    }
-
-    if (this.task_id) {
-      const res = await DB.getData(this.task_id);
-      const { EN11612Detail, id, ...DBState } = res.data;
-      this.setState({
-        DBState: {
-          ...DBState,
-          ref: res.ref.value.id
-        },
-        EN11612Detail
+      const dataFromDB = await DB.getData(this.task_id)
+        .then(({ data }) => {
+          const { EN11612Detail, id, ...DBState } = data;
+          return { EN11612Detail, DBState };
       });
-      this.state.link || this.setState({ link: `[URL=https://certreport.xmtextiles.com/edit/${this.task_id}/]this task[/URL]` });
+
+      B24.get_task(this.task_id)
+        .then(r => this.setState({
+          ...r.state,
+          link: `[URL=certreport.xmtextiles.com/edit/${this.task_id}/]this task[/URL]`,
+          DBState: dataFromDB.DBState,
+          EN11612Detail: dataFromDB.EN11612Detail
+        }))
+        .catch((e) => this.setState({ hasError: true }));
     }
   }
 
