@@ -53,9 +53,15 @@ class Form extends React.Component<IFormProps> {
   async componentDidMount() {
     if (this.task_id && this.props.location.state === undefined) {
       const dataFromDB = await DB.getData(this.task_id)
-        .then(({ data }) => {
-          const { EN11612Detail, id, ...DBState } = data;
-          return { EN11612Detail, DBState };
+        .then(res => {
+          const { EN11612Detail, id, ...DBState } = res.data;
+          return {
+            EN11612Detail,
+            DBState: {
+              ...DBState,
+              ref: res.ref.value.id
+            }
+          };
       });
 
       B24.get_task(this.task_id)

@@ -39,7 +39,7 @@ class DB {
     state: any
   ) {
     return DB.client().query(
-      q.Create(q.Class(this.fdbClass),
+      q.Create(q.Collection(this.fdbClass),
         {
           data: {
             id: +id, ...state
@@ -52,7 +52,7 @@ class DB {
     state: any
   ) {
     const { ref, ...data } = state;
-    DB.client().query(q.Update(q.Ref(q.Class(this.fdbClass), ref), {
+    DB.client().query(q.Update(q.Ref(q.Collection(this.fdbClass), ref), {
       data: { ...data }
     })).catch(console.log);
   }
