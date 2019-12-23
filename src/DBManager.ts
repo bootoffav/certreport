@@ -23,7 +23,6 @@ class DB {
         if (error instanceof errors.NotFound) {
           return await this.createInstance(taskId, emptyState.DBState);
         }
-        console.log(error);
       });
     const props = Object.getOwnPropertyNames(res.data);
 
