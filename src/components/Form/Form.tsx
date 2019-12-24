@@ -20,6 +20,7 @@ interface IFormState extends IState {
   requestStatus: Status;
   EN11612Detail?: any;
   hasError: boolean;
+  existsInDB?: boolean;
 }
 
 interface IFormProps {
@@ -53,23 +54,15 @@ class Form extends React.Component<IFormProps> {
   async componentDidMount() {
     if (this.task_id && this.props.location.state === undefined) {
       const dataFromDB = await DB.getData(this.task_id)
-        .then(res => {
-          const { EN11612Detail, id, ...DBState } = res.data;
-          return {
-            EN11612Detail,
-            DBState: {
-              ...DBState,
-              ref: res.ref.value.id
-            }
-          };
-      });
+        .then(({ EN11612Detail, exists, ...DBState }: any) => ({ EN11612Detail, DBState, exists }));
 
       B24.get_task(this.task_id)
         .then(r => this.setState({
           ...r.state,
           link: `[URL=certreport.xmtextiles.com/edit/${this.task_id}/]this task[/URL]`,
           DBState: dataFromDB.DBState,
-          EN11612Detail: dataFromDB.EN11612Detail
+          EN11612Detail: dataFromDB.EN11612Detail,
+          existsInDB: dataFromDB.exists
         }))
         .catch((e) => this.setState({ hasError: true }));
     }
@@ -106,22 +99,13 @@ class Form extends React.Component<IFormProps> {
     });
 
     if (OK) {
-        this.setState({ requestStatus: Status.Loading });
-
-      if (this.task_id) {
-        DB.updateInstance({
-          ...this.state.DBState,
-          EN11612Detail: this.state.EN11612Detail
-        });
-        B24.updateTask(this.state, this.task_id)
-          .then(this.successfullySubmitted)
-          .catch(this.unsuccessfullySubmitted)
-      } else {
-        const taskId = await B24.createTask(this.state);
-        DB.createInstance(taskId, this.state.DBState)
-          .then(this.successfullySubmitted)
-          .catch(this.unsuccessfullySubmitted)
-      }
+      this.setState({ requestStatus: Status.Loading });
+      const taskId = this.task_id
+        ? await B24.updateTask(this.state, this.task_id).then(_ => this.task_id)
+        : await B24.createTask(this.state);
+      this.state.existsInDB
+        ? DB.updateInstance(taskId, { ...this.state.DBState, EN11612Detail: this.state.EN11612Detail }).then(this.successfullySubmitted).catch(this.unsuccessfullySubmitted)
+        : DB.createInstance(taskId, this.state.DBState).then(this.successfullySubmitted).catch(this.unsuccessfullySubmitted)
     }
   }
 
@@ -144,7 +128,8 @@ class Form extends React.Component<IFormProps> {
     }, 3000);
   }
 
-  unsuccessfullySubmitted = () => {
+  unsuccessfullySubmitted = (error: any) => {
+    console.log(error);
     this.setState({ requestStatus: Status.Failure });
     setTimeout(() => this.setState({
       requestStatus: Status.FillingForm

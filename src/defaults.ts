@@ -101,7 +101,7 @@ const emptyState : IState = {
     washPreTreatment: [[],[]],
     footer: [[],[]],
     cycles: ['5', ''],
-    washTemp: 60,
+    washTemp: "60",
     otherStandard1: 'According to Standard Mandotory Test Requirement',
     otherStandard2: 'According to Standard Mandotory Test Requirement'
   },

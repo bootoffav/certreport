@@ -3,7 +3,7 @@ import { emptyState } from './defaults';
 
 class DB {
 
-  static fdbClass = process.env.REACT_APP_FAUNADB_CLASS || 'aitexForm';
+  static fdbCollection = process.env.REACT_APP_FAUNADB_CLASS || 'aitex';
   static fdbIndex = process.env.REACT_APP_FAUNADB_INDEX || 'id';
 
   static client() {
@@ -17,20 +17,25 @@ class DB {
   }
 
   static async getData(taskId: string) {
-    const res = await DB.client().query(q.Get(q.Match(q.Index(this.fdbIndex), +taskId)))
-      .then((res: any) => res)
+    const data = await DB.client().query(q.Get(q.Ref(q.Collection(this.fdbCollection), taskId)))
+      .then((res: any) => ({
+        ...res.data,
+        exists: true
+      }))
       .catch(async error => {
-        if (error instanceof errors.NotFound) {
-          return await this.createInstance(taskId, emptyState.DBState);
-        }
+        return {
+          ...emptyState.DBState,
+          EN11612Detail: emptyState.EN11612Detail,
+          exists: false
+        };
       });
-    const props = Object.getOwnPropertyNames(res.data);
+    const props = Object.getOwnPropertyNames(data);
 
-    if (!props.includes('testRequirement')) res.data.testRequirement = emptyState.DBState.testRequirement;
-    if (!props.includes('washPreTreatment')) res.data.washPreTreatment = emptyState.DBState.washPreTreatment;
-    if (!props.includes('footer')) res.data.footer = emptyState.DBState.footer;
+    if (!props.includes('testRequirement')) data.testRequirement = emptyState.DBState.testRequirement;
+    if (!props.includes('washPreTreatment')) data.washPreTreatment = emptyState.DBState.washPreTreatment;
+    if (!props.includes('footer')) data.footer = emptyState.DBState.footer;
 
-    return res;
+    return data;
   }
 
   static async createInstance(
@@ -38,22 +43,23 @@ class DB {
     state: any
   ) {
     return DB.client().query(
-      q.Create(q.Collection(this.fdbClass),
+      q.Create(
+        q.Ref(q.Collection(this.fdbCollection), id),
         {
           data: {
-            id: +id, ...state
+            ...state
           }
         })
     )
   }
 
   static updateInstance(
+    ref: string,
     state: any
   ) {
-    const { ref, ...data } = state;
-    DB.client().query(q.Update(q.Ref(q.Collection(this.fdbClass), ref), {
-      data: { ...data }
-    })).catch(console.log);
+    return DB.client().query(q.Update(q.Ref(q.Collection(this.fdbCollection), ref), {
+      data: { ...state }
+    }))
   }
 }
 
