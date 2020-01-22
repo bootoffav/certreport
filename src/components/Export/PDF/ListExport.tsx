@@ -17,7 +17,7 @@ class ListExport extends React.Component<{
 
   generateTableStructureForResults = () => ({
     accessors: [
-      'state.serialNumber', 'state.brand', 'state.stage', 'lastActionDate',
+      'position', 'state.serialNumber', 'state.brand', 'state.stage', 'lastActionDate',
       'TITLE', 'state.article', 'state.testReport',
       'state.certificate', 'state.standardsResult'
     ],
@@ -39,8 +39,7 @@ class ListExport extends React.Component<{
       });
 
       headers = this.props.columns.map(({ Header }: any) => this.boldText(Header))
-      widths = this.props.columns.map(({ accessor, minWidth, width }: any) =>
-      accessor === 'TITLE' ? 'auto' : minWidth || width || '*'
+      widths = this.props.columns.map(({ accessor, minWidth, width }: any) => accessor === 'TITLE' ? 'auto' : minWidth || width || '*'
       );
     }
 
@@ -68,7 +67,7 @@ class ListExport extends React.Component<{
   // crap code to refactor ASAP
   * genRow(tasks: any, accessors: any) {
     for (let i = 0; i < tasks.length; i++) {
-      const row: any[] = [i + 1];
+      const row: any = [];
 
       accessors.forEach((acc: string) => {
         switch (acc) {
@@ -156,7 +155,6 @@ class ListExport extends React.Component<{
     return pdfMake.createPdf(
       // @ts-ignore
       docDefinition, tableLayout, fonts, vfs
-      // ).download(`${this.stage}.pdf`);
     ).download(this.filename);
   }
 

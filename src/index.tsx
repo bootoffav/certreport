@@ -67,9 +67,11 @@ class App extends React.Component {
             <Switch>
               <Route exact path="/dashboard" render={() => <Dashboard tasks={this.state.allTasks} />} />
               <Route exact path="/" render={() => <List tasks={this.state.allTasks} staleData={this.cache.staleData}/>} />
+              // @ts-ignore
               <Route exact path="/add" render={(props) => <Form {...props} />} />
               <Route exact path="/edit/:id" render={(props) =>
                 <ErrorBoundary>
+                  // @ts-ignore
                   <Form {...props} />
                 </ErrorBoundary>
               } />
