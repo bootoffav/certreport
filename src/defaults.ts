@@ -44,7 +44,8 @@ export interface IState {
   };
   DBState: any;
   EN11612Detail?: any,
-  link : string;
+  link: string;
+  news: string;
   testingTime: string;
   serialNumber: string;
   applicantName: string;
@@ -111,6 +112,7 @@ const emptyState : IState = {
   paid: false,
   proforma: '',
   paid2: false,
+  news: '',
   length: '1',
   stage: '',
   testingTime: '21',

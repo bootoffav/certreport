@@ -109,6 +109,7 @@ class B24 {
         `${stAd.testFinishedOn && `[B]tests to be finished on:[/B] ${stAd.testFinishedOn}\n`}` +
         `${stAd.certReceivedOn && `[B]results to be received on:[/B] ${stAd.certReceivedOn}\n`}` +
         `${state.stage && `[B]Stage:[/B] ${state.stage}\n`}` +
+        `${state.news && `[B]News:[/B] ${state.news}\n`}` +
         `${state.resume === undefined ? '' : `[B]Resume:[/B] ${state.resume}\n`}` +
         `${state.comments && `[B]Comments:[/B] ${state.comments}\n`}` +
         `${state.link && `[B]Edit:[/B] ${state.link}\n`}` +

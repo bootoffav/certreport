@@ -433,11 +433,14 @@ class Form extends React.Component<IFormProps> {
               updateParent={(DBState: any) => this.setState({ DBState })}
             />
           </Tab>
-          <Tab title="Comments">
-            {<div className="form-row">
+          <Tab title="Comments & News">
+            <div className="form-row">
+              <BaseInput value={this.state.news} className="ml-2 flex-grow-1" id='news' label="News:" handleChange={this.handleChange} />
+            </div>
+            <div className="form-row">
               <label htmlFor='comments'>Comments:</label>
               <textarea className='form-control' value={this.state.comments} id='comments' rows={15} onChange={this.handleChange} />
-            </div>}
+            </div>
           </Tab>
         <Tab title="File Uploads">
           <FileUploads taskId={this.task_id} />

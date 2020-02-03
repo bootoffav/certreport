@@ -97,6 +97,7 @@ class Task implements ITask {
       'results to be received on': 'certReceivedOn',
       'Resume': 'resume',
       'Stage': 'stage',
+      'News': 'news',
       'Comments': 'comments',
       'Edit': 'link',
       'Second payment': 'secondPayment'
