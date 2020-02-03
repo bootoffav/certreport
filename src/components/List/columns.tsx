@@ -262,7 +262,7 @@ function getColumns(totalPrice: number, requiredStage: Stage | 'results' | 'over
         if (props.value) {
           return <a href={`https://${props.value}`}
             target="_blank" rel="noopener noreferrer"
-          >Official Announcement</a>
+          >URL новости</a>
         }
         return '';
       }

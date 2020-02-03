@@ -19,13 +19,13 @@ class ListExport extends React.Component<{
     accessors: [
       'position', 'state.serialNumber', 'state.brand', 'state.stage', 'lastActionDate',
       'TITLE', 'state.article', 'state.testReport',
-      'state.certificate', 'state.standardsResult'
+      'state.certificate', 'state.standardsResult', 'state.news'
     ],
     headers: [
       '#', '##', 'Brand', 'Status', 'L. A. D.', 'Task title',
-      'Fabric', 'Test report', 'Certificate', 'Result'
+      'Fabric', 'Test report', 'Certificate', 'Result', 'News'
     ].map(this.boldText),
-    widths: [20, 40, 50, 60, 70, '*', 120, 100, 200, 100]
+    widths: [20, 40, 50, 60, 70, '*', 100, 100, 180, 100, 100]
   });
 
   generateContent() {
