@@ -435,7 +435,7 @@ class Form extends React.Component<IFormProps> {
           </Tab>
           <Tab title="Comments & News">
             <div className="form-row">
-              <BaseInput value={this.state.news} className="ml-2 flex-grow-1" id='news' label="News:" handleChange={this.handleChange} />
+              <BaseInput required={false} value={this.state.news} className="ml-2 flex-grow-1" id='news' label="News:" handleChange={this.handleChange} />
             </div>
             <div className="form-row">
               <label htmlFor='comments'>Comments:</label>

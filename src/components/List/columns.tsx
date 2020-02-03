@@ -258,9 +258,14 @@ function getColumns(totalPrice: number, requiredStage: Stage | 'results' | 'over
       Header: 'News',
       id: 'news',
       accessor: 'state.news',
-      Cell: (props: any) => <a href={`https://${props.value}`}
-        target="_blank" rel="noopener noreferrer"
-      >Official Announcement</a>
+      Cell: (props: any) => {
+        if (props.value) {
+          return <a href={`https://${props.value}`}
+            target="_blank" rel="noopener noreferrer"
+          >Official Announcement</a>
+        }
+        return '';
+      }
   }
   ];
 
