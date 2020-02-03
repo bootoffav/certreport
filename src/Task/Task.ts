@@ -157,6 +157,10 @@ class Task implements ITask {
       delete parsedState.secondPayment;
     }
     
+    if (parsedState.news) {
+      if (parsedState.news.startsWith('https//')) parsedState.news = parsedState.news.substring(7);
+    } 
+
     if (parsedState.pretreatment1) {
       [
         parsedState.pretreatment1,

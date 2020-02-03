@@ -253,6 +253,14 @@ function getColumns(totalPrice: number, requiredStage: Stage | 'results' | 'over
           return '';
       }
     }
+    }, {
+      // 29
+      Header: 'News',
+      id: 'news',
+      accessor: 'state.news',
+      Cell: (props: any) => <a href={`https://${props.value}`}
+        target="_blank" rel="noopener noreferrer"
+      >Official Announcement</a>
   }
   ];
 
@@ -261,40 +269,40 @@ function getColumns(totalPrice: number, requiredStage: Stage | 'results' | 'over
   let hidden: number[];
   switch (requiredStage) {
     case Stage['00. Paused']:
-      hidden = [4, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 19, 21, 22, 23, 24, 25, 26];
+      hidden = [4, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 19, 21, 22, 23, 24, 25, 26, 29];
       break;
     case Stage['0. Sample to be prepared']:
-      hidden = [4, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 25, 26];
+      hidden = [4, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 25, 26, 29];
       break;
     case Stage['1. Sample Sent']:
-      hidden = [4, 5, 6, 7, 8, 12, 13, 14, 15, 16, 17, 19, 21, 22, 24, 25, 26, 28];
+      hidden = [4, 5, 6, 7, 8, 12, 13, 14, 15, 16, 17, 19, 21, 22, 24, 25, 26, 28, 29];
       break;
     case Stage['2. Sample Arrived']:
-      hidden = [4, 5, 6, 7, 8, 10, 13, 14, 15, 16, 17, 19, 21, 22, 24, 25, 26, 28];
+      hidden = [4, 5, 6, 7, 8, 10, 13, 14, 15, 16, 17, 19, 21, 22, 24, 25, 26, 28, 29];
       break;
     case Stage['3. PI Issued']:
-      hidden = [4, 5, 6, 7, 8, 10, 11, 12, 13, 16, 18, 20, 21, 23, 24, 25, 27, 28];
+      hidden = [4, 5, 6, 7, 8, 10, 11, 12, 13, 16, 18, 20, 21, 23, 24, 25, 27, 28, 29];
       break;
     case Stage['4. Payment Done']:
-      hidden = [4, 5, 6, 7, 8, 10, 11, 12, 13, 18, 19, 20, 21, 23, 24, 26, 28];
+      hidden = [4, 5, 6, 7, 8, 10, 11, 12, 13, 18, 19, 20, 21, 23, 24, 26, 28, 29];
       break;
     case Stage['5. Testing is started']:
-      hidden = [4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 21, 23, 24, 26, 28];
+      hidden = [4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 21, 23, 24, 26, 28, 29];
       break;
     case 'results':
-      hidden = [7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 19, 21, 22, 24, 27];
+      hidden = [7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 19, 21, 22, 24, 27, 28];
       break;
     case 'overdue':
-      hidden = [7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 23, 27];
+      hidden = [7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 23, 27, 29];
       break;
     case Stage['7. Test-report ready']:
-      hidden = [4, 5, 6, 7, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 24];
+      hidden = [4, 5, 6, 7, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 24, 29];
       break;
     case Stage['8. Certificate ready']:
-      hidden = [4, 5, 6, 8, 10, 11, 12, 14, 15, 16, 18, 20, 21];
+      hidden = [4, 5, 6, 8, 10, 11, 12, 14, 15, 16, 18, 20, 21, 29];
       break;
     default:
-      hidden = [5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 19, 21, 23, 24, 25, 28];
+      hidden = [5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 19, 21, 23, 24, 25, 28, 29];
   }
 
   columns.forEach((col, ind) => {
