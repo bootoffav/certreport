@@ -182,7 +182,7 @@ class Form extends React.Component<IFormProps> {
           <div className="btn-group btn-group-toggle" data-toggle="buttons">
             <label
               className={
-                'btn btn-outline-light ' +
+                'btn btn-outline-secondary ' +
                 `${this.state.resume === undefined ? 'active' : ''}`
               }
               onClick={() => this.setState({ resume: undefined })}
@@ -201,6 +201,13 @@ class Form extends React.Component<IFormProps> {
               }
               onClick={() => this.setState({ resume: 'pass' })}
               ><input type="radio" />PASS</label>
+            <label
+              className={
+                'btn btn-outline-secondary ' +
+                `${this.state.resume === 'no sample' ? 'active' : ''}`
+              }
+              onClick={() => this.setState({ resume: 'no sample' })}
+              ><input type="radio" />NO Sample</label>
           </div>
         </div>
       </div>

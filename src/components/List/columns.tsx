@@ -226,6 +226,8 @@ function getColumns(totalPrice: number, requiredStage: Stage | 'results' | 'over
           return <span className="oi oi-circle-x" > </span>;
         case 'pass':
           return <span className="oi oi-thumb-up" > </span>;
+        case 'no sample':
+          return 'NO Sample';
         default:
           return '';
       }

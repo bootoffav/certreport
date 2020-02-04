@@ -92,7 +92,7 @@ export interface IState {
   certReceivedOnRealDate: string;
   comments: string;
   otherTextInDescription: string | null;
-  resume: undefined | 'fail' | 'pass';
+  resume: undefined | 'fail' | 'pass' | 'no sample';
 }
 
 const emptyState : IState = {
