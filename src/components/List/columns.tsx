@@ -260,16 +260,13 @@ function getColumns(totalPrice: number, requiredStage: Stage | 'results' | 'over
       Header: 'News',
       id: 'news',
       accessor: 'state.news',
-      Cell: (props: any) => {
-        if (props.value) {
-          return <a href={`https://${props.value}`}
+      Cell: ({ value }: any) =>
+        value ?
+          <a href={`https://${value}`}
             target="_blank" rel="noopener noreferrer"
-          >URL новости</a>
-        }
-        return '';
-      }
-  }
-  ];
+          >{`https://${value}`}</a>
+        : ''
+  }];
 
   // @ts-ignore
   columns.forEach(col => col.show = true);
