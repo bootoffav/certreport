@@ -86,7 +86,7 @@ function getColumns(totalPrice: number, requiredStage: Stage | 'results' | 'over
     accessor: 'TITLE',
     id: 'taskName',
     minWidth: 550,
-      Cell: ({ original, value }: any) => 
+    Cell: ({ original, value }: any) =>
       <Link
         to={`/edit/${original.ID}`}
         target="_blank" rel="noopener noreferrer"
@@ -185,10 +185,10 @@ function getColumns(totalPrice: number, requiredStage: Stage | 'results' | 'over
     // 23
     Header: 'Certificate',
     id: 'certificate',
-    accessor: (row: any) => 
-    ['7. Test-report ready', '8. Certificate ready', '9. Ended'].includes(row.state.stage)
-    ? row.UF_TASK_WEBDAV_FILES.map((file: any, key: number) => <div key={key}><a href={`https://xmtextiles.bitrix24.ru${file.DOWNLOAD_URL}`}>{file.NAME}</a></div>)
-    : row.state.certificate,
+    accessor: (row: any) =>
+      ['7. Test-report ready', '8. Certificate ready', '9. Ended'].includes(row.state.stage)
+        ? row.UF_TASK_WEBDAV_FILES.map((file: any, key: number) => <div key={key}><a href={`https://xmtextiles.bitrix24.ru${file.DOWNLOAD_URL}`}>{file.NAME}</a></div>)
+        : row.state.certificate,
     minWidth: 100,
   }, {
     // 24
@@ -214,7 +214,7 @@ function getColumns(totalPrice: number, requiredStage: Stage | 'results' | 'over
         }
         return <div key={i}>{st}{lastItem ? <br /> : ''}</div>
       })
-    }, {
+  }, {
     // 26
     Header: 'Result',
     id: 'result',
@@ -223,9 +223,9 @@ function getColumns(totalPrice: number, requiredStage: Stage | 'results' | 'over
     Cell: (props: any) => {
       switch (props.value) {
         case 'fail':
-          return <span className="oi oi-circle-x" > </span>;
+          return <span className="oi oi-circle-x"></span>;
         case 'pass':
-          return <span className="oi oi-thumb-up" > </span>;
+          return <span className="oi oi-thumb-up"></span>;
         case 'no sample':
           return 'NO Sample';
         default:
@@ -255,17 +255,22 @@ function getColumns(totalPrice: number, requiredStage: Stage | 'results' | 'over
           return '';
       }
     }
-    }, {
-      // 29
-      Header: 'News',
-      id: 'news',
-      accessor: 'state.news',
-      Cell: ({ value }: any) =>
-        value ?
-          <a href={`https://${value}`}
-            target="_blank" rel="noopener noreferrer"
-          >{`https://${value}`}</a>
-        : ''
+  }, {
+    // 29
+    Header: 'News',
+    id: 'news',
+    accessor: 'state.news',
+    style: { 'whiteSpace': 'unset' },
+    Cell: ({ value }: any) => value
+      ?
+      <a href={`https://${value}`}
+        style={{
+          'overflow': 'break-word',
+          'wordWrap': 'break-word'
+      }}
+        target="_blank" rel="noopener noreferrer"
+      >{`https://${value}`}</a>
+      : ''
   }];
 
   // @ts-ignore
