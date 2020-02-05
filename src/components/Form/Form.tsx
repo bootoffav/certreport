@@ -31,9 +31,7 @@ interface IFormProps {
       id: string;
     };
   };
-  location: {
-    state: IFormState;
-  };
+  state: any;
 }
 
 class Form extends React.Component<IFormProps> {
@@ -43,7 +41,7 @@ class Form extends React.Component<IFormProps> {
   constructor(props: IFormProps) {
     super(props);
     this.task_id = props.match.params.id;
-    this.state = props.location.state || emptyState;
+    this.state = props.state || emptyState;
     this.state.requestStatus = Status.FillingForm;
   }
 
@@ -52,7 +50,7 @@ class Form extends React.Component<IFormProps> {
   }
   
   async componentDidMount() {
-    if (this.task_id && this.props.location.state === undefined) {
+    if (this.task_id && this.props.state === undefined) {
       const dataFromDB = await DB.getData(this.task_id)
         .then(({ EN11612Detail, exists, ...DBState }: any) => ({ EN11612Detail, DBState, exists }));
 

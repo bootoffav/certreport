@@ -16,9 +16,11 @@ let selectOptions: {
     { value: 'C_10041', label: 'XMG'}
   ],
   testingCompany: [
-    { value: 'Aitex (Spain)', label: 'Aitex (Spain)'},
     { value: 'Aitex (China)', label: 'Aitex (China)'},
+    { value: 'Aitex (Spain)', label: 'Aitex (Spain)'},
     { value: 'BTTG (UK)', label: 'BTTG (UK)'},
+    { value: 'CENTROCOT', label: 'CENTROCOT'},
+    { value: 'CSI-Serico', label: 'CSI-Serico'},
     { value: 'Satra (UK)', label: 'Satra (UK)'}
   ],
   stages: [
