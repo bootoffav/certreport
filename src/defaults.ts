@@ -19,8 +19,8 @@ let selectOptions: {
     { value: 'Aitex (China)', label: 'Aitex (China)'},
     { value: 'Aitex (Spain)', label: 'Aitex (Spain)'},
     { value: 'BTTG (UK)', label: 'BTTG (UK)'},
-    { value: 'CENTROCOT', label: 'CENTROCOT'},
-    { value: 'CSI-Serico', label: 'CSI-Serico'},
+    { value: 'CENTROCOT (Italy)', label: 'CENTROCOT (Italy)'},
+    { value: 'CSI-Serico (Italy)', label: 'CSI-Serico (Italy)'},
     { value: 'Satra (UK)', label: 'Satra (UK)'}
   ],
   stages: [
