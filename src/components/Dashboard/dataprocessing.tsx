@@ -1,4 +1,14 @@
-function getData(tasks: any, type: string) {
+type dataType = {
+  names: any;
+  labels: any;
+  datasets: {
+    data: any;
+    backgroundColor: any;
+    hoverBackgroundColor: any;
+  };
+}
+
+function byStages(tasks: any): dataType {
   const data: any = {};
   data.names = {
     'no stage': [],
@@ -47,4 +57,27 @@ function getRandomColors(amount: number) {
 }
 
 
-export { getData };
+function byProducts(tasks: any): dataType {
+  let data: any = { names: {} };
+  const articles: any = new Set(tasks.map(({ state: { article } }: any) => article === '' ? 'no product' : article));
+  articles.forEach((article: any) => data.names[article] = []);
+
+  data.names['no product'].push(1);
+  for (let i = 0; i < tasks.length; i++) {
+    tasks[i].state === undefined || tasks[i].state.article === ''
+      ? data.names['no product'].push(tasks[i].TITLE.substring(0, 50))
+      : data.names[tasks[i].state.article].push(tasks[i].TITLE.substring(0, 50));
+  }
+
+  data.labels = Object.keys(data.names);
+  const colors = getRandomColors(Object.keys(data.names).length);
+  data.datasets = [{
+    data: Object.keys(data.names).map(article => data.names[article].length),
+    backgroundColor: colors,
+    hoverBackgroundColor: colors,
+  }];
+
+  return data;
+}
+
+export { byStages, byProducts };

@@ -32,7 +32,7 @@ const CompletedCertifications = () => {
   return <StatsCard
     layout={1}
     movement={movement()}
-    total={<div className="display-4">{completedCerts()}</div> }
+    total={<div className="display-5">{completedCerts()}</div> }
     label="Completed certifications"
   />
 }
@@ -57,7 +57,7 @@ const Products = () => {
   return <StatsCard
     layout={1}
     movement={movement()}
-    total={<div className="display-4">{amountOfUniqueProducts()}</div> }
+    total={<div className="display-5">{amountOfUniqueProducts()}</div> }
     label="Products"
   />
 }
@@ -74,7 +74,7 @@ const AmountOfCertifications = () => {
   return <StatsCard
     layout={1}
     movement={movement()}
-    total={<div className="display-4">{amountOfOngoingCerts()}</div>}
+    total={<div className="display-5">{amountOfOngoingCerts()}</div>}
     label={`${startDate ? 'New' : 'All'} Certifications`}
   />
 }
@@ -97,8 +97,8 @@ const AmountSpent = () => {
 
   return <Card
     body={<>
-      <Header.H5 className="text-center">Spent this period</Header.H5>
-      <div className="display-4 text-center">{spent()}</div>
+      <Header.H5 className="display-5 text-center">{spent()}</Header.H5>
+      <div className="display-5 text-center">Spent this period</div>
       </>
     }/>
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+import './Dashboard.css';
 import { BrowserRouter } from 'react-router-dom';
 import { render } from 'react-dom';
 import ReactTable from "react-table";
@@ -6,7 +7,7 @@ import { Grid, Card } from 'tabler-react';
 import { Doughnut } from 'react-chartjs-2';
 import { DateFilter } from '../Filters';
 import { doughnutOptions } from './configs';
-import { getData } from './dataprocessing';
+import { byStages, byProducts } from './dataprocessing';
 import { AmountOfCertifications, AmountSpent, CompletedCertifications, Products } from './StatCards';
 import { getColumns } from '../List/columns';
 
@@ -51,49 +52,59 @@ class Dashboard extends React.Component<{ tasks: any[]; }, IDashboard> {
     });
   }
 
-  get byStages() {
-    return getData(this.state.tasks, 'byStages');
-  }
-
   render() {
     return (
       <Grid>
-          <Grid.Row>
-            <Grid.Col width={4} offset={4}>
-              <Card body={ <DateFilter filter={this.dateFilter} /> }/>
-            </Grid.Col>
-          </Grid.Row>
+        <Grid.Row>
+          <Grid.Col width={4} offset={4}>
+            <Card body={ <DateFilter filter={this.dateFilter} /> }/>
+          </Grid.Col>
+        </Grid.Row>
           <Grid.Row cards deck>
             <Grid.Col md={5}>
               <Card
                 title="Task by stages"
                 body={
                   <Doughnut
-                    data={this.byStages}
+                    data={byStages(this.state.tasks)}
                     options={{
                       ...doughnutOptions,
                       onClick: (_: MouseEvent, chartElement: any) => {
                         const { _model: { label: stage } } = chartElement.pop();
-                        this.renderTableOfDiagramSegment(stage);
+                        this.renderTableOfDiagramSegment(stage, 'stage');
                       }
                     }}
                   />
                 }
               />
             </Grid.Col>
-            <Grid.Col md={7}>
-              <Grid.Row>
-                <StatCardsContext.Provider value={{
+            <Grid.Col md={5}>
+              <Card
+                title="Products"
+                body={
+                  <Doughnut
+                    data={byProducts(this.state.tasks)}
+                    options={{
+                      ...doughnutOptions,
+                      onClick: (_: MouseEvent, chartElement: any) => {
+                        const { _model: { label: article } } = chartElement.pop();
+                        this.renderTableOfDiagramSegment(article, 'article');
+                      }
+                    }}
+                  />
+                }
+              />
+            </Grid.Col>
+            <Grid.Col md={2}>
+              <StatCardsContext.Provider value={{
                   tasks: this.props.tasks,
                   startDate: this.state.startDate,
                   endDate: this.state.endDate,
-                }}>
-                  <Grid.Col><CompletedCertifications /></Grid.Col>
-                  <Grid.Col><AmountOfCertifications /></Grid.Col>
-                  <Grid.Col><AmountSpent /></Grid.Col>
-                  <Grid.Col><Products /></Grid.Col>
-                </StatCardsContext.Provider>
-              </Grid.Row>
+              }}>
+                <Grid.Row><CompletedCertifications /></Grid.Row>
+                <Grid.Row><AmountOfCertifications /></Grid.Row>
+                <Grid.Row><AmountSpent /></Grid.Row>
+              </StatCardsContext.Provider>
             </Grid.Col>
           </Grid.Row>
         <Grid.Row>
@@ -109,15 +120,13 @@ class Dashboard extends React.Component<{ tasks: any[]; }, IDashboard> {
     return getColumns(0, undefined);
   }
 
-  renderTableOfDiagramSegment(stage: string) {
-
-    if (stage === 'no stage') stage = '';
-    const data = this.state.tasks.filter(t => t.state.stage === stage);
+  renderTableOfDiagramSegment(checkedValue: string, param: string) {
+    if (['no product', 'no stage'].includes(checkedValue)) checkedValue = '';
 
     render(
       <BrowserRouter>
         <ReactTable
-          data={data}
+          data={this.state.tasks.filter(t => t.state[param] === checkedValue)}
           columns={this.columns}
           defaultPageSize={10}
         />
@@ -125,8 +134,8 @@ class Dashboard extends React.Component<{ tasks: any[]; }, IDashboard> {
       document.getElementById('tableOfDiagramSegment')
     );
   }
-
 }
+
 export default Dashboard;
 export const StatCardsContext = React.createContext({});
 export { tasksInRange };
