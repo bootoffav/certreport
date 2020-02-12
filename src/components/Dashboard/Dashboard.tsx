@@ -8,7 +8,7 @@ import { Doughnut } from 'react-chartjs-2';
 import { DateFilter } from '../Filters';
 import { doughnutOptions } from './configs';
 import { byStages, byProducts } from './dataprocessing';
-import { AmountOfCertifications, AmountSpent, CompletedCertifications, Products } from './StatCards';
+import { AmountOfCertifications, AmountSpent, CompletedCertifications } from './StatCards';
 import { getColumns } from '../List/columns';
 
 
@@ -116,18 +116,25 @@ class Dashboard extends React.Component<{ tasks: any[]; }, IDashboard> {
     );
   }
 
-  get columns() {
-    return getColumns(0, undefined);
-  }
 
   renderTableOfDiagramSegment(checkedValue: string, param: string) {
     if (['no product', 'no stage'].includes(checkedValue)) checkedValue = '';
+    const tasks = this.state.tasks.filter(t => t.state[param] === checkedValue);
+    const totalPrice: number = tasks.reduce(
+      (sum: number, task: any) => sum + Number(task.state.price),
+      0);
 
     render(
       <BrowserRouter>
         <ReactTable
-          data={this.state.tasks.filter(t => t.state[param] === checkedValue)}
-          columns={this.columns}
+          data={tasks}
+          resolveData={(data: any, i = 1) =>
+            data.map((row: any) => {
+              row.position = i++;
+              return row;
+            })
+          }
+          columns={getColumns(totalPrice, undefined)}
           defaultPageSize={10}
         />
       </BrowserRouter>,
