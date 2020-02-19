@@ -11,7 +11,6 @@ import { byStages, byProducts } from './dataprocessing';
 import { AmountOfCertifications, AmountSpent, CompletedCertifications } from './StatCards';
 import { getColumns } from '../List/columns';
 
-
 interface IDashboard {
   tasks: any;
   startDate?: Date;

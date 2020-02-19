@@ -18,48 +18,50 @@ function sortDates(a: string | undefined, b: string | undefined): number {
 }
 
 function getColumns(totalPrice: number, requiredStage: Stage | 'results' | 'overdue' | undefined) {
+
   const columns = [{
     // 0
     Header: '#',
     id: 'position',
     sortable: false,
     accessor: 'position',
-    width: 40
+    width: 30
   }, {
     // 1
     Header: '##',
     id: 'serialNumber',
-    accessor: (row: any) => row.state.serialNumber && String(row.state.serialNumber),
-    width: 55,
+    accessor: ({ state }: any) => state.serialNumber,
+    width: 48,
     Cell: (props: any) => <a
-      href={`https://xmtextiles.bitrix24.ru/company/personal/user/460/tasks/task/view/${props.original.ID}/`}
-      target="_blank" rel="noopener noreferrer"
+    href={`https://xmtextiles.bitrix24.ru/company/personal/user/460/tasks/task/view/${props.original.ID}/`}
+    target="_blank" rel="noopener noreferrer"
     >{props.value}</a>
   }, {
     // 2
-    Header: 'Creation Date',
+    Header: 'Created',
     id: 'createdDate',
-    minWidth: 77,
     accessor: 'CREATED_DATE',
+    width: 80,
     Cell: ({ value }: any) => dayjs(value).format('DD.MM.YYYY')
   }, {
     // 3
     Header: 'Brand',
     id: 'brand',
-    minWidth: 50,
-    accessor: 'state.brand'
+    accessor: 'state.brand',
+    width: 37,
   }, {
     // 4
     Header: 'Status',
     id: 'stage',
-    minWidth: 100,
-    accessor: 'state.stage'
+    accessor: 'state.stage',
+    width: 160
   }, {
     //5
     Header: 'L. A. D.',
     id: 'lastActionDate',
     accessor: 'lastActionDate',
-    sortMethod: sortDates
+    sortMethod: sortDates,
+    width: 79
   }, {
     // 6
     Header: 'N. A. D.',
@@ -299,7 +301,7 @@ function getColumns(totalPrice: number, requiredStage: Stage | 'results' | 'over
       hidden = [4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 21, 23, 24, 26, 28, 29];
       break;
     case 'results':
-      hidden = [7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 19, 21, 22, 24, 27, 28];
+      hidden = [6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 19, 21, 22, 24, 27, 28];
       break;
     case 'overdue':
       hidden = [7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 23, 27, 29];
