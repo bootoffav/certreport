@@ -28,9 +28,9 @@ class QSpending extends React.Component<{
     this.state = { quarters };
   }
 
-  findQRange(toSub: number) {
+  findQRange(toSub: number, endDate?: Date) {
     // @ts-ignore
-    const q = dayjs().subtract(toSub, 'quarter');
+    const q = dayjs(endDate).subtract(toSub, 'quarter');
     return {
       // @ts-ignore
       start: q.startOf('quarter'), end: q.endOf('quarter'), spent: 0
@@ -45,7 +45,7 @@ class QSpending extends React.Component<{
       let i = 1;
       // @ts-ignore
       while (end.subtract(i, 'quarter').startOf('quarter') > dayjs(startDate)) {
-        quarters[i] = this.findQRange(i++);
+        quarters[i] = this.findQRange(i++, endDate);
       }
 
       return quarters;
@@ -64,13 +64,14 @@ class QSpending extends React.Component<{
     this.props.tasks.forEach((task: any) => {
       const { price, paymentDate } = task.state;
       Object.entries(quarters).forEach(entry => {
-        const [_, quarter ]: any = entry;
+        const [_, quarter]: any = entry;
+        // @ts-ignore
         if (quarter.start < dayjs(paymentDate) && dayjs(paymentDate) < quarter.end) {
           quarter.spent += +price;
+          //@ts-ignore
         }
       });
     });
-
     return quarters;
   }
 
@@ -88,7 +89,7 @@ class QSpending extends React.Component<{
   render() {
     return Object.values(this.state.quarters).reverse().map((quarter: any) => {
       return <Grid.Col width={2} key={quarter.start}>
-        <Card title={`Q${quarter.start.quarter()} spendings (${quarter.start.format('MM.YYYY')} - ${quarter.end.format('MM.YYYY')})`}
+        <Card title={`Q${quarter.start.quarter()}-${quarter.start.format('YY')}`}
           body={<>
             <Header.H5 className="display-5 text-center">
               {`€${Math.round(quarter.spent).toLocaleString()}`}

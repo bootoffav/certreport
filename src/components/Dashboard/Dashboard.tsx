@@ -55,7 +55,7 @@ class Dashboard extends React.Component<{ tasks: any[]; }, IDashboard> {
       <Grid>
         <Grid.Row>
           <QSpending
-            tasks={this.state.tasks}
+            tasks={this.props.tasks}
             startDate={this.state.startDate}
             endDate={this.state.endDate}
           />
