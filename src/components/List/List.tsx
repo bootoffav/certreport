@@ -1,6 +1,6 @@
-import './List.css';
 import React from 'react';
 import ReactTable from "react-table";
+import './List.css';
 import Task, { Stage } from '../../Task/Task';
 import '../../css/style.css';
 import { Toolbar, filter } from '../Toolbar/Toolbar';
@@ -105,9 +105,9 @@ export default class List extends React.Component<{ tasks: any; staleData: boole
   
   }
 
-  dateFilter = (startDate: Date | null, endDate: Date | null): void => {
+  dateFilter = (startDate?: Date, endDate?: Date): void => {
     let tasksForUpdate: any;
-    if (startDate === null || endDate === null) {
+    if (!startDate || !endDate) {
       tasksForUpdate = this.state.tasks;
     } else {
       tasksForUpdate = this.state.tasks.filter((task: any) => {
@@ -115,7 +115,6 @@ export default class List extends React.Component<{ tasks: any; staleData: boole
         return startDate < comparingDate && endDate > comparingDate
       });
     }
-
     this.setState({
       filteredTasksLevel1: tasksForUpdate, startDate, endDate
     }, () => this.toolbarFilter(this.state.requiredStage));

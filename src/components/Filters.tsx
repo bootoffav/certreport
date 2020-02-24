@@ -76,11 +76,11 @@ const BrandFilter: React.FunctionComponent<{
 
 function DateFilter(
   { filter }: {
-    filter: (startDate: Date | null, endDate: Date | null) => void;
+    filter: (startDate?: Date, endDate?: Date) => void;
   }) {
 
-  const[startDate, setStartDate] = useState<Date | null>(null);
-  const[endDate, setEndDate] = useState<Date | null>(null);
+  const[startDate, setStartDate] = useState<Date>();
+  const[endDate, setEndDate] = useState<Date>();
 
   return <div className="form-row mx-3" id="dateRange">
     <div className="d-flex align-items-center">
@@ -94,7 +94,7 @@ function DateFilter(
         selectsStart
         startDate={startDate}
         endDate={endDate}
-        onChange={(date) => {
+        onChange={(date: Date) => {
           setStartDate(date);
           filter(date, endDate)
         }}
@@ -109,7 +109,7 @@ function DateFilter(
         selectsEnd
         startDate={startDate}
         endDate={endDate}
-        onChange={(date) => {
+        onChange={(date: Date) => {
           setEndDate(date);
           filter(startDate, date)
         }}
