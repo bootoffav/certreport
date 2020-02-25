@@ -1,7 +1,7 @@
 import { Grid, Card, Header } from 'tabler-react';
 import React from 'react';
 import dayjs from 'dayjs';
-import { start } from 'repl';
+import './QSpending.css';
 
 
 dayjs.extend(require('dayjs/plugin/quarterOfYear'));
@@ -87,17 +87,23 @@ class QSpending extends React.Component<{
   }
 
   render() {
+    const nbsp = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
     return Object.values(this.state.quarters).reverse().map((quarter: any) => {
       return <Grid.Col width={2} key={quarter.start}>
-        <Card title={`Q${quarter.start.quarter()}-${quarter.start.format('YY')}`}
-          body={<>
-            <Header.H5 className="display-5 text-center">
+        <Card>
+          <Card.Header>
+            <span dangerouslySetInnerHTML={{__html: nbsp}} />
+            {`Q${quarter.start.quarter()}-${quarter.start.format('YY')}`}
+          </Card.Header>
+          <Card.Body>
+            <Header.H3 className="text-center">
               {`€${Math.round(quarter.spent).toLocaleString()}`}
-            </Header.H5>
-          </>} />
+            </Header.H3>
+          </Card.Body>
+        </Card>
       </Grid.Col>
     })
-  }
-}
-
-export { QSpending }
+      }
+    }
+    
+export {QSpending}
