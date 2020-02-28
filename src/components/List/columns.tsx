@@ -45,7 +45,7 @@ function getColumns(totalPrice: number, requiredStage: Stage | 'results' | 'over
     Cell: ({ value }: any) => dayjs(value).format('DD.MM.YYYY')
   }, {
     // 3
-    Header: 'Brand',
+    Header: 'XM_',
     id: 'brand',
     accessor: 'state.brand',
     width: 37,
@@ -84,7 +84,7 @@ function getColumns(totalPrice: number, requiredStage: Stage | 'results' | 'over
     sortMethod: sortDates
   }, {
     // 9
-    Header: 'Task title',
+    Header: 'Task',
     accessor: 'TITLE',
     id: 'taskName',
     minWidth: 550,
@@ -92,10 +92,11 @@ function getColumns(totalPrice: number, requiredStage: Stage | 'results' | 'over
       <Link
         to={`/edit/${original.ID}`}
         target="_blank" rel="noopener noreferrer"
+        style={{ textDecoration: 'none' }}
       >{value}</Link>
   }, {
     // 10
-    Header: 'Sample to be prepared on',
+    Header: 'Sample NAD',
     accessor: 'state.readyOn',
     id: 'readyOn',
     width: 130,
@@ -273,6 +274,16 @@ function getColumns(totalPrice: number, requiredStage: Stage | 'results' | 'over
         target="_blank" rel="noopener noreferrer"
       >{`https://${value}`}</a>
       : ''
+  }, {
+    // 30
+    Header: 'Part #',
+    id: 'partNumber',
+    accessor: 'state.partNumber'
+  }, {
+    // 31
+    Header: 'Wash',
+    id: 'wash',
+    accessor: 'state.pretreatment1'
   }];
 
   // @ts-ignore
@@ -280,40 +291,40 @@ function getColumns(totalPrice: number, requiredStage: Stage | 'results' | 'over
   let hidden: number[];
   switch (requiredStage) {
     case Stage['00. Paused']:
-      hidden = [4, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 19, 21, 22, 23, 24, 25, 26, 29];
+      hidden = [4, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 19, 21, 22, 23, 24, 25, 26, 29, 30, 31];
       break;
     case Stage['0. Sample to be prepared']:
-      hidden = [4, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 25, 26, 29];
+      hidden = [2, 4, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 19, 20, 21, 22, 23, 24, 25, 26, 28, 29];
       break;
     case Stage['1. Sample Sent']:
-      hidden = [4, 5, 6, 7, 8, 12, 13, 14, 15, 16, 17, 19, 21, 22, 24, 25, 26, 28, 29];
+      hidden = [4, 5, 6, 7, 8, 12, 13, 14, 15, 16, 17, 19, 21, 22, 24, 25, 26, 28, 29, 30, 31];
       break;
     case Stage['2. Sample Arrived']:
-      hidden = [4, 5, 6, 7, 8, 10, 13, 14, 15, 16, 17, 19, 21, 22, 24, 25, 26, 28, 29];
+      hidden = [4, 5, 6, 7, 8, 10, 13, 14, 15, 16, 17, 19, 21, 22, 24, 25, 26, 28, 29, 30, 31];
       break;
     case Stage['3. PI Issued']:
-      hidden = [4, 5, 6, 7, 8, 10, 11, 12, 13, 16, 18, 20, 21, 23, 24, 25, 27, 28, 29];
+      hidden = [4, 5, 6, 7, 8, 10, 11, 12, 13, 16, 18, 20, 21, 23, 24, 25, 27, 28, 29, 30, 31];
       break;
     case Stage['4. Payment Done']:
-      hidden = [4, 5, 6, 7, 8, 10, 11, 12, 13, 18, 19, 20, 21, 23, 24, 26, 28, 29];
+      hidden = [4, 5, 6, 7, 8, 10, 11, 12, 13, 18, 19, 20, 21, 23, 24, 26, 28, 29, 30, 31];
       break;
     case Stage['5. Testing is started']:
-      hidden = [4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 21, 23, 24, 26, 28, 29];
+      hidden = [4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 21, 23, 24, 26, 28, 29, 30, 31];
       break;
     case 'results':
-      hidden = [6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 19, 21, 22, 24, 27, 28];
+      hidden = [6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 19, 21, 22, 24, 27, 28, 30, 31];
       break;
     case 'overdue':
-      hidden = [7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 23, 27, 29];
+      hidden = [7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 23, 27, 29, 30, 31];
       break;
     case Stage['7. Test-report ready']:
-      hidden = [4, 5, 6, 7, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 24, 29];
+      hidden = [4, 5, 6, 7, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 24, 29, 30, 31];
       break;
     case Stage['8. Certificate ready']:
-      hidden = [4, 5, 6, 8, 10, 11, 12, 14, 15, 16, 18, 20, 21, 29];
+      hidden = [4, 5, 6, 8, 10, 11, 12, 14, 15, 16, 18, 20, 21, 29, 30, 31];
       break;
     default:
-      hidden = [5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 19, 21, 23, 24, 25, 28, 29];
+      hidden = [5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 19, 21, 23, 24, 25, 28, 29, 30, 31];
   }
 
   columns.forEach((col, ind) => {

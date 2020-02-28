@@ -8,6 +8,7 @@ type dataType = {
   };
 }
 
+
 function byStages(tasks: any): dataType {
   const data: any = {};
   data.names = {
@@ -35,7 +36,7 @@ function byStages(tasks: any): dataType {
   });
   data.labels = Object.keys(data.names);
   const colors = getRandomColors(Object.keys(data.names).length);
-  
+
   data.datasets = [{
     data: Object.keys(data.names).map(stage => data.names[stage].length),
     backgroundColor: colors,
@@ -43,17 +44,6 @@ function byStages(tasks: any): dataType {
   }];
 
   return data;
-}
-
-function getRandomColors(amount: number) {
-  let letters = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'];
-  const colors = [];
-  for (let i = 0; i < amount; i++) {
-    let color = '#';
-    for (let i = 0; i < 6; i++) color += letters[Math.floor(Math.random() * 16)];
-    colors.push(color);
-  }
-  return colors;
 }
 
 
@@ -78,6 +68,18 @@ function byProducts(tasks: any): dataType {
   }];
 
   return data;
+}
+
+
+function getRandomColors(amount: number) {
+  let letters = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'];
+  const colors = [];
+  for (let i = 0; i < amount; i++) {
+    let color = '#';
+    for (let i = 0; i < 6; i++) color += letters[Math.floor(Math.random() * 16)];
+    colors.push(color);
+  }
+  return colors;
 }
 
 export { byStages, byProducts };

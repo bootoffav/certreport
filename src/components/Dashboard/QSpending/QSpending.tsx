@@ -63,12 +63,9 @@ class QSpending extends React.Component<{
   countQuarterSpendings(quarters: any) {
     this.props.tasks.forEach((task: any) => {
       const { price, paymentDate } = task.state;
-      Object.entries(quarters).forEach(entry => {
-        const [_, quarter]: any = entry;
-        // @ts-ignore
+      Object.entries(quarters).forEach(([_, quarter]: any) => {
         if (quarter.start < dayjs(paymentDate) && dayjs(paymentDate) < quarter.end) {
           quarter.spent += +price;
-          //@ts-ignore
         }
       });
     });

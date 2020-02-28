@@ -1,4 +1,4 @@
-import faunadb, { query as q, errors } from "faunadb";
+import faunadb, { query as q } from "faunadb";
 import { emptyState } from './defaults';
 
 class DB {
