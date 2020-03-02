@@ -8,6 +8,7 @@ dayjs.extend(require('dayjs/plugin/quarterOfYear'));
 
 
 class QSpending extends React.Component<{
+  renderTable: (t: any[]) => void;
   tasks: any;
   startDate?: Date;
   endDate?: Date;
@@ -15,6 +16,7 @@ class QSpending extends React.Component<{
 
   spendings: any = {};
   state: {
+    tasksByQuarters?: any;
     quarters: any;
   }
 
@@ -33,7 +35,8 @@ class QSpending extends React.Component<{
     const q = dayjs(endDate).subtract(toSub, 'quarter');
     return {
       // @ts-ignore
-      start: q.startOf('quarter'), end: q.endOf('quarter'), spent: 0
+      start: q.startOf('quarter'), end: q.endOf('quarter'),
+      spent: 0, tasks: []
     }
   }
 
@@ -66,6 +69,7 @@ class QSpending extends React.Component<{
       Object.entries(quarters).forEach(([_, quarter]: any) => {
         if (quarter.start < dayjs(paymentDate) && dayjs(paymentDate) < quarter.end) {
           quarter.spent += +price;
+          quarter.tasks.push(task);
         }
       });
     });
@@ -89,8 +93,8 @@ class QSpending extends React.Component<{
       return <Grid.Col width={2} key={quarter.start}>
         <Card>
           <Card.Header>
-            <span dangerouslySetInnerHTML={{__html: nbsp}} />
-            {`Q${quarter.start.quarter()}-${quarter.start.format('YY')}`}
+            <span dangerouslySetInnerHTML={{ __html: nbsp }}/>
+            <span className="quarterHeader" onClick={() => this.props.renderTable(quarter.tasks)}>{`Q${quarter.start.quarter()}-${quarter.start.format('YY')}`}</span>
           </Card.Header>
           <Card.Body>
             <Header.H3 className="text-center">

@@ -55,6 +55,7 @@ class Dashboard extends React.Component<{ tasks: any[]; }, IDashboard> {
       <Grid>
         <Grid.Row>
           <QSpending
+            renderTable={(tasks) => this.renderTableOfDiagramSegment('', '', tasks)}
             tasks={this.props.tasks}
             startDate={this.state.startDate}
             endDate={this.state.endDate}
@@ -121,9 +122,11 @@ class Dashboard extends React.Component<{ tasks: any[]; }, IDashboard> {
   }
 
 
-  renderTableOfDiagramSegment(checkedValue: string, param: string) {
+  renderTableOfDiagramSegment(checkedValue: string, param: string, tasks?: any) {
     if (['no product', 'no stage'].includes(checkedValue)) checkedValue = '';
-    const tasks = this.state.tasks.filter(t => t.state[param] === checkedValue);
+
+    tasks = tasks || this.state.tasks.filter(t => t.state[param] === checkedValue);
+
     const totalPrice: number = tasks.reduce(
       (sum: number, task: any) => sum + Number(task.state.price),
       0);
