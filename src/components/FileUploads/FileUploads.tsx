@@ -1,11 +1,18 @@
+import qs from 'qs';
 import React from 'react';
 import B24 from '../../B24';
-import ReactDOM from 'react-dom';
+// import ReactDOM from 'react-dom';
 import UploadedFilesList from './UploadedFilesList';
+
+
+const creator_id = process.env.REACT_APP_B24_USER_ID;
+const webhook_key = process.env.REACT_APP_B24_WEBHOOK_KEY;
+const main_url = process.env.REACT_APP_B24_MAIN_URL;
 
 class FileUploads extends React.Component<{
   taskId: string | undefined;
   attachedFiles: any;
+  updateAttachedFiles: () => void;
 }> {
 
   state = {
@@ -13,15 +20,15 @@ class FileUploads extends React.Component<{
   };
 
   upload = (e: any) => {
-    let uploaded: any = [];
+    // let uploaded: any = [];
     this.setState({ uploading: true });
     const amountOfFiles = e.target.files.length;
     let uploadedFiles = 0;
 
     const renderToUI = (uploadedResponse: any, file: any) => {
       uploadedFiles++;
-      uploaded.push({ name: file.name, result: uploadedResponse.result ? true : false })
-      ReactDOM.render(<Loading uploaded={uploaded} />, document.getElementById('loaded'));
+      // uploaded.push({ name: file.name, result: uploadedResponse.result ? true : false })
+      // ReactDOM.render(<Loading uploaded={uploaded} />, document.getElementById('loaded'));
       if (uploadedFiles === amountOfFiles) {
         this.setState({ uploading: false });
       }
@@ -33,14 +40,24 @@ class FileUploads extends React.Component<{
       reader.onload = () => {
         // @ts-ignore
         B24.fileUpload(this.props.taskId, file.name, reader.result)
-          .then((res: any) => renderToUI(res, file));
+          .then((res: any) => {
+            renderToUI(res, file);
+            this.props.updateAttachedFiles();
+          });
       }
     }
   }
 
+  deleteFile = (file: any) => {
+    Promise.all([
+      fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.deletefile?` + qs.stringify({ TASK_ID: this.props.taskId, ATTACHMENT_ID: file.ATTACHMENT_ID })),
+      fetch(`${main_url}/${creator_id}/${webhook_key}/disk.file.delete?` + qs.stringify({ id: file.FILE_ID }))
+    ]).then(this.props.updateAttachedFiles);
+  }
+
   render() {
     return <>
-      <UploadedFilesList attachedFiles={this.props.attachedFiles}/>
+      <UploadedFilesList attachedFiles={this.props.attachedFiles} deleteFile={this.deleteFile} />
       <div className="input-group">
         <div className="input-group-prepend">
           <span className="input-group-text" id="inputGroupFileAddon01">

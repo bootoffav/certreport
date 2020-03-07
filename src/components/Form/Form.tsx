@@ -38,8 +38,6 @@ class Form extends React.Component<IFormProps> {
   task_id: string | undefined;
   state: IFormState;
 
-  attachedFiles = [];
-
   constructor(props: IFormProps) {
     super(props);
     this.task_id = props.match.params.id;
@@ -58,9 +56,9 @@ class Form extends React.Component<IFormProps> {
 
       B24.get_task(this.task_id)
         .then((r: any) => {
-          this.attachedFiles = r.UF_TASK_WEBDAV_FILES;
           this.setState({
             ...r.state,
+            attachedFiles: r.UF_TASK_WEBDAV_FILES,
             link: `[URL=certreport.xmtextiles.com/edit/${this.task_id}/]this task[/URL]`,
             DBState: dataFromDB.DBState,
             EN11612Detail: dataFromDB.EN11612Detail,
@@ -422,12 +420,6 @@ class Form extends React.Component<IFormProps> {
       <Export state={this.state}/>
     </div>
 
-  // renderFileUploads() {
-  //   return <div className="tab-pane fade" id="nav-fileUploads" role="tabpanel" aria-labelledby="nav-fileUploads-tab">
-  //     <FileUploads taskId={this.task_id} />
-  //   </div>;
-  // }
-
   render = () =>
     <div className="container">
       <Notification status={this.state.requestStatus} />
@@ -453,12 +445,25 @@ class Form extends React.Component<IFormProps> {
             </div>
           </Tab>
         <Tab title="File Uploads">
-            <FileUploads taskId={this.task_id} attachedFiles={this.attachedFiles} />
+            <FileUploads
+              taskId={this.task_id}
+              attachedFiles={this.state.attachedFiles}
+              updateAttachedFiles={() => this.updateAttachedFiles()}
+            />
         </Tab>
         </TabbedCard>
         {this.renderFormFooter()}
       </form>
     </div>
+  
+  updateAttachedFiles = () => {
+    B24.get_task(this.task_id)
+      .then((r: any) => {
+        this.setState({
+          attachedFiles: r.UF_TASK_WEBDAV_FILES,
+        })
+      })
+  }
 }
 
 export default Form;

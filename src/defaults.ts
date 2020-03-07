@@ -44,6 +44,7 @@ export interface IState {
   standardsResult: {
     [key: string]: 'pass' | 'fail';
   };
+  attachedFiles: any;
   DBState: any;
   EN11612Detail?: any,
   link: string;
@@ -108,6 +109,7 @@ const emptyState : IState = {
     otherStandard1: 'According to Standard Mandotory Test Requirement',
     otherStandard2: 'According to Standard Mandotory Test Requirement'
   },
+  attachedFiles: [],
   EN11612Detail: {},
   resume: undefined,
   link: '',
