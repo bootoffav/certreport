@@ -1,9 +1,11 @@
 import React from 'react';
 import B24 from '../../B24';
 import ReactDOM from 'react-dom';
+import UploadedFilesList from './UploadedFilesList';
 
 class FileUploads extends React.Component<{
   taskId: string | undefined;
+  attachedFiles: any;
 }> {
 
   state = {
@@ -38,6 +40,7 @@ class FileUploads extends React.Component<{
 
   render() {
     return <>
+      <UploadedFilesList attachedFiles={this.props.attachedFiles}/>
       <div className="input-group">
         <div className="input-group-prepend">
           <span className="input-group-text" id="inputGroupFileAddon01">

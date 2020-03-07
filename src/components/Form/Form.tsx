@@ -38,6 +38,8 @@ class Form extends React.Component<IFormProps> {
   task_id: string | undefined;
   state: IFormState;
 
+  attachedFiles = [];
+
   constructor(props: IFormProps) {
     super(props);
     this.task_id = props.match.params.id;
@@ -55,13 +57,16 @@ class Form extends React.Component<IFormProps> {
         .then(({ EN11612Detail, exists, ...DBState }: any) => ({ EN11612Detail, DBState, exists }));
 
       B24.get_task(this.task_id)
-        .then(r => this.setState({
-          ...r.state,
-          link: `[URL=certreport.xmtextiles.com/edit/${this.task_id}/]this task[/URL]`,
-          DBState: dataFromDB.DBState,
-          EN11612Detail: dataFromDB.EN11612Detail,
-          existsInDB: dataFromDB.exists
-        }))
+        .then((r: any) => {
+          this.attachedFiles = r.UF_TASK_WEBDAV_FILES;
+          this.setState({
+            ...r.state,
+            link: `[URL=certreport.xmtextiles.com/edit/${this.task_id}/]this task[/URL]`,
+            DBState: dataFromDB.DBState,
+            EN11612Detail: dataFromDB.EN11612Detail,
+            existsInDB: dataFromDB.exists
+          })
+        })
         .catch((e) => this.setState({ hasError: true }));
     }
   }
@@ -417,17 +422,17 @@ class Form extends React.Component<IFormProps> {
       <Export state={this.state}/>
     </div>
 
-  renderFileUploads() {
-    return <div className="tab-pane fade" id="nav-fileUploads" role="tabpanel" aria-labelledby="nav-fileUploads-tab">
-      <FileUploads taskId={this.task_id} />
-    </div>;
-  }
+  // renderFileUploads() {
+  //   return <div className="tab-pane fade" id="nav-fileUploads" role="tabpanel" aria-labelledby="nav-fileUploads-tab">
+  //     <FileUploads taskId={this.task_id} />
+  //   </div>;
+  // }
 
   render = () =>
     <div className="container">
       <Notification status={this.state.requestStatus} />
       <form onSubmit={(e) => this.handleCert(e)}>
-        <TabbedCard initialTab="Basic Info">
+        <TabbedCard initialTab="File Uploads">
           <Tab title="Basic Info">{this.renderBasicInfo()}</Tab>
           <Tab title="Dates">{this.renderDates()}</Tab>
           <Tab title="Payments">{this.renderPayments()}</Tab>
@@ -448,7 +453,7 @@ class Form extends React.Component<IFormProps> {
             </div>
           </Tab>
         <Tab title="File Uploads">
-          <FileUploads taskId={this.task_id} />
+            <FileUploads taskId={this.task_id} attachedFiles={this.attachedFiles} />
         </Tab>
         </TabbedCard>
         {this.renderFormFooter()}
