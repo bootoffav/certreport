@@ -64,27 +64,26 @@ class Dashboard extends React.Component<{ tasks: any[]; }, IDashboard> {
             <Card body={ <DateFilter filter={this.dateFilter} /> }/>
           </Grid.Col>
         </Grid.Row>
-        <Grid.Row></Grid.Row>
-          <Grid.Row cards deck>
+          <Grid.Row cards>
             <Grid.Col md={5}>
-              <Card
-                title="Task by stages"
-                body={
-                  <Doughnut
-                    data={byStages(this.state.tasks)}
-                    options={{
-                      ...doughnutOptions,
-                      onClick: (_: MouseEvent, chartElement: any) => {
-                        const { _model: { label: stage } } = chartElement.pop();
-                        this.renderTableOfDiagramSegment(stage, 'stage');
-                      }
-                    }}
-                  />
+            <Card isCollapsible
+              title="Task by stages"
+              body={
+                <Doughnut
+                  data={byStages(this.state.tasks)}
+                  options={{
+                    ...doughnutOptions,
+                    onClick: (_: MouseEvent, chartElement: any) => {
+                      const { _model: { label: stage } } = chartElement.pop();
+                      this.renderTableOfDiagramSegment(stage, 'stage');
+                    }
+                  }}
+                />
                 }
-              />
+                />
             </Grid.Col>
             <Grid.Col md={5}>
-              <Card
+              <Card isCollapsible
                 title="Products"
                 body={
                   <Doughnut

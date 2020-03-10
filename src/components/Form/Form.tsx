@@ -424,7 +424,7 @@ class Form extends React.Component<IFormProps> {
     <div className="container">
       <Notification status={this.state.requestStatus} />
       <form onSubmit={(e) => this.handleCert(e)}>
-        <TabbedCard initialTab="File Uploads">
+        <TabbedCard initialTab="Basic Info">
           <Tab title="Basic Info">{this.renderBasicInfo()}</Tab>
           <Tab title="Dates">{this.renderDates()}</Tab>
           <Tab title="Payments">{this.renderPayments()}</Tab>
