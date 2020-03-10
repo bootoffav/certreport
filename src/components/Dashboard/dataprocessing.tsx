@@ -16,7 +16,7 @@ function byStages(tasks: any): dataType {
     '00. Paused': [],
     '0. Sample to be prepared': [],
     '1. Sample Sent': [],
-    '2. Sample arrived': [],
+    '2. Sample Arrived': [],
     '3. PI Issued': [],
     '4. Payment Done': [],
     '5. Testing is started': [],
@@ -30,9 +30,13 @@ function byStages(tasks: any): dataType {
 
 
   tasks.forEach((task: any) => {
-    (task.state.stage === '')
-    ? data.names['no stage'].push(task.TITLE.substring(0, 50))
-    : data.names[task.state.stage].push(task.TITLE.substring(0, 50));
+    if (task.hasOwnProperty('state')) { // существует state
+      task.state.stage === ''
+        ? data.names['no stage'].push(task.TITLE.substring(0, 50))
+        : data.names[task.state.stage].push(task.TITLE.substring(0, 50));
+    } else {
+      data.names['no stage'].push(task.TITLE.substring(0, 50));
+    }
   });
   data.labels = Object.keys(data.names);
   const colors = getRandomColors(Object.keys(data.names).length);
