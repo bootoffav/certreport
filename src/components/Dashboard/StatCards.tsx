@@ -32,7 +32,13 @@ const CompletedCertifications = () => {
   return <StatsCard
     layout={1}
     movement={movement()}
-    total={<div className="display-5">{completedCerts()}</div> }
+    total={
+      <div
+        className="display-5"
+        onClick={displayNone}
+        >{completedCerts()}
+      </div>
+    }
     label="Completed certifications"
   />
 }
@@ -74,11 +80,17 @@ const AmountOfCertifications = () => {
   return <StatsCard
     layout={1}
     movement={movement()}
-    total={<div className="display-5">{amountOfOngoingCerts()}</div>}
+    total={
+      <div
+        className="display-5"
+        onClick={displayNone}
+      >{amountOfOngoingCerts()}</div>
+    }
     label={`${startDate ? 'New' : 'All'} Certifications`}
   />
 }
 
+const displayNone = (e: any) => e.currentTarget.parentNode.parentNode.parentNode.style.display = 'none';
 
 const AmountSpent = () => {
   const { tasks, startDate, endDate}: any = useContext(StatCardsContext);
@@ -97,8 +109,13 @@ const AmountSpent = () => {
 
   return <Card
     body={<>
-      <Header.H5 className="display-5 text-center">{spent()}</Header.H5>
-      <div className="display-5 text-center">Spent this period</div>
+      <Header.H5 className="display-5 text-center"
+        ><div
+          onClick={displayNone}
+        >{spent()}</div>
+      </Header.H5>
+      <div className="display-5 text-center"
+      >Spent this period</div>
       </>
     }/>
 }

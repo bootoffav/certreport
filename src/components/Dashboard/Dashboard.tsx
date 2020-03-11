@@ -64,8 +64,8 @@ class Dashboard extends React.Component<{ tasks: any[]; }, IDashboard> {
             <Card body={ <DateFilter filter={this.dateFilter} /> }/>
           </Grid.Col>
         </Grid.Row>
-          <Grid.Row cards>
-            <Grid.Col md={5}>
+        <Grid.Row>
+          <Grid.Col width={5}>
             <Card isCollapsible
               title="Task by stages"
               body={
@@ -80,39 +80,39 @@ class Dashboard extends React.Component<{ tasks: any[]; }, IDashboard> {
                   }}
                 />
                 }
-                />
-            </Grid.Col>
-            <Grid.Col md={5}>
-              <Card isCollapsible
-                title="Products"
-                body={
-                  <Doughnut
-                    data={byProducts(this.state.tasks)}
-                    options={{
-                      ...doughnutOptions,
-                      onClick: (_: MouseEvent, chartElement: any) => {
-                        const { _model: { label: article } } = chartElement.pop();
-                        this.renderTableOfDiagramSegment(article, 'article');
-                      }
-                    }}
-                  />
-                }
               />
-            </Grid.Col>
-            <Grid.Col md={2}>
-              <StatCardsContext.Provider value={{
-                  tasks: this.props.tasks,
-                  startDate: this.state.startDate,
-                  endDate: this.state.endDate,
-              }}>
-                <Grid.Row><CompletedCertifications /></Grid.Row>
-                <Grid.Row><AmountOfCertifications /></Grid.Row>
-                <Grid.Row><AmountSpent /></Grid.Row>
-              </StatCardsContext.Provider>
-            </Grid.Col>
-          </Grid.Row>
+          </Grid.Col>
+          <Grid.Col width={5}>
+            <Card isCollapsible
+              title="Products"
+              body={
+                <Doughnut
+                  data={byProducts(this.state.tasks)}
+                  options={{
+                    ...doughnutOptions,
+                    onClick: (_: MouseEvent, chartElement: any) => {
+                      const { _model: { label: article } } = chartElement.pop();
+                      this.renderTableOfDiagramSegment(article, 'article');
+                    }
+                  }}
+                />
+              }
+            />
+          </Grid.Col>
+          <Grid.Col width={2}>
+            <StatCardsContext.Provider value={{
+                tasks: this.props.tasks,
+                startDate: this.state.startDate,
+                endDate: this.state.endDate,
+            }}>
+              <Grid.Row><CompletedCertifications /></Grid.Row>
+              <Grid.Row><AmountOfCertifications /></Grid.Row>
+              <Grid.Row><AmountSpent /></Grid.Row>
+            </StatCardsContext.Provider>
+          </Grid.Col>
+        </Grid.Row>
         <Grid.Row>
-          <Grid.Col md={12}>
+          <Grid.Col width={12}>
             <div id="tableOfDiagramSegment"></div>
           </Grid.Col>
         </Grid.Row>
