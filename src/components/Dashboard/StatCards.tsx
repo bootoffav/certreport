@@ -92,30 +92,30 @@ const AmountOfCertifications = () => {
 
 const displayNone = (e: any) => e.currentTarget.parentNode.parentNode.parentNode.style.display = 'none';
 
-const AmountSpent = () => {
-  const { tasks, startDate, endDate}: any = useContext(StatCardsContext);
-  const spent = () => {
-    let spent = 0;
-    let t = startDate || endDate
-      ? tasksInRange(tasks, 'CREATED_DATE', startDate, endDate)
-      : tasks;
+const AmountSpent = ({ spent }: any) => {
+  // const { tasks, startDate, endDate}: any = useContext(StatCardsContext);
+  // const spent = () => {
+  //   let spent = 0;
+  //   let t = startDate || endDate
+  //     ? tasksInRange(tasks, 'CREATED_DATE', startDate, endDate)
+  //     : tasks;
     
-    t.forEach(({ state }: any) => {
-      spent += +state.price;
-    });
+  //   t.forEach(({ state }: any) => {
+  //     spent += +state.price;
+  //   });
 
-    return spent ? `€${Math.round(spent).toLocaleString()}` : 'could not count';
-  }
+  //   return spent ? `€${Math.round(spent).toLocaleString()}` : 'could not count';
+  // }
 
   return <Card
     body={<>
       <Header.H5 className="display-5 text-center"
         ><div
           onClick={displayNone}
-        >{spent()}</div>
+    >€{spent.toLocaleString()}</div>
       </Header.H5>
       <div className="display-5 text-center"
-      >Spent this period</div>
+      >Spent summary (default last 4 Quaters)</div>
       </>
     }/>
 }

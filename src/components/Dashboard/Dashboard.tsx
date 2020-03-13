@@ -16,6 +16,7 @@ interface IDashboard {
   tasks: any;
   startDate?: Date;
   endDate?: Date;
+  quarterSpendingsTotal: number;
 }
 
 function tasksInRange(tasks: any[], filterParam: string, startDate?: Date, endDate?: Date) {
@@ -38,7 +39,8 @@ class Dashboard extends React.Component<{ tasks: any[]; }, IDashboard> {
   state = {
     tasks: this.props.tasks,
     startDate: undefined,
-    endDate: undefined
+    endDate: undefined,
+    quarterSpendingsTotal: 0
   }
 
   dateFilter = (startDate?: Date, endDate?: Date): void => {
@@ -55,13 +57,15 @@ class Dashboard extends React.Component<{ tasks: any[]; }, IDashboard> {
       <Grid>
         <Grid.Row>
           <QSpending
+            saveTotal={(quarterSpendingsTotal: number) => this.setState({ quarterSpendingsTotal })}
             renderTable={(tasks) => this.renderTableOfDiagramSegment('', '', tasks)}
             tasks={this.props.tasks}
             startDate={this.state.startDate}
             endDate={this.state.endDate}
           />
           <Grid.Col width={4}>
-            <Card body={ <DateFilter filter={this.dateFilter} /> }/>
+            <AmountSpent spent={this.state.quarterSpendingsTotal}/>
+            {/* <Card body={ <DateFilter filter={this.dateFilter} /> }/> */}
           </Grid.Col>
         </Grid.Row>
         <Grid.Row>
@@ -107,7 +111,7 @@ class Dashboard extends React.Component<{ tasks: any[]; }, IDashboard> {
             }}>
               <Grid.Row><CompletedCertifications /></Grid.Row>
               <Grid.Row><AmountOfCertifications /></Grid.Row>
-              <Grid.Row><AmountSpent /></Grid.Row>
+              <Grid.Row></Grid.Row>
             </StatCardsContext.Provider>
           </Grid.Col>
         </Grid.Row>

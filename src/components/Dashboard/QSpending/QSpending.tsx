@@ -9,6 +9,7 @@ dayjs.extend(require('dayjs/plugin/quarterOfYear'));
 
 class QSpending extends React.Component<{
   renderTable: (t: any[]) => void;
+  saveTotal: (total: number) => void;
   tasks: any;
   startDate?: Date;
   endDate?: Date;
@@ -26,7 +27,12 @@ class QSpending extends React.Component<{
     let quarters = this.findQuarters();
     //привяжем суммы трат
     quarters = this.countQuarterSpendings(quarters);
-    
+    this.props.saveTotal(
+      Math.round(
+        Object.values(quarters)
+          .reduce((acc: number, quarter: any) => acc + quarter.spent, 0)
+      )
+    );
     this.state = { quarters };
   }
 
@@ -83,8 +89,13 @@ class QSpending extends React.Component<{
       let quarters = this.findQuarters(startDate, endDate);
       quarters = this.countQuarterSpendings(quarters);
       this.setState({ quarters, startDate, endDate });
+      this.props.saveTotal(
+        Math.round(
+          Object.values(quarters)
+            .reduce((acc: number, quarter: any) => acc + quarter.spent, 0)
+        )
+      );
     }
-
   }
 
   render() {
