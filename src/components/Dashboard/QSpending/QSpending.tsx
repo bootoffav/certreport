@@ -99,13 +99,13 @@ class QSpending extends React.Component<{
   }
 
   render() {
-    const nbsp = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
     return Object.values(this.state.quarters).reverse().map((quarter: any) => {
       return <Grid.Col width={2} key={quarter.start}>
         <Card>
           <Card.Header>
-            <span dangerouslySetInnerHTML={{ __html: nbsp }}/>
-            <span className="quarterHeader" onClick={() => this.props.renderTable(quarter.tasks)}>{`Q${quarter.start.quarter()}-${quarter.start.format('YY')}`}</span>
+            <div className="mx-auto quarterHeader" onClick={() => this.props.renderTable(quarter.tasks)}>
+              {`Q${quarter.start.quarter()}-${quarter.start.format('YY')}`}
+            </div>
           </Card.Header>
           <Card.Body>
             <Header.H3 className="text-center">
