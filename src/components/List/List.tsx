@@ -134,7 +134,7 @@ export default class List extends React.Component<{ tasks: any; staleData: boole
   }
 
   render = (): JSX.Element => <>
-      <div className="mb-1 mt-2 d-flex justify-content-between">
+      <div className="d-flex justify-content-between">
       <div className="d-inline-flex justify-content-start">
         <BrandFilter filter={this.brandFilter} />
         <ColumnSearch filter={this.columnFilter} />

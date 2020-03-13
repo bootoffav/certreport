@@ -47,7 +47,7 @@ class App extends React.Component {
       <div className="container-fluid">
         <Router>
           <>
-            <nav className="rounded-bottom navbar navbar-light shadow">
+            <nav className="mb-2 rounded-bottom navbar navbar-light shadow">
               <div className="container-fluid d-flex">
                 <NavLink className="navbar-brand" exact to="/dashboard">
                   <img src="/img/logo.png" width={150} alt="site-logo" />

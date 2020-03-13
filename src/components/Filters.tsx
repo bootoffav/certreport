@@ -82,7 +82,7 @@ function DateFilter(
   const[startDate, setStartDate] = useState<Date>();
   const[endDate, setEndDate] = useState<Date>();
 
-  return <div className="form-row mx-3" id="dateRange">
+  return <div className="form-row mx-1" id="dateRange">
     <div className="d-flex align-items-center">
       <div className="text-uppercase">Date Filter:</div>
     </div>

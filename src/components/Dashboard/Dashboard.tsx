@@ -64,8 +64,8 @@ class Dashboard extends React.Component<{ tasks: any[]; }, IDashboard> {
             endDate={this.state.endDate}
           />
           <Grid.Col width={4}>
+            <DateFilter filter={this.dateFilter} />
             <AmountSpent spent={this.state.quarterSpendingsTotal}/>
-            {/* <Card body={ <DateFilter filter={this.dateFilter} /> }/> */}
           </Grid.Col>
         </Grid.Row>
         <Grid.Row>
@@ -109,9 +109,8 @@ class Dashboard extends React.Component<{ tasks: any[]; }, IDashboard> {
                 startDate: this.state.startDate,
                 endDate: this.state.endDate,
             }}>
-              <Grid.Row><CompletedCertifications /></Grid.Row>
-              <Grid.Row><AmountOfCertifications /></Grid.Row>
-              <Grid.Row></Grid.Row>
+              <CompletedCertifications />
+              <AmountOfCertifications />
             </StatCardsContext.Provider>
           </Grid.Col>
         </Grid.Row>
