@@ -107,16 +107,16 @@ const AmountSpent = ({ spent }: any) => {
   //   return spent ? `€${Math.round(spent).toLocaleString()}` : 'could not count';
   // }
 
-  return <div style={{ marginTop: '0.9em' }}>
+  return <div style={{ marginTop: '0.2em' }}>
       <Card
       body={<>
-        <Header.H5 className="display-5 text-center"
+          <div className="display-5 text-center"
+          >TOTAL:</div>
+        <Header.H3 className="display-5 text-center"
           ><div
             onClick={displayNone}
       >€{spent.toLocaleString()}</div>
-        </Header.H5>
-        <div className="display-5 text-center"
-        >Spent summary (default last 4 Quaters)</div>
+        </Header.H3>
         </>
       } />
     </div>
