@@ -13,6 +13,7 @@ class ListExport extends React.Component<{
   startDate?: Date;
   endDate?: Date;
 }> {
+  totalPrice = 0;
   stage: string | undefined;
 
   generateTableStructureForResults = () => ({
@@ -39,21 +40,53 @@ class ListExport extends React.Component<{
       });
 
       headers = this.props.columns.map(({ Header }: any) => this.boldText(Header))
-      widths = this.props.columns.map(({ accessor, minWidth, width }: any) => accessor === 'TITLE' ? 'auto' : minWidth || width || '*'
-      );
+      widths = this.props.columns.map(({ accessor, minWidth, width }: any) => {
+        switch (accessor) {
+          case 'TITLE':
+            return 'auto'
+          case 'state.readyOn':
+            return 70;
+          case 'state.article':
+            return 130;
+          default:
+            return minWidth || width || '*'
+        }
+      });
     }
+
+    const table = {
+      table: {
+        widths,
+        body: [
+          headers,
+          ...[...this.genRow(this.props.tasks, accessors)]
+            // sort by increasing SerialNumber
+            .sort((a: any, b: any) => {
+              if (a[1] < b[1]) { return -1; }
+              if (a[1] > b[1]) { return 1; }
+              return 0;
+            })
+        ]
+      }
+    };
+    for (let i = 0; i < table.table.body.length; i++) {
+      if (i === 0) continue;
+      table.table.body[i][0] = i;
+    } // for column # make right count
+
+    // add TotalPrice
+    table.table.body.push([
+      { text: '', colSpan: accessors.length - 1 }, // empty columns
+      ...Array(accessors.length - 2).fill({ text: '', border: 'none'}), // required by pdkMake
+      {
+        alignment: 'right',
+        text: `€${Math.round(this.totalPrice).toLocaleString().replace(/,/g, ' ')}`
+      }
+    ]);
 
     return [
       { text: this.stage, fontSize: 30, alignment: 'center', margin: [5, 4] },
-      {
-        table: {
-          widths,
-          body: [
-            headers,
-            ...this.genRow(this.props.tasks, accessors)
-          ]
-        }
-      }
+      table
     ];
   }
 
@@ -64,7 +97,6 @@ class ListExport extends React.Component<{
     bold: true,
   });
 
-  // crap code to refactor ASAP
   * genRow(tasks: any, accessors: any) {
     for (let i = 0; i < tasks.length; i++) {
       const row: any = [];
@@ -74,13 +106,15 @@ class ListExport extends React.Component<{
           case 'TITLE':
             row.push({
               text: tasks[i][acc],
-              decoration: 'underline',
               color: 'blue',
               link: `${process.env.REACT_APP_B24_HOST}/company/personal/user/${process.env.REACT_APP_B24_USER_ID}/tasks/task/view/${tasks[i].ID}/`
             });
           break;
           case 'state.article':
-            row.push(this.boldText(tasks[i].state.article));
+            row.push({
+              ...this.boldText(tasks[i].state.article),
+              alignment: 'left'
+            });
             break;
           case 'state.certificate':
             const files = tasks[i]['UF_TASK_WEBDAV_FILES'] || [];
@@ -119,6 +153,13 @@ class ListExport extends React.Component<{
               // }
             }
             row.push(results);
+            break;
+          case 'state.price':
+            this.totalPrice += Number(tasks[i].state.price);
+            row.push({
+              alignment: 'right',
+              text: tasks[i].state.price === '' ? '' : `€${Math.round(tasks[i].state.price).toLocaleString().replace(/,/g, ' ')}`
+            });
             break;
           default:
             acc.includes('state.') && !!tasks[i].state[acc.substring(6)]
