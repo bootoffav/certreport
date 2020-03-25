@@ -1,6 +1,5 @@
 let doughnutOptions = {
   legend: {
-    position: 'right',
     display: false
   },
   tooltips: {

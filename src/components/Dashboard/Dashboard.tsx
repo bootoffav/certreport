@@ -19,6 +19,14 @@ interface IDashboard {
   quarterSpendingsTotal: number;
 }
 
+const generateLabels = (e: any, i = 0) => Object.entries(e.data.names)
+  .map((entry: any[]) => ({
+      text: `${entry[0]}: ${entry[1].length}`,
+      fillStyle: e.data.datasets[0].backgroundColor[i++],
+    })
+  );
+
+
 function tasksInRange(tasks: any[], filterParam: string, startDate?: Date, endDate?: Date) {
   if (startDate === undefined || endDate === undefined) return tasks;
 
@@ -76,10 +84,15 @@ class Dashboard extends React.Component<{ tasks: any[]; }, IDashboard> {
                 <Doughnut
                   data={byStages(this.state.tasks)}
                   options={{
-                    ...doughnutOptions,
+                    legend: {
+                      position: 'bottom',
+                      labels: { generateLabels }
+                    },
                     onClick: (_: MouseEvent, chartElement: any) => {
-                      const { _model: { label: stage } } = chartElement.pop();
-                      this.renderTableOfDiagramSegment(stage, 'stage');
+                      if (chartElement.length !== 0) {
+                        const { _model: { label: stage } } = chartElement.pop();
+                        this.renderTableOfDiagramSegment(stage, 'stage');
+                      }
                     }
                   }}
                 />
