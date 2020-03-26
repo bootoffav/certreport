@@ -30,9 +30,9 @@ class ColumnSearch extends React.Component<{
   };
 
   render = () =>
-    <div className="pl-1 input-group">
+    <div className="input-group">
       <input type="text" className="form-control" placeholder="search"
-        onChange={this.onChange} value={this.state.value}/>
+        onChange={this.onChange} value={this.state.value} />
       <div className="input-group-append">
         <button className="btn btn-outline-success dropdown-toggle" id="columnSearch" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Task name</button>
         <div className="dropdown-menu">
@@ -82,7 +82,7 @@ function DateFilter(
   const[startDate, setStartDate] = useState<Date>();
   const[endDate, setEndDate] = useState<Date>();
 
-  return <div className="form-row mx-1" id="dateRange">
+  return <div className="form-row" id="dateRange">
     <div className="d-flex align-items-center">
       <div className="text-uppercase">Date Filter:</div>
     </div>

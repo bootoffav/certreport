@@ -1,8 +1,9 @@
 import React from 'react';
-import Task, { Stage } from '../../Task/Task';
+import Task from '../../Task/Task';
+import { Dropdown } from 'tabler-react';
 
 const Toolbar: React.FunctionComponent<{
-  onClick: (toolBarProp: Stage | undefined | string) => void;
+  onClick: (toolBarProp: undefined | string) => void;
 }> = (props) => {
 
   const stages = [
@@ -19,34 +20,37 @@ const Toolbar: React.FunctionComponent<{
     '9. Ended'
   ];
 
-  const ToolbarStageButton = (stage: string) => <button
-    key={stage}
-    className="btn btn-block btn-indigo"
-    // @ts-ignore
-      onClick={() => props.onClick(Stage[stage])}
-    >{stage}</button>
+  const more = [ 'all', 'results', 'products', 'overdue' ];
 
-  return (
-    <div id="toolbar" style={{ width: 'inherit' }} className="btn-group" role="group" >
-      <button className="btn btn-block btn-cyan" style={{ marginTop: 8 }}
-        onClick={() => props.onClick(undefined)}
-      >All</button>
-      {stages.map(ToolbarStageButton)}
-      <button
-        className="btn btn-block btn-cyan"
-        onClick={() => props.onClick('results')}
-      >Results</button>
-      <button
-        className="btn btn-block btn-cyan"
-        onClick={() => props.onClick('overdue')}
-      >Overdue</button>
-    </div>);
+  const DropDownItem = (item: string) => ({
+    value: item.charAt(0).toUpperCase() + item.slice(1),
+    key: item,
+    onClick: () => props.onClick(item === 'all' ? undefined : item)
+  });
 
+  return <div id="toolbar" style={{ width: 'inherit' }} className="btn-group" role="group" >
+    <div className="mr-2">
+      <Dropdown
+        type="button"
+        value="Stages"
+        color="indigo"
+        triggerContent="Stages"
+        itemsObject={stages.map(DropDownItem)}
+      ></Dropdown>
+    </div>
+    <Dropdown
+      type="button"
+      value="More"
+      color="cyan"
+      triggerContent="More"
+      itemsObject={more.map(DropDownItem)}
+    ></Dropdown>
+  </div>;
 }
 
 const filter = (
   tasks: Task[],
-  requiredStage: Stage | undefined | string = undefined,
+  requiredStage?: string,
 ): Task[] => {
   switch (requiredStage) {
     case undefined:
@@ -55,8 +59,7 @@ const filter = (
     case 'overdue':
       return tasks.filter(t => t.overdue);
     default:
-      // @ts-ignore
-      return tasks.filter(t => Stage[t.state.stage] === requiredStage);
+      return tasks.filter(t => t.state.stage === requiredStage);
   }
 }
 

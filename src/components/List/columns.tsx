@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import React from 'react';
-import { Stage } from '../../Task/Task';
 import { dateConverter } from '../../helpers';
 import dayjs from 'dayjs';
 
@@ -17,7 +16,7 @@ function sortDates(a: string | undefined, b: string | undefined): number {
   return 0;
 }
 
-function getColumns(totalPrice: number, requiredStage: Stage | 'results' | 'overdue' | undefined) {
+function getColumns(totalPrice: number, requiredStage?: string) {
 
   const columns = [{
     // 0
@@ -290,25 +289,25 @@ function getColumns(totalPrice: number, requiredStage: Stage | 'results' | 'over
   columns.forEach(col => col.show = true);
   let hidden: number[];
   switch (requiredStage) {
-    case Stage['00. Paused']:
+    case '00. Paused':
       hidden = [4, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 19, 21, 22, 23, 24, 25, 26, 28, 29, 30];
       break;
-    case Stage['0. Sample to be prepared']:
+    case '0. Sample to be prepared':
       hidden = [2, 4, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28];
       break;
-    case Stage['1. Sample Sent']:
+    case '1. Sample Sent':
       hidden = [4, 5, 6, 7, 8, 12, 13, 14, 15, 16, 17, 19, 21, 22, 24, 25, 26, 27, 28, 29, 30];
       break;
-    case Stage['2. Sample Arrived']:
+    case '2. Sample Arrived':
       hidden = [4, 5, 6, 7, 8, 10, 13, 14, 15, 16, 17, 19, 21, 22, 24, 25, 26, 27, 28, 29, 30];
       break;
-    case Stage['3. PI Issued']:
+    case '3. PI Issued':
       hidden = [4, 5, 6, 7, 8, 10, 11, 12, 13, 16, 18, 20, 21, 23, 24, 25, 27, 28, 29, 30];
       break;
-    case Stage['4. Payment Done']:
+    case '4. Payment Done':
       hidden = [4, 5, 6, 7, 8, 10, 11, 12, 13, 18, 19, 20, 21, 23, 24, 26, 27, 28, 29, 30];
       break;
-    case Stage['5. Testing is started']:
+    case '5. Testing is started':
       hidden = [4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 21, 23, 24, 26, 27, 28, 29, 30];
       break;
     case 'results':
@@ -317,10 +316,10 @@ function getColumns(totalPrice: number, requiredStage: Stage | 'results' | 'over
     case 'overdue':
       hidden = [7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 23, 26, 28, 29, 30];
       break;
-    case Stage['7. Test-report ready']:
+    case '7. Test-report ready':
       hidden = [4, 5, 6, 7, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 24, 28, 20, 30];
       break;
-    case Stage['8. Certificate ready']:
+    case '8. Certificate ready':
       hidden = [4, 5, 6, 8, 10, 11, 12, 14, 15, 16, 18, 20, 21, 28, 29, 30];
       break;
     default:

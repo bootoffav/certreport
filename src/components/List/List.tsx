@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactTable from "react-table";
 import './List.css';
-import Task, { Stage } from '../../Task/Task';
+import Task from '../../Task/Task';
 import '../../css/style.css';
 import { Toolbar, filter } from '../Toolbar/Toolbar';
 import { getColumns } from './columns';
@@ -16,7 +16,7 @@ interface IListState {
   tasks: Task[];
   totalPrice: number;
   sortedData: Task[] | undefined;
-  requiredStage: Stage | undefined;
+  requiredStage: string | undefined;
   startDate?: Date;
   endDate?: Date;
 }
@@ -120,7 +120,7 @@ export default class List extends React.Component<{ tasks: any; staleData: boole
     }, () => this.toolbarFilter(this.state.requiredStage));
   }
 
-  toolbarFilter = (requiredStage: Stage | undefined | string = undefined) => {
+  toolbarFilter = (requiredStage: undefined | string = undefined) => {
     let visibleTasks: Task[] = filter(this.state.filteredTasksLevel1, requiredStage);
     let totalPrice: number = visibleTasks.reduce((sum: number, task: any) => sum + Number(task.state.price), 0);
     this.setState({ visibleTasks, totalPrice, requiredStage });
@@ -134,11 +134,12 @@ export default class List extends React.Component<{ tasks: any; staleData: boole
   }
 
   render = (): JSX.Element => <>
-      <div className="d-flex justify-content-between">
-      <div className="d-inline-flex justify-content-start">
-        <BrandFilter filter={this.brandFilter} />
+    <div className="d-flex justify-content-between mb-1">
+      <div className="d-inline-flex justify-content-start flex-grow-1">
+        <div className="mr-2"><BrandFilter filter={this.brandFilter} /></div>
+        <div className="mr-2"><Toolbar onClick={this.toolbarFilter} /></div>
         <ColumnSearch filter={this.columnFilter} />
-        <DateFilter filter={this.dateFilter} />
+        <div className="ml-3"><DateFilter filter={this.dateFilter} /></div>
       </div>
       <div className="d-inline-flex justify-content-end">
         <List.State staleData={this.props.staleData} />
@@ -155,7 +156,6 @@ export default class List extends React.Component<{ tasks: any; staleData: boole
         </div>
       </div>
     </div>
-      <Toolbar onClick={this.toolbarFilter} />
       <ReactTable
       data={this.state.visibleTasks} columns={this.columns}
       resolveData={(data: any, i = 1) =>

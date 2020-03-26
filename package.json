@@ -28,7 +28,6 @@
     "jquery": "^3.4.0",
     "lodash": "^4.17.11",
     "netlify-identity-widget": "^1.5.1",
-    "netlify-lambda": "^1.4.13",
     "open-iconic": "^1.1.1",
     "pdfmake": "^0.1.57",
     "popper.js": "^1.14.5",

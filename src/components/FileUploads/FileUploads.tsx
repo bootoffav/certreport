@@ -80,18 +80,18 @@ class FileUploads extends React.Component<{
   }
 }
 
-const Loading = (props: any) =>
-  <ul className="list-group list-group-flush">
-    {props.uploaded.map(({ name, result }: any, index: number) =>
-      <li className="list-group-item" key={index}>
-        {name}  &nbsp;&nbsp;&nbsp;
-            {result
-          ? <span className="oi oi-circle-check"></span>
-          : <span className="oi oi-circle-x"></span>
-        }
-      </li>)
-    }
-  </ul>;
+// const Loading = (props: any) =>
+//   <ul className="list-group list-group-flush">
+//     {props.uploaded.map(({ name, result }: any, index: number) =>
+//       <li className="list-group-item" key={index}>
+//         {name}  &nbsp;&nbsp;&nbsp;
+//             {result
+//           ? <span className="oi oi-circle-check"></span>
+//           : <span className="oi oi-circle-x"></span>
+//         }
+//       </li>)
+//     }
+//   </ul>;
 
 
 export default FileUploads;
