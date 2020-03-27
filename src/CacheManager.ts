@@ -4,8 +4,8 @@ import Task from './Task/Task';
 
 interface ICacheManager {
   staleData: boolean;
-  getFromCache: (cacheType: Storage) => Task[];
-  setCaches: (tasks: Task[]) => void;
+  getFromCache: (cacheType: Storage) => any;
+  setCaches: any;
 }
 
 
@@ -14,20 +14,29 @@ class CacheManager implements ICacheManager {
     return !sessionStorage.hasOwnProperty('tasks');
   }
 
-  getFromCache = (cacheType: Storage): Task[] => {
-    const fromCache: string | null = cacheType.getItem('tasks');
-    return typeof fromCache === 'string' ? JSON.parse(fromCache) : [];
+  getFromCache = (cacheType: Storage): any => {
+    let tasksFromCache: string | null = cacheType.getItem('tasks');
+    let productsFromCache: string | null = cacheType.getItem('products');
+
+    tasksFromCache = typeof tasksFromCache === 'string' ? JSON.parse(tasksFromCache) : [];
+    productsFromCache = typeof productsFromCache === 'string' ? JSON.parse(productsFromCache) : [];
+    return {
+      tasksFromCache,
+      productsFromCache
+    };
   }
 
-  setCaches = (tasks : Task[]) => {
+  setCaches = ({ tasks, products }: any) => {
     const stringifiedTasks = JSON.stringify(tasks, (k, v) => [
       'readyOn', 'sentOn', 'receivedOn', 'startedOn', 'finishedOn', 'resultsReceived', 'paymentDate'
     ].includes(k) && v !== undefined && v !== null ? v.substr(0, 10) : v);
 
     localStorage.setItem('tasks', stringifiedTasks);
     sessionStorage.setItem('tasks', stringifiedTasks);
+    localStorage.setItem('products', JSON.stringify(products));
+    sessionStorage.setItem('products', JSON.stringify(products));
 
-    return tasks;
+    return { tasks, products };
   }
  
   getFromAPI() {
@@ -68,9 +77,11 @@ class CacheManager implements ICacheManager {
         } while (filtered.new.length !== 0);
         
         filtered.old.forEach((task: any) => {
-          task.state = { ...emptyState };
-          task.state.otherTextInDescription = '\n' + task.DESCRIPTION;
-          task.state.UF_CRM_TASK = task.UF_CRM_TASK;
+          task.state = {
+            ...emptyState,
+            otherTextInDescription: '\n' + task.DESCRIPTION,
+            UF_CRM_TASK: task.UF_CRM_TASK
+          };
         });
         return [ ...parsedTasks, ...filtered.old] as Task[];
       });

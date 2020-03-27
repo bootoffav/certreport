@@ -15,25 +15,34 @@ import List from './components/List/List';
 import Form from './components/Form/Form';
 import Dashboard from './components/Dashboard/Dashboard';
 import ErrorBoundary from './ErrorBoundary';
+import { Products } from './Product/Product';
 
 initApp();
 
 
 class App extends React.Component {
-  cache = new CacheManager();
+  cache: CacheManager;
+  state: {
+    allTasks: any;
+    allProducts: any;
+  }
 
-  state = {
-    allTasks: this.cache.staleData ? this.cache.getFromCache(localStorage) : this.cache.getFromCache(sessionStorage)
-  };
+  constructor(props: any) {
+    super(props);
+    this.cache = new CacheManager();
+    const fromCache = this.cache.staleData ? this.cache.getFromCache(localStorage) : this.cache.getFromCache(sessionStorage);
+    this.state = {
+      allTasks: fromCache.tasksFromCache,
+      allProducts: fromCache.productsFromCache
+    };
+  }
 
   componentDidMount() {
     if (this.cache.staleData) {
-      this.cache.getFromAPI()
+      this.cache.getFromAPI() // get Tasks
+        .then(Products) // parse Products
         .then(this.cache.setCaches)
-        .then(tasks => {
-          this.setState({ allTasks: tasks });
-          return tasks;
-        })
+        .then(({ tasks, products }) => this.setState({ allTasks: tasks, allProducts: products }));
     }
   }
 
@@ -66,7 +75,7 @@ class App extends React.Component {
             </nav>
             <Switch>
               <Route exact path="/dashboard" render={() => <Dashboard tasks={this.state.allTasks} />} />
-              <Route exact path="/" render={() => <List tasks={this.state.allTasks} staleData={this.cache.staleData}/>} />
+              <Route exact path="/" render={() => <List data={this.state} staleData={this.cache.staleData}/>} />
               <Route exact path="/add" render={({ match, location: { state } }) =>
                 <Form
                   match={match}

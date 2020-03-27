@@ -13,7 +13,7 @@ interface IListState {
   visibleTasks: Task[];
   allTasks: Task[];
   filteredTasksLevel1: Task[];
-  tasks: Task[];
+  tasks: any;
   totalPrice: number;
   sortedData: Task[] | undefined;
   requiredStage: string | undefined;
@@ -21,7 +21,7 @@ interface IListState {
   endDate?: Date;
 }
 
-export default class List extends React.Component<{ tasks: any; staleData: boolean; }> {
+export default class List extends React.Component<{ data: any; staleData: boolean; }> {
   state: IListState = {
     visibleTasks: [],
     allTasks: [],
@@ -57,7 +57,7 @@ export default class List extends React.Component<{ tasks: any; staleData: boole
 
   updateState = (providedTasks?: any) => {
     const tasks: Task[] = generalSettingsFilter(
-      providedTasks || this.props.tasks
+      providedTasks || this.props.data.allTasks
     );
     
     const visibleTasks: Task[] = filter(tasks);
@@ -121,6 +121,10 @@ export default class List extends React.Component<{ tasks: any; staleData: boole
   }
 
   toolbarFilter = (requiredStage: undefined | string = undefined) => {
+    if (requiredStage === 'products') {
+      this.setState({ requiredStage });
+      return;
+    }
     let visibleTasks: Task[] = filter(this.state.filteredTasksLevel1, requiredStage);
     let totalPrice: number = visibleTasks.reduce((sum: number, task: any) => sum + Number(task.state.price), 0);
     this.setState({ visibleTasks, totalPrice, requiredStage });
@@ -157,19 +161,24 @@ export default class List extends React.Component<{ tasks: any; staleData: boole
       </div>
     </div>
       <ReactTable
-      data={this.state.visibleTasks} columns={this.columns}
-      resolveData={(data: any, i = 1) =>
-        data.map((row: any) => {
-          row.position = i++;
-          return row;
-        })
-      }
-      onSortedChange={() => this.setState({
-        visibleTasks: this.ref.getResolvedState().sortedData.map(({ _original }: any) => _original)
-      })}
+        data={
+          this.state.requiredStage === 'products'
+            ? this.props.data.allProducts
+            : this.state.visibleTasks
+        }
+        columns={this.columns}
+        resolveData={(data: any, i = 1) =>
+          data.map((row: any) => {
+            row.position = i++;
+            return row;
+          })
+        }
+      // onSortedChange={() => this.setState({
+      //   visibleTasks: this.ref.getResolvedState().sortedData.map(({ _original }: any) => _original)
+      // })}
       ref={(ref) => this.ref = ref}
       className='-striped -highlight table'
-      getTrProps={this.getTrProps}
+      // getTrProps={this.getTrProps}
       />
     </>
 }

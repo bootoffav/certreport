@@ -24,8 +24,6 @@ function byStages(tasks: any): dataType {
     '7. Test-report ready': [],
     '8. Certificate ready': [],
     '9. Ended': [],
-    'Results': [],
-    'Overdue': []
   };
 
 

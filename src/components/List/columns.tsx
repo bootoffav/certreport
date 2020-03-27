@@ -18,6 +18,43 @@ function sortDates(a: string | undefined, b: string | undefined): number {
 
 function getColumns(totalPrice: number, requiredStage?: string) {
 
+  if (requiredStage === 'products') {
+    return [{
+        // 0
+        Header: '#',
+        id: 'position',
+        sortable: false,
+        accessor: 'position',
+        width: 30
+      }, {
+        // 1
+        Header: 'Fabric',
+        id: 'article',
+        accessor: 'article',
+        width: 150,
+      }, {
+        // 2
+        Header: 'Standards',
+        id: 'standards',
+        accessor: 'standards',
+        width: 450,
+        Cell: ({ value }: any) => value.join(', ')
+      }, {
+        // 3
+        Header: 'Certifications',
+        id: 'tasks',
+        accessor: 'tasks',
+        Cell: ({ value }: any) => value.map((t: any) => <span key={t.ID}>
+            <span> </span>
+            <a
+              href={`https://xmtextiles.bitrix24.ru/company/personal/user/460/tasks/task/view/${t.ID}/`}
+              target="_blank" rel="noopener noreferrer"
+            >{t.TITLE}</a>
+          </span>
+        )
+    }]
+  }
+
   const columns = [{
     // 0
     Header: '#',
@@ -153,7 +190,7 @@ function getColumns(totalPrice: number, requiredStage?: string) {
     sortMethod: sortDates
   }, {
     // 18
-    Header: 'Fabric',
+    Header: 'Article',
     id: 'article',
     accessor: 'state.article',
     width: 100
@@ -312,6 +349,9 @@ function getColumns(totalPrice: number, requiredStage?: string) {
       break;
     case 'results':
       hidden = [6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 19, 21, 22, 24, 26, 27, 29, 30];
+      break;
+    case 'products':
+      hidden = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 19, 20, 21, 22, 23, 24, 26, 27, 28, 29, 30, 31];
       break;
     case 'overdue':
       hidden = [7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 23, 26, 28, 29, 30];
