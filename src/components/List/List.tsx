@@ -138,7 +138,7 @@ export default class List extends React.Component<{ data: any; staleData: boolea
 
   render = (): JSX.Element => <>
     <div className="d-flex justify-content-between mb-1">
-      <div className="d-inline-flex justify-content-start flex-grow-1">
+      <div className="d-flex justify-content-start w-100">
         <div className="mr-2"><BrandFilter filter={this.brandFilter} /></div>
         <div className="mr-2"><Toolbar onClick={this.toolbarFilter} /></div>
         <ColumnSearch filter={this.columnFilter} />
