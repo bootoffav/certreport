@@ -11,12 +11,6 @@ const Notification: React.FunctionComponent<{
   status: Status;
 }> = ({ status }) => {
   switch (status) {
-    case Status.Loading:
-      return <div className="d-flex justify-content-end">
-        <div className="spinner-border text-primary" role="status">
-          <span className="sr-only">Loading...</span>
-        </div>
-      </div>
     case Status.Success:
       return <div className="alert alert-success" role="alert">
         <h4 className="alert-heading">Success!</h4>

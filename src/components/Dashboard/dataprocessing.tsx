@@ -57,8 +57,8 @@ function byProducts(tasks: any): dataType {
   data.names['no product'].push(1);
   for (let i = 0; i < tasks.length; i++) {
     tasks[i].state === undefined || tasks[i].state.article === ''
-      ? data.names['no product'].push(tasks[i].TITLE.substring(0, 50))
-      : data.names[tasks[i].state.article].push(tasks[i].TITLE.substring(0, 50));
+      ? data.names['no product'].push(tasks[i].TITLE.substring(0, tasks[i].TITLE.indexOf(' ')))
+      : data.names[tasks[i].state.article].push(tasks[i].TITLE.substring(0, tasks[i].TITLE.indexOf(' ')));
   }
 
   data.labels = Object.keys(data.names);

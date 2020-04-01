@@ -39,13 +39,12 @@ export default class List extends React.Component<{ data: any; staleData: boolea
 
   static State: React.FunctionComponent<{
     staleData: boolean;
-  }> = ({ staleData }) => {
-    return staleData ?
-      <div className="d-flex align-items-center">
+  }> = ({ staleData }) =>
+    staleData ?
+      <div className="d-flex align-items-center mr-2">
         <div className="spinner-border spinner-border-sm text-primary" role="status"></div>
       </div>
       : <></>
-  }
 
   async componentDidMount() {
     this.updateState();
@@ -173,12 +172,12 @@ export default class List extends React.Component<{ data: any; staleData: boolea
             return row;
           })
         }
-      // onSortedChange={() => this.setState({
-      //   visibleTasks: this.ref.getResolvedState().sortedData.map(({ _original }: any) => _original)
-      // })}
+      onSortedChange={() => this.setState({
+        visibleTasks: this.ref.getResolvedState().sortedData.map(({ _original }: any) => _original)
+      })}
       ref={(ref) => this.ref = ref}
       className='-striped -highlight table'
-      // getTrProps={this.getTrProps}
+      getTrProps={this.getTrProps}
       />
     </>
 }

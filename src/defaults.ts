@@ -54,7 +54,7 @@ export interface IState {
   applicantName: string;
   testingCompany: string;
   stage: string;
-  standards : string;
+  standards: string;
   price: string;
   paid: boolean;
   paymentDate : string;

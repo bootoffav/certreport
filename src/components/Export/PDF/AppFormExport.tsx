@@ -390,6 +390,7 @@ class AppFormExport {
   }
 
   create() {
+    // @ts-ignore
     return pdfMake.createPdf(this.docDefinition, tableLayout, fonts, vfs);
   }
 }
