@@ -11,7 +11,7 @@ interface ICacheManager {
 
 class CacheManager implements ICacheManager {
   get staleData(): boolean {
-    return !sessionStorage.hasOwnProperty('tasks');
+    return !sessionStorage.hasOwnProperty('tasks') || !sessionStorage.hasOwnProperty('products');
   }
 
   getFromCache = (cacheType: Storage): any => {

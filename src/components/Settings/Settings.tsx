@@ -68,7 +68,7 @@ export class Settings extends React.Component<{
   }
 
   reset() {
-    [ 'showOnlyOngoingCertifications', 'showOnlyFailedCertifications',
+    ['showOnlyOngoingCertifications', 'showOnlyFailedCertifications',
       'settingsOR', 'includeCompletedTasks', 'includeEndedTasks',
       'includeTasksWithoutNumbers'
     ].forEach(item => localStorage.removeItem(item));
@@ -90,6 +90,7 @@ export class Settings extends React.Component<{
       <button type="button" className="btn btn-default" data-toggle="modal" data-target="#modal-settings">
         <span className="oi oi-cog"></span>
       </button>
+
       <div className="modal fade" id="modal-settings" tab-index="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div className="modal-dialog" role="document">
           <div className="modal-content">
@@ -114,7 +115,7 @@ export class Settings extends React.Component<{
               <div className="form-check">
                 <input className="form-check-input" type="radio"
                   name="generalSettings" id="showOnlyFailedCertifications"
-                  checked={this.state.showOnlyFailedCertifications} 
+                  checked={this.state.showOnlyFailedCertifications}
                   onChange={this.toggle}
                 />
                 <label className="form-check-label" htmlFor="showOnlyFailedCertifications">

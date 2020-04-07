@@ -1,5 +1,6 @@
 import React from 'react';
-import ReactTable from "react-table";
+import ReactTable from 'react-table';
+import { Button } from 'tabler-react';
 import './List.css';
 import Task from '../../Task/Task';
 import '../../css/style.css';
@@ -41,9 +42,7 @@ export default class List extends React.Component<{ data: any; staleData: boolea
     staleData: boolean;
   }> = ({ staleData }) =>
     staleData ?
-      <div className="d-flex align-items-center mr-2">
-        <div className="spinner-border spinner-border-sm text-primary" role="status"></div>
-      </div>
+      <Button loading color="success" icon="check" size="sm" className="mr-1" />
       : <></>
 
   async componentDidMount() {
