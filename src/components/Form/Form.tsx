@@ -394,6 +394,10 @@ class Form extends React.Component<IFormProps> {
             number={this.state.proformaNumber2}
           />
       </div>
+
+      <div className="col-10 offset-1">
+        <p className="text-right font-weight-bold">Total: €{+this.state.price + +this.state.price2}</p>
+      </div> 
     </Dimmer>
 
   renderStandards = () =>
