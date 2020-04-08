@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import React from 'react';
+import React from 'react';  
 import { dateConverter } from '../../helpers';
 import dayjs from 'dayjs';
 
@@ -17,49 +17,11 @@ function sortDates(a: string | undefined, b: string | undefined): number {
 }
 
 function getColumns(totalPrice: number, requiredStage?: string) {
-
-  if (requiredStage === 'products') {
-    return [{
-        // 0
-        Header: '#',
-        id: 'position',
-        sortable: false,
-        accessor: 'position',
-        width: 30
-      }, {
-        // 1
-        Header: 'Fabric',
-        id: 'article',
-        accessor: 'article',
-        width: 150,
-      }, {
-        // 2
-        Header: 'Standards',
-        id: 'standards',
-        accessor: 'standards',
-        width: 450,
-        Cell: ({ value }: any) => value.join(', ')
-      }, {
-        // 3
-        Header: 'Certifications',
-        id: 'tasks',
-        accessor: 'tasks',
-        Cell: ({ value }: any) => value.map((t: any) => <span key={t.ID}>
-            <span> </span>
-            <a
-              href={`https://xmtextiles.bitrix24.ru/company/personal/user/460/tasks/task/view/${t.ID}/`}
-              target="_blank" rel="noopener noreferrer"
-            >{t.TITLE}</a>
-          </span>
-        )
-    }]
-  }
-
-  const columns = [{
+  const allColumns = [{
     // 0
     Header: '#',
     id: 'position',
-    sortable: false,
+    sortable: true,
     accessor: 'position',
     width: 30
   }, {
@@ -320,58 +282,66 @@ function getColumns(totalPrice: number, requiredStage?: string) {
     accessor: 'state.price',
     minWidth: 90,
     Cell: (props: any) => <>€<span style={{ float: 'right' }}>{formatPrice(props.value)}</span></>
+  }, {
+    // 32
+    Header: 'Fabric',
+    id: 'article',
+    accessor: 'article',
+    width: 150,
+  }, {
+    // 33
+    Header: 'Standards',
+    id: 'standards',
+    accessor: 'standards',
+    width: 450,
+    Cell: ({ value }: any) => value.join(', ')
+  }, {
+    // 34
+    Header: 'Certifications',
+    id: 'tasks',
+    accessor: 'tasks',
+    Cell: ({ value }: any) => value.map((t: any) => <span key={t.ID}>
+        <span> </span>
+        <a
+          href={`https://xmtextiles.bitrix24.ru/company/personal/user/460/tasks/task/view/${t.ID}/`}
+          target="_blank" rel="noopener noreferrer"
+        >{t.TITLE}</a>
+      </span>
+    )
   }];
 
-  // @ts-ignore
-  columns.forEach(col => col.show = true);
-  let hidden: number[];
-  switch (requiredStage) {
-    case '00. Paused':
-      hidden = [4, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 19, 21, 22, 23, 24, 25, 26, 28, 29, 30];
-      break;
-    case '0. Sample to be prepared':
-      hidden = [2, 4, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28];
-      break;
-    case '1. Sample Sent':
-      hidden = [4, 5, 6, 7, 8, 12, 13, 14, 15, 16, 17, 19, 21, 22, 24, 25, 26, 27, 28, 29, 30];
-      break;
-    case '2. Sample Arrived':
-      hidden = [4, 5, 6, 7, 8, 10, 13, 14, 15, 16, 17, 19, 21, 22, 24, 25, 26, 27, 28, 29, 30];
-      break;
-    case '3. PI Issued':
-      hidden = [4, 5, 6, 7, 8, 10, 11, 12, 13, 16, 18, 20, 21, 23, 24, 25, 27, 28, 29, 30];
-      break;
-    case '4. Payment Done':
-      hidden = [4, 5, 6, 7, 8, 10, 11, 12, 13, 18, 19, 20, 21, 23, 24, 26, 27, 28, 29, 30];
-      break;
-    case '5. Testing is started':
-      hidden = [4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 21, 23, 24, 26, 27, 28, 29, 30];
-      break;
-    case 'results':
-      hidden = [6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 19, 21, 22, 24, 26, 27, 29, 30];
-      break;
-    case 'products':
-      hidden = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 19, 20, 21, 22, 23, 24, 26, 27, 28, 29, 30, 31];
-      break;
-    case 'overdue':
-      hidden = [7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 23, 26, 28, 29, 30];
-      break;
-    case '7. Test-report ready':
-      hidden = [4, 5, 6, 7, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 24, 28, 20, 30];
-      break;
-    case '8. Certificate ready':
-      hidden = [4, 5, 6, 8, 10, 11, 12, 14, 15, 16, 18, 20, 21, 28, 29, 30];
-      break;
-    default:
-      hidden = [5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 19, 21, 23, 24, 25, 27, 28, 29, 30];
+  const takeColumns = (columnPositions: number[]) => {
+    return [0, ...columnPositions].map((num: number) => allColumns[num]);
   }
 
-  columns.forEach((col, ind) => {
-    // @ts-ignore
-    if (hidden.includes(ind)) col.show = false;
-  });
-
-  return columns;
+  switch (requiredStage) {
+    case '00. Paused':
+      return takeColumns([1, 2, 3, 9, 10, 18, 20, 27, 31]);
+    case '0. Sample to be prepared':
+      return takeColumns([1, 2, 3, 9, 10, 18, 30, 31]);
+    case '1. Sample Sent':
+      return takeColumns([1, 2, 3, 9, 10, 11, 18, 20, 23, 31]);
+    case '2. Sample Arrived':
+      return takeColumns([1, 2, 3, 9, 11, 12, 18, 20, 23, 31]);
+    case '3. PI Issued':
+      return takeColumns([1, 2, 3, 9, 14, 15, 17, 19, 22, 26, 31]);
+    case '4. Payment Done':
+      return takeColumns([1, 2, 3, 9, 14, 15, 16, 17, 22, 25, 31]);
+    case '5. Testing is started':
+      return takeColumns([1, 2, 3, 9, 17, 18, 19, 20, 22, 25, 31]);
+    case '7. Test-report ready':
+      return takeColumns([1, 2, 3, 8, 9, 19, 21, 22, 23, 25, 26, 27, 29, 31]);
+    case '8. Certificate ready':
+      return takeColumns([1, 2, 3, 7, 9, 13, 17, 19, 22, 23, 24, 25, 26, 27, 31]);
+    case 'results':
+      return takeColumns([1, 2, 3, 4, 5, 9, 18, 20, 23, 25, 28, 31]);
+    case 'products':
+      return takeColumns([32, 33, 34]);
+    case 'overdue':
+      return takeColumns([1, 2, 3, 4, 5, 6, 9, 19, 21, 22, 24, 25, 27, 31]);
+    default:
+      return takeColumns([1, 2, 3, 4, 9, 18, 20, 22, 26, 31]);
+  }
 }
 
 function formatPrice(price: number) {

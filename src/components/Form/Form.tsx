@@ -216,7 +216,7 @@ class Form extends React.Component<IFormProps> {
         </div>
       </div>
       <div className="d-flex">
-        <div className="flex-fill">
+        <div className="w-25">
           <Article
           value={this.asSelectable(this.state.article)}
           options={selectOptions.articles}
@@ -224,31 +224,34 @@ class Form extends React.Component<IFormProps> {
           handleSlaveChange={ (product, code, brand) => this.setState({ product, code, brand }) }
           />
         </div>
-        <BaseInput value={this.state.product} className="ml-2 flex-grow-1" id='product' label='Product' handleChange={this.handleChange} />
-        <BaseInput value={this.state.code} className="ml-2" id='code' label='Code' handleChange={this.handleChange} />
-        <BaseInput value={this.state.colour} className="ml-2" id='colour' label='Colour' handleChange={this.handleChange} />
+        <BaseInput value={this.state.product} className="ml-2 w-25" id='product' label='Product' handleChange={this.handleChange} />
+        <BaseInput value={this.state.code} className="ml-2 w-25" id='code' label='Code' handleChange={this.handleChange} />
+        <BaseInput value={this.state.colour} className="ml-2 w-25" id='colour' label='Colour' handleChange={this.handleChange} />
       </div>
-
       <div className="d-flex">
-        <div className="flex-grow-1">
+        <div className="w-25 mr-2">
           Brand
           <Select value={this.asSelectable(this.state.brand)} onChange={(e: any) => this.handleSelectChange([e], 'brand')}
             options={selectOptions.brand}
           />
         </div>
-        <BaseInput value={this.state.materialNeeded} className="flex-grow-1 mx-2" id='materialNeeded' label='Material needed' handleChange={this.handleChange} />
-        <BaseInput value={this.state.testingTime} className="flex-grow-1" id='testingTime' label='Testing Time' handleChange={this.handleChange} />
+        <BaseInput value={this.state.materialNeeded} className="w-25 mr-2" id='materialNeeded' label='Material needed' handleChange={this.handleChange} />
+        <BaseInput value={this.state.testingTime} className="w-25 mr-2" id='testingTime' label='Testing Time' handleChange={this.handleChange} />
+        <div className="w-25">
+          <SerialNumber
+            serialNumber={this.state.serialNumber}
+            handleChange={this.handleChange}
+            handleInit={(v : any) => this.setState({serialNumber: v})} url={this.props.match.url}/>
+        </div>
       </div>
       <div className="d-flex">
-        <BaseInput value={this.state.length} className="flex-grow-1" id='length' label='Sample length (m)' handleChange={this.handleChange} />
-        <BaseInput value={this.state.width} className="flex-grow-1 ml-2" id='width' label='Sample width (m)' handleChange={this.handleChange} />
+        <BaseInput value={this.state.length} className="w-25 mr-2" id='length' label='Sample length (m)' handleChange={this.handleChange} />
+        <BaseInput value={this.state.width} className="w-25 mr-2" id='width' label='Sample width (m)' handleChange={this.handleChange} />
+        <BaseInput value={this.state.partNumber} className="w-25 mr-2" id='partNumber' label='Part number' handleChange={this.handleChange} />
+        <BaseInput value={this.state.rollNumber} className="w-25" id='rollNumber' label='Roll number' handleChange={this.handleChange} />
       </div>
       <div className="d-flex">
-        <BaseInput value={this.state.partNumber} className="flex-grow-1" id='partNumber' label='Part number' handleChange={this.handleChange} />
-        <BaseInput value={this.state.rollNumber} className="flex-grow-1 ml-2" id='rollNumber' label='Roll number' handleChange={this.handleChange} />
-      </div>
-      <div className="d-flex">
-        <div className="flex-grow-1">
+        <div className="w-50 mr-2">
         Pre-treatment 1
           <div className="input-group">
             <input type='text' required={true} className="form-control"
@@ -285,18 +288,12 @@ class Form extends React.Component<IFormProps> {
           </div>
           </div>
         </div>
-        <BaseInput value={this.state.pretreatment2} className="flex-grow-1 mx-2" id='pretreatment2' label='Pre-treatment 2' handleChange={this.handleChange} />
-        <BaseInput value={this.state.pretreatment3} className="flex-grow-1" id='pretreatment3' label='Pre-treatment 3' handleChange={this.handleChange} />
+        <BaseInput value={this.state.pretreatment2} className="w-25 mr-2" id='pretreatment2' label='Pre-treatment 2' handleChange={this.handleChange} />
+        <BaseInput value={this.state.pretreatment3} className="w-25" id='pretreatment3' label='Pre-treatment 3' handleChange={this.handleChange} />
       </div>
       <div className="d-flex">
-        <div className="flex-grow-1 from-group">
-          <SerialNumber
-            serialNumber={this.state.serialNumber}
-            handleChange={this.handleChange}
-            handleInit={(v : any) => this.setState({serialNumber: v})} url={this.props.match.url}/>
-        </div>
-        <BaseInput value={this.state.testReport} className="flex-grow-1 mx-2" id='testReport' required={false} label='Test Report' handleChange={this.handleChange} />
-        <BaseInput value={this.state.certificate} className="flex-grow-1" id='certificate' required={false} label='Certificate' handleChange={this.handleChange} />
+        <BaseInput value={this.state.testReport} className="w-50 mr-2" id='testReport' required={false} label='Test Report' handleChange={this.handleChange} />
+        <BaseInput value={this.state.certificate} className="w-50" id='certificate' required={false} label='Certificate' handleChange={this.handleChange} />
       </div>
     </Dimmer>;
 
@@ -444,7 +441,7 @@ class Form extends React.Component<IFormProps> {
           <Tab title="Comments & News">
             <Dimmer active={this.state.requestStatus !== Status.FillingForm} loader>
               <div className="form-row">
-                <BaseInput required={false} value={this.state.news} className="ml-2 flex-grow-1" id='news' label="News:" handleChange={this.handleChange} />
+                <BaseInput required={false} value={this.state.news} className="w-100" id='news' label="News:" handleChange={this.handleChange} />
               </div>
               <div className="form-row">
                 <label htmlFor='comments'>Comments:</label>

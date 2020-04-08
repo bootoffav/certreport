@@ -1385,12 +1385,13 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
-"@types/bootstrap@4.0.0":
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/@types/bootstrap/-/bootstrap-4.0.0.tgz#a81e2f541562ed8ddb70d869a4773c79c8377eb1"
-  integrity sha512-8VnBUKfWDB4pbYbaKPRItkCdZnpvwkeLEtcePNl4ZsYBr/E02SJ1KvaGkOzPWfQqtUUN+V2sRSw3PqwJ/h7/Qg==
+"@types/bootstrap@^4.3.2":
+  version "4.3.2"
+  resolved "https://registry.yarnpkg.com/@types/bootstrap/-/bootstrap-4.3.2.tgz#25e6be5fc09ad58911555eb8d01dcf05f37156d8"
+  integrity sha512-ArJM2BsZ6KvPb7M3PGWNjlriFYP6gh3hINk76TTVXBqUiPYFOeyXA08gsVFSIjUqMitregBEqT79rvfgXEiLQQ==
   dependencies:
     "@types/jquery" "*"
+    popper.js "^1.14.1"
 
 "@types/color-name@^1.1.1":
   version "1.1.1"
@@ -2620,10 +2621,10 @@ boolbase@^1.0.0, boolbase@~1.0.0:
   resolved "https://registry.yarnpkg.com/boolbase/-/boolbase-1.0.0.tgz#68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
   integrity sha1-aN/1++YMUes3cl6p4+0xDcwed24=
 
-bootstrap@4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.0.0.tgz#ceb03842c145fcc1b9b4e15da2a05656ba68469a"
-  integrity sha512-gulJE5dGFo6Q61V/whS6VM4WIyrlydXfCgkE+Gxe5hjrJ8rXLLZlALq7zq2RPhOc45PSwQpJkrTnc2KgD6cvmA==
+bootstrap@^4.4.1:
+  version "4.4.1"
+  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.4.1.tgz#8582960eea0c5cd2bede84d8b0baf3789c3e8b01"
+  integrity sha512-tbx5cHubwE6e2ZG7nqM3g/FZ5PQEDMWmMGNrCUBVRPHXTJaH7CBDdsLeu3eCh3B1tzAxTnAbtmrzvWEvT2NNEA==
 
 brace-expansion@^1.1.7:
   version "1.1.11"
@@ -9864,7 +9865,7 @@ react-select@^2.1.2:
     react-input-autosize "^2.2.1"
     react-transition-group "^2.2.1"
 
-react-table@^6.8.6:
+react-table@^6.11.5:
   version "6.11.5"
   resolved "https://registry.yarnpkg.com/react-table/-/react-table-6.11.5.tgz#84e52885db426a07a6c4ce2c7e942f2cd4e2aa58"
   integrity sha512-LM+AS9v//7Y7lAlgTWW/cW6Sn5VOb3EsSkKQfQTzOW8FngB1FUskLLNEVkAYsTX9LjOWR3QlGjykJqCE6eXT/g==

@@ -16,7 +16,6 @@ type Products = {
   tasks: {
     ID: string;
     TITLE: string;
-    fullPrice: number;
   }[]
 }[];
 
@@ -27,27 +26,26 @@ function Products(tasks: any[]) {
 
   tasks.forEach(t => {
     if (t.state && t.state.article !== "") {
-      let { article, standards, price, price2 } = t.state;
+      let { article, standards } = t.state;
       standards = standards.split(', ');
       
       // check for existence
       const indexOfProduct = products.findIndex(product => product.article === article);
-      const objToPush = {
-        ID: t.ID,
+      const convertedTitle = {
+        ...t,
         TITLE: t.TITLE.substring(0, t.TITLE.indexOf(' ')),
-        fullPrice: Number(price) + Number(price2)
       };
 
       if (indexOfProduct > 0) {
         // exists
         products[indexOfProduct].standards = Array.from(new Set([...products[indexOfProduct].standards, ...standards]));
-        products[indexOfProduct].tasks.push(objToPush);
+        products[indexOfProduct].tasks.push(convertedTitle);
       } else {
         // not exist
         products.push({
           article,
           standards,
-          tasks: [objToPush]
+          tasks: [convertedTitle]
         })
       }
     }

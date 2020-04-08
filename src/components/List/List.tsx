@@ -11,26 +11,21 @@ import { Settings, generalSettingsFilter } from '../Settings/Settings';
 import ListExport from '../Export/PDF/ListExport';
 
 interface IListState {
-  visibleTasks: Task[];
-  allTasks: Task[];
-  filteredTasksLevel1: Task[];
-  tasks: any;
+  visibleData: any[];
+  tasks: [];
   totalPrice: number;
   sortedData: Task[] | undefined;
-  requiredStage: string | undefined;
+  requiredStage?: string;
   startDate?: Date;
   endDate?: Date;
 }
 
 export default class List extends React.Component<{ data: any; staleData: boolean; }> {
   state: IListState = {
-    visibleTasks: [],
-    allTasks: [],
-    filteredTasksLevel1: [],
+    visibleData: [],
     tasks: [],
     sortedData: undefined, //used for Task PDF list (ejected out of react-table ref)
     totalPrice: 0,
-    requiredStage: undefined,
   };
   ref: any;
 
@@ -58,74 +53,94 @@ export default class List extends React.Component<{ data: any; staleData: boolea
       providedTasks || this.props.data.allTasks
     );
     
-    const visibleTasks: Task[] = filter(tasks);
-    const totalPrice: number = visibleTasks.reduce((sum: number, task: any) => sum + Number(task.state.price), 0);
+    const visibleData: Task[] = filter(tasks);
+    const totalPrice: number = visibleData.reduce((sum: number, task: any) => sum + Number(task.state.price), 0);
     this.setState({
-      filteredTasksLevel1: tasks,
-      tasks, visibleTasks, totalPrice, requiredStage: undefined
+      tasks,
+      visibleData,
+      totalPrice,
     });
   }
 
-  //level 1 filter
   brandFilter = (e: React.SyntheticEvent<HTMLButtonElement>): void => {
     const brand = e.currentTarget.innerText;
     const brandFilter = document.getElementById('brandFilter');
     if (brandFilter !== null) brandFilter.innerText = `Brand: ${brand}`;
-    let filtered;
+    let visibleData;
 
-    switch (brand) {
-      case 'All':
-        filtered = this.state.tasks;
-        break;
-      case 'No brand':
-        filtered = this.state.tasks.filter((task: any) => !Boolean(task.state.brand));
-        break;
-      default:
-        filtered = this.state.tasks.filter((task: any) => task.state.brand === brand);
-    }
+      switch (brand) {
+        case 'All':
+          visibleData = this.state.tasks;
+          break;
+        case 'No brand':
+          visibleData = this.state.tasks.filter((task: any) => !Boolean(task.state.brand));
+          break;
+        default:
+          visibleData = this.state.tasks.filter((task: any) => task.state.brand === brand);
+      }
 
     this.setState({
-      filteredTasksLevel1: filtered
-    }, () => this.toolbarFilter(this.state.requiredStage));
+      requiredStage: undefined,
+      visibleData
+    });
   }
 
   columnFilter = (searchVal: string, columnToSearch: string) : void => {
-    let foundTasks;
+    let visibleData;
     searchVal = searchVal.toLowerCase();
-    foundTasks = this.state.tasks.filter((task: any) => columnToSearch === 'TITLE'
-      ? task[columnToSearch].toLowerCase().includes(searchVal)
-      : task.state[columnToSearch].toLowerCase().includes(searchVal)
-    );
-    
-    this.setState({
-      filteredTasksLevel1: foundTasks
-    }, () => this.toolbarFilter(this.state.requiredStage));
-  
+    if (this.state.requiredStage === 'products') {
+      visibleData = this.props.data.allProducts.filter((product: any) => {
+        if (columnToSearch === 'article') {
+          return product[columnToSearch].toLowerCase().includes(searchVal)
+        } else {
+
+          return product[columnToSearch].join(', ').toLowerCase().includes(searchVal);
+        }
+      })
+    } else {
+      visibleData = this.state.tasks.filter((task: any) => columnToSearch === 'TITLE'
+        ? task[columnToSearch].toLowerCase().includes(searchVal)
+        : task.state[columnToSearch].toLowerCase().includes(searchVal)
+      );
+    }
+
+    this.setState({ visibleData });
   }
 
   dateFilter = (startDate?: Date, endDate?: Date): void => {
-    let tasksForUpdate: any;
+    let visibleData: any;
     if (!startDate || !endDate) {
-      tasksForUpdate = this.state.tasks;
+      visibleData = this.state.tasks;
     } else {
-      tasksForUpdate = this.state.tasks.filter((task: any) => {
+      visibleData = this.state.tasks.filter((task: any) => {
         const comparingDate = new Date(task.state.certReceivedOnRealDate);
         return startDate < comparingDate && endDate > comparingDate
       });
     }
+
     this.setState({
-      filteredTasksLevel1: tasksForUpdate, startDate, endDate
-    }, () => this.toolbarFilter(this.state.requiredStage));
+      requiredStage: undefined,
+      startDate,
+      endDate,
+      visibleData
+    });
   }
 
-  toolbarFilter = (requiredStage: undefined | string = undefined) => {
+  toolbarFilter = (requiredStage?: string) => {
     if (requiredStage === 'products') {
-      this.setState({ requiredStage });
-      return;
+      return this.setState({
+         requiredStage,
+        visibleData: this.props.data.allProducts
+      });
     }
-    let visibleTasks: Task[] = filter(this.state.filteredTasksLevel1, requiredStage);
-    let totalPrice: number = visibleTasks.reduce((sum: number, task: any) => sum + Number(task.state.price), 0);
-    this.setState({ visibleTasks, totalPrice, requiredStage });
+
+    let visibleData: Task[] = filter(this.state.tasks, requiredStage);
+
+    this.setState({
+      visibleData,
+      requiredStage,
+      totalPrice: visibleData.reduce((sum: number, task: any) => sum + Number(task.state.price), 0)
+    });
   }
 
   getTrProps(state: any, rowInfo: any, column: any) {
@@ -136,47 +151,43 @@ export default class List extends React.Component<{ data: any; staleData: boolea
   }
 
   render = (): JSX.Element => <>
-    <div className="d-flex justify-content-between mb-1">
-      <div className="d-flex justify-content-start w-100">
+    <div className="d-flex mb-1">
+      <div className="d-flex w-100">
         <div className="mr-2"><BrandFilter filter={this.brandFilter} /></div>
         <div className="mr-2"><Toolbar onClick={this.toolbarFilter} /></div>
-        <ColumnSearch filter={this.columnFilter} />
+        <ColumnSearch
+          requiredStage={this.state.requiredStage}
+          filter={this.columnFilter}
+        />
         <div className="ml-3"><DateFilter filter={this.dateFilter} /></div>
       </div>
-      <div className="d-inline-flex justify-content-end">
+      <div className="d-flex">
         <List.State staleData={this.props.staleData} />
         <ListExport
-          tasks={this.state.visibleTasks}
-          // @ts-ignore
-          columns={this.columns.filter(column => column.show)}
+          tasks={this.state.visibleData}
+          columns={this.columns}
           stage={this.state.requiredStage}
           startDate={this.state.startDate}
           endDate={this.state.endDate}
         />
-        <div className="align-self-center">
-          <Settings onClose={() => this.updateState()} />
-        </div>
+        <Settings onClose={() => this.updateState()} />
       </div>
     </div>
-      <ReactTable
-        data={
-          this.state.requiredStage === 'products'
-            ? this.props.data.allProducts
-            : this.state.visibleTasks
-        }
-        columns={this.columns}
-        resolveData={(data: any, i = 1) =>
-          data.map((row: any) => {
-            row.position = i++;
-            return row;
-          })
-        }
+    <ReactTable
+      data={this.state.visibleData}
+      columns={this.columns}
+      resolveData={(data: any, i = 1) =>
+        data.map((row: any) => {
+          row.position = i++;
+          return row;
+        })
+      }
       onSortedChange={() => this.setState({
         visibleTasks: this.ref.getResolvedState().sortedData.map(({ _original }: any) => _original)
       })}
       ref={(ref) => this.ref = ref}
       className='-striped -highlight table'
       getTrProps={this.getTrProps}
-      />
-    </>
+    />
+  </>
 }

@@ -141,14 +141,15 @@ class Article extends React.Component<ArticleProps> {
   }
 
   render = () =>
-    <div className="form-group">
+    <>
       Article
       <Select value={this.props.value}
+        // @ts-ignore
         onChange={this.onChange}
         options={this.props.options}
         formatGroupLabel={this.formatGroupLabel}
       />
-    </div>
+    </>
 }
 
 export { PickDate, BaseInput, Article, Price, Paid, Pi };
