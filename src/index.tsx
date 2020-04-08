@@ -74,7 +74,11 @@ class App extends React.Component {
             </nav>
             <Switch>
               <Route exact path="/dashboard" render={() => <Dashboard tasks={this.state.allTasks} />} />
-              <Route exact path="/" render={() => <List data={this.state} staleData={this.cache.staleData}/>} />
+              <Route exact path="/" render={() => <List
+                allTasks={this.state.allTasks}
+                allProducts={this.state.allProducts}
+                staleData={this.cache.staleData}
+              />} />
               <Route exact path="/add" render={({ match, location: { state } }) =>
                 <Form
                   match={match}

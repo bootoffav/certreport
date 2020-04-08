@@ -20,7 +20,7 @@ interface IListState {
   endDate?: Date;
 }
 
-export default class List extends React.Component<{ data: any; staleData: boolean; }> {
+export default class List extends React.Component<{ allTasks: any; allProducts: any; staleData: boolean; }> {
   state: IListState = {
     visibleData: [],
     tasks: [],
@@ -50,9 +50,8 @@ export default class List extends React.Component<{ data: any; staleData: boolea
 
   updateState = (providedTasks?: any) => {
     const tasks: Task[] = generalSettingsFilter(
-      providedTasks || this.props.data.allTasks
+      providedTasks || this.props.allTasks
     );
-    
     const visibleData: Task[] = filter(tasks);
     const totalPrice: number = visibleData.reduce((sum: number, task: any) => sum + Number(task.state.price), 0);
     this.setState({
@@ -89,7 +88,7 @@ export default class List extends React.Component<{ data: any; staleData: boolea
     let visibleData;
     searchVal = searchVal.toLowerCase();
     if (this.state.requiredStage === 'products') {
-      visibleData = this.props.data.allProducts.filter((product: any) => {
+      visibleData = this.props.allProducts.filter((product: any) => {
         if (columnToSearch === 'article') {
           return product[columnToSearch].toLowerCase().includes(searchVal)
         } else {
@@ -130,7 +129,7 @@ export default class List extends React.Component<{ data: any; staleData: boolea
     if (requiredStage === 'products') {
       return this.setState({
          requiredStage,
-        visibleData: this.props.data.allProducts
+        visibleData: this.props.allProducts
       });
     }
 

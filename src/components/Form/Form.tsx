@@ -396,7 +396,7 @@ class Form extends React.Component<IFormProps> {
       </div>
 
       <div className="col-10 offset-1">
-        <p className="text-right font-weight-bold">Total: €{+this.state.price + +this.state.price2}</p>
+        <p className="text-right font-weight-bold">Total: €{(+this.state.price + +this.state.price2).toFixed(2)}</p>
       </div> 
     </Dimmer>
 
