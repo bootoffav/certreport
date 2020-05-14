@@ -95,7 +95,7 @@ export interface IState {
   certReceivedOnRealDate: string;
   comments: string;
   otherTextInDescription: string | null;
-  resume: undefined | 'fail' | 'pass' | 'no sample';
+  resume: undefined | 'fail' | 'pass' | 'no sample' | 'partly';
 }
 
 const emptyState : IState = {

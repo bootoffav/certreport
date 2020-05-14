@@ -206,7 +206,14 @@ class Form extends React.Component<IFormProps> {
                 ><input type="radio" />PASS</label>
               <label
                 className={
-                  'btn btn-outline-secondary ' +
+                  'btn btn-outline-warning ' +
+                  `${this.state.resume === 'partly' ? 'active' : ''}`
+                }
+                onClick={() => this.setState({ resume: 'partly' })}
+                ><input type="radio" />PASS (partly)</label>
+              <label
+                className={
+                  'btn btn-outline-dark ' +
                   `${this.state.resume === 'no sample' ? 'active' : ''}`
                 }
                 onClick={() => this.setState({ resume: 'no sample' })}
