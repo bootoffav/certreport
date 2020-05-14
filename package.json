@@ -61,6 +61,9 @@
     "enzyme-adapter-react-16": "^1.11.2",
     "react-test-renderer": "^16.8.6"
   },
+  "engines": {
+      "node": ">=13.11.0"
+  },
   "browserslist": [
     ">0.2%",
     "not dead"
