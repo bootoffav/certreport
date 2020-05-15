@@ -227,6 +227,8 @@ function getColumns(totalPrice: number, requiredStage?: string) {
           return <span className="oi oi-circle-x"></span>;
         case 'pass':
           return <span className="oi oi-thumb-up"></span>;
+        case 'partly':
+          return <span className="oi oi-warning"></span>;
         case 'no sample':
           return 'NO Sample';
         default:
