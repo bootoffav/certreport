@@ -204,7 +204,7 @@ class Task implements ITask {
     let parsedStandards = '';
 
     for (let st of standards) {
-      const reqRes = /pass|fail/.exec(st);
+      const reqRes = /pass|fail|partly/.exec(st);
       if (reqRes !== null) {
         const prop = reqRes.input.slice(0, reqRes.index-2);
         const value = reqRes[0];

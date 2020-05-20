@@ -26,7 +26,7 @@ class EN11612Detail extends React.Component<{
   }
 
   render() {
-    return <div className="d-flex">
+    return <div className="d-flex justify-content-between">
       {this.blocks.map(name => {
         return <div key={name} className="flex-fill d-flex flex-column">
           <p className="text-center">
@@ -44,7 +44,7 @@ class EN11612Detail extends React.Component<{
                 onChange={this.onChange}
                 />
               <label className="form-check-label"><span className="oi oi-circle-x"></span></label>
-            </div>&nbsp;&nbsp;&nbsp;
+            </div>
           <div className="form-check">
               <input
                 className="form-check-input"
@@ -56,6 +56,18 @@ class EN11612Detail extends React.Component<{
                 onChange={this.onChange}
               />
               <label className="form-check-label"><span className="oi oi-thumb-up"></span></label>
+            </div>
+          <div className="form-check">
+              <input
+                className="form-check-input"
+                type="radio"
+                name={name}
+                data-result='partly'
+                // @ts-ignore
+                checked={this.props[name] === 'partly'}
+                onChange={this.onChange}
+              />
+              <label className="form-check-label"><span className="oi oi-warning"></span></label>
             </div>
           </div>
         </div>
@@ -124,6 +136,19 @@ function Standards(props: StandardsProps) {
                 value="pass"
               />
               <label className="form-check-label"><span className="oi oi-thumb-up"></span></label>
+            </div>
+            <div className="form-check form-check-inline">
+              <input
+                className="form-check-input"
+                type="radio"
+                checked={props.standardsResult[standard] === 'partly'}
+                onChange={props.resultChange}
+                name={`radioOptions${id}`}
+                data-standard={standard}
+                id={`radioPass${id}`}
+                value="partly"
+              />
+              <label className="form-check-label"><span className="oi oi-warning"></span></label>
             </div>
             <button type="button"
               className="btn btn-sm btn-link btn-reset"
