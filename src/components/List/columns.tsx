@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import React from 'react';  
+import React from 'react';
 import { dateConverter } from '../../helpers';
 import dayjs from 'dayjs';
 
@@ -316,6 +316,19 @@ function getColumns(totalPrice: number, requiredStage?: string) {
     return [0, ...columnPositions].map((num: number) => allColumns[num]);
   }
 
+  const applyTextWrap = (
+    columns: any,
+    сolumnsToMakeActionUpon: number[]
+  ) => {
+    сolumnsToMakeActionUpon.forEach((columnNumber: number) => {
+      columns[columnNumber] = {
+        ...columns[columnNumber],
+        style: { 'whiteSpace': 'unset' }
+      };
+    })
+    return columns;
+  };
+
   switch (requiredStage) {
     case '00. Paused':
       return takeColumns([1, 2, 3, 9, 10, 18, 20, 27, 31]);
@@ -336,7 +349,10 @@ function getColumns(totalPrice: number, requiredStage?: string) {
     case '8. Certificate ready':
       return takeColumns([1, 2, 3, 7, 9, 13, 17, 19, 22, 23, 24, 25, 26, 27, 31]);
     case 'results':
-      return takeColumns([1, 2, 3, 4, 5, 9, 18, 20, 23, 25, 28, 31]);
+      return applyTextWrap(
+        takeColumns([1, 2, 3, 4, 5, 9, 18, 20, 23, 25, 28, 31]),
+        [6]
+      );
     case 'products':
       return takeColumns([32, 33, 34]);
     case 'overdue':
