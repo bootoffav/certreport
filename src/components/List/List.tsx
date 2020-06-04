@@ -1,36 +1,46 @@
 import React from 'react';
 import ReactTable from 'react-table';
 import { Button } from 'tabler-react';
-import './List.css';
 import Task from '../../Task/Task';
-import '../../css/style.css';
-import { Toolbar, filter } from '../Toolbar/Toolbar';
 import { getColumns } from './columns';
-import { ColumnSearch, BrandFilter, DateFilter } from '../Filters';
+import StageFilter from './Filters/StageFilter';
+import DateFilter from './Filters/DateFilter';
+import BrandFilter from './Filters/BrandFilter';
+import ColumnFilter from './Filters/ColumnFilter';
 import { Settings, generalSettingsFilter } from '../Settings/Settings';
 import ListExport from '../Export/PDF/ListExport';
 
+import './List.css';
+import '../../css/style.css';
+
 interface IListState {
-  visibleData: any[];
-  tasks: [];
-  totalPrice: number;
-  sortedData: Task[] | undefined;
-  requiredStage?: string;
-  startDate?: Date;
-  endDate?: Date;
+    visibleData: any[];
+    tasks: [];
+    totalPrice: number;
+    sortedData: Task[] | undefined;
+    stage: string;
+    startDate?: Date;
+    endDate?: Date;
+    brandFiltered: any;
+    columnFilterValue: string;
 }
 
 export default class List extends React.Component<{ allTasks: any; allProducts: any; staleData: boolean; }> {
-  state: IListState = {
-    visibleData: [],
-    tasks: [],
-    sortedData: undefined, //used for Task PDF list (ejected out of react-table ref)
-    totalPrice: 0,
+    state: IListState = {
+        brandFiltered: [],
+        visibleData: [],
+        tasks: [],
+        columnFilterValue: '',
+
+        //used for Task PDF list (ejected out of react-table ref)
+        sortedData: undefined,
+        totalPrice: 0,
+        stage: 'All'
   };
   ref: any;
 
   get columns() {
-    return getColumns(this.state.totalPrice, this.state.requiredStage);
+    return getColumns(this.state.totalPrice, this.state.stage);
   }
 
   static State: React.FunctionComponent<{
@@ -52,93 +62,12 @@ export default class List extends React.Component<{ allTasks: any; allProducts: 
     const tasks: Task[] = generalSettingsFilter(
       providedTasks || this.props.allTasks
     );
-    const visibleData: Task[] = filter(tasks);
-    const totalPrice: number = visibleData.reduce((sum: number, task: any) => sum + Number(task.state.price), 0);
+    const totalPrice: number = tasks.reduce((sum: number, task: any) => sum + Number(task.state.price), 0);
     this.setState({
-      tasks,
-      visibleData,
-      totalPrice,
-    });
-  }
-
-  brandFilter = (e: React.SyntheticEvent<HTMLButtonElement>): void => {
-    const brand = e.currentTarget.innerText;
-    const brandFilter = document.getElementById('brandFilter');
-    if (brandFilter !== null) brandFilter.innerText = `Brand: ${brand}`;
-    let visibleData;
-
-      switch (brand) {
-        case 'All':
-          visibleData = this.state.tasks;
-          break;
-        case 'No brand':
-          visibleData = this.state.tasks.filter((task: any) => !Boolean(task.state.brand));
-          break;
-        default:
-          visibleData = this.state.tasks.filter((task: any) => task.state.brand === brand);
-      }
-
-    this.setState({
-      requiredStage: undefined,
-      visibleData
-    });
-  }
-
-  columnFilter = (searchVal: string, columnToSearch: string) : void => {
-    let visibleData;
-    searchVal = searchVal.toLowerCase();
-    if (this.state.requiredStage === 'products') {
-      visibleData = this.props.allProducts.filter((product: any) => {
-        if (columnToSearch === 'article') {
-          return product[columnToSearch].toLowerCase().includes(searchVal)
-        } else {
-
-          return product[columnToSearch].join(', ').toLowerCase().includes(searchVal);
-        }
-      })
-    } else {
-      visibleData = this.state.tasks.filter((task: any) => columnToSearch === 'TITLE'
-        ? task[columnToSearch].toLowerCase().includes(searchVal)
-        : task.state[columnToSearch].toLowerCase().includes(searchVal)
-      );
-    }
-
-    this.setState({ visibleData });
-  }
-
-  dateFilter = (startDate?: Date, endDate?: Date): void => {
-    let visibleData: any;
-    if (!startDate || !endDate) {
-      visibleData = this.state.tasks;
-    } else {
-      visibleData = this.state.tasks.filter((task: any) => {
-        const comparingDate = new Date(task.state.certReceivedOnRealDate);
-        return startDate < comparingDate && endDate > comparingDate
-      });
-    }
-
-    this.setState({
-      requiredStage: undefined,
-      startDate,
-      endDate,
-      visibleData
-    });
-  }
-
-  toolbarFilter = (requiredStage?: string) => {
-    if (requiredStage === 'products') {
-      return this.setState({
-         requiredStage,
-        visibleData: this.props.allProducts
-      });
-    }
-
-    let visibleData: Task[] = filter(this.state.tasks, requiredStage);
-
-    this.setState({
-      visibleData,
-      requiredStage,
-      totalPrice: visibleData.reduce((sum: number, task: any) => sum + Number(task.state.price), 0)
+        tasks,
+        totalPrice,
+        visibleData: tasks,
+        brandFiltered: tasks
     });
   }
 
@@ -152,20 +81,41 @@ export default class List extends React.Component<{ allTasks: any; allProducts: 
   render = (): JSX.Element => <>
     <div className="d-flex mb-1">
       <div className="d-flex w-100">
-        <div className="mr-2"><BrandFilter filter={this.brandFilter} /></div>
-        <div className="mr-2"><Toolbar onClick={this.toolbarFilter} /></div>
-        <ColumnSearch
-          requiredStage={this.state.requiredStage}
-          filter={this.columnFilter}
-        />
-        <div className="ml-3"><DateFilter filter={this.dateFilter} /></div>
+        <div className="mr-2">
+          <BrandFilter
+            tasks={this.state.tasks}
+            update={this.setState.bind(this)}
+            />
+        </div>
+        <div className="mr-2">
+          <StageFilter
+            tasks={this.state.brandFiltered}
+            allProducts={this.props.allProducts}
+            update={this.setState.bind(this)}
+          />
+        </div>
+            <ColumnFilter
+                value={this.state.columnFilterValue}
+                tasks={this.state.brandFiltered}
+                allProducts={this.props.allProducts}
+                requiredStage={this.state.stage}
+                update={this.setState.bind(this)}
+            />
+            <div className="ml-3">
+                <DateFilter
+                    startDate={this.state.startDate}
+                    endDate={this.state.endDate}
+                    tasks={this.state.brandFiltered}
+                    update={this.setState.bind(this)}
+                />
+            </div>
       </div>
       <div className="d-flex">
         <List.State staleData={this.props.staleData} />
         <ListExport
           tasks={this.state.visibleData}
           columns={this.columns}
-          stage={this.state.requiredStage}
+          stage={this.state.stage}
           startDate={this.state.startDate}
           endDate={this.state.endDate}
         />

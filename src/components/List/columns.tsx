@@ -329,37 +329,37 @@ function getColumns(totalPrice: number, requiredStage?: string) {
     return columns;
   };
 
-  switch (requiredStage) {
-    case '00. Paused':
-      return takeColumns([1, 2, 3, 9, 10, 18, 20, 27, 31]);
-    case '0. Sample to be prepared':
-      return takeColumns([1, 2, 3, 9, 10, 18, 30, 31]);
-    case '1. Sample Sent':
-      return takeColumns([1, 2, 3, 9, 10, 11, 18, 20, 23, 31]);
-    case '2. Sample Arrived':
-      return takeColumns([1, 2, 3, 9, 11, 12, 18, 20, 23, 31]);
-    case '3. PI Issued':
-      return takeColumns([1, 2, 3, 9, 14, 15, 17, 19, 22, 26, 31]);
-    case '4. Payment Done':
-      return takeColumns([1, 2, 3, 9, 14, 15, 16, 17, 22, 25, 31]);
-    case '5. Testing is started':
-      return takeColumns([1, 2, 3, 9, 17, 18, 19, 20, 22, 25, 31]);
-    case '7. Test-report ready':
-      return takeColumns([1, 2, 3, 8, 9, 19, 21, 22, 23, 25, 26, 27, 29, 31]);
-    case '8. Certificate ready':
-      return takeColumns([1, 2, 3, 7, 9, 13, 17, 19, 22, 23, 24, 25, 26, 27, 31]);
-    case 'results':
-      return applyTextWrap(
-        takeColumns([1, 2, 3, 4, 5, 9, 18, 20, 23, 25, 28, 31]),
-        [6]
-      );
-    case 'products':
-      return takeColumns([32, 33, 34]);
-    case 'overdue':
-      return takeColumns([1, 2, 3, 4, 5, 6, 9, 19, 21, 22, 24, 25, 27, 31]);
-    default:
-      return takeColumns([1, 2, 3, 4, 9, 18, 20, 22, 26, 31]);
-  }
+    switch (requiredStage) {
+        case '00. Paused':
+            return takeColumns([1, 2, 3, 9, 10, 18, 20, 27, 31]);
+        case '0. Sample to be prepared':
+            return takeColumns([1, 2, 3, 9, 10, 18, 30, 31]);
+        case '1. Sample Sent':
+            return takeColumns([1, 2, 3, 9, 10, 11, 18, 20, 23, 31]);
+        case '2. Sample Arrived':
+            return takeColumns([1, 2, 3, 9, 11, 12, 18, 20, 23, 31]);
+        case '3. PI Issued':
+            return takeColumns([1, 2, 3, 9, 14, 15, 17, 19, 22, 26, 31]);
+        case '4. Payment Done':
+            return takeColumns([1, 2, 3, 9, 14, 15, 16, 17, 22, 25, 31]);
+        case '5. Testing is started':
+            return takeColumns([1, 2, 3, 9, 17, 18, 19, 20, 22, 25, 31]);
+        case '7. Test-report ready':
+            return takeColumns([1, 2, 3, 8, 9, 19, 21, 22, 23, 25, 26, 27, 29, 31]);
+        case '8. Certificate ready':
+            return takeColumns([1, 2, 3, 7, 9, 13, 17, 19, 22, 23, 24, 25, 26, 27, 31]);
+        case 'results':
+            return applyTextWrap(
+                takeColumns([1, 2, 3, 4, 5, 9, 18, 20, 23, 25, 28, 31]),
+                [6]
+            );
+        case 'products':
+            return takeColumns([32, 33, 34]);
+        case 'overdue':
+            return takeColumns([1, 2, 3, 4, 5, 6, 9, 19, 21, 22, 24, 25, 27, 31]);
+        default:
+            return takeColumns([1, 2, 3, 4, 9, 18, 20, 22, 26, 31]);
+    }
 }
 
 function formatPrice(price: number) {
