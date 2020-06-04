@@ -5,7 +5,7 @@ import { render } from 'react-dom';
 import ReactTable from "react-table";
 import { Grid, Card } from 'tabler-react';
 import { Doughnut } from 'react-chartjs-2';
-import { DateFilter } from '../Filters';
+import DateFilter from '../List/Filters/DateFilter';
 import { QSpending } from './QSpending/QSpending';
 import { doughnutOptions } from './configs';
 import { byStages, byProducts } from './dataprocessing';
@@ -19,12 +19,18 @@ interface IDashboard {
   quarterSpendingsTotal: number;
 }
 
-const generateLabels = (e: any, i = 0) => Object.entries(e.data.names)
-  .map((entry: any[]) => ({
-      text: `${entry[0]}: ${entry[1].length}`,
-      fillStyle: e.data.datasets[0].backgroundColor[i++],
-    })
-  );
+// const generateLabels = (e: any, i = 0) => {
+//   return Object.entries(e.data.names)
+//     .map((entry: any[]) => ({
+//       text: `${entry[0]}: ${entry[1].length}`,
+//       fillStyle: e.data.datasets[0].backgroundColor[i++],
+//       hidden: false,
+//       index: 2,
+//       strokeStyle: "#fff",
+//       lineWidth: 2
+//     })
+//   );
+// }
 
 
 function tasksInRange(tasks: any[], filterParam: string, startDate?: Date, endDate?: Date) {
@@ -86,7 +92,6 @@ class Dashboard extends React.Component<{ tasks: any[]; }, IDashboard> {
                   options={{
                     legend: {
                       position: 'bottom',
-                      labels: { generateLabels }
                     },
                     onClick: (_: MouseEvent, chartElement: any) => {
                       if (chartElement.length !== 0) {
