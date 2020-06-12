@@ -20,14 +20,14 @@ const StageFilter: React.FunctionComponent<{
         }
 
         switch (stage) {
-            case 'results':
+            case 'all':
                 visibleData = tasks;
                 break;
             case 'overdue':
                 visibleData = tasks.filter((t: Task) => t.overdue);
                 break;
             default:
-            visibleData = tasks.filter((t: Task) => t.state.stage === stage);
+                visibleData = tasks.filter((t: Task) => t.state.stage === stage);
         }
 
 
@@ -36,8 +36,8 @@ const StageFilter: React.FunctionComponent<{
             stage,
             totalPrice: visibleData.reduce((sum: number, task: any) => sum + Number(task.state.price), 0),
             columnFilterValue: '',
-            startDate: null,
-            endDate: null
+            startDate: undefined,
+            endDate: undefined
         });
     }
 
@@ -55,7 +55,7 @@ const StageFilter: React.FunctionComponent<{
         '9. Ended'
     ];
 
-    const more = ['results', 'products', 'overdue' ];
+    const more = ['products', 'overdue'];
 
     const DropDownItem = (item: string) => ({
         value: item.charAt(0).toUpperCase() + item.slice(1),

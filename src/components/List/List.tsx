@@ -7,7 +7,7 @@ import StageFilter from './Filters/StageFilter';
 import DateFilter from './Filters/DateFilter';
 import BrandFilter from './Filters/BrandFilter';
 import ColumnFilter from './Filters/ColumnFilter';
-import { Settings, generalSettingsFilter } from '../Settings/Settings';
+// import { Settings, generalSettingsFilter } from '../Settings/Settings';
 import ListExport from '../Export/PDF/ListExport';
 
 import './List.css';
@@ -15,7 +15,6 @@ import '../../css/style.css';
 
 interface IListState {
     visibleData: any[];
-    tasks: [];
     totalPrice: number;
     sortedData: Task[] | undefined;
     stage: string;
@@ -29,13 +28,12 @@ export default class List extends React.Component<{ allTasks: any; allProducts: 
     state: IListState = {
         brandFiltered: [],
         visibleData: [],
-        tasks: [],
         columnFilterValue: '',
 
         //used for Task PDF list (ejected out of react-table ref)
         sortedData: undefined,
         totalPrice: 0,
-        stage: 'All'
+        stage: 'all'
   };
   ref: any;
 
@@ -50,25 +48,22 @@ export default class List extends React.Component<{ allTasks: any; allProducts: 
       <Button loading color="success" icon="check" size="sm" className="mr-1" />
       : <></>
 
-  async componentDidMount() {
-    this.updateState();
-  }
+    async componentDidMount() {
+        this.updateState();
+    }
 
-  UNSAFE_componentWillReceiveProps({ tasks }: any) {
-    this.updateState(tasks);
-  }
+    UNSAFE_componentWillReceiveProps({ tasks }: any) {
+        this.updateState(tasks);
+    }
 
   updateState = (providedTasks?: any) => {
-    const tasks: Task[] = generalSettingsFilter(
-      providedTasks || this.props.allTasks
-    );
-    const totalPrice: number = tasks.reduce((sum: number, task: any) => sum + Number(task.state.price), 0);
-    this.setState({
-        tasks,
-        totalPrice,
-        visibleData: tasks,
-        brandFiltered: tasks
-    });
+        const tasks = providedTasks || this.props.allTasks;
+        const totalPrice: number = tasks.reduce((sum: number, task: any) => sum + Number(task.state.price), 0);
+        this.setState({
+            totalPrice,
+            visibleData: tasks,
+            brandFiltered: tasks
+        });
   }
 
   getTrProps(state: any, rowInfo: any, column: any) {
@@ -78,65 +73,64 @@ export default class List extends React.Component<{ allTasks: any; allProducts: 
     return rowInfo.original.overdue ? { className: 'missedDeadline' } : {};
   }
 
-  render = (): JSX.Element => <>
-    <div className="d-flex mb-1">
-      <div className="d-flex w-100">
-        <div className="mr-2">
-          <BrandFilter
-            tasks={this.state.tasks}
-            update={this.setState.bind(this)}
-            />
-        </div>
-        <div className="mr-2">
-          <StageFilter
-            tasks={this.state.brandFiltered}
-            allProducts={this.props.allProducts}
-            update={this.setState.bind(this)}
-          />
-        </div>
-            <ColumnFilter
-                value={this.state.columnFilterValue}
-                tasks={this.state.brandFiltered}
-                allProducts={this.props.allProducts}
-                requiredStage={this.state.stage}
-                update={this.setState.bind(this)}
-            />
-            <div className="ml-3">
-                <DateFilter
-                    startDate={this.state.startDate}
-                    endDate={this.state.endDate}
-                    tasks={this.state.brandFiltered}
-                    update={this.setState.bind(this)}
-                />
+    render = (): JSX.Element => <>
+        <div className="d-flex mb-1">
+            <div className="d-flex w-100">
+                <div className="mr-2">
+                    <BrandFilter
+                        tasks={this.props.allTasks}
+                        update={this.setState.bind(this)}
+                        />
+                    </div>
+                <div className="mr-2">
+                    <StageFilter
+                        tasks={this.state.brandFiltered}
+                        allProducts={this.props.allProducts}
+                        update={this.setState.bind(this)}
+                    />
+                </div>
+                    <ColumnFilter
+                        value={this.state.columnFilterValue}
+                        tasks={this.state.brandFiltered}
+                        allProducts={this.props.allProducts}
+                        requiredStage={this.state.stage}
+                        update={this.setState.bind(this)}
+                    />
+                <div className="ml-3">
+                    <DateFilter
+                        startDate={this.state.startDate}
+                        endDate={this.state.endDate}
+                        tasks={this.state.brandFiltered}
+                        update={this.setState.bind(this)}
+                    />
+                </div>
             </div>
-      </div>
-      <div className="d-flex">
-        <List.State staleData={this.props.staleData} />
-        <ListExport
-          tasks={this.state.visibleData}
-          columns={this.columns}
-          stage={this.state.stage}
-          startDate={this.state.startDate}
-          endDate={this.state.endDate}
+            <div className="d-flex">
+                <List.State staleData={this.props.staleData} />
+                    <ListExport
+                        tasks={this.state.visibleData}
+                        columns={this.columns}
+                        stage={this.state.stage}
+                        startDate={this.state.startDate}
+                        endDate={this.state.endDate}
+                    />
+            </div>
+        </div>
+        <ReactTable
+            data={this.state.visibleData}
+            columns={this.columns}
+            resolveData={(data: any, i = 1) =>
+                data.map((row: any) => {
+                row.position = i++;
+                return row;
+                })
+            }
+            onSortedChange={() => this.setState({
+                visibleTasks: this.ref.getResolvedState().sortedData.map(({ _original }: any) => _original)
+            })}
+            ref={(ref) => this.ref = ref}
+            className='-striped -highlight table'
+            getTrProps={this.getTrProps}
         />
-        <Settings onClose={() => this.updateState()} />
-      </div>
-    </div>
-    <ReactTable
-      data={this.state.visibleData}
-      columns={this.columns}
-      resolveData={(data: any, i = 1) =>
-        data.map((row: any) => {
-          row.position = i++;
-          return row;
-        })
-      }
-      onSortedChange={() => this.setState({
-        visibleTasks: this.ref.getResolvedState().sortedData.map(({ _original }: any) => _original)
-      })}
-      ref={(ref) => this.ref = ref}
-      className='-striped -highlight table'
-      getTrProps={this.getTrProps}
-    />
-  </>
+    </>
 }

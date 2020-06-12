@@ -26,7 +26,9 @@ const BrandFilter: React.FunctionComponent<{
         }
         update({
             brandFiltered,
-            stage: 'All',
+            startDate: undefined,
+            endDate: undefined,
+            stage: 'all',
             visibleData: brandFiltered
         });
     }

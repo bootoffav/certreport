@@ -30,7 +30,7 @@ class ListExport extends React.Component<{
   });
 
   generateContent() {
-    if (this.props.stage === 'results') {
+    if (this.props.stage === 'all') {
       var { accessors, headers, widths } = this.generateTableStructureForResults();
     } else {
       accessors = this.props.columns.map((col: any) => {
@@ -177,8 +177,8 @@ class ListExport extends React.Component<{
       case 'overdue':
         this.stage = `Overdue Certifications in Testing Lab (on ${dayjs().format('DD.MM.YYYY')})`;
         break;
-      case 'results':
-        this.stage = 'Results';
+      case 'all':
+        this.stage = 'All';
         break;
       default:
         this.stage = Stage[this.props.stage] || 'ALL';
@@ -200,7 +200,7 @@ class ListExport extends React.Component<{
   }
 
   get filename() {
-    if (this.stage === 'Results') {
+    if (this.stage === 'All') {
       return (this.props.startDate && this.props.endDate)
         ? `Certification results for ${dayjs(this.props.startDate).format('DDMMMYYYY')} - ${dayjs(this.props.endDate).format('DDMMMYYYY')}.pdf`
         : `Certification results of all time.pdf`

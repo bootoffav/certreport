@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import DatePicker from "react-datepicker";
 import './Filters.css';
 
@@ -27,7 +27,7 @@ function DateFilter(
             endDate,
             visibleData,
             columnFilterValue: '',
-            stage: 'All'
+            stage: 'all'
         });
     }
 

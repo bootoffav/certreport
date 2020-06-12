@@ -16,7 +16,7 @@ function sortDates(a: string | undefined, b: string | undefined): number {
   return 0;
 }
 
-function getColumns(totalPrice: number, requiredStage?: string) {
+function getColumns(totalPrice: number, stage?: string) {
   const allColumns = [{
     // 0
     Header: '#',
@@ -329,7 +329,7 @@ function getColumns(totalPrice: number, requiredStage?: string) {
     return columns;
   };
 
-    switch (requiredStage) {
+    switch (stage) {
         case '00. Paused':
             return takeColumns([1, 2, 3, 9, 10, 18, 20, 27, 31]);
         case '0. Sample to be prepared':
@@ -348,7 +348,7 @@ function getColumns(totalPrice: number, requiredStage?: string) {
             return takeColumns([1, 2, 3, 8, 9, 19, 21, 22, 23, 25, 26, 27, 29, 31]);
         case '8. Certificate ready':
             return takeColumns([1, 2, 3, 7, 9, 13, 17, 19, 22, 23, 24, 25, 26, 27, 31]);
-        case 'results':
+        case 'all':
             return applyTextWrap(
                 takeColumns([1, 2, 3, 4, 5, 9, 18, 20, 23, 25, 28, 31]),
                 [6]

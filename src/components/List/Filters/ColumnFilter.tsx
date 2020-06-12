@@ -58,9 +58,9 @@ class ColumnFilter extends React.Component<{
         this.props.update({
             visibleData,
             columnFilterValue: searchVal,
-            stage: 'All',
-            startDate: null,
-            endDate: null
+            stage: 'all',
+            startDate: undefined,
+            endDate: undefined
         });
     }
 
