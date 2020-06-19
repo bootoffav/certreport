@@ -1,30 +1,33 @@
 import React from 'react';
 import './Filters.css';
 
-const BrandFilter: React.FunctionComponent<{
+class BrandFilter extends React.Component<{
     tasks: any,
     update: any
-}> = ({ tasks, update }) => {
+}> {
+    state: any;
 
-    function filter(
-        e: React.SyntheticEvent<HTMLButtonElement>,
-    ) {
-        let brandFiltered;
-        const brand = e.currentTarget.innerText;
-        const brandButton = document.getElementById('brandFilter');
-        if (brandButton !== null) brandButton.innerText = `Brand: ${brand}`;
-
-        switch (brand) {
-            case 'All':
-                brandFiltered = tasks;
-                break;
-            case 'No brand':
-                brandFiltered = tasks.filter((task: any) => !Boolean(task.state.brand));
-                break;
-            default:
-                brandFiltered = tasks.filter((task: any) => task.state.brand === brand);
+    constructor(props: any) {
+        super(props);
+        this.state = {
+            XMT: true,
+            XMS: true,
+            XMF: true,
+            'No brand': true
         }
-        update({
+    }
+    
+    filter(activeBrands: []) {
+        let brandFiltered: any;
+        brandFiltered = this.props.tasks.filter((task: any) => {
+            if (task.state.brand === '') {
+                //@ts-ignore
+                if (activeBrands.includes('No brand')) return true;
+            }
+            // @ts-ignore
+            return activeBrands.includes(task.state.brand)
+        });
+        this.props.update({
             brandFiltered,
             startDate: undefined,
             endDate: undefined,
@@ -33,26 +36,61 @@ const BrandFilter: React.FunctionComponent<{
         });
     }
 
-    return (
-      <div className="dropdown">
-            <button
-                className="btn btn-success dropdown-toggle"
-                type="button"
-                id="brandFilter"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-            >Brand: All</button>
-        <div className="dropdown-menu">
-            <button className="dropdown-item" onClick={filter}>All</button>
-            <div className="dropdown-divider"></div>
-            <button className="dropdown-item" onClick={filter}>XMT</button>
-            <button className="dropdown-item" onClick={filter}>XMS</button>
-            <button className="dropdown-item" onClick={filter}>XMF</button>
-            <div className="dropdown-divider"></div>
-            <button className="dropdown-item" onClick={filter}>No brand</button>
-        </div>
-    </div>);
+    componentDidUpdate(prevProps: any, prevState: any, snapshot: any) {
+        let activeBrands: any = [];
+        if (prevState !== this.state) {
+            Object.keys(this.state).forEach((brand: any) => {
+                if (this.state[brand]) activeBrands.push(brand);
+            });
+            this.filter(activeBrands);
+        }
+    }
+    
+    handleChange = (e: any) => {
+        this.setState({
+            [e.currentTarget.value]: e.currentTarget.checked
+        });
+        e.stopPropagation();
+    }
+
+    render() {
+        return (
+            <div className="btn-group" data-toggle="buttons">
+                <label className="btn btn-secondary" onClick={this.handleChange}>
+                    <input
+                        type="checkbox"
+                        value="XMT"
+                        checked={this.state.XMT}
+                        onClick={this.handleChange}
+                    /> XMT
+            </label>
+                <label className="btn btn-secondary" onClick={this.handleChange}>
+                    <input
+                        type="checkbox"
+                        value="XMS"
+                        checked={this.state.XMS}
+                        onClick={this.handleChange}
+                    /> XMS
+            </label>
+            <label className="btn btn-secondary">
+                <input
+                    type="checkbox"
+                    value="XMF"
+                    checked={this.state.XMF}
+                    onClick={this.handleChange}
+                /> XMF
+            </label>
+             <label className="btn btn-secondary">
+                <input
+                    type="checkbox"
+                    value="No brand"
+                    checked={this.state['No brand']}
+                    onClick={this.handleChange}
+                /> No brand
+            </label>
+            </div>
+        );
+    }
 }
 
 export default BrandFilter;
