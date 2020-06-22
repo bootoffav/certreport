@@ -5,9 +5,7 @@ import Task from '../../Task/Task';
 import { getColumns } from './columns';
 import StageFilter from './Filters/StageFilter';
 import DateFilter from './Filters/DateFilter';
-import BrandFilter from './Filters/BrandFilter';
 import ColumnFilter from './Filters/ColumnFilter';
-// import { Settings, generalSettingsFilter } from '../Settings/Settings';
 import ListExport from '../Export/PDF/ListExport';
 
 import './List.css';
@@ -20,13 +18,11 @@ interface IListState {
     stage: string;
     startDate?: Date;
     endDate?: Date;
-    brandFiltered: any;
     columnFilterValue: string;
 }
 
 export default class List extends React.Component<{ allTasks: any; allProducts: any; staleData: boolean; }> {
     state: IListState = {
-        brandFiltered: [],
         visibleData: [],
         columnFilterValue: '',
 
@@ -52,8 +48,10 @@ export default class List extends React.Component<{ allTasks: any; allProducts: 
         this.updateState();
     }
 
-    UNSAFE_componentWillReceiveProps({ tasks }: any) {
-        this.updateState(tasks);
+    componentDidUpdate(prevProps: any, prevState: any) {
+        if (prevProps.allTasks !== this.props.allTasks) {
+            this.updateState(this.props.allTasks);
+        }
     }
 
   updateState = (providedTasks?: any) => {
@@ -61,8 +59,7 @@ export default class List extends React.Component<{ allTasks: any; allProducts: 
         const totalPrice: number = tasks.reduce((sum: number, task: any) => sum + Number(task.state.price), 0);
         this.setState({
             totalPrice,
-            visibleData: tasks,
-            brandFiltered: tasks
+            visibleData: tasks
         });
   }
 
@@ -77,21 +74,15 @@ export default class List extends React.Component<{ allTasks: any; allProducts: 
         <div className="d-flex mb-1">
             <div className="d-flex w-100">
                 <div className="mr-2">
-                    <BrandFilter
-                        tasks={this.props.allTasks}
-                        update={this.setState.bind(this)}
-                        />
-                    </div>
-                <div className="mr-2">
                     <StageFilter
-                        tasks={this.state.brandFiltered}
+                        tasks={this.props.allTasks}
                         allProducts={this.props.allProducts}
                         update={this.setState.bind(this)}
                     />
                 </div>
                     <ColumnFilter
                         value={this.state.columnFilterValue}
-                        tasks={this.state.brandFiltered}
+                        tasks={this.props.allTasks}
                         allProducts={this.props.allProducts}
                         requiredStage={this.state.stage}
                         update={this.setState.bind(this)}
@@ -100,7 +91,7 @@ export default class List extends React.Component<{ allTasks: any; allProducts: 
                     <DateFilter
                         startDate={this.state.startDate}
                         endDate={this.state.endDate}
-                        tasks={this.state.brandFiltered}
+                        tasks={this.props.allTasks}
                         update={this.setState.bind(this)}
                     />
                 </div>

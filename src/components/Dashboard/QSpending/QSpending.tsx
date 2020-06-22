@@ -82,21 +82,20 @@ class QSpending extends React.Component<{
     return quarters;
   }
 
-  componentDidUpdate(prevProps: any) {
-    const { startDate: prevStart, endDate: prevEnd } = prevProps;
-    const { startDate, endDate } = this.props;
-    if (prevStart !== startDate || prevEnd !== endDate) {
-      let quarters = this.findQuarters(startDate, endDate);
-      quarters = this.countQuarterSpendings(quarters);
-      this.setState({ quarters, startDate, endDate });
-      this.props.saveTotal(
-        Math.round(
-          Object.values(quarters)
-            .reduce((acc: number, quarter: any) => acc + quarter.spent, 0)
-        )
-      );
+    componentDidUpdate(prevProps: any) {
+        const { startDate: prevStart, endDate: prevEnd, tasks: prevTasks } = prevProps;
+        const { startDate, endDate } = this.props;
+        if (prevStart !== startDate || prevEnd !== endDate || prevTasks !== this.props.tasks) {
+            let quarters = this.findQuarters(startDate, endDate);
+            quarters = this.countQuarterSpendings(quarters);
+            this.setState({ quarters, startDate, endDate });
+            this.props.saveTotal(
+                Math.round(
+                Object.values(quarters)
+                    .reduce((acc: number, quarter: any) => acc + quarter.spent, 0)
+                ));
+            }
     }
-  }
 
   render() {
     return Object.values(this.state.quarters).reverse().map((quarter: any) => {

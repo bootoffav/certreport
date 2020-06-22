@@ -56,6 +56,14 @@ class Dashboard extends React.Component<{ tasks: any[]; }, IDashboard> {
     endDate: undefined,
     quarterSpendingsTotal: 0
   }
+    
+    componentDidUpdate(prevProps: any, prevState: any) {
+        if (prevProps.tasks !== this.props.tasks) {
+            this.setState({
+                tasks: this.props.tasks
+            });
+        }
+    }
 
   dateFilter = (startDate?: Date, endDate?: Date): void => {
     this.setState({ startDate, endDate });
@@ -73,7 +81,7 @@ class Dashboard extends React.Component<{ tasks: any[]; }, IDashboard> {
           <QSpending
             saveTotal={(quarterSpendingsTotal: number) => this.setState({ quarterSpendingsTotal })}
             renderTable={(tasks) => this.renderTableOfDiagramSegment('', '', tasks)}
-            tasks={this.props.tasks}
+            tasks={this.state.tasks}
             startDate={this.state.startDate}
             endDate={this.state.endDate}
           />

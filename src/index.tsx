@@ -15,26 +15,28 @@ import Form from './components/Form/Form';
 import Dashboard from './components/Dashboard/Dashboard';
 import ErrorBoundary from './ErrorBoundary';
 import { Products } from './Product/Product';
+import BrandFilter from './components/List/Filters/BrandFilter';
 
 initApp();
 
-
 class App extends React.Component {
-  cache: CacheManager;
-  state: {
-    allTasks: any;
-    allProducts: any;
-  }
+    cache: CacheManager;
+    state: {
+        allTasks: any;
+        allProducts: any;
+        brandFiltered: any;
+    }
 
-  constructor(props: any) {
-    super(props);
-    this.cache = new CacheManager();
-    const fromCache = this.cache.staleData ? this.cache.getFromCache(localStorage) : this.cache.getFromCache(sessionStorage);
-    this.state = {
-      allTasks: fromCache.tasksFromCache,
-      allProducts: fromCache.productsFromCache
-    };
-  }
+    constructor(props: any) {
+        super(props);
+        this.cache = new CacheManager();
+        const fromCache = this.cache.staleData ? this.cache.getFromCache(localStorage) : this.cache.getFromCache(sessionStorage);
+        this.state = {
+            allTasks: fromCache.tasksFromCache,
+            allProducts: fromCache.productsFromCache,
+            brandFiltered: fromCache.tasksFromCache
+        };
+    }
 
   componentDidMount() {
     if (this.cache.staleData) {
@@ -50,55 +52,63 @@ class App extends React.Component {
       <span className="sr-only">Loading...</span>
     </div>
 
-  render() {
-    return (
-      <div className="container-fluid">
-        <Router>
-          <>
-            <nav className="mb-2 rounded-bottom navbar navbar-light shadow">
-              <div className="container-fluid d-flex">
-                <NavLink className="navbar-brand" exact to="/dashboard">
-                  <img src="/img/logo.png" width={150} alt="site-logo" />
-                </NavLink>
-                <span className="navbar-text">
-                  <NavLink to="/">
-                    XMT XMF XMS fabrics certification processes gathered together in one place!
-                  </NavLink>
-                </span>
-                <ul className="navbar-nav">
-                  <li className="nav-item">
-                    <NavLink exact to="/add">Add cert</NavLink>
-                  </li>
-                </ul>
-              </div>
-            </nav>
-            <Switch>
-              <Route exact path="/dashboard" render={() => <Dashboard tasks={this.state.allTasks} />} />
-              <Route exact path="/" render={() => <List
-                allTasks={this.state.allTasks}
-                allProducts={this.state.allProducts}
-                staleData={this.cache.staleData}
-              />} />
-              <Route exact path="/add" render={({ match, location: { state } }) =>
-                <Form
-                  match={match}
-                  state={state} />}
-                />
-              <Route exact path="/edit/:id" render={({ match, location: { state }}) =>
-                <ErrorBoundary>
-                  <Form
-                    match={match}
-                    state={state}
-                  />
-                </ErrorBoundary>
-              } />
-              <Route path="*" component={Error404Page} />
-              </Switch>
-          </>
-        </Router>
-      </div>
-    );
-  }
+    render() {
+        return (
+            <Router>
+                <div className="container-fluid">
+                    <div className="pl-1 pt-1 mb-1 rounded-bottom navbar-light d-flex justify-content-start">
+                        <BrandFilter
+                                tasks={this.state.allTasks}
+                                update={this.setState.bind(this)}
+                        />
+                        <div className="container-fluid">
+                            <div className="row">
+                                <div className="offset-3 col-2 pt-1">
+                                    <NavLink className="navbar-link" exact to="/dashboard">
+                                        <p style={{ fontSize: '20px' }}>Dashboard</p>
+                                    </NavLink>
+                                </div>
+                                <div className="col-2 pt-1">
+                                    <NavLink className="navbar-link" to="/">
+                                        <p style={{ fontSize: '20px' }}>Certification list</p>
+                                    </NavLink>
+                                </div>
+                                <div className="ml-auto pr-2 pt-1">
+                                    <NavLink exact to="/add">
+                                        <p style={{ fontSize: '20px' }}>Add cert</p>
+                                    </NavLink>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <Switch>
+                        <Route exact path="/dashboard"
+                            render={() => <Dashboard
+                                tasks={this.state.brandFiltered}
+                            />} />
+                        <Route exact path="/" render={() => <List
+                            allTasks={this.state.brandFiltered}
+                            allProducts={this.state.allProducts}
+                            staleData={this.cache.staleData}
+                        />} />
+                        <Route exact path="/add" render={({ match, location: { state } }) =>
+                            <Form
+                                match={match}
+                                state={state} />}
+                        />
+                        <Route exact path="/edit/:id" render={({ match, location: { state } }) =>
+                            <ErrorBoundary>
+                                <Form
+                                    match={match}
+                                    state={state}
+                                />
+                            </ErrorBoundary>
+                        } />
+                        <Route path="*" component={Error404Page} />
+                    </Switch>
+                </div>
+            </Router>);
+    }
 }
 
 
@@ -110,4 +120,4 @@ netlifyIdentity.on('login', user => {
 
 netlifyIdentity.currentUser()
   ? ReactDOM.render(<App />, document.getElementById('root'))
-  : netlifyIdentity.open('login');
+    : netlifyIdentity.open('login');

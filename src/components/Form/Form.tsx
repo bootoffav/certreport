@@ -50,8 +50,8 @@ class Form extends React.Component<IFormProps> {
   }
   
   async componentDidMount() {
-    this.setState({ requestStatus: Status.Loading });
-    if (this.task_id && this.props.state === undefined) {
+      if (this.task_id && this.props.state === undefined) {
+      this.setState({ requestStatus: Status.Loading });
       const dataFromDB = await DB.getData(this.task_id)
         .then(({ EN11612Detail, exists, ...DBState }: any) => ({ EN11612Detail, DBState, exists }));
 

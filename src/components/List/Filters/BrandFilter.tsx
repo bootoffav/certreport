@@ -17,22 +17,14 @@ class BrandFilter extends React.Component<{
         }
     }
     
-    filter(activeBrands: []) {
-        let brandFiltered: any;
-        brandFiltered = this.props.tasks.filter((task: any) => {
+    filter(activeBrands: string[]) {
+        return this.props.tasks.filter((task: any) => {
             if (task.state.brand === '') {
                 //@ts-ignore
                 if (activeBrands.includes('No brand')) return true;
             }
             // @ts-ignore
-            return activeBrands.includes(task.state.brand)
-        });
-        this.props.update({
-            brandFiltered,
-            startDate: undefined,
-            endDate: undefined,
-            stage: 'all',
-            visibleData: brandFiltered
+            return activeBrands.includes(task.state.brand);
         });
     }
 
@@ -42,7 +34,9 @@ class BrandFilter extends React.Component<{
             Object.keys(this.state).forEach((brand: any) => {
                 if (this.state[brand]) activeBrands.push(brand);
             });
-            this.filter(activeBrands);
+            this.props.update({
+                brandFiltered: this.filter(activeBrands)
+            });
         }
     }
     
@@ -63,7 +57,7 @@ class BrandFilter extends React.Component<{
                         checked={this.state.XMT}
                         onClick={this.handleChange}
                     /> XMT
-            </label>
+                </label>
                 <label className="btn btn-secondary" onClick={this.handleChange}>
                     <input
                         type="checkbox"
@@ -71,25 +65,24 @@ class BrandFilter extends React.Component<{
                         checked={this.state.XMS}
                         onClick={this.handleChange}
                     /> XMS
-            </label>
-            <label className="btn btn-secondary">
-                <input
-                    type="checkbox"
-                    value="XMF"
-                    checked={this.state.XMF}
-                    onClick={this.handleChange}
-                /> XMF
-            </label>
-             <label className="btn btn-secondary">
-                <input
-                    type="checkbox"
-                    value="No brand"
-                    checked={this.state['No brand']}
-                    onClick={this.handleChange}
-                /> No brand
-            </label>
-            </div>
-        );
+                </label>
+                <label className="btn btn-secondary">
+                    <input
+                        type="checkbox"
+                        value="XMF"
+                        checked={this.state.XMF}
+                        onClick={this.handleChange}
+                    /> XMF
+                </label>
+                <label className="btn btn-secondary">
+                    <input
+                        type="checkbox"
+                        value="No brand"
+                        checked={this.state['No brand']}
+                        onClick={this.handleChange}
+                    /> No brand
+                </label>
+            </div>);
     }
 }
 
