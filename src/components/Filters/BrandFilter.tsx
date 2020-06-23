@@ -1,5 +1,4 @@
 import React from 'react';
-import './Filters.css';
 
 class BrandFilter extends React.Component<{
     tasks: any,
@@ -13,7 +12,7 @@ class BrandFilter extends React.Component<{
             XMT: true,
             XMS: true,
             XMF: true,
-            'No brand': true
+            'No brand': false
         }
     }
     

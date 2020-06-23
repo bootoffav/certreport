@@ -1,7 +1,7 @@
 import React from 'react';
 import './Dashboard.css';
 import { BrowserRouter } from 'react-router-dom';
-import { render } from 'react-dom';
+import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTable from "react-table";
 import { Grid, Card } from 'tabler-react';
 import { Doughnut } from 'react-chartjs-2';
@@ -18,20 +18,6 @@ interface IDashboard {
   endDate?: Date;
   quarterSpendingsTotal: number;
 }
-
-// const generateLabels = (e: any, i = 0) => {
-//   return Object.entries(e.data.names)
-//     .map((entry: any[]) => ({
-//       text: `${entry[0]}: ${entry[1].length}`,
-//       fillStyle: e.data.datasets[0].backgroundColor[i++],
-//       hidden: false,
-//       index: 2,
-//       strokeStyle: "#fff",
-//       lineWidth: 2
-//     })
-//   );
-// }
-
 
 function tasksInRange(tasks: any[], filterParam: string, startDate?: Date, endDate?: Date) {
   if (startDate === undefined || endDate === undefined) return tasks;
@@ -50,103 +36,116 @@ function tasksInRange(tasks: any[], filterParam: string, startDate?: Date, endDa
 }
 
 class Dashboard extends React.Component<{ tasks: any[]; }, IDashboard> {
-  state = {
-    tasks: this.props.tasks,
-    startDate: undefined,
-    endDate: undefined,
-    quarterSpendingsTotal: 0
-  }
-    
+    state = {
+        tasks: this.props.tasks,
+        startDate: undefined,
+        endDate: undefined,
+        quarterSpendingsTotal: 0
+    }
+
     componentDidUpdate(prevProps: any, prevState: any) {
         if (prevProps.tasks !== this.props.tasks) {
             this.setState({
                 tasks: this.props.tasks
             });
+
+            const tableSegment = document.getElementById('tableOfDiagramSegment');
+            if (tableSegment) unmountComponentAtNode(tableSegment);
         }
     }
 
-  dateFilter = (startDate?: Date, endDate?: Date): void => {
-    this.setState({ startDate, endDate });
-    if (startDate && endDate) {
-      this.setState({
-        tasks: tasksInRange(this.props.tasks, 'CREATED_DATE', startDate, endDate),
-      });
-    }
+    dateFilter = (startDate?: Date, endDate?: Date): void => {
+        var inRange;
+        if (startDate && endDate) {
+            inRange = tasksInRange(this.state.tasks, 'CREATED_DATE', startDate, endDate);
+            this.setState({ tasks: inRange });
+
+            const tableSegment = document.getElementById('tableOfDiagramSegment');
+            if (tableSegment) unmountComponentAtNode(tableSegment);
+        }
+        this.setState({
+            startDate,
+            endDate
+        });
   }
 
-  render() {
-    return (
-      <Grid>
-        <Grid.Row>
-          <QSpending
-            saveTotal={(quarterSpendingsTotal: number) => this.setState({ quarterSpendingsTotal })}
-            renderTable={(tasks) => this.renderTableOfDiagramSegment('', '', tasks)}
-            tasks={this.state.tasks}
-            startDate={this.state.startDate}
-            endDate={this.state.endDate}
-          />
-          <Grid.Col width={4}>
-            <DateFilter filter={this.dateFilter} />
-            <AmountSpent spent={this.state.quarterSpendingsTotal}/>
-          </Grid.Col>
-        </Grid.Row>
-        <Grid.Row>
-          <Grid.Col width={5}>
-            <Card isCollapsible
-              title="Task by stages"
-              body={
-                <Doughnut
-                  data={byStages(this.state.tasks)}
-                  options={{
-                    legend: {
-                      position: 'bottom',
-                    },
-                    onClick: (_: MouseEvent, chartElement: any) => {
-                      if (chartElement.length !== 0) {
-                        const { _model: { label: stage } } = chartElement.pop();
-                        this.renderTableOfDiagramSegment(stage, 'stage');
-                      }
-                    }
-                  }}
-                />
-                }
-              />
-          </Grid.Col>
-          <Grid.Col width={5}>
-            <Card isCollapsible
-              title="Products"
-              body={
-                <Doughnut
-                  data={byProducts(this.state.tasks)}
-                  options={{
-                    ...doughnutOptions,
-                    onClick: (_: MouseEvent, chartElement: any) => {
-                      const { _model: { label: article } } = chartElement.pop();
-                      this.renderTableOfDiagramSegment(article, 'article');
-                    }
-                  }}
-                />
-              }
-            />
-          </Grid.Col>
-          <Grid.Col width={2}>
-            <StatCardsContext.Provider value={{
-                tasks: this.props.tasks,
-                startDate: this.state.startDate,
-                endDate: this.state.endDate,
-            }}>
-              <CompletedCertifications />
-              <AmountOfCertifications />
-            </StatCardsContext.Provider>
-          </Grid.Col>
-        </Grid.Row>
-        <Grid.Row>
-          <Grid.Col width={12}>
-            <div id="tableOfDiagramSegment"></div>
-          </Grid.Col>
-        </Grid.Row>
-      </Grid>
-    );
+    render() {
+        return (
+            <Grid>
+                <Grid.Row>
+                    <QSpending
+                        saveTotal={(quarterSpendingsTotal: number) => this.setState({ quarterSpendingsTotal })}
+                        renderTable={(tasks) => this.renderTableOfDiagramSegment('', '', tasks)}
+                        tasks={this.state.tasks}
+                        startDate={this.state.startDate}
+                        endDate={this.state.endDate}
+                    />
+                    <Grid.Col width={4}>
+                        <DateFilter
+                            filter={this.dateFilter}
+                            startDate={this.state.startDate}
+                            endDate={this.state.endDate}
+                        />
+                        <AmountSpent spent={this.state.quarterSpendingsTotal}/>
+                    </Grid.Col>
+                </Grid.Row>
+                <Grid.Row>
+                    <Grid.Col width={5}>
+                        <Card isCollapsible
+                        title="Task by stages"
+                        body={
+                            <Doughnut
+                            data={byStages(this.state.tasks)}
+                            options={{
+                                legend: {
+                                position: 'bottom',
+                                },
+                                onClick: (_: MouseEvent, chartElement: any) => {
+                                if (chartElement.length !== 0) {
+                                    const { _model: { label: stage } } = chartElement.pop();
+                                    this.renderTableOfDiagramSegment(stage, 'stage');
+                                }
+                                }
+                            }}
+                            />
+                            }
+                        />
+                    </Grid.Col>
+                    <Grid.Col width={5}>
+                        <Card isCollapsible
+                        title="Products"
+                        body={
+                            <Doughnut
+                            data={byProducts(this.state.tasks)}
+                            options={{
+                                ...doughnutOptions,
+                                onClick: (_: MouseEvent, chartElement: any) => {
+                                const { _model: { label: article } } = chartElement.pop();
+                                this.renderTableOfDiagramSegment(article, 'article');
+                                }
+                            }}
+                            />
+                        }
+                        />
+                    </Grid.Col>
+                    <Grid.Col width={2}>
+                        <StatCardsContext.Provider value={{
+                            tasks: this.props.tasks,
+                            startDate: this.state.startDate,
+                            endDate: this.state.endDate,
+                        }}>
+                        <CompletedCertifications />
+                        <AmountOfCertifications />
+                        </StatCardsContext.Provider>
+                    </Grid.Col>
+                </Grid.Row>
+                <Grid.Row>
+                <Grid.Col width={12}>
+                    <div id="tableOfDiagramSegment"></div>
+                </Grid.Col>
+                </Grid.Row>
+            </Grid>
+        );
   }
 
 

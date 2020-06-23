@@ -15,7 +15,7 @@ import Form from './components/Form/Form';
 import Dashboard from './components/Dashboard/Dashboard';
 import ErrorBoundary from './ErrorBoundary';
 import { Products } from './Product/Product';
-import BrandFilter from './components/List/Filters/BrandFilter';
+import BrandFilter from './components/Filters/BrandFilter';
 
 initApp();
 

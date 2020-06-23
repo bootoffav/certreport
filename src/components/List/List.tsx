@@ -37,38 +37,47 @@ export default class List extends React.Component<{ allTasks: any; allProducts: 
     return getColumns(this.state.totalPrice, this.state.stage);
   }
 
-  static State: React.FunctionComponent<{
-    staleData: boolean;
-  }> = ({ staleData }) =>
-    staleData ?
-      <Button loading color="success" icon="check" size="sm" className="mr-1" />
-      : <></>
+    static State: React.FunctionComponent<{
+        staleData: boolean;
+    }> = ({ staleData }) =>
+        staleData ?
+        <Button loading color="success" icon="check" size="sm" className="mr-1" />
+        : <></>
 
     async componentDidMount() {
         this.updateState();
     }
 
+    resetFilters = () => {
+        this.setState({
+            startDate: undefined,
+            endDate: undefined,
+            stage: 'all',
+            columnFilterValue: ''
+        })
+    }
+
     componentDidUpdate(prevProps: any, prevState: any) {
         if (prevProps.allTasks !== this.props.allTasks) {
-            this.updateState(this.props.allTasks);
+            this.updateState();
+            this.resetFilters();
         }
     }
 
-  updateState = (providedTasks?: any) => {
-        const tasks = providedTasks || this.props.allTasks;
-        const totalPrice: number = tasks.reduce((sum: number, task: any) => sum + Number(task.state.price), 0);
+  updateState = () => {
+        const totalPrice: number = this.props.allTasks.reduce((sum: number, task: any) => sum + Number(task.state.price), 0);
         this.setState({
             totalPrice,
-            visibleData: tasks
+            visibleData: this.props.allTasks
         });
   }
 
-  getTrProps(state: any, rowInfo: any, column: any) {
-    if (rowInfo === undefined) {
-      return {};
+    getTrProps(state: any, rowInfo: any, column: any) {
+        if (rowInfo === undefined) {
+            return {};
+        }
+            return rowInfo.original.overdue ? { className: 'missedDeadline' } : {};
     }
-    return rowInfo.original.overdue ? { className: 'missedDeadline' } : {};
-  }
 
     render = (): JSX.Element => <>
         <div className="d-flex mb-1">
