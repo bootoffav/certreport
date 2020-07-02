@@ -51,7 +51,9 @@ class Dashboard extends React.Component<{ tasks: any[]; }, IDashboard> {
     componentDidUpdate(prevProps: any, prevState: any) {
         if (prevProps.tasks !== this.props.tasks) {
             this.setState({
-                tasks: this.props.tasks
+                tasks: this.props.tasks,
+                startDate: undefined,
+                endDate: undefined
             });
 
             const tableSegment = document.getElementById('tableOfDiagramSegment');
