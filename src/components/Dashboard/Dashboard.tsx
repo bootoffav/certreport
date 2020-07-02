@@ -19,21 +19,26 @@ interface IDashboard {
   quarterSpendingsTotal: number;
 }
 
-function tasksInRange(tasks: any[], filterParam: string, startDate?: Date, endDate?: Date) {
-  if (startDate === undefined || endDate === undefined) return tasks;
+    function tasksInRange(
+        tasks: any[],
+        filterParam: string,
+        startDate?: Date,
+        endDate?: Date
+    ) {
+        if (startDate === undefined || endDate === undefined) return tasks;
 
-  const tasksInRange = tasks.filter(task => {
-    const comparingDate = new Date(
-      filterParam === 'CREATED_DATE'
-        ? task[filterParam]
-        : task.state[filterParam]
-    );
+        const tasksInRange = tasks.filter(task => {
+            const comparingDate = new Date(
+                filterParam === 'CREATED_DATE'
+                    ? task[filterParam]
+                    : task.state[filterParam]
+            );
 
-    return startDate < comparingDate && endDate > comparingDate
-  });
+            return startDate < comparingDate && endDate > comparingDate
+        });
 
-  return tasksInRange;
-}
+        return tasksInRange;
+    }
 
 class Dashboard extends React.Component<{ tasks: any[]; }, IDashboard> {
     state = {
@@ -57,7 +62,12 @@ class Dashboard extends React.Component<{ tasks: any[]; }, IDashboard> {
     dateFilter = (startDate?: Date, endDate?: Date): void => {
         var inRange;
         if (startDate && endDate) {
-            inRange = tasksInRange(this.state.tasks, 'CREATED_DATE', startDate, endDate);
+            inRange = tasksInRange(
+                this.state.tasks,
+                'certReceivedOnRealDate',
+                startDate,
+                endDate
+            );
             this.setState({ tasks: inRange });
 
             const tableSegment = document.getElementById('tableOfDiagramSegment');
