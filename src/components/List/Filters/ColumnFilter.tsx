@@ -1,5 +1,4 @@
 import React from 'react';
-import './Filters.css';
 
 class ColumnFilter extends React.Component<{
     tasks: any;
@@ -71,7 +70,7 @@ class ColumnFilter extends React.Component<{
 
   render = () => {
     const prop = this.props.requiredStage === 'products' ? 'products' : 'default';
-    return <div className="input-group">
+    return <div className="mr-1 input-group">
       <input type="text" className="form-control" placeholder="search"
         onChange={this.onChange} value={this.props.value} />
       <div className="input-group-append">

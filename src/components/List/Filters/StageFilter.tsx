@@ -1,6 +1,7 @@
 import React from 'react';
 import Task from '../../../Task/Task';
 import { Dropdown } from 'tabler-react';
+import { countTotalPrice } from '../../../helpers';
 
 const StageFilter: React.FunctionComponent<{
     allProducts: any;
@@ -34,7 +35,7 @@ const StageFilter: React.FunctionComponent<{
         update({
             visibleData,
             stage,
-            totalPrice: visibleData.reduce((sum: number, task: any) => sum + Number(task.state.price), 0),
+            totalPrice: countTotalPrice(visibleData),
             columnFilterValue: '',
             startDate: undefined,
             endDate: undefined

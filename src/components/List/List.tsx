@@ -4,12 +4,13 @@ import { Button } from 'tabler-react';
 import Task from '../../Task/Task';
 import { getColumns } from './columns';
 import StageFilter from './Filters/StageFilter';
-import DateFilter from './Filters/DateFilter';
+// import DateFilter from './Filters/DateFilter';
 import ColumnFilter from './Filters/ColumnFilter';
 import ListExport from '../Export/PDF/ListExport';
 
 import './List.css';
 import '../../css/style.css';
+import { countTotalPrice } from '../../helpers';
 
 interface IListState {
     visibleData: any[];
@@ -65,7 +66,7 @@ export default class List extends React.Component<{ allTasks: any; allProducts: 
     }
 
   updateState = () => {
-        const totalPrice: number = this.props.allTasks.reduce((sum: number, task: any) => sum + Number(task.state.price), 0);
+      const totalPrice = countTotalPrice(this.props.allTasks);
         this.setState({
             totalPrice,
             visibleData: this.props.allTasks
@@ -96,14 +97,6 @@ export default class List extends React.Component<{ allTasks: any; allProducts: 
                         requiredStage={this.state.stage}
                         update={this.setState.bind(this)}
                     />
-                <div className="ml-3">
-                    <DateFilter
-                        startDate={this.state.startDate}
-                        endDate={this.state.endDate}
-                        tasks={this.props.allTasks}
-                        update={this.setState.bind(this)}
-                    />
-                </div>
             </div>
             <div className="d-flex">
                 <List.State staleData={this.props.staleData} />

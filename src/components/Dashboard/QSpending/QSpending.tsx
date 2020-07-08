@@ -9,7 +9,7 @@ dayjs.extend(require('dayjs/plugin/quarterOfYear'));
 
 class QSpending extends React.Component<{
   renderTable: (t: any[]) => void;
-  saveTotal: (total: number) => void;
+//   saveTotal: (total: number) => void;
   tasks: any;
   startDate?: Date;
   endDate?: Date;
@@ -27,12 +27,12 @@ class QSpending extends React.Component<{
     let quarters = this.findQuarters();
     //привяжем суммы трат
     quarters = this.countQuarterSpendings(quarters);
-    this.props.saveTotal(
-      Math.round(
-        Object.values(quarters)
-          .reduce((acc: number, quarter: any) => acc + quarter.spent, 0)
-      )
-    );
+    // this.props.saveTotal(
+    //   Math.round(
+    //     Object.values(quarters)
+    //       .reduce((acc: number, quarter: any) => acc + quarter.spent, 0)
+    //   )
+    // );
     this.state = { quarters };
   }
 
@@ -81,11 +81,12 @@ class QSpending extends React.Component<{
 
   // считает траты целых кварталов
     countQuarterSpendings(quarters: any) {
+        console.log(this.props.tasks);
         this.props.tasks.forEach((task: any) => {
-            const { price, paymentDate } = task.state;
+            const { price, paymentDate, price2 } = task.state;
             Object.entries(quarters).forEach(([_, quarter]: any) => {
                 if (quarter.start < dayjs(paymentDate) && dayjs(paymentDate) < quarter.end) {
-                    quarter.spent += +price;
+                    quarter.spent += +price + +price2;
                     quarter.tasks.push(task);
                 }
             });
@@ -100,29 +101,23 @@ class QSpending extends React.Component<{
             let quarters = this.findQuarters(startDate, endDate);
             quarters = this.countQuarterSpendings(quarters);
             this.setState({ quarters, startDate, endDate });
-            this.props.saveTotal(
-                Math.round(
-                    Object.values(quarters)
-                        .reduce((acc: number, quarter: any) => acc + quarter.spent, 0)
-                )
-            );
         }
     }
 
     render() {
         return Object.values(this.state.quarters).map((quarter: any) => {
-            return <Grid.Col width={2} key={quarter.start}>
-                <Card>
-                <Card.Header>
-                    <div className="mx-auto quarterHeader" onClick={() => this.props.renderTable(quarter.tasks)}>
-                    {`Q${quarter.start.quarter()}-${quarter.start.format('YY')}`}
-                    </div>
-                </Card.Header>
-                <Card.Body>
-                    <Header.H3 className="text-center">
-                    {`€${Math.round(quarter.spent).toLocaleString()}`}
-                    </Header.H3>
-                </Card.Body>
+            return <Grid.Col width={3}>
+                <Card key={quarter.start}>
+                    <Card.Header>
+                        <div className="mx-auto quarterHeader" onClick={() => this.props.renderTable(quarter.tasks)}>
+                        {`Q${quarter.start.quarter()}-${quarter.start.format('YY')}`}
+                        </div>
+                    </Card.Header>
+                    <Card.Body>
+                        <Header.H3 className="text-center">
+                        {`€${Math.round(quarter.spent).toLocaleString()}`}
+                        </Header.H3>
+                    </Card.Body>
                 </Card>
             </Grid.Col>
         })

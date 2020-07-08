@@ -281,7 +281,7 @@ function getColumns(totalPrice: number, stage?: string) {
     Header: 'Price, €',
     Footer: <>Total: < span style={{ float: 'right' }}>{formatPrice(totalPrice)}</span></>,
     id: 'price',
-    accessor: 'state.price',
+    accessor: ({ state }: any) => (+state.price + +state.price2),
     minWidth: 90,
     Cell: (props: any) => <>€<span style={{ float: 'right' }}>{formatPrice(props.value)}</span></>
   }, {
@@ -350,7 +350,7 @@ function getColumns(totalPrice: number, stage?: string) {
             return takeColumns([1, 2, 3, 7, 9, 13, 17, 19, 22, 23, 24, 25, 26, 27, 31]);
         case 'all':
             return applyTextWrap(
-                takeColumns([1, 2, 3, 4, 5, 9, 18, 20, 23, 25, 28, 31]),
+                takeColumns([1, 2, 3, 4, 5, 9, 18, 20, 23, 24, 25, 28, 31]),
                 [6]
             );
         case 'products':
@@ -358,7 +358,7 @@ function getColumns(totalPrice: number, stage?: string) {
         case 'overdue':
             return takeColumns([1, 2, 3, 4, 5, 6, 9, 19, 21, 22, 24, 25, 27, 31]);
         default:
-            return takeColumns([1, 2, 3, 4, 9, 18, 20, 22, 26, 31]);
+            return takeColumns([1, 2, 3, 4, 9, 18, 20, 24, 26, 31]);
     }
 }
 
