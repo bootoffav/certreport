@@ -39,14 +39,12 @@ function tasksInRange(
     return tasksInRange;
 }
 
-class Dashboard extends React.Component<{ tasks: any[]; }, IDashboard> {
+class Dashboard extends React.Component<any, IDashboard> {
 
     constructor(props: any) {
         super(props);
         this.state = {
             tasks: this.props.tasks,
-            startDate: undefined,
-            endDate: undefined,
         };
     }
 
@@ -69,27 +67,6 @@ class Dashboard extends React.Component<{ tasks: any[]; }, IDashboard> {
         }
     }
 
-//     dateFilter = (startDate?: Date, endDate?: Date): void => {
-//         var inRange;
-//         if (startDate && endDate) {
-//             console.log(this.props.tasks);
-//             inRange = tasksInRange(
-//                 this.props.tasks,
-//                 'certReceivedOnRealDate',
-//                 startDate,
-//                 endDate
-//             );
-//             this.setState({ tasks: inRange });
-
-//             const tableSegment = document.getElementById('tableOfDiagramSegment');
-//             if (tableSegment) unmountComponentAtNode(tableSegment);
-//         }
-//         this.setState({
-//             startDate,
-//             endDate
-//         });
-//   }
-
     render() {
         return (
             <>
@@ -99,19 +76,13 @@ class Dashboard extends React.Component<{ tasks: any[]; }, IDashboard> {
                             <QSpending
                                 renderTable={(tasks) => this.renderTableOfDiagramSegment('', '', tasks)}
                                 tasks={this.state.tasks}
-                                startDate={this.state.startDate}
-                                endDate={this.state.endDate}
+                                startDate={this.props.startDate}
+                                endDate={this.props.endDate}
                             />
                         </Grid.Row>
                     </Grid.Col>
 
                     <Grid.Col width={4}>
-                            {/* <DateFilter
-                                filter={this.dateFilter}
-                                startDate={this.state.startDate}
-                                endDate={this.state.endDate}
-                                update={this.setState.bind(this)}
-                            /> */}
                             <AmountSpent spent={this.countSpendingsTotal()}/>
                     </Grid.Col>
                 </Grid.Row>

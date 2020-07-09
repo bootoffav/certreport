@@ -82,7 +82,7 @@ class Main extends React.Component {
         return (
             <Router>
                 <div className="container-fluid">
-                    <div className="pl-1 pt-1 mb-1 rounded-bottom navbar-light d-flex justify-content-start">
+                    <div className="pl-1 mb-1 rounded-bottom navbar-light d-flex justify-content-start">
                         <BrandFilter
                             tasks={this.state.allTasks}
                             update={this.setState.bind(this)}
@@ -92,21 +92,21 @@ class Main extends React.Component {
                             endDate={this.state.endDate}
                             update={this.setState.bind(this)}
                         />
-                        <div className="container-fluid">
-                            <div className="row">
-                                <div className="offset-3 col-2 pt-1">
+                        <div className="container">
+                            <div className="d-flex h-100 justify-content-end align-items-center pt-2" style={{ fontSize: '16px' }}>
+                                <div>
                                     <NavLink className="navbar-link" exact to="/dashboard">
-                                        <p style={{ fontSize: '20px' }}>Dashboard</p>
+                                        <p>Dashboard</p>
                                     </NavLink>
                                 </div>
-                                <div className="col-2 pt-1">
+                                <div className="mx-2">
                                     <NavLink className="navbar-link" to="/">
-                                        <p style={{ fontSize: '20px' }}>Certification list</p>
+                                        <p>Certification list</p>
                                     </NavLink>
                                 </div>
-                                <div className="ml-auto pr-2 pt-1">
+                                <div>
                                     <NavLink exact to="/add">
-                                        <p style={{ fontSize: '20px' }}>Add cert</p>
+                                        <p>Add cert</p>
                                     </NavLink>
                                 </div>
                             </div>
@@ -116,6 +116,8 @@ class Main extends React.Component {
                         <Route exact path="/dashboard"
                             render={() => <Dashboard
                                 tasks={this.state.filtered}
+                                startDate={this.state.startDate}
+                                endDate={this.state.endDate}
                             />} />
                         <Route exact path="/" render={() => <List
                             allTasks={this.state.filtered}

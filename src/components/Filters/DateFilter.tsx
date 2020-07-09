@@ -41,7 +41,7 @@ class DateFilter extends React.Component<any, any> {
                         minDate={this.state.startDate}
                     />
                 </div>
-                <Button color="info" className="h-75" pill
+                <Button color="info" pill
                     onClick={() => this.props.update({
                         startDate: this.state.startDate,
                         endDate: this.state.endDate

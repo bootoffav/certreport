@@ -1,10 +1,10 @@
 import { Grid, Card, Header } from 'tabler-react';
 import React from 'react';
 import dayjs from 'dayjs';
+import quarterOfYear from 'dayjs/plugin/quarterOfYear';
 import './QSpending.css';
 
-
-dayjs.extend(require('dayjs/plugin/quarterOfYear'));
+dayjs.extend(quarterOfYear);
 
 
 class QSpending extends React.Component<{
@@ -36,52 +36,66 @@ class QSpending extends React.Component<{
     this.state = { quarters };
   }
 
-  findQRange(toSub: number, endDate?: Date) {
-    // @ts-ignore
-    const q = dayjs(endDate).subtract(toSub, 'quarter');
-    return {
-      // @ts-ignore
-      start: q.startOf('quarter'), end: q.endOf('quarter'),
-      spent: 0, tasks: []
+    findQuarter(howMany: number, startDate?: Date) {
+        let start = startDate ? dayjs(startDate) : dayjs().subtract(4, 'quarter');
+        const q = start.add(howMany, 'quarter');
+        return {
+            start: q.startOf('quarter'),
+            end: q.endOf('quarter'),
+            spent: 0,
+            tasks: []
+        }
     }
-  }
+
 
     //  находит целые кварталы
     findQuarters(startDate?: Date, endDate?: Date) {
-        var quarters: any = {};
+        var quarters: any = [];
         if (startDate && endDate) {
-            const end = dayjs(endDate);
             let i = 1;
-            
-            // @ts-ignore
-            while (end.subtract(i, 'quarter').startOf('quarter') >= dayjs(startDate)) {
-                quarters[i] = this.findQRange(i++, endDate);
+            const start = dayjs(startDate);
+            const end = dayjs(endDate);
+
+            // checking if startDate is a start of its quarter
+            if (start.isSame(start.startOf('quarter'), 'day')) {
+                quarters.push({
+                    start: start.startOf('quarter'),
+                    end: start.endOf('quarter'),
+                    spent: 0,
+                    tasks: []
+                });
             }
-            // checking if endDate is an end of a current quarter
-            // @ts-ignore
-            if (dayjs(endDate).isSame(end.endOf('quarter'), 'day')) {
-                quarters[i] = {
-                    // @ts-ignore
-                    start: dayjs(endDate).startOf('quarter'), end: dayjs(endDate).endOf('quarter'),
-                    spent: 0, tasks: []
-                }
+
+            while (start.add(i, 'quarter').endOf('quarter') < end) {
+                quarters.push(
+                    this.findQuarter(i++, startDate)
+                );
+            }
+
+            // checking if endDate is an end of its quarter
+            if (start.add(i, 'quarter').endOf('quarter').isSame(end, 'day')) {
+                quarters.push({
+                    start: start.add(i, 'quarter').startOf('quarter'),
+                    end: start.add(i, 'quarter').endOf('quarter'),
+                    spent: 0,
+                    tasks: []
+                });
             }
 
             return quarters;
         }
 
         // last for 4 quarters from today
-        return {
-            1: this.findQRange(4),
-            2: this.findQRange(3),
-            3: this.findQRange(2),
-            4: this.findQRange(1),
-        }
+        return [
+            this.findQuarter(0),
+            this.findQuarter(1),
+            this.findQuarter(2),
+            this.findQuarter(3)
+        ]
     }
 
-  // считает траты целых кварталов
+    // считает траты целых кварталов
     countQuarterSpendings(quarters: any) {
-        console.log(this.props.tasks);
         this.props.tasks.forEach((task: any) => {
             const { price, paymentDate, price2 } = task.state;
             Object.entries(quarters).forEach(([_, quarter]: any) => {
@@ -105,7 +119,7 @@ class QSpending extends React.Component<{
     }
 
     render() {
-        return Object.values(this.state.quarters).map((quarter: any) => {
+        return this.state.quarters.map((quarter: any) => {
             return <Grid.Col width={3}>
                 <Card key={quarter.start}>
                     <Card.Header>
