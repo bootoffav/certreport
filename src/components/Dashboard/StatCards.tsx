@@ -35,7 +35,6 @@ const CompletedCertifications = () => {
     total={
       <div
         className="display-5"
-        onClick={displayNone}
         >{completedCerts()}
       </div>
     }
@@ -83,14 +82,12 @@ const AmountOfCertifications = () => {
     total={
       <div
         className="display-5"
-        onClick={displayNone}
       >{amountOfOngoingCerts()}</div>
     }
     label={`${startDate ? 'New' : 'All'} Certifications`}
   />
 }
 
-const displayNone = (e: any) => e.currentTarget.parentNode.parentNode.parentNode.style.display = 'none';
 
 const AmountSpent = ({ spent }: any) => {
   // const { tasks, startDate, endDate}: any = useContext(StatCardsContext);
@@ -114,7 +111,7 @@ const AmountSpent = ({ spent }: any) => {
           >TOTAL:</div>
         <Header.H3 className="display-5 text-center"
           ><div
-            onClick={displayNone}
+            // onClick={displayNone}
       >€{spent.toLocaleString()}</div>
         </Header.H3>
         </>

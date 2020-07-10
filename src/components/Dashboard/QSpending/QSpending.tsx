@@ -24,7 +24,7 @@ class QSpending extends React.Component<{
   constructor(props: any) {
     super(props);
     //найдем полные кварталы
-    let quarters = this.findQuarters();
+    let quarters = this.findQuarters(this.props.startDate, this.props.endDate);
     //привяжем суммы трат
     quarters = this.countQuarterSpendings(quarters);
     // this.props.saveTotal(
