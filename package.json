@@ -26,7 +26,7 @@
     "faunadb": "^2.9.4",
     "file-saverjs": "^1.3.6",
     "jquery": "^3.4.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.19",
     "netlify-identity-widget": "^1.5.1",
     "open-iconic": "^1.1.1",
     "pdfmake": "^0.1.57",
