@@ -22,7 +22,11 @@ interface IListState {
     columnFilterValue: string;
 }
 
-export default class List extends React.Component<{ allTasks: any; allProducts: any; staleData: boolean; }> {
+export default class List extends React.Component<{
+    allTasks: any;
+    allProducts: any;
+    staleData: boolean;
+}> {
     state: IListState = {
         visibleData: [],
         columnFilterValue: '',
@@ -30,7 +34,7 @@ export default class List extends React.Component<{ allTasks: any; allProducts: 
         //used for Task PDF list (ejected out of react-table ref)
         sortedData: undefined,
         totalPrice: 0,
-        stage: 'all'
+        stage: 'all',
   };
   ref: any;
 

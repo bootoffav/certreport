@@ -310,6 +310,12 @@ function getColumns(totalPrice: number, stage?: string) {
         >{t.TITLE}</a>
       </span>
     )
+  }, {
+    // 35
+    Header: 'Brand',
+    id: 'brand',
+    accessor: 'brand',
+    width: 50,
   }];
 
   const takeColumns = (columnPositions: number[]) => {
@@ -354,7 +360,7 @@ function getColumns(totalPrice: number, stage?: string) {
                 [6]
             );
         case 'products':
-            return takeColumns([32, 33, 34]);
+            return takeColumns([32, 35, 33, 34]);
         case 'overdue':
             return takeColumns([1, 2, 3, 4, 5, 6, 9, 19, 21, 22, 24, 25, 27, 31]);
         default:

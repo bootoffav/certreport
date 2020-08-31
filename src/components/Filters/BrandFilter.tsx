@@ -34,8 +34,10 @@ class BrandFilter extends React.Component<{
     render() {
         return (
             <div className="d-flex mt-1 align-items-center">
-                <div className="btn-group" data-toggle="buttons">
-                    <label className="btn btn-secondary" onClick={this.handleChange}>
+                <div className="btn-group pt-1" data-toggle="buttons">
+                    <label className="btn btn-secondary"
+                        onClick={(e) => e.preventDefault()}
+                    >
                         <input
                             type="checkbox"
                             value="XMT"
@@ -43,7 +45,7 @@ class BrandFilter extends React.Component<{
                             onClick={this.handleChange}
                         /> XMT
                     </label>
-                    <label className="btn btn-secondary" onClick={this.handleChange}>
+                    <label className="btn btn-secondary">
                         <input
                             type="checkbox"
                             value="XMS"
@@ -51,7 +53,8 @@ class BrandFilter extends React.Component<{
                             onClick={this.handleChange}
                         /> XMS
                     </label>
-                    <label className="btn btn-secondary">
+                    <label className="btn btn-secondary"
+                    >
                         <input
                             type="checkbox"
                             value="XMF"

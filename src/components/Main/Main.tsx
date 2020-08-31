@@ -15,7 +15,8 @@ class Main extends React.Component {
     state: {
         allTasks: any;
         allProducts: any;
-        filtered: any;
+        filteredTasks: any;
+        filteredProducts: any;
         startDate?: Date;
         endDate?: Date;
         activeBrands: string[];
@@ -28,7 +29,8 @@ class Main extends React.Component {
         this.state = {
             allTasks: fromCache.tasksFromCache,
             allProducts: fromCache.productsFromCache,
-            filtered: fromCache.tasksFromCache,
+            filteredTasks: fromCache.tasksFromCache,
+            filteredProducts: fromCache.productsFromCache,
             activeBrands: ['XMT', 'XMS', 'XMF']
         };
     }
@@ -49,19 +51,28 @@ class Main extends React.Component {
     }
 
     filter() {
-        let { allTasks, activeBrands, startDate, endDate } = this.state;
+        let { allTasks, allProducts, activeBrands, startDate, endDate } = this.state;
 
-        // brandfiltering
-        let filtered = allTasks.filter((task: any) => {
+        // brandfiltering for Tasks
+        let filteredTasks = allTasks.filter((task: any) => {
             if (task.state.brand === '') {
                 if (activeBrands.includes('No brand')) return true;
             }
             return activeBrands.includes(task.state.brand);
         });
 
+        // brandfiltering for Products
+        let filteredProducts = allProducts.filter((product: any) => {
+            if (product.brand === '') {
+                if (activeBrands.includes('No brand')) return true;
+            }
+            return activeBrands.includes(product.brand);
+        });
+
+
         // datefiltering
         if (startDate && endDate) {
-            filtered = filtered.filter((task: any) => {
+            filteredTasks = filteredTasks.filter((task: any) => {
                 const comparingDate = new Date(task.state.certReceivedOnRealDate);
                 // @ts-ignore
                 return startDate < comparingDate && endDate > comparingDate;
@@ -69,7 +80,7 @@ class Main extends React.Component {
         }
 
         this.setState({
-            filtered
+            filteredTasks, filteredProducts
         });
     }
 
@@ -115,13 +126,13 @@ class Main extends React.Component {
                     <Switch>
                         <Route exact path="/dashboard"
                             render={() => <Dashboard
-                                tasks={this.state.filtered}
+                                tasks={this.state.filteredTasks}
                                 startDate={this.state.startDate}
                                 endDate={this.state.endDate}
                             />} />
                         <Route exact path="/" render={() => <List
-                            allTasks={this.state.filtered}
-                            allProducts={this.state.allProducts}
+                            allTasks={this.state.filteredTasks}
+                            allProducts={this.state.filteredProducts}
                             staleData={this.cache.staleData}
                         />} />
                         <Route exact path="/add" render={({ match, location: { state } }) =>
