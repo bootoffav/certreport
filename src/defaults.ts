@@ -173,9 +173,6 @@ function initApp() {
 
   B24.get_products().then(data => saveAndApply(data, 'articles'));
   B24.get_standards().then(data => saveAndApply(data, 'standards'));
-
-  // let fromStorage: string | null;
-  // ['articles', 'standards'].forEach(item => fromStorage = localStorage.getItem(item) && (selectOptions[item] = fromStorage));
 }
 
 export { emptyState, selectOptions, initApp };

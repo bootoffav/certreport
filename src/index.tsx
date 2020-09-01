@@ -12,7 +12,7 @@ import Main from './components/Main/Main';
 initApp();
 
 netlifyIdentity.init();
-netlifyIdentity.on('login', user => {
+netlifyIdentity.on('login', () => {
   netlifyIdentity.close();
   ReactDOM.render(<Main />, document.getElementById('root'));
 });
