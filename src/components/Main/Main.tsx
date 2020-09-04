@@ -36,6 +36,7 @@ class Main extends React.Component {
     }
 
     componentDidMount() {
+        this.filter();
         if (this.cache.staleData) {
             this.cache.getFromAPI() // get Tasks
                 .then(Products) // parse Products
