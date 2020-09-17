@@ -38,29 +38,31 @@ class DB {
     return data;
   }
 
-  static async createInstance(
-    id: string,
-    state: any
-  ) {
-    return DB.client().query(
-      q.Create(
-        q.Ref(q.Collection(this.fdbCollection), id),
-        {
-          data: {
-            ...state
-          }
-        })
-    )
-  }
+    static async createInstance(
+        taskId: string,
+        state: any
+    ) {
+        return DB.client().query(
+            q.Create(
+                q.Ref(q.Collection(this.fdbCollection), taskId),
+                {
+                    data: {
+                        ...state
+                    }
+                })
+        );
+        // return taskId;
+    }
 
-  static updateInstance(
-    ref: string,
-    state: any
-  ) {
-    return DB.client().query(q.Update(q.Ref(q.Collection(this.fdbCollection), ref), {
-      data: { ...state }
-    }))
-  }
+    static updateInstance(
+        taskId: string,
+        state: any
+    ) {
+        return DB.client().query(q.Update(q.Ref(q.Collection(this.fdbCollection), taskId), {
+            data: { ...state }
+        }));
+        // return taskId;
+    }
 }
 
 export { DB };

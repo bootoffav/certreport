@@ -15,6 +15,7 @@ import FabricApplicationForm from './FabricApplicationForm';
 import { DB } from '../../DBManager';
 import { removeEmptyProps } from '../../helpers';
 import { TabbedCard, Tab, Dimmer } from 'tabler-react';
+import CacheManager from '../../CacheManager';
 
 interface IFormState extends IState {
   requestStatus: Status;
@@ -93,24 +94,37 @@ class Form extends React.Component<IFormProps> {
 
   handleChange = (e: any) => ['price', 'price2'].includes(e.target.id) ? this.setState({ [e.target.id]: e.target.value.replace(',', '.') }) : this.setState({ [e.target.id]: e.target.value });
 
-  async handleCert(e: any) {
-    e.preventDefault();
-    const OK = await swal({
-      title: "Are you sure?",
-      icon: "info",
-      buttons: ["Cancel", "OK"]
-    });
+    async handleCert(e: any) {
+        e.preventDefault();
+        const OK = await swal({
+            title: "Are you sure?",
+            icon: "info",
+            buttons: ["Cancel", "OK"]
+        });
 
-    if (OK) {
-      this.setState({ requestStatus: Status.Loading });
-      const taskId = this.task_id
-        ? await B24.updateTask(this.state, this.task_id).then(_ => this.task_id).catch(this.unsuccessfullySubmitted)
-        : await B24.createTask(this.state).catch(this.unsuccessfullySubmitted);
-      this.state.existsInDB
-        ? DB.updateInstance(taskId, { ...this.state.DBState, EN11612Detail: this.state.EN11612Detail }).then(this.successfullySubmitted).catch(this.unsuccessfullySubmitted)
-        : DB.createInstance(taskId, this.state.DBState).then(this.successfullySubmitted).catch(this.unsuccessfullySubmitted)
+        if (OK) {
+            this.setState({ requestStatus: Status.Loading });
+            // update in Bitrix
+            const taskId = this.task_id
+                ? await B24.updateTask(this.state, this.task_id)
+                    .then(_ => this.task_id)
+                    .catch(this.unsuccessfullySubmitted)
+                : await B24.createTask(this.state)
+                    .catch(this.unsuccessfullySubmitted);
+
+            // update in indexedDB
+            await CacheManager.updateOneTask(taskId);
+
+            // update in FaunaDB
+            this.state.existsInDB
+                ? DB.updateInstance(taskId, { ...this.state.DBState, EN11612Detail: this.state.EN11612Detail })
+                    .then(this.successfullySubmitted)
+                    .catch(this.unsuccessfullySubmitted)
+                : DB.createInstance(taskId, this.state.DBState)
+                    .then(this.successfullySubmitted)
+                    .catch(this.unsuccessfullySubmitted)
+        }
     }
-  }
 
   asSelectable = (value : string) => {
     if (value !== '') {
@@ -121,15 +135,14 @@ class Form extends React.Component<IFormProps> {
     }
   }
 
-  successfullySubmitted = () => {
-    this.setState({ requestStatus: Status.Success });
-    sessionStorage.removeItem('tasks');
-    setTimeout(() => {
-      window.history.length === 1
-      ? window.close()
-      : window.location.assign('/');
-    }, 3000);
-  }
+    successfullySubmitted = (e: any) => {
+        this.setState({ requestStatus: Status.Success });
+        setTimeout(() => {
+            window.history.length === 1
+            ? window.close()
+            : window.location.assign('/');
+        }, 3000);
+    }
 
   unsuccessfullySubmitted = (error: any) => {
     console.log(error);

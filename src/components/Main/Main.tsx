@@ -10,39 +10,37 @@ import { Products } from '../../Product/Product';
 import BrandFilter from '../Filters/BrandFilter';
 import DateFilter from '../Filters/DateFilter';
 
+const state = {
+    allTasks: [],
+    allProducts: [],
+    filteredTasks: [],
+    filteredProducts: [],
+    updated: false,
+    startDate: undefined,
+    endDate: undefined,
+    activeBrands: ['XMT', 'XMS', 'XMF']
+}
+
 class Main extends React.Component {
     cache: CacheManager;
-    state: {
-        allTasks: any;
-        allProducts: any;
-        filteredTasks: any;
-        filteredProducts: any;
-        startDate?: Date;
-        endDate?: Date;
-        activeBrands: string[];
-    }
+    state = state;
 
     constructor(props: any) {
         super(props);
         this.cache = new CacheManager();
-        const fromCache = this.cache.staleData ? this.cache.getFromCache(localStorage) : this.cache.getFromCache(sessionStorage);
-        this.state = {
-            allTasks: fromCache.tasksFromCache,
-            allProducts: fromCache.productsFromCache,
-            filteredTasks: fromCache.tasksFromCache,
-            filteredProducts: fromCache.productsFromCache,
-            activeBrands: ['XMT', 'XMS', 'XMF']
-        };
     }
 
-    componentDidMount() {
-        this.filter();
-        if (this.cache.staleData) {
-            this.cache.getFromAPI() // get Tasks
-                .then(Products) // parse Products
-                .then(this.cache.setCaches)
-                .then(({ tasks, products }) => this.setState({ allTasks: tasks, allProducts: products }));
-            }
+    async componentDidMount() {
+        const applyUpdate = async ({ tasks, products }: any) => {
+            return await this.setState({ allTasks: tasks, filteredTasks: tasks, allProducts: products, filteredProducts: products });
+        }
+
+        const markUpdated = () => this.setState({ updated: true });
+
+
+        this.cache.getCache().then(applyUpdate);
+        await this.cache.doUpdate();
+        this.cache.getCache().then(applyUpdate).then(markUpdated);
     }
 
     componentDidUpdate(prevProps: any, prevState: any) {
@@ -134,7 +132,7 @@ class Main extends React.Component {
                         <Route exact path="/" render={() => <List
                             allTasks={this.state.filteredTasks}
                             allProducts={this.state.filteredProducts}
-                            staleData={this.cache.staleData}
+                            updated={this.state.updated}
                         />} />
                         <Route exact path="/add" render={({ match, location: { state } }) =>
                             <Form

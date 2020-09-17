@@ -25,6 +25,7 @@ class BrandFilter extends React.Component<{
     }
 
     handleChange = (e: any) => {
+        // debugger;
         e.stopPropagation();
         this.setState({
             [e.currentTarget.value]: e.currentTarget.checked
@@ -41,15 +42,16 @@ class BrandFilter extends React.Component<{
                         <input
                             type="checkbox"
                             value="XMT"
-                            checked={this.state.XMT}
+                            defaultChecked={this.state.XMT}
                             onClick={this.handleChange}
+                            // onChange={this.handleChange}
                         /> XMT
                     </label>
                     <label className="btn btn-secondary">
                         <input
                             type="checkbox"
                             value="XMS"
-                            checked={this.state.XMS}
+                            defaultChecked={this.state.XMS}
                             onClick={this.handleChange}
                         /> XMS
                     </label>
@@ -58,7 +60,7 @@ class BrandFilter extends React.Component<{
                         <input
                             type="checkbox"
                             value="XMF"
-                            checked={this.state.XMF}
+                            defaultChecked={this.state.XMF}
                             onClick={this.handleChange}
                         /> XMF
                     </label>
@@ -66,7 +68,7 @@ class BrandFilter extends React.Component<{
                         <input
                             type="checkbox"
                             value="No brand"
-                            checked={this.state['No brand']}
+                            defaultChecked={this.state['No brand']}
                             onClick={this.handleChange}
                         /> No brand
                     </label>

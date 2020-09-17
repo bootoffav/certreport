@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactTable from 'react-table';
-import { Button } from 'tabler-react';
+import { Button, Form } from 'tabler-react';
 import Task from '../../Task/Task';
 import { getColumns } from './columns';
 import StageFilter from './Filters/StageFilter';
 // import DateFilter from './Filters/DateFilter';
 import ColumnFilter from './Filters/ColumnFilter';
-import ListExport from '../Export/PDF/ListExport';
+// import ListExport from '../Export/PDF/ListExport';
 
 import './List.css';
 import '../../css/style.css';
@@ -25,7 +25,7 @@ interface IListState {
 export default class List extends React.Component<{
     allTasks: any;
     allProducts: any;
-    staleData: boolean;
+    updated: boolean;
 }> {
     state: IListState = {
         visibleData: [],
@@ -43,11 +43,11 @@ export default class List extends React.Component<{
   }
 
     static State: React.FunctionComponent<{
-        staleData: boolean;
-    }> = ({ staleData }) =>
-        staleData ?
-        <Button loading color="success" icon="check" size="sm" className="mr-1" />
-        : <></>
+        status: boolean;
+    }> = ({ status }) =>
+        status
+            ? <Button color="green" icon="check" size="sm" className="mr-1">updated</Button>
+            : <Button loading color="orange" size="sm" className="mr-1" >updated</Button>
 
     async componentDidMount() {
         this.updateState();
@@ -69,13 +69,13 @@ export default class List extends React.Component<{
         }
     }
 
-  updateState = () => {
-      const totalPrice = countTotalPrice(this.props.allTasks);
+    updateState = () => {
+        const totalPrice = countTotalPrice(this.props.allTasks);
         this.setState({
             totalPrice,
             visibleData: this.props.allTasks
         });
-  }
+    }
 
     getTrProps(state: any, rowInfo: any, column: any) {
         if (rowInfo === undefined) {
@@ -103,14 +103,14 @@ export default class List extends React.Component<{
                     />
             </div>
             <div className="d-flex">
-                <List.State staleData={this.props.staleData} />
-                    <ListExport
-                        tasks={this.state.visibleData}
-                        columns={this.columns}
-                        stage={this.state.stage}
-                        startDate={this.state.startDate}
-                        endDate={this.state.endDate}
-                    />
+                {/* <ListExport
+                    tasks={this.state.visibleData}
+                    columns={this.columns}
+                    stage={this.state.stage}
+                    startDate={this.state.startDate}
+                    endDate={this.state.endDate}
+                    /> */}
+                <List.State status={this.props.updated} />
             </div>
         </div>
         <ReactTable
@@ -130,4 +130,5 @@ export default class List extends React.Component<{
             getTrProps={this.getTrProps}
         />
     </>
+
 }

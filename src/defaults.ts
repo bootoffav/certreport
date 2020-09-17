@@ -164,15 +164,15 @@ const emptyState : IState = {
 };
 
 function initApp() {
-  Sentry.init({ dsn: "https://09c5935753774acabba136bf59c9e31f@sentry.io/1796060" });
-  const saveAndApply = (data: any[], item: string) => {
+    Sentry.init({ dsn: "https://09c5935753774acabba136bf59c9e31f@sentry.io/1796060" });
+    const saveAndApply = (data: any[], item: string) => {
     localStorage.removeItem(item);
     localStorage.setItem(item, JSON.stringify(data));
     selectOptions[item] = data;
-  }
+    }
 
-  B24.get_products().then(data => saveAndApply(data, 'articles'));
-  B24.get_standards().then(data => saveAndApply(data, 'standards'));
+    B24.get_products().then(data => saveAndApply(data, 'articles'));
+    B24.get_standards().then(data => saveAndApply(data, 'standards'));
 }
 
 export { emptyState, selectOptions, initApp };

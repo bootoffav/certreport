@@ -52,7 +52,6 @@ class Dashboard extends React.Component<any, IDashboard> {
         Math.round(
             this.state.tasks.reduce(
                 (spendingsTotal: number, task: any) => {
-                    // console.log(task.TITLE);
                     return spendingsTotal + +task.state.price + +task.state.price2
                 },
                 0

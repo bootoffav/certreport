@@ -41,15 +41,15 @@ class Task implements ITask {
     this.nextActionDate = this.getNextActionDate();
   }
 
-  parseable_description = (desc: string) => desc.startsWith('[B]Applicant name:[/B]');
+  static parseable_description = (desc: string) => desc.startsWith('[B]Applicant name:[/B]');
 
-  separateParseableDataAndOtherTextOfDescription = (desc: string) => ({
+  static separateParseableDataAndOtherTextOfDescription = (desc: string) => ({
     unParsedTaskState: desc.slice(0, desc.indexOf(dataSeparator)).trim(),
     otherTextInDescription: desc.slice(desc.indexOf(dataSeparator) + dataSeparator.length)
   });
 
   parse(description: string, uf_crm_task: string[]) {
-    if (!this.parseable_description(description)) {
+    if (!Task.parseable_description(description)) {
       return {
         ...emptyState,
         otherTextInDescription: description,
@@ -57,7 +57,7 @@ class Task implements ITask {
       };
     }
 
-    let { unParsedTaskState, otherTextInDescription } = this.separateParseableDataAndOtherTextOfDescription(description);
+    let { unParsedTaskState, otherTextInDescription } = Task.separateParseableDataAndOtherTextOfDescription(description);
 
     let parsedState: {
       [k: string]: any;
