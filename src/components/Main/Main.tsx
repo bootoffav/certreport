@@ -6,7 +6,6 @@ import List from '../List/List';
 import Form from '../Form/Form';
 import Dashboard from '../Dashboard/Dashboard';
 import ErrorBoundary from '../../ErrorBoundary';
-import { Products } from '../../Product/Product';
 import BrandFilter from '../Filters/BrandFilter';
 import DateFilter from '../Filters/DateFilter';
 

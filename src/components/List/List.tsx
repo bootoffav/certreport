@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactTable from 'react-table';
-import { Button, Form } from 'tabler-react';
+import { Button } from 'tabler-react';
 import Task from '../../Task/Task';
 import { getColumns } from './columns';
 import StageFilter from './Filters/StageFilter';
