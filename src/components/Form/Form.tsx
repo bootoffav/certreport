@@ -113,7 +113,8 @@ class Form extends React.Component<IFormProps> {
                     .catch(this.unsuccessfullySubmitted);
 
             // update in indexedDB
-            await CacheManager.updateOneTask(taskId);
+            await CacheManager.updateTask(taskId);
+            window.opener.location.reload();
 
             // update in FaunaDB
             this.state.existsInDB
@@ -126,31 +127,29 @@ class Form extends React.Component<IFormProps> {
         }
     }
 
-  asSelectable = (value : string) => {
-    if (value !== '') {
-      const splitted : string[] = value.split(', ');
-      return splitted.length === 1
-      ? [{ label: value, value }]
-      : splitted.map(label => ({label, value: label }));
+    asSelectable = (value : string) => {
+        if (value !== '') {
+        const splitted : string[] = value.split(', ');
+        return splitted.length === 1
+            ? [{ label: value, value }]
+            : splitted.map(label => ({label, value: label }));
+        }
     }
-  }
 
-    successfullySubmitted = (e: any) => {
+    successfullySubmitted = () => {
         this.setState({ requestStatus: Status.Success });
-        setTimeout(() => {
-            window.history.length === 1
-            ? window.close()
-            : window.location.assign('/');
-        }, 3000);
+        setTimeout(() =>
+            window.history.length === 1 ? window.close() : window.location.assign('/')
+        , 500);
     }
 
-  unsuccessfullySubmitted = (error: any) => {
-    console.log(error);
-    this.setState({ requestStatus: Status.Failure });
-    setTimeout(() => this.setState({
-      requestStatus: Status.FillingForm
-    }), 3000);
-  }
+    unsuccessfullySubmitted = (error: any) => {
+        console.log(error);
+        this.setState({ requestStatus: Status.Failure });
+        setTimeout(() => this.setState({
+            requestStatus: Status.FillingForm
+        }), 1500);
+    }
 
   renderBasicInfo = () =>
     <Dimmer active={this.state.requestStatus !== Status.FillingForm} loader>

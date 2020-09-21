@@ -239,15 +239,15 @@ class B24 {
         return tasks;
     }
 
-  static get_task(id : string | undefined) {
-    if (id === null) {
-      throw new Error('id is undefined');
-    }
+    static get_task(id : string | undefined) {
+        if (id === null) {
+            throw new Error('id is undefined');
+        }
 
-    return fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.getdata?ID=${id}`)
-      .then(rsp => rsp.json())
-      .then(rsp => new Task(rsp.result));
-  }
+        return fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.getdata?ID=${id}`)
+            .then(rsp => rsp.json())
+            .then(rsp => new Task(rsp.result))
+    }
 
     static async get_standards() {
       let standards : {

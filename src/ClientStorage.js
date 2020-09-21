@@ -3,25 +3,36 @@ import B24 from './B24';
 import { Products } from './Product/Product';
 
 class ClientStorage {
+
+    static async getFromAPI(ids) {
+        const fulfilledTasks = [];
+        const rejectedTasks = [];
+
+        for (let id of ids) {
+            await B24.get_task(id)
+                .then(task => fulfilledTasks.push(task))
+                .catch(() => rejectedTasks.push(id));
+        }
+
+        while (rejectedTasks.length !== 0) {
+            const id = rejectedTasks.shift();
+            B24.get_task(id)
+                .then(task => fulfilledTasks.push(task))
+                .catch(() => rejectedTasks.push(id));
+        }
+
+        return fulfilledTasks;
+    }
+
     static updateTasks = () =>
         new Promise(async res => {
             const { addedTasksID, removedTasksID } = await ClientStorage.getDBdiffs();
-            let addedTasks = [];
-            const interval = () => new Promise(res => setTimeout(() => res(), 3000));
-
-            do {
-                const bunchOfIDs = addedTasksID.splice(0, 3)
-                    .map(id => B24.get_task(id));
-                addedTasks = [
-                    ...addedTasks,
-                    ...await interval().then(() => Promise.all(bunchOfIDs))
-                ]
-
-            } while (addedTasksID.length !== 0);
+            let addedTasks = await ClientStorage.getFromAPI(addedTasksID);
 
             if (addedTasks.length > 0) {
                 await ClientStorage.writeData(addedTasks);
             }
+
             if (removedTasksID.length > 0) {
                 await ClientStorage.removeData(removedTasksID);
             }
@@ -48,10 +59,8 @@ class ClientStorage {
                     default:
                         data.forEach(entity => store.put(entity, entity.article));
                 }
-                tran.oncomplete = () => {
-                    console.log(`${storeType} have written to IndexedDB!`);
-                    res();
-                }
+                tran.oncomplete = () =>
+                    res(`${storeType} have written to IndexedDB!`);
                 tran.onerror = () => console.error('there was an error');
             };
         });

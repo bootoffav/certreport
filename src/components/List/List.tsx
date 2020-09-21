@@ -125,6 +125,7 @@ export default class List extends React.Component<{
             onSortedChange={() => this.setState({
                 visibleTasks: this.ref.getResolvedState().sortedData.map(({ _original }: any) => _original)
             })}
+            noDataText='First time update takes a little while, please do not close page until it is done. See for green button at top right corner'
             ref={(ref) => this.ref = ref}
             className='-striped -highlight table'
             getTrProps={this.getTrProps}

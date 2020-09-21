@@ -36,10 +36,10 @@ class Main extends React.Component {
 
         const markUpdated = () => this.setState({ updated: true });
 
-
-        this.cache.getCache().then(applyUpdate);
+        await this.cache.getCache().then(applyUpdate).then(this.filter.bind(this));
         await this.cache.doUpdate();
-        this.cache.getCache().then(applyUpdate).then(markUpdated);
+        await this.cache.getCache().then(applyUpdate).then(markUpdated);
+        this.filter();
     }
 
     componentDidUpdate(prevProps: any, prevState: any) {

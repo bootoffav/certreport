@@ -18,10 +18,8 @@ class CacheManager {
 
     getCache = async () => await ClientStorage.getData();
 
-    static async updateOneTask(taskId: string) {
-        const task = await B24.get_task(taskId);
-        return await ClientStorage.writeData([ task ]);
-    }
+    static updateTask = (taskId: string) =>
+        B24.get_task(taskId).then(task => ClientStorage.writeData([ task ]))
 }
 
 export default CacheManager;

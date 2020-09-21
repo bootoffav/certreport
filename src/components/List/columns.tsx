@@ -89,7 +89,7 @@ function getColumns(totalPrice: number, stage?: string) {
     Cell: ({ original, value }: any) =>
       <Link
         to={`/edit/${original.ID}`}
-        target="_blank" rel="noopener noreferrer"
+        target="_blank"
         style={{ textDecoration: 'none' }}
       >{value}</Link>
   }, {
