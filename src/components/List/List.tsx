@@ -4,9 +4,7 @@ import { Button } from 'tabler-react';
 import Task from '../../Task/Task';
 import { getColumns } from './columns';
 import StageFilter from './Filters/StageFilter';
-// import DateFilter from './Filters/DateFilter';
 import ColumnFilter from './Filters/ColumnFilter';
-// import ListExport from '../Export/PDF/ListExport';
 
 import './List.css';
 import '../../css/style.css';
@@ -46,8 +44,8 @@ export default class List extends React.Component<{
         status: boolean;
     }> = ({ status }) =>
         status
-            ? <Button color="green" icon="check" size="sm" className="mr-1">updated</Button>
-            : <Button loading color="orange" size="sm" className="mr-1" >updated</Button>
+            ? <div className="alert alert-success stateLoaded" role="alert">Updated</div>
+            : <Button loading color="orange" size="sm">updated</Button>
 
     async componentDidMount() {
         this.updateState();
