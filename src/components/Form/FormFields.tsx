@@ -49,7 +49,7 @@ const Price: React.FunctionComponent<{
       <div className="input-group-prepend">
         <span className="input-group-text">€</span>
       </div>
-      <input type="text" className="form-control"
+      <input type="number" className="form-control"
         id={props.id}
         value={props.value}
         onChange={props.handleChange}

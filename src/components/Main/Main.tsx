@@ -129,8 +129,8 @@ class Main extends React.Component {
                                 endDate={this.state.endDate}
                             />} />
                         <Route exact path="/" render={() => <List
-                            allTasks={this.state.filteredTasks}
-                            allProducts={this.state.filteredProducts}
+                            tasks={this.state.filteredTasks}
+                            products={this.state.filteredProducts}
                             updated={this.state.updated}
                         />} />
                         <Route exact path="/add" render={({ match, location: { state } }) =>

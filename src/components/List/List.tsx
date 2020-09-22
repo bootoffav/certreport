@@ -21,8 +21,8 @@ interface IListState {
 }
 
 export default class List extends React.Component<{
-    allTasks: any;
-    allProducts: any;
+    tasks: any;
+    products: any;
     updated: boolean;
 }> {
     state: IListState = {
@@ -61,17 +61,17 @@ export default class List extends React.Component<{
     }
 
     componentDidUpdate(prevProps: any, prevState: any) {
-        if (prevProps.allTasks !== this.props.allTasks) {
+        if (prevProps.tasks !== this.props.tasks) {
             this.updateState();
             this.resetFilters();
         }
     }
 
     updateState = () => {
-        const totalPrice = countTotalPrice(this.props.allTasks);
+        const totalPrice = countTotalPrice(this.props.tasks);
         this.setState({
             totalPrice,
-            visibleData: this.props.allTasks
+            visibleData: this.props.tasks
         });
     }
 
@@ -87,15 +87,15 @@ export default class List extends React.Component<{
             <div className="d-flex w-100">
                 <div className="mr-2">
                     <StageFilter
-                        tasks={this.props.allTasks}
-                        allProducts={this.props.allProducts}
+                        tasks={this.props.tasks}
+                        allProducts={this.props.products}
                         update={this.setState.bind(this)}
                     />
                 </div>
                     <ColumnFilter
                         value={this.state.columnFilterValue}
-                        tasks={this.props.allTasks}
-                        allProducts={this.props.allProducts}
+                        tasks={this.props.tasks}
+                        allProducts={this.props.products}
                         requiredStage={this.state.stage}
                         update={this.setState.bind(this)}
                     />

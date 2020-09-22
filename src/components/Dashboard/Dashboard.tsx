@@ -48,16 +48,6 @@ class Dashboard extends React.Component<any, IDashboard> {
         };
     }
 
-    countSpendingsTotal = () =>
-        Math.round(
-            this.state.tasks.reduce(
-                (spendingsTotal: number, task: any) => {
-                    return spendingsTotal + +task.state.price + +task.state.price2
-                },
-                0
-            )
-        );
-
     componentDidUpdate(prevProps: any, prevState: any) {
         if (prevProps.tasks !== this.props.tasks) {
             this.setState({
@@ -85,7 +75,7 @@ class Dashboard extends React.Component<any, IDashboard> {
                     </Grid.Col>
 
                     <Grid.Col width={4}>
-                            <AmountSpent spent={this.countSpendingsTotal()}/>
+                            <AmountSpent spent={countTotalPrice(this.state.tasks)}/>
                     </Grid.Col>
                 </Grid.Row>
                 <Grid.Row>

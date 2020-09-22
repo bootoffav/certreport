@@ -25,7 +25,6 @@ class BrandFilter extends React.Component<{
     }
 
     handleChange = (e: any) => {
-        // debugger;
         e.stopPropagation();
         this.setState({
             [e.currentTarget.value]: e.currentTarget.checked
