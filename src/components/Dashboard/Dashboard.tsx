@@ -147,15 +147,15 @@ class Dashboard extends React.Component<any, IDashboard> {
         render(
         <BrowserRouter>
             <ReactTable
-            data={tasks}
-            resolveData={(data: any, i = 1) =>
-                data.map((row: any) => {
-                row.position = i++;
-                return row;
-                })
-            }
-            columns={getColumns(totalPrice, undefined)}
-            defaultPageSize={10}
+                data={tasks}
+                resolveData={(data: any, i = 1) =>
+                    data.map((row: any) => {
+                    row.position = i++;
+                    return row;
+                    })
+                }
+                columns={getColumns(totalPrice, undefined)}
+                defaultPageSize={10}
             />
         </BrowserRouter>,
         document.getElementById('tableOfDiagramSegment')
