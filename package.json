@@ -25,6 +25,7 @@
     "tabler-react": "^1.30.1"
   },
   "scripts": {
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -44,6 +45,7 @@
     "@types/react-dom": "^16.9.8",
     "@types/react-router-dom": "^5.1.5",
     "@types/react-select": "^3.0.20",
+    "source-map-explorer": "^2.5.0",
     "typescript": "3.9.7"
   },
   "browserslist": [

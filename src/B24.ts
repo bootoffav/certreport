@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import { dataSeparator } from './Task/Task';
 import Task from './Task/Task';
 import StateAdapter from './StateAdapter';
-import AppFormExport from './components/Export/PDF/AppFormExport';
+import { AppFormExport } from './components/Export/PDF/AppFormExport';
 import { IState } from './defaults';
 
 const creator_id = process.env.REACT_APP_B24_USER_ID;
@@ -120,34 +120,35 @@ class B24 {
     return taskFields;
   };
 
-  static async handleApplicationForm(taskId: string, state: IState) {
-    const fileName = `Fabric Test Application Form_${state.serialNumber}_${state.article}.pdf`;
-    await fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.getfiles?` + qs.stringify({ TASKID: taskId }))
-      .then(res => res.json())
-      .then(res => 
-        res.result.forEach((file: any) => {
-          // 29 is 'Fabric Test Application Form_'
-          if ('NAME' in file && fileName.substr(0, 29) === file.NAME.substr(0, 29)) {
-            // remove this file from task
-            fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.deletefile?` + qs.stringify({ TASK_ID: taskId, ATTACHMENT_ID: file.ATTACHMENT_ID }));
-            // delete from Bitrix
-            fetch(`${main_url}/${creator_id}/${webhook_key}/disk.file.delete?` + qs.stringify({ id: file.FILE_ID }));
-          }
-        }
-        ));
-    new AppFormExport({ state }).create().getBase64((base64: string) => {
-      fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.addfile/`, {
-        method: 'post',
-        body: qs.stringify({
-          TASK_ID: taskId,
-          FILE: {
-            NAME: fileName,
-            CONTENT: base64
-          }
-        })
-      })
-    });
-  }
+    static async handleApplicationForm(taskId: string, state: IState) {
+        const fileName = `Fabric Test Application Form_${state.serialNumber}_${state.article}.pdf`;
+        await fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.getfiles?` + qs.stringify({ TASKID: taskId }))
+            .then(res => res.json())
+            .then(res => 
+                res.result.forEach((file: any) => {
+                // 29 is 'Fabric Test Application Form_'
+                if ('NAME' in file && fileName.substr(0, 29) === file.NAME.substr(0, 29)) {
+                    // remove this file from task
+                    fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.deletefile?` + qs.stringify({ TASK_ID: taskId, ATTACHMENT_ID: file.ATTACHMENT_ID }));
+                    // delete from Bitrix
+                    fetch(`${main_url}/${creator_id}/${webhook_key}/disk.file.delete?` + qs.stringify({ id: file.FILE_ID }));
+                }
+                }
+                ));
+        const pdf = await new AppFormExport({ state }).create();
+        pdf.getBase64((base64: string) => {
+            fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.addfile/`, {
+                method: 'post',
+                body: qs.stringify({
+                TASK_ID: taskId,
+                FILE: {
+                    NAME: fileName,
+                    CONTENT: base64
+                }
+                })
+            })
+        });
+    }
 
   static createTask = (state : any) => {
     const defaultParams = {

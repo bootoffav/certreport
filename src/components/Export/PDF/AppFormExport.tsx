@@ -1,9 +1,5 @@
-import pdfMake from "pdfmake/build/pdfmake";
-import { vfs } from './vfs_fonts.js';
-
 import { tableLayout, fonts } from './settings';
 import { footerImage } from './footer-image';
-
 
 const checkedSquare = { text: '', style: { font: 'Icons' } };
 const emptySquare = { text: '', style: { font: 'Icons' } };
@@ -385,14 +381,16 @@ class AppFormExport {
     };
 
   }
-  save() {
-    this.create().download(`Fabric Test Application Form_${this.state.serialNumber}_${this.state.article}.pdf`);
-  }
 
-  create() {
-    // @ts-ignore
-    return pdfMake.createPdf(this.docDefinition, tableLayout, fonts, vfs);
-  }
+    save = () =>
+        this.create()
+            .then(pdf => pdf.download(`Fabric Test Application Form_${this.state.serialNumber}_${this.state.article}.pdf`));
+
+    create = () =>
+        Promise.all([
+            import('pdfmake/build/pdfmake'),
+            import('./vfs_fonts.js')
+        ]).then(([pdfmake, vfs]: any) => pdfmake.createPdf(this.docDefinition, tableLayout, fonts, vfs.vfs));
 }
 
-export { AppFormExport as default };
+export { AppFormExport };
