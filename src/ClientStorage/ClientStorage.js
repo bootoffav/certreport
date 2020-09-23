@@ -1,6 +1,6 @@
 import { without } from 'lodash';
-import B24 from './B24';
-import { Products } from './Product/Product';
+import B24 from '../B24';
+import { Products } from '../Product/Product';
 
 class ClientStorage {
 

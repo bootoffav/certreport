@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
+import dayjs from 'dayjs';
+import { Icon } from 'tabler-react';
 import React from 'react';
 import { dateConverter } from '../../helpers';
-import dayjs from 'dayjs';
 
 function sortDates(a: string | undefined, b: string | undefined): number {
   if (a === undefined) return -1;
@@ -31,8 +32,8 @@ function getColumns(totalPrice: number, stage?: string) {
     accessor: ({ state }: any) => state.serialNumber,
     width: 48,
     Cell: (props: any) => <a
-    href={`https://xmtextiles.bitrix24.ru/company/personal/user/460/tasks/task/view/${props.original.ID}/`}
-    target="_blank" rel="noopener noreferrer"
+        href={`https://xmtextiles.bitrix24.ru/company/personal/user/460/tasks/task/view/${props.original.ID}/`}
+        target="_blank" rel="noopener noreferrer"
     >{props.value}</a>
   }, {
     // 2
@@ -87,11 +88,11 @@ function getColumns(totalPrice: number, stage?: string) {
     id: 'taskName',
     minWidth: 550,
     Cell: ({ original, value }: any) =>
-      <Link
-        to={`/edit/${original.ID}`}
-        target="_blank"
-        style={{ textDecoration: 'none' }}
-      >{value}</Link>
+        <Link
+            to={`/edit/${original.ID}`}
+            target="_blank"
+            style={{ textDecoration: 'none' }}
+        >{value}</Link>
   }, {
     // 10
     Header: 'Sample NAD',
@@ -209,9 +210,11 @@ function getColumns(totalPrice: number, stage?: string) {
         const lastItem = stArr.length !== i + 1;
         switch (original.state.standardsResult[st]) {
           case 'pass':
-            return <div key={i}>{st} <span className="oi oi-thumb-up"></span>{lastItem ? <br /> : ''}</div>
+                return <div key={i}>{st} <Icon prefix="fe" width="60" className='greenIcon' name="thumbs-up"/>
+                    {lastItem ? <br /> : ''}
+                </div>
           case 'fail':
-            return <div key={i}>{st} <span className="oi oi-circle-x"></span>{lastItem ? <br /> : ''}</div>
+            return <div key={i}>{st} <Icon prefix="fe" width="60" className='redIcon' name="thumbs-down"/>{lastItem ? <br /> : ''}</div>
         }
         return <div key={i}>{st}{lastItem ? <br /> : ''}</div>
       })
@@ -224,11 +227,11 @@ function getColumns(totalPrice: number, stage?: string) {
     Cell: (props: any) => {
       switch (props.value) {
         case 'fail':
-          return <span className="oi oi-circle-x"></span>;
+          return <Icon prefix="fe" width="60" className='redIcon' name="thumbs-down"/>;
         case 'pass':
-          return <span className="oi oi-thumb-up"></span>;
+          return <Icon prefix="fe" width="60" className='greenIcon' name="thumbs-up"/>;
         case 'partly':
-          return <span className="oi oi-warning"></span>;
+          return <Icon prefix="fe" width="60" className='yellowIcon' name="alert-circle"/>;
         case 'no sample':
           return 'NO Sample';
         default:
@@ -243,9 +246,9 @@ function getColumns(totalPrice: number, stage?: string) {
     Cell: (props: any) => {
       switch (props.value) {
         case 'fail':
-          return <span className="oi oi-circle-x"></span>;
+          return <Icon prefix="fe" width="60" className='redIcon' name="thumbs-down"/>;
         case 'pass':
-          return <span className="oi oi-thumb-up"></span>;
+          return <Icon prefix="fe" width="60" className='greenIcon' name="thumbs-up"/>;
         default:
           return '';
       }

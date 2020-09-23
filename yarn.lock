@@ -7818,11 +7818,6 @@ onetime@^5.1.0:
   dependencies:
     mimic-fn "^2.1.0"
 
-open-iconic@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/open-iconic/-/open-iconic-1.1.1.tgz#9dcfc8c7cd3c61cdb4a236b1a347894c97adc0c6"
-  integrity sha1-nc/Ix808Yc20ojaxo0eJTJetwMY=
-
 open@^7.0.2, open@^7.1.0:
   version "7.2.1"
   resolved "https://registry.yarnpkg.com/open/-/open-7.2.1.tgz#07b0ade11a43f2a8ce718480bdf3d7563a095195"

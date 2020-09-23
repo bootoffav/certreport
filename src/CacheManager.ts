@@ -1,12 +1,5 @@
 import B24 from './B24';
-import { ClientStorage } from './ClientStorage';
-
-interface ICacheManager {
-    getCache: (cacheType: Storage) => any;
-    staleData: boolean;
-    setCaches: any;
-}
-
+import { ClientStorage } from './ClientStorage/ClientStorage';
 
 class CacheManager {
 

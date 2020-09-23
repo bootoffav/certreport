@@ -14,26 +14,3 @@ label, p {
 a.nav-item {
     font-size: 1.1em;
 }
-
-.oi-thumb-up, .oi-circle-check {
-    color: green;
-}
-
-.oi-circle-x {
-    color: red;
-}
-
-.oi-warning {
-    color: rgb(91.7%, 73.7%, 4.9%)
-}
-
-  /* Safari */
-@-webkit-keyframes spin {
-    0% { -webkit-transform: rotate(0deg); }
-    100% { -webkit-transform: rotate(360deg); }
-}
-
-@keyframes spin {
-0% { transform: rotate(0deg); }
-100% { transform: rotate(360deg); }
-}

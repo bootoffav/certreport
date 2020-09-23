@@ -14,7 +14,7 @@ import FileUploads from '../FileUploads/FileUploads';
 import FabricApplicationForm from './FabricApplicationForm';
 import { DB } from '../../DBManager';
 import { removeEmptyProps } from '../../helpers';
-import { TabbedCard, Tab, Dimmer } from 'tabler-react';
+import { TabbedCard, Tab, Dimmer, Icon } from 'tabler-react';
 import CacheManager from '../../CacheManager';
 
 interface IFormState extends IState {
@@ -39,12 +39,12 @@ class Form extends React.Component<IFormProps> {
   task_id: string | undefined;
   state: IFormState;
 
-  constructor(props: IFormProps) {
-    super(props);
-    this.task_id = props.match.params.id;
-    this.state = props.state || emptyState;
-    this.state.requestStatus = Status.FillingForm;
-  }
+    constructor(props: IFormProps) {
+        super(props);
+        this.task_id = props.match.params.id;
+        this.state = props.state || emptyState;
+        this.state.requestStatus = Status.FillingForm;
+    }
 
   componentDidUpdate = () => {
     if (this.state.hasError) throw new Error('Task not found');
@@ -285,9 +285,7 @@ class Form extends React.Component<IFormProps> {
                     })
                     }
                   />
-                  <label className="ml-2 form-check-label" htmlFor="pretreatment1Fail">
-                    <span className="oi oi-circle-x"></span>
-                  </label>
+                  <label className="ml-2 form-check-label" htmlFor="pretreatment1Fail"><Icon prefix="fe" width="60" className='redIcon' name="thumbs-down"/></label>
                 </div>
               <div className="form-check form-check-inline">
                 <input type="radio" name="pretreatment1Result" id="pretreatment1Pass"
@@ -297,7 +295,7 @@ class Form extends React.Component<IFormProps> {
                   })
                   }
                 />
-                <label className="form-check-label ml-2" htmlFor="pretreatment1Pass"><span className="oi oi-thumb-up"></span></label>
+                <label className="form-check-label ml-2" htmlFor="pretreatment1Pass"><Icon prefix="fe" width="60" className='greenIcon' name="thumbs-up"/></label>
               </div>
               <button type="button"
                 className="btn btn-sm btn-link btn-reset"

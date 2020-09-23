@@ -1,4 +1,5 @@
 import React from 'react';
+import { Icon } from 'tabler-react';
 import './Standards.css';
 
 type IEN11612Detail = {
@@ -43,7 +44,7 @@ class EN11612Detail extends React.Component<{
                 checked={this.props[name] === 'fail'}
                 onChange={this.onChange}
                 />
-              <label className="form-check-label"><span className="oi oi-circle-x"></span></label>
+              <label className="form-check-label"><Icon prefix="fe" width="60" className='redIcon' name="thumbs-down"/></label>
             </div>
           <div className="form-check">
               <input
@@ -55,7 +56,7 @@ class EN11612Detail extends React.Component<{
                 checked={this.props[name] === 'pass'}
                 onChange={this.onChange}
               />
-              <label className="form-check-label"><span className="oi oi-thumb-up"></span></label>
+              <label className="form-check-label"><Icon prefix="fe" width="60" className='greenIcon' name="thumbs-up"/></label>
             </div>
           <div className="form-check">
               <input
@@ -67,7 +68,7 @@ class EN11612Detail extends React.Component<{
                 checked={this.props[name] === 'partly'}
                 onChange={this.onChange}
               />
-              <label className="form-check-label"><span className="oi oi-warning"></span></label>
+              <label className="form-check-label"><Icon prefix="fe" width="60" className='yellowIcon' name="alert-circle"/></label>
             </div>
           </div>
         </div>
@@ -122,7 +123,7 @@ function Standards(props: StandardsProps) {
                 id={`radioFail${id}`}
                 value="fail"
                 />
-              <label className="form-check-label"><span className="oi oi-circle-x"></span></label>
+              <label className="form-check-label"><Icon prefix="fe" width="60" className='redIcon' name="thumbs-down"/></label>
             </div>
             <div className="form-check form-check-inline">
               <input
@@ -135,7 +136,7 @@ function Standards(props: StandardsProps) {
                 id={`radioPass${id}`}
                 value="pass"
               />
-              <label className="form-check-label"><span className="oi oi-thumb-up"></span></label>
+              <label className="form-check-label"><Icon prefix="fe" width="60" className='greenIcon' name="thumbs-up"/></label>
             </div>
             <div className="form-check form-check-inline">
               <input
@@ -148,7 +149,7 @@ function Standards(props: StandardsProps) {
                 id={`radioPass${id}`}
                 value="partly"
               />
-              <label className="form-check-label"><span className="oi oi-warning"></span></label>
+              <label className="form-check-label"><Icon prefix="fe" width="60" className='yellowIcon' name="alert-circle"/></label>
             </div>
             <button type="button"
               className="btn btn-sm btn-link btn-reset"

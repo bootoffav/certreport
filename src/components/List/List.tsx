@@ -44,8 +44,8 @@ export default class List extends React.Component<{
         status: boolean;
     }> = ({ status }) =>
         status
-            ? <div className="alert alert-success stateLoaded" role="alert">Updated</div>
-            : <Button loading color="orange" size="sm">updated</Button>
+            ? <div className="alert alert-success loadingBox" role="alert">Updated</div>
+            : <Button loading color="orange" size="sm">updated_updated</Button>
 
     async componentDidMount() {
         this.updateState();

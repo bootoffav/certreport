@@ -14,7 +14,19 @@
   background: #ff000040 !important;
 }
 
-.stateLoaded {
+.loadingBox {
     margin-bottom: 0rem;
     padding: 0.45rem 2.05rem;
+}
+
+.greenIcon {
+    color: green;
+}
+
+.redIcon {
+    color: red;
+}
+
+.yellowIcon {
+    color: rgb(223, 217, 42);
 }
