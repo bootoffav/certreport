@@ -6,23 +6,21 @@ import List from '../List/List';
 import Form from '../Form/Form';
 import Dashboard from '../Dashboard/Dashboard';
 import ErrorBoundary from '../../ErrorBoundary';
-import BrandFilter from '../Filters/BrandFilter';
+import { BrandFilter } from '../Filters/BrandFilter';
 import DateFilter from '../Filters/DateFilter';
-
-const state = {
-    allTasks: [],
-    allProducts: [],
-    filteredTasks: [],
-    filteredProducts: [],
-    updated: false,
-    startDate: undefined,
-    endDate: undefined,
-    activeBrands: ['XMT', 'XMS', 'XMF']
-}
 
 class Main extends React.Component {
     cache: CacheManager;
-    state = state;
+    state = {
+        allTasks: [],
+        allProducts: [],
+        filteredTasks: [],
+        filteredProducts: [],
+        updated: false,
+        startDate: undefined,
+        endDate: undefined,
+        activeBrands: ['XMT', 'XMS', 'XMF']
+    };
 
     constructor(props: any) {
         super(props);
@@ -153,4 +151,4 @@ class Main extends React.Component {
     }
 }
 
-export default Main;
+export { Main };
