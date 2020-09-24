@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@sentry/browser": "^5.24.2",
-    "bootstrap": "4.0.0",
+    "bootstrap": "^4.5.2",
     "chart.js": "^2.9.3",
     "dayjs": "^1.8.36",
     "faunadb": "2.14.2",

@@ -191,7 +191,7 @@ function getColumns(totalPrice: number, stage?: string) {
             ['7. Test-report ready', '8. Certificate ready', '9. Ended'].includes(row.state.stage)
                 ? row.UF_TASK_WEBDAV_FILES.map((file: any, key: number) => <div key={key}><a href={`https://xmtextiles.bitrix24.ru${file.DOWNLOAD_URL}`}>{file.NAME}</a></div>)
                 : row.state.certificate,
-        minWidth: 100,
+        minWidth: 300,
     }, {
         // 24
         Header: 'Certificate really received on',
@@ -317,8 +317,7 @@ function getColumns(totalPrice: number, stage?: string) {
         id: 'brand',
         accessor: 'brand',
         width: 50,
-    }].map(column => ({ style: { 'whiteSpace': 'unset' }, ...column }));
-
+    }].map(column => ({ ...column, style: { 'whiteSpace': 'unset' } }));
 
   const takeColumns = (columnPositions: number[]) => {
     return [0, ...columnPositions].map((num: number) => allColumns[num]);
