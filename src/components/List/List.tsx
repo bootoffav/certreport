@@ -7,7 +7,6 @@ import StageFilter from './Filters/StageFilter';
 import ColumnFilter from './Filters/ColumnFilter';
 
 import './List.css';
-import '../../css/style.css';
 import { countTotalPrice } from '../../helpers';
 
 interface IListState {
