@@ -100,17 +100,17 @@ class Main extends React.Component {
                             update={this.setState.bind(this)}
                         />
                         <div className="container">
-                            <div className="d-flex h-100 justify-content-end align-items-center pt-2" style={{ fontSize: '16px' }}>
+                            <div className="d-flex h-100 justify-content-end align-items-center" style={{ fontSize: '16px' }}>
                                 <div>
                                     <NavLink className="navbar-link" exact to="/dashboard">
                                         <p>Dashboard</p>
                                     </NavLink>
                                 </div>
-                                <div className="mx-2">
+                                <span className="vl"></span>
                                     <NavLink className="navbar-link" to="/">
                                         <p>Certification list</p>
                                     </NavLink>
-                                </div>
+                                <span className="vl"></span>
                                 <div>
                                     <NavLink exact to="/add">
                                         <p>Add cert</p>

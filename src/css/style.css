@@ -14,3 +14,13 @@ label, p {
 a.nav-item {
     font-size: 1.1em;
 }
+
+.vl {
+    margin: 1em;
+    border: 1px solid grey;
+    height: 2em;
+}
+
+p {
+    padding-top: 1em;
+}
