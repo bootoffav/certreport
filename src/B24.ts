@@ -17,7 +17,7 @@ const auditors: string[] = process.env.REACT_APP_B24_AUDITORS ? process.env.REAC
 
 class B24 {
 
-  private static _start : undefined;
+  private static _start: undefined;
 
   static defaultParams = {
       CREATED_BY: creator_id,
@@ -33,10 +33,10 @@ class B24 {
     this._start = start;
   }
 
-  static step = (json : any) => {
-    B24.start = json.next;
-    return json.result;
-  };
+    static step = (json: any) => {
+        B24.start = json.next;
+        return json.result;
+    };
 
   static makeUfCrmTaskField = (state : any) => {
     const brands_map : {
@@ -208,38 +208,34 @@ class B24 {
   }
 
     static async getTasksID() {
-        let tasks : {}[] = [];
+        let tasks: {
+            ID: any;
+        }[] = [];
+        let start = 0;
         do {
-            tasks = tasks.concat(await fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.list?` +
+            let emptyResponse;
+            
+            const bunch = await fetch(`${main_url}/${creator_id}/${webhook_key}/tasks.task.list?` +
                 qs.stringify({
+                    start,
                     order: { ID: 'desc' },
                     filter: { TAG: tag },
-                    params: [''],
-                    select: ['ID'],
-                    start: B24.start
-                })
-            )
-            .then(res => res.json())
-            .then(B24.step));
-        } while (B24.start !== undefined);
-        // @ts-ignore
-        return tasks.map(t => t.ID);
-    }
+                    select: ['ID']
+                }))
+                .then(res => res.json())
+                .then(json => {
+                    const { tasks } = B24.step(json);
+                    if (tasks.length === 0) emptyResponse = true;
+                    return tasks;
+                });
+            
+            tasks = tasks.concat(bunch);
+            if (emptyResponse) break;
+            start += 50;
 
-    static async get_tasks() {
-        let tasks : {}[] = [];
-        do {
-        tasks = tasks.concat(await fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.list?` +
-            qs.stringify({
-                order: { ID: 'desc' },
-                filter: { TAG: tag },
-                start: B24.start
-            })
-        )
-        .then(res => res.json())
-        .then(B24.step));
-        } while (B24.start !== undefined);
-        return tasks;
+        } while (true);
+        // @ts-ignore
+        return tasks.map(t => t.id);
     }
 
     static get_task(id : string | undefined) {

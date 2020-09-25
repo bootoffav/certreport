@@ -38,6 +38,7 @@ class ColumnFilter extends React.Component<{
 
     filter(searchVal: string, columnToSearch: string) {
         let visibleData;
+        const searchValOrig = searchVal;
         searchVal = searchVal.toLowerCase();
         if (this.props.requiredStage === 'products') {
             visibleData = this.props.allProducts.filter((product: any) => {
@@ -56,7 +57,7 @@ class ColumnFilter extends React.Component<{
 
         this.props.update({
             visibleData,
-            columnFilterValue: searchVal,
+            columnFilterValue: searchValOrig,
             stage: 'all',
             startDate: undefined,
             endDate: undefined
