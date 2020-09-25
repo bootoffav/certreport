@@ -8,10 +8,9 @@ import B24 from '../../B24';
 import Notification, { Status } from '../Notification/Notification';
 import SerialNumber from '../SerialNumber/SerialNumber';
 import { selectOptions, emptyState, IState } from '../../defaults';
-import Export from '../Export/Export';
 import Standards from '../Standards/Standards';
 import FileUploads from '../FileUploads/FileUploads';
-import FabricApplicationForm from './FabricApplicationForm';
+import { FabricApplicationForm } from './FabricApplicationForm';
 import { DB } from '../../DBManager';
 import { removeEmptyProps } from '../../helpers';
 import { TabbedCard, Tab, Dimmer, Icon } from 'tabler-react';
@@ -432,16 +431,6 @@ class Form extends React.Component<IFormProps> {
       />
     </Dimmer>
 
-  renderFormFooter = () =>
-    <div className="d-flex justify-content-around form-row m-2">
-      <div className="col-2">
-        <button type="submit"
-          className="btn btn-danger btn-block"
-        >SAVE</button>
-      </div>
-      <Export state={this.state}/>
-    </div>
-
   render = () =>
     <div className="container">
       <Notification status={this.state.requestStatus} />
@@ -455,6 +444,7 @@ class Form extends React.Component<IFormProps> {
             <Dimmer active={this.state.requestStatus !== Status.FillingForm} loader>
               <FabricApplicationForm
                 state={this.state.DBState}
+                appForm={this.state}
                 updateParent={(DBState: any) => this.setState({ DBState })}
               />
             </Dimmer>
@@ -480,7 +470,7 @@ class Form extends React.Component<IFormProps> {
             </Dimmer>
           </Tab>
         </TabbedCard>
-        {this.renderFormFooter()}
+        <button type="submit" className="mx-auto col-2 btn btn-primary btn-block">Save changes</button>
       </form>
     </div>
   

@@ -10,3 +10,9 @@
   display: inline-block;
   font-size: 0.9em;
 }
+
+.trashFile {
+    margin-left: 2em;
+    font-size: medium;
+
+}

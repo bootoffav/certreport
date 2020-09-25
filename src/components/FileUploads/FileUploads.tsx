@@ -1,8 +1,7 @@
 import qs from 'qs';
 import React from 'react';
 import B24 from '../../B24';
-// import ReactDOM from 'react-dom';
-import UploadedFilesList from './UploadedFilesList';
+import { UploadedFilesList } from './UploadedFilesList';
 
 
 const creator_id = process.env.REACT_APP_B24_USER_ID;
@@ -20,15 +19,12 @@ class FileUploads extends React.Component<{
   };
 
   upload = (e: any) => {
-    // let uploaded: any = [];
     this.setState({ uploading: true });
     const amountOfFiles = e.target.files.length;
     let uploadedFiles = 0;
 
     const renderToUI = (uploadedResponse: any, file: any) => {
       uploadedFiles++;
-      // uploaded.push({ name: file.name, result: uploadedResponse.result ? true : false })
-      // ReactDOM.render(<Loading uploaded={uploaded} />, document.getElementById('loaded'));
       if (uploadedFiles === amountOfFiles) {
         this.setState({ uploading: false });
       }

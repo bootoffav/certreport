@@ -1,13 +1,16 @@
 import React from 'react';
 import { without } from 'lodash';
+import { Form, Button, Icon } from 'tabler-react';
+import { AppFormExport } from '../Export/PDF/AppFormExport';
 
 import './FabricApplicationForm.css';
 
 class FabricApplicationForm extends React.Component<{
-  state: any;
-  updateParent: (DBState: any) => void;
+    state: any;
+    appForm: any;
+    updateParent: (DBState: any) => void;
 }, {
-  [key: string]: any;
+      [key: string]: any;
   }> {
 
   toggleCheckboxState = (table: string, row: number, label: string) => {
@@ -51,12 +54,22 @@ class FabricApplicationForm extends React.Component<{
       </label>
     </div>;
   };
-  
+
   TestRequirement = () =>
     <table id="testRequirement" className="table table-sm table-bordered">
       <thead className="text-center">
         <tr>
-          <th colSpan={8}>Test Requirement</th>
+            <th colSpan={8}>
+                <span className="align-middle">Test Requirement</span>
+                <div className="float-right">
+                    <Button link
+                        onClick={(e: any) => {
+                            e.preventDefault();
+                            new AppFormExport(this.props.appForm).save();
+                        }}
+                    ><Icon prefix="fe" name="download" /></Button>
+                </div>
+            </th>
         </tr>
       </thead>
       <tbody>
@@ -140,15 +153,16 @@ class FabricApplicationForm extends React.Component<{
           <td colSpan={7}>According to Standard Mandotory Test Requirement</td>
         </tr>
         <tr>
-          <td>
-            <div className="custom-control custom-switch">
-              &nbsp;&nbsp;&nbsp;<input type="checkbox" className="custom-control-input" id="testRequirement_Other-Standard-1"
-              checked={this.props.state.testRequirement[7].includes('Other Standard 1')}
-              onChange={() => this.toggleCheckboxState('testRequirement', 7, 'Other Standard 1')}
-              />
-              <label className="custom-control-label" htmlFor="testRequirement_Other-Standard-1">Other Standard 1</label>
-            </div>
-          </td>
+            <td>
+                <div className="form-check form-check-inline">
+                    <Form.Switch
+                        label="Other Standard 1"
+                        checked={this.props.state.testRequirement[7].includes('Other Standard 1')}
+                        type="checkbox"
+                        onChange={() => this.toggleCheckboxState('testRequirement', 7, 'Other Standard 1')}
+                    />
+                </div>
+            </td>
           <td colSpan={7}>
             <input className="form-control form-control-sm input-xs"
               id='testRequirement_Other-Standard-1-description'
@@ -165,14 +179,15 @@ class FabricApplicationForm extends React.Component<{
           </td>
         </tr>
         <tr>
-          <td>
-            <div className="custom-control custom-switch">
-              &nbsp;&nbsp;&nbsp;<input type="checkbox" className="custom-control-input" id="testRequirement_Other-Standard-2"
-              checked={this.props.state.testRequirement[8].includes('Other Standard 2')}
-              onChange={() => this.toggleCheckboxState('testRequirement', 8, 'Other Standard 2')}
-              />
-              <label className="custom-control-label" htmlFor="testRequirement_Other-Standard-2">Other Standard 2</label>
-            </div>
+            <td>
+                <div className="form-check form-check-inline">
+                    <Form.Switch
+                        label="Other Standard 2"
+                        checked={this.props.state.testRequirement[8].includes('Other Standard 2')}
+                        type="checkbox"
+                        onChange={() => this.toggleCheckboxState('testRequirement', 8, 'Other Standard 2')}
+                    />
+                </div>
           </td>
           <td colSpan={7}>
             <input className="form-control form-control-sm input-xs"
@@ -313,13 +328,14 @@ class FabricApplicationForm extends React.Component<{
     </table>
   }
 
-  render() {
-    return <>
-      <this.TestRequirement />
-      <this.WashPreTreatmentRequirement />
-      <this.formFooter />
-    </>;
-  }
+    render() {
+        return <>
+
+        <this.TestRequirement />
+        <this.WashPreTreatmentRequirement />
+        <this.formFooter />
+        </>;
+    }
 }
 
-export default FabricApplicationForm;
+export { FabricApplicationForm };

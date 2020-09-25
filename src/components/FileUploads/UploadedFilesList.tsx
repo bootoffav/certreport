@@ -1,15 +1,20 @@
 import React from 'react';
-import { Button } from 'tabler-react';
+import { Icon } from 'tabler-react';
 import './UploadedFilesList.css';
 
-const UploadedFilesList = ({ attachedFiles, deleteFile }: any) => {
-  return <div className="uploadedFiles">
+const UploadedFilesList = ({ attachedFiles, deleteFile }: any) => 
+  <div className="uploadedFiles">
     <p className="font-weight-bold">Uploaded files:</p>
-    {attachedFiles.map((file: any) =>
-        <p key={file.FILE_ID}>{file.NAME}
-            <Button className="ml-3" color="orange" size="sm" icon="trash"
+    {attachedFiles.map((file: any, index: number) =>
+        <p key={file.FILE_ID} className="pl-2">
+            {<span className="font-weight-bold">{index + 1}</span>}. {file.NAME}
+            <Icon
+                prefix="fe"
+                name="trash"
+                link
+                className="trashFile"
                 onClick={(e: any) => {
-                    e.currentTarget.innerText = 'wait...';
+                    e.currentTarget.outerHTML = '<a class="icon"><i class="fe fe-loader trashFile"></i></a>';
                     deleteFile(file);
                     e.preventDefault();
                 }}
@@ -17,6 +22,5 @@ const UploadedFilesList = ({ attachedFiles, deleteFile }: any) => {
         </p>
     )}
   </div>
-}
 
-export default UploadedFilesList;
+export { UploadedFilesList };
