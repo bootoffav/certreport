@@ -4,7 +4,11 @@ import { Products } from '../Product/Product';
 
 class ClientStorage {
 
+<<<<<<< HEAD:src/ClientStorage/ClientStorage.ts
     static async getFromAPI(ids: string[]) {
+=======
+    static async getFromAPI(ids: any) {
+>>>>>>> FIX-ClientStorageToTypeScript:src/ClientStorage/ClientStorage.ts
         const fulfilledTasks: any[] = [];
         const rejectedTasks: string[] = [];
 
@@ -14,12 +18,17 @@ class ClientStorage {
                 .catch(() => rejectedTasks.push(id));
         }
 
+<<<<<<< HEAD:src/ClientStorage/ClientStorage.ts
         while (rejectedTasks.length !== 0) {
             const id = rejectedTasks.shift() || '';
             B24.get_task(id)
+=======
+        rejectedTasks.forEach(async id => {
+            await B24.get_task(id)
+>>>>>>> FIX-ClientStorageToTypeScript:src/ClientStorage/ClientStorage.ts
                 .then(task => fulfilledTasks.push(task))
                 .catch(() => rejectedTasks.push(id));
-        }
+        });
 
         return fulfilledTasks;
     }
@@ -66,12 +75,16 @@ class ClientStorage {
         });
     }
 
+<<<<<<< HEAD:src/ClientStorage/ClientStorage.ts
     static removeData(data: string[]) {
+=======
+    static removeData(data: any) {
+>>>>>>> FIX-ClientStorageToTypeScript:src/ClientStorage/ClientStorage.ts
         return new Promise(res => {
             window.indexedDB.open("default").onsuccess = ({ target }: any) => {
                 const tran = target.result.transaction(['tasks'], "readwrite");
                 const store = tran.objectStore('tasks');
-                data.forEach(id => store.delete(id));
+                data.forEach((id: string) => store.delete(id));
                 tran.oncomplete = () => {
                     console.log(`tasks ${data} have been erased from IndexedDB!`);
                     res();
@@ -80,8 +93,13 @@ class ClientStorage {
         });
     }
 
+<<<<<<< HEAD:src/ClientStorage/ClientStorage.ts
     static getExistingKeys(storeType: 'tasks' | 'products'): Promise<string[]> {
         return new Promise((res) => {
+=======
+    static getExistingKeys(storeType: string) {
+        return new Promise<string[]>((res) => {
+>>>>>>> FIX-ClientStorageToTypeScript:src/ClientStorage/ClientStorage.ts
             let request = window.indexedDB.open("default");
 
             request.onsuccess = (e: any) => {
@@ -97,11 +115,19 @@ class ClientStorage {
     /*
     * returns array id Tasks ID that are not in indexedDB
     */
+<<<<<<< HEAD:src/ClientStorage/ClientStorage.ts
     static getDBdiffs = (): Promise<{
         addedTasksID: string[],
         removedTasksID: string[]
     }> =>
         new Promise(async (res) => {
+=======
+    static getDBdiffs = () =>
+        new Promise<{
+            addedTasksID: string[];
+            removedTasksID: string[];
+        }>(async (res) => {
+>>>>>>> FIX-ClientStorageToTypeScript:src/ClientStorage/ClientStorage.ts
             const existingKeys = await ClientStorage.getExistingKeys('tasks');
             const remoteKeys = await ClientStorage.getRemoteKeys();
             res({
@@ -110,11 +136,20 @@ class ClientStorage {
             });
         });
 
+<<<<<<< HEAD:src/ClientStorage/ClientStorage.ts
     static getData = (): Promise<{ tasks: any, products: any }> =>
         new Promise((res) => {
             const db = window.indexedDB.open("default");
 
             db.onsuccess = ({ target }: any) => {
+=======
+    static getData = () =>
+        new Promise<{tasks: any, products: any}>((res) => {
+            const db = window.indexedDB.open("default");
+
+            db.onsuccess = ({ target }) => {
+                // @ts-ignore
+>>>>>>> FIX-ClientStorageToTypeScript:src/ClientStorage/ClientStorage.ts
                 const db = target.result;
 
                 db.transaction('products').objectStore('products').getAll().onsuccess = ({ target }: any) => {
