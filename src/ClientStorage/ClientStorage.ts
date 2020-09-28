@@ -4,9 +4,9 @@ import { Products } from '../Product/Product';
 
 class ClientStorage {
 
-    static async getFromAPI(ids) {
-        const fulfilledTasks = [];
-        const rejectedTasks = [];
+    static async getFromAPI(ids: string[]) {
+        const fulfilledTasks: any[] = [];
+        const rejectedTasks: string[] = [];
 
         for (let id of ids) {
             await B24.get_task(id)
@@ -15,7 +15,7 @@ class ClientStorage {
         }
 
         while (rejectedTasks.length !== 0) {
-            const id = rejectedTasks.shift();
+            const id = rejectedTasks.shift() || '';
             B24.get_task(id)
                 .then(task => fulfilledTasks.push(task))
                 .catch(() => rejectedTasks.push(id));
@@ -39,7 +39,7 @@ class ClientStorage {
             res();
         });
 
-    static updateProducts(tasks) {
+    static updateProducts(tasks: any[]) {
         const { products } = Products(tasks);
         return new Promise(async res => {
             await ClientStorage.writeData(products, 'products');
@@ -47,17 +47,17 @@ class ClientStorage {
         });
     }
 
-    static writeData(data, storeType = 'tasks') {
+    static writeData(data: any, storeType = 'tasks') {
         return new Promise(res => {
-            window.indexedDB.open("default").onsuccess = ({ target }) => {
+            window.indexedDB.open("default").onsuccess = ({ target }: any) => {
                 const tran = target.result.transaction([storeType], "readwrite");
                 const store = tran.objectStore(storeType);
                 switch (storeType) {
                     case 'tasks':
-                        data.forEach(entity => store.put(entity, entity.ID));
+                        data.forEach((entity: any) => store.put(entity, entity.ID));
                         break;
                     default:
-                        data.forEach(entity => store.put(entity, entity.article));
+                        data.forEach((entity: any) => store.put(entity, entity.article));
                 }
                 tran.oncomplete = () =>
                     res(`${storeType} have written to IndexedDB!`);
@@ -66,9 +66,9 @@ class ClientStorage {
         });
     }
 
-    static removeData(data) {
+    static removeData(data: string[]) {
         return new Promise(res => {
-            window.indexedDB.open("default").onsuccess = ({ target }) => {
+            window.indexedDB.open("default").onsuccess = ({ target }: any) => {
                 const tran = target.result.transaction(['tasks'], "readwrite");
                 const store = tran.objectStore('tasks');
                 data.forEach(id => store.delete(id));
@@ -80,14 +80,14 @@ class ClientStorage {
         });
     }
 
-    static getExistingKeys(storeType) {
+    static getExistingKeys(storeType: 'tasks' | 'products'): Promise<string[]> {
         return new Promise((res) => {
             let request = window.indexedDB.open("default");
 
-            request.onsuccess = (e) => {
+            request.onsuccess = (e: any) => {
                 const conn = e.target.result;
                 conn.transaction([storeType]).objectStore(storeType).getAllKeys()
-                    .onsuccess = (e) => res(e.target.result);
+                    .onsuccess = (e: any) => res(e.target.result);
             }
         });
     }
@@ -97,7 +97,10 @@ class ClientStorage {
     /*
     * returns array id Tasks ID that are not in indexedDB
     */
-    static getDBdiffs = () =>
+    static getDBdiffs = (): Promise<{
+        addedTasksID: string[],
+        removedTasksID: string[]
+    }> =>
         new Promise(async (res) => {
             const existingKeys = await ClientStorage.getExistingKeys('tasks');
             const remoteKeys = await ClientStorage.getRemoteKeys();
@@ -107,23 +110,23 @@ class ClientStorage {
             });
         });
 
-    static getData = () =>
+    static getData = (): Promise<{ tasks: any, products: any }> =>
         new Promise((res) => {
             const db = window.indexedDB.open("default");
 
-            db.onsuccess = ({ target }) => {
+            db.onsuccess = ({ target }: any) => {
                 const db = target.result;
 
-                db.transaction('products').objectStore('products').getAll().onsuccess = ({ target }) => {
+                db.transaction('products').objectStore('products').getAll().onsuccess = ({ target }: any) => {
                     const products = target.result;
-                    db.transaction('tasks').objectStore('tasks').getAll().onsuccess = ({ target }) => {
+                    db.transaction('tasks').objectStore('tasks').getAll().onsuccess = ({ target }: any) => {
                         const tasks = target.result;
                         res({ tasks, products });
                     };
                 };
             };
 
-            db.onupgradeneeded = (e) => {
+            db.onupgradeneeded = (e: any) => {
                 e.target.result.createObjectStore('tasks');
                 e.target.result.createObjectStore('products');
             };

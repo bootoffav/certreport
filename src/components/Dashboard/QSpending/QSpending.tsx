@@ -120,8 +120,8 @@ class QSpending extends React.Component<{
 
     render() {
         return this.state.quarters.map((quarter: any) => {
-            return <Grid.Col width={3}>
-                <Card key={quarter.start}>
+            return <Grid.Col width={3} key={quarter.start}>
+                <Card>
                     <Card.Header>
                         <div className="mx-auto quarterHeader" onClick={() => this.props.renderTable(quarter.tasks)}>
                         {`Q${quarter.start.quarter()}-${quarter.start.format('YY')}`}
