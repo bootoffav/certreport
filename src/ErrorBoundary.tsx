@@ -1,7 +1,7 @@
-import React from 'react';
+import { Component } from 'react';
 import { Error400Page } from 'tabler-react';
 
-class ErrorBoundary extends React.Component {
+class ErrorBoundary extends Component {
   subtitles: {
     [k: string]: string;
   } = {

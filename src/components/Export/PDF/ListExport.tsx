@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import pdfMake from "pdfmake/build/pdfmake";
 import dayjs from 'dayjs';
 import { vfs } from './vfs_fonts.js';
@@ -6,7 +6,7 @@ import { Stage } from '../../../Task/Task';
 
 import { tableLayout, fonts } from './settings';
 
-class ListExport extends React.Component<{
+class ListExport extends Component<{
   tasks: any;
   columns: any;
   stage: any;

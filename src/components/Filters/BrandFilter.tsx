@@ -1,6 +1,6 @@
-import React from 'react';
+import { Component } from 'react';
 
-class BrandFilter extends React.Component<{
+class BrandFilter extends Component<{
     tasks: any,
     update: any
 }> {

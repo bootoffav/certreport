@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default function SettingsOR(props: {
   enabled: boolean;
   state: any;

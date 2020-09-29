@@ -1,5 +1,5 @@
 import { Grid, Card, Header } from 'tabler-react';
-import React from 'react';
+import { Component } from 'react';
 import dayjs from 'dayjs';
 import quarterOfYear from 'dayjs/plugin/quarterOfYear';
 import './QSpending.css';
@@ -7,7 +7,7 @@ import './QSpending.css';
 dayjs.extend(quarterOfYear);
 
 
-class QSpending extends React.Component<{
+class QSpending extends Component<{
   renderTable: (t: any[]) => void;
 //   saveTotal: (total: number) => void;
   tasks: any;

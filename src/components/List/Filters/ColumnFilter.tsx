@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 class ColumnFilter extends React.Component<{
     tasks: any;

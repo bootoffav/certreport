@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Icon } from 'tabler-react';
 import './Standards.css';
 

@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { Icon } from 'tabler-react';
-import React from 'react';
 import { dateConverter } from '../../helpers';
 
 function sortDates(a: string | undefined, b: string | undefined): number {
@@ -356,7 +355,7 @@ function getColumns(totalPrice: number, stage?: string) {
 function formatPrice(price: number) {
   return price.toLocaleString('en-US', {
     style: 'currency', currency: 'EUR'
-  }).replace(/,/g, ' ').replace(/\./g, ',')
+  }).replace(/,/g, ' ').replace(/\./g, ',');
 }
 
 export { getColumns };

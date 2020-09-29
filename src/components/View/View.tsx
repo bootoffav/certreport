@@ -1,7 +1,7 @@
-import React from 'react';
+import { Component } from 'react';
 
 
-class View extends React.Component {
+class View extends Component {
 
   renderHeader = () =>
     <div className="d-flex justify-content-around m-4">

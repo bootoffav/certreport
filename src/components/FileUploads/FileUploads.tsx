@@ -1,5 +1,5 @@
 import qs from 'qs';
-import React from 'react';
+import { Component } from 'react';
 import B24 from '../../B24';
 import { UploadedFilesList } from './UploadedFilesList';
 
@@ -8,7 +8,7 @@ const creator_id = process.env.REACT_APP_B24_USER_ID;
 const webhook_key = process.env.REACT_APP_B24_WEBHOOK_KEY;
 const main_url = process.env.REACT_APP_B24_MAIN_URL;
 
-class FileUploads extends React.Component<{
+class FileUploads extends Component<{
   taskId: string | undefined;
   attachedFiles: any;
   updateAttachedFiles: () => void;

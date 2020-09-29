@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import swal from 'sweetalert';
 import "react-datepicker/dist/react-datepicker.css";
 import Select from 'react-select';

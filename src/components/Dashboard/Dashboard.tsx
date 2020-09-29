@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component, createContext } from 'react';
 import './Dashboard.css';
 import { BrowserRouter } from 'react-router-dom';
 import { render, unmountComponentAtNode } from 'react-dom';
@@ -39,7 +39,7 @@ function tasksInRange(
     return tasksInRange;
 }
 
-class Dashboard extends React.Component<any, IDashboard> {
+class Dashboard extends Component<any, IDashboard> {
 
     constructor(props: any) {
         super(props);
@@ -164,5 +164,5 @@ class Dashboard extends React.Component<any, IDashboard> {
 }
 
 export default Dashboard;
-export const StatCardsContext = React.createContext({});
+export const StatCardsContext = createContext({});
 export { tasksInRange };

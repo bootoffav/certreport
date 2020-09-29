@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import ReactTable from 'react-table';
 import { Button } from 'tabler-react';
 import Task from '../../Task/Task';

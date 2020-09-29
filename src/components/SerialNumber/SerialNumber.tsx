@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 // import firebase from '../../../old_code/DB';
 
 interface SerialNumberProps {
@@ -11,7 +11,7 @@ interface SerialNumberProps {
 //   firebaseCallback: any;
 // }
 
-class SerialNumber extends React.Component<SerialNumberProps> {
+class SerialNumber extends Component<SerialNumberProps> {
   // firebaseCallBack : any;
   // componentDidMount() {
   //   if (this.props.url === '/add') {

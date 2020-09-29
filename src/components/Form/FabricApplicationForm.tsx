@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { without } from 'lodash';
 import { Form, Button, Icon } from 'tabler-react';
 import { AppFormExport } from '../Export/PDF/AppFormExport';

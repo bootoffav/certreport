@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import { BrowserRouter as Router, Route, NavLink, Switch } from "react-router-dom";
 import { Error404Page } from 'tabler-react';
 import CacheManager from '../../CacheManager';
@@ -9,7 +9,7 @@ import ErrorBoundary from '../../ErrorBoundary';
 import { BrandFilter } from '../Filters/BrandFilter';
 import DateFilter from '../Filters/DateFilter';
 
-class Main extends React.Component {
+class Main extends Component {
     cache: CacheManager;
     state = {
         allTasks: [],

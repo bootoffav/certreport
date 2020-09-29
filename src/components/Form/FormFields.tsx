@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import DatePicker from "react-datepicker";
 import B24 from '../../B24';
 import Select from 'react-select';
