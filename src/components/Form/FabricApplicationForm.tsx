@@ -30,7 +30,7 @@ class FabricApplicationForm extends React.Component<{
     });
   }
 
-  static checkBox: React.FunctionComponent<{
+  static CheckBox: React.FunctionComponent<{
     label: string;
     table?: string;
     row?: number;
@@ -81,7 +81,7 @@ class FabricApplicationForm extends React.Component<{
           {
             ['EN 11611', 'A1', 'A2'].map(item =>
               <td key={item}>
-                <FabricApplicationForm.checkBox
+                <FabricApplicationForm.CheckBox
                   label={item}
                   checked={this.props.state.testRequirement[0].includes(item)}
                   onChange={() => this.toggleCheckboxState('testRequirement', 0, item)}
@@ -93,7 +93,7 @@ class FabricApplicationForm extends React.Component<{
         <tr>
           {['EN 11612', 'A1', 'A2', 'B', 'C', 'D', 'E', 'F'].map(item =>
             <td key={item}>
-              <FabricApplicationForm.checkBox
+              <FabricApplicationForm.CheckBox
                 label={item}
                 checked={this.props.state.testRequirement[1].includes(item)}
                 onChange={() => this.toggleCheckboxState('testRequirement', 1, item)}
@@ -104,7 +104,7 @@ class FabricApplicationForm extends React.Component<{
         <tr>
           {['EN 1149-5', 'EN 1149-1', 'EN 1149-3'].map(item =>
             <td key={item}>
-              <FabricApplicationForm.checkBox
+              <FabricApplicationForm.CheckBox
                 label={item}
                 checked={this.props.state.testRequirement[2].includes(item)}
                 onChange={() => this.toggleCheckboxState('testRequirement', 2, item)}
@@ -116,7 +116,7 @@ class FabricApplicationForm extends React.Component<{
         <tr>
           {['EN 61482-1-2', 'Class 1', 'Class 2'].map(item =>
             <td key={item}>
-              <FabricApplicationForm.checkBox
+              <FabricApplicationForm.CheckBox
                 label={item}
                 checked={this.props.state.testRequirement[3].includes(item)}
                 onChange={() => this.toggleCheckboxState('testRequirement', 3, item)}
@@ -127,7 +127,7 @@ class FabricApplicationForm extends React.Component<{
         </tr>
         <tr>
           <td>
-            <FabricApplicationForm.checkBox label={'EN 20471'}
+            <FabricApplicationForm.CheckBox label={'EN 20471'}
               checked={this.props.state.testRequirement[4].includes('EN 20471')}
               onChange={() => this.toggleCheckboxState('testRequirement', 4, 'EN 20471')}
             />
@@ -136,7 +136,7 @@ class FabricApplicationForm extends React.Component<{
         </tr>
         <tr>
           <td>
-            <FabricApplicationForm.checkBox label={'EN 14116'}
+            <FabricApplicationForm.CheckBox label={'EN 14116'}
               checked={this.props.state.testRequirement[5].includes('EN 11416')}
               onChange={() => this.toggleCheckboxState('testRequirement', 5, 'EN 11416')}
             />
@@ -145,7 +145,7 @@ class FabricApplicationForm extends React.Component<{
         </tr>
         <tr>
           <td>
-            <FabricApplicationForm.checkBox label={'EN 343'}
+            <FabricApplicationForm.CheckBox label={'EN 343'}
               checked={this.props.state.testRequirement[6].includes('EN 343')}
               onChange={() => this.toggleCheckboxState('testRequirement', 6, 'EN 343')}
           />
@@ -250,7 +250,7 @@ class FabricApplicationForm extends React.Component<{
 
           {['A', 'B', 'C', 'D', 'E', 'F'].map(item =>
             <td key={item}>
-              <FabricApplicationForm.checkBox
+              <FabricApplicationForm.CheckBox
                 table={'washPreTreatment'}
                 label={item}
                 checked={this.props.state.washPreTreatment[0].includes(item)}
@@ -277,7 +277,7 @@ class FabricApplicationForm extends React.Component<{
           <td>According to standard</td>
           {['Tumble Dry', 'Tunnel Dry'].map(item =>
             <td colSpan={3} key={item}>
-              <FabricApplicationForm.checkBox
+              <FabricApplicationForm.CheckBox
                 table={'washPreTreatment'}
                 label={item}
                 checked={this.props.state.washPreTreatment[1].includes(item)}
@@ -299,13 +299,13 @@ class FabricApplicationForm extends React.Component<{
           <td>PI/OFFER in:</td>
           <td>
             {row1.map(currency => 
-              <FabricApplicationForm.checkBox
+              <FabricApplicationForm.CheckBox
                 key={currency}
                 table='footer'
                 label={currency}
                 checked={this.props.state.footer[0].includes(currency)}
                 onChange={() => this.toggleCheckboxState('footer', 0, currency)}
-              >/&nbsp;&nbsp;&nbsp;</FabricApplicationForm.checkBox>
+              >/&nbsp;&nbsp;&nbsp;</FabricApplicationForm.CheckBox>
             )}
           </td>
         </tr>
@@ -314,13 +314,13 @@ class FabricApplicationForm extends React.Component<{
           <td>Test Certificate:</td>
           <td>
             {row2.map(item =>
-              <FabricApplicationForm.checkBox
+              <FabricApplicationForm.CheckBox
                 key={item}
                 table='footer'
                 label={item}
                 checked={this.props.state.footer[1].includes(item)}
                 onChange={() => this.toggleCheckboxState('footer', 1, item)}
-              >/</FabricApplicationForm.checkBox>
+              >/</FabricApplicationForm.CheckBox>
             )}
           </td>
         </tr>

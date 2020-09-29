@@ -1,13 +1,6 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { StatsCard, Header, Card } from 'tabler-react';
 import { tasksInRange, StatCardsContext } from './Dashboard';
-
-
-interface ICardProps {
-  tasks: any[];
-  startDate?: Date;
-  endDate?: Date;
-}
 
 const CompletedCertifications = () => {
   const { tasks, startDate, endDate}: any = useContext(StatCardsContext);

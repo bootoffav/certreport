@@ -3,7 +3,6 @@ import 'react-table/react-table.css';
 import './css/style.css';
 import 'bootstrap';
 import ReactDOM from 'react-dom';
-import React from 'react';
 import netlifyIdentity from 'netlify-identity-widget';
 import { initApp } from './defaults';
 import { Main } from './components/Main/Main';

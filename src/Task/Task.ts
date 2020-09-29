@@ -1,12 +1,6 @@
 import { selectOptions, emptyState, IState } from '../defaults';
 import dayjs from 'dayjs';
 
-interface ITask {
-  state: {}
-  position?: number;
-  determineStage: () => string;
-}
-
 const dataSeparator = '-------------------------------------------------';
 
 export enum Stage {
@@ -23,7 +17,7 @@ export enum Stage {
   '9. Ended'
 }
 
-class Task implements ITask {
+class Task {
   state: IState;
   position?: number;
   overdue: boolean;

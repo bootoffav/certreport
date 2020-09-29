@@ -1,16 +1,4 @@
-/*
-  {
-    "Aravis": {
-      'standards': ['EN1', 'EN2'],
-      'tasks': [{
-        ID: '45032',
-        TITLE: '262_Aitex'
-      }]
-    }
-  }
-*/
-
-type Products = {
+type ProductType = {
     article: string,
     standards: string[],
     brand: string,
@@ -23,7 +11,7 @@ type Products = {
 
 function Products(tasks: any[]) {
   // get unique products
-  var products: Products = [];
+  var products: ProductType = [];
 
   tasks.forEach(t => {
       if (t.state && t.state.article !== "") {

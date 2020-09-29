@@ -5,7 +5,7 @@ let selectOptions: {
     brand: any[];
     standards: any[];
     testingCompany: any[];
-    articles: [];
+    articles: any[];
     stages: any[];
     [key: string]: any;
     } = {

@@ -226,7 +226,7 @@ class B24 {
                 });
             if (part.length === 0) break;
             tasks = tasks.concat(part);
-            start += part.length;
+            start += 50;
 
         }
 
