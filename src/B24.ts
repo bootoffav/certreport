@@ -209,27 +209,19 @@ class B24 {
 
     static async getTasksID() {
         let tasks: { id: string }[] = [];
-        let start = 0;
-        
-        while (true) {
-            const part = await fetch(`${main_url}/${creator_id}/${webhook_key}/tasks.task.list?` +
+
+        do {
+            tasks = tasks.concat(await fetch(`${main_url}/${creator_id}/${webhook_key}/tasks.task.list?` +
                 qs.stringify({
                     order: { ID: 'desc' },
                     filter: { TAG: tag },
                     select: ['ID'],
-                    start
+                    start: B24.start
                 }))
                 .then(res => res.json())
-                .then(json => {
-                    const { tasks } = B24.step(json);
-                    return tasks;
-                });
-            if (part.length === 0) break;
-            tasks = tasks.concat(part);
-            start += 50;
+                .then(json => B24.step(json).tasks));
 
-        }
-
+        } while (B24.start !== undefined);
         return tasks.map(t => t.id);
     }
 
