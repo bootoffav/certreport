@@ -1,9 +1,13 @@
+/* eslint-disable import/no-webpack-loader-syntax */
+//@ts-ignore
+import dataFetcher from 'workerize-loader!../workers/dataFetcher';
 import { without } from 'lodash';
 import B24 from '../B24';
 import { Products } from '../Product/Product';
 
-class ClientStorage {
+const worker = dataFetcher();
 
+class ClientStorage {
     static async getFromAPI(ids: any) {
         const fulfilledTasks: any[] = [];
         const rejectedTasks: string[] = [];
@@ -91,8 +95,6 @@ class ClientStorage {
         });
     }
 
-    static getRemoteKeys = () => B24.getTasksID()
-
     /*
     * returns array id Tasks ID that are not in indexedDB
     */
@@ -101,11 +103,14 @@ class ClientStorage {
             addedTasksID: string[];
             removedTasksID: string[];
         }>(async (res) => {
-            const existingKeys = await ClientStorage.getExistingKeys('tasks');
-            const remoteKeys = await ClientStorage.getRemoteKeys();
+            const localIds = await ClientStorage.getExistingKeys('tasks');
+            const remoteIds = await new Promise<string[]>((resolve) => {
+                worker.getTasksID();
+                worker.addEventListener('message', ({data}: any) => resolve(data));
+            });
             res({
-                addedTasksID: without(remoteKeys, ...existingKeys),
-                removedTasksID: without(existingKeys, ...remoteKeys)
+                addedTasksID: without(remoteIds, ...localIds),
+                removedTasksID: without(localIds, ...remoteIds)
             });
         });
 

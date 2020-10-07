@@ -17,20 +17,12 @@ const auditors: string[] = process.env.REACT_APP_B24_AUDITORS ? process.env.REAC
 
 class B24 {
 
-  private static _start: undefined;
+  static start: undefined;
 
   static defaultParams = {
       CREATED_BY: creator_id,
       TAGS: [tag],
       GROUP_ID: 21,
-  }
-
-  static get start() {
-    return this._start;
-  }
-
-  static set start(start) {
-    this._start = start;
   }
 
     static step = (json: any) => {
