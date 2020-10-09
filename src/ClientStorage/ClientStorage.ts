@@ -108,6 +108,7 @@ class ClientStorage {
                 worker.getTasksID();
                 worker.addEventListener('message', ({data}: any) => resolve(data));
             });
+            console.log(localIds, remoteIds);
             res({
                 addedTasksID: without(remoteIds, ...localIds),
                 removedTasksID: without(localIds, ...remoteIds)
