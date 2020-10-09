@@ -4,7 +4,7 @@ const tag = process.env.REACT_APP_TAG;
 const webhook_key = process.env.REACT_APP_B24_WEBHOOK_KEY;
 const main_url = process.env.REACT_APP_B24_MAIN_URL;
 
-let start: number | undefined  = undefined;
+let start: number;
 
 const step = (json: any) => {
     start = json.next;
@@ -20,15 +20,13 @@ export async function getTasksID() {
                 order: { ID: 'desc' },
                 filter: { TAG: tag },
                 select: ['ID'],
-                start: start
+                start
             }))
             .then(res => res.json())
             .then(json => step(json).tasks));
 
     } while (start !== undefined);
-    
+
     const ids = response.map(t => t.id);
-    
-    // @ts-ignore
     postMessage(ids);
 };

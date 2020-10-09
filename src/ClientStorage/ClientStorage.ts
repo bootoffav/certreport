@@ -1,5 +1,5 @@
 /* eslint-disable import/no-webpack-loader-syntax */
-//@ts-ignore
+// @ts-ignore
 import dataFetcher from 'workerize-loader!../workers/dataFetcher';
 import { without } from 'lodash';
 import B24 from '../B24';
@@ -104,11 +104,12 @@ class ClientStorage {
             removedTasksID: string[];
         }>(async (res) => {
             const localIds = await ClientStorage.getExistingKeys('tasks');
-            const remoteIds = await new Promise<string[]>((resolve) => {
+            const remoteIds = await new Promise<string[]>(resolve => {
+                worker.onmessage = ({ data }: MessageEvent) => {
+                    if (Array.isArray(data)) resolve(data);
+                }
                 worker.getTasksID();
-                worker.addEventListener('message', ({data}: any) => resolve(data));
             });
-            console.log(localIds, remoteIds);
             res({
                 addedTasksID: without(remoteIds, ...localIds),
                 removedTasksID: without(localIds, ...remoteIds)
