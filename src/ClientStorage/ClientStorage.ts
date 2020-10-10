@@ -65,7 +65,7 @@ class ClientStorage {
 
     static getData = () =>
         new Promise<{tasks: any, products: any}>((res) => {
-            const db = window.indexedDB.open("default");
+            const db = window.indexedDB.open("default", 2);
 
             db.onsuccess = ({ target }) => {
                 // @ts-ignore
@@ -81,8 +81,19 @@ class ClientStorage {
             };
 
             db.onupgradeneeded = (e: any) => {
-                e.target.result.createObjectStore('tasks');
-                e.target.result.createObjectStore('products');
+                const objectStores = Array.from(e.target.result.objectStoreNames);
+
+                if (objectStores.length > 0) {
+                    objectStores.forEach((obs: any) => {
+                        e.target.result.deleteObjectStore(obs);
+                        e.target.result.createObjectStore(obs);
+                    });
+                } else {
+                    e.target.result.createObjectStore('tasks');
+                    e.target.result.createObjectStore('products');
+                }
+
+                sessionStorage.removeItem('updated');
             };
         });
 }

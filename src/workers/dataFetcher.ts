@@ -16,11 +16,11 @@ const step = (json: any) => {
 const getAttachedFiles = (id: string) =>
     fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.getfiles?` + qs.stringify({ TASKID: id }))
         .then(res => res.json())
-        .then(({ result }: any) => result);
+        .then(({ result }: any) => result)
+        .catch(e => []);
 
 export async function getTasks() {
     let rawTasks: { id: string, title: string, description: string, ufCrmTask: []}[]= [];
-    console.log('called');
     const tasks: any = [];
     do {
         rawTasks = rawTasks.concat(await fetch(`${main_url}/${creator_id}/${webhook_key}/tasks.task.list?` +

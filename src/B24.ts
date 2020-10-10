@@ -206,7 +206,8 @@ class B24 {
         const getAttachedFiles = () =>
             fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.getfiles?` + qs.stringify({ TASKID: id }))
                 .then(res => res.json())
-                .then(({ result }: any) => result);
+                .then(({ result }: any) => result)
+                .catch(e => []);
 
         const test = await fetch(`${main_url}/${creator_id}/${webhook_key}/tasks.task.get?` +
             qs.stringify({

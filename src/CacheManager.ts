@@ -4,9 +4,12 @@ import { ClientStorage } from './ClientStorage/ClientStorage';
 class CacheManager {
 
     doUpdate = async () => {
-        await ClientStorage.updateTasks();
-        const { tasks } = await this.getCache();
-        await ClientStorage.updateProducts(tasks);
+        if (sessionStorage.getItem('updated') === null) {
+            await ClientStorage.updateTasks();
+            const { tasks } = await this.getCache();
+            await ClientStorage.updateProducts(tasks);
+            sessionStorage.setItem('updated', '1');
+        }
     }
 
     getCache = async () => await ClientStorage.getData();

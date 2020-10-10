@@ -186,11 +186,18 @@ function getColumns(totalPrice: number, stage?: string) {
         // 23
         Header: 'Certificate',
         id: 'certificate',
-        accessor: (row: any) => {
-            if (['7. Test-report ready', '8. Certificate ready', '9. Ended'].includes(row.state.stage)) {
-                return row.ufTaskWebdavFiles.map((file: any, key: number) => <div key={key}><a href={`https://xmtextiles.bitrix24.ru${file.DOWNLOAD_URL}`}>{file.NAME}</a></div>)
+        accessor: ({ ufTaskWebdavFiles: files, state }: any) => {
+            const stages = ['7. Test-report ready', '8. Certificate ready', '9. Ended'];
+            if (stages.includes(state.stage)) {
+                return files.map(
+                    (file: any, key: number) =>
+                        <div key={key}>
+                            <a href={`https://xmtextiles.bitrix24.ru${file.DOWNLOAD_URL}`}>{file.NAME}</a>
+                        </div>
+                );
             }
-            return row.state.certificate;
+
+            return state.certificate;
         },
         minWidth: 300,
     }, {
