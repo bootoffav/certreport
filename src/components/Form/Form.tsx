@@ -7,19 +7,20 @@ import { PickDate, BaseInput, Article, Price, Paid, Pi } from "./FormFields";
 import B24 from '../../B24';
 import Notification, { Status } from '../Notification/Notification';
 import SerialNumber from '../SerialNumber/SerialNumber';
-import { selectOptions, emptyState, IState } from '../../defaults';
+import { selectOptions } from '../../defaults';
+import { IState, emptyState } from '../../Task/emptyState';
 import Standards from '../Standards/Standards';
 import FileUploads from '../FileUploads/FileUploads';
 import { FabricApplicationForm } from './FabricApplicationForm';
 import { DB } from '../../DBManager';
 import { removeEmptyProps } from '../../helpers';
-import { TabbedCard, Tab, Dimmer, Icon } from 'tabler-react';
+import { TabbedCard, Tab, Dimmer, Icon, Button } from 'tabler-react';
 import CacheManager from '../../CacheManager';
 
 interface IFormState extends IState {
   requestStatus: Status;
   EN11612Detail?: any;
-  hasError: boolean;
+  hasError?: boolean;
   existsInDB?: boolean;
 }
 
@@ -31,45 +32,46 @@ interface IFormProps {
       id: string;
     };
   };
-  state: any;
 }
 
 class Form extends React.Component<IFormProps> {
-  task_id: string | undefined;
-  state: IFormState;
-
+    task_id: string | undefined;
+    state: IFormState;
+    
     constructor(props: IFormProps) {
         super(props);
         this.task_id = props.match.params.id;
-        this.state = props.state || emptyState;
-        this.state.requestStatus = Status.FillingForm;
+        this.state = {
+            ...emptyState,
+            requestStatus: Status.FillingForm
+        };
     }
 
   componentDidUpdate = () => {
     if (this.state.hasError) throw new Error('Task not found');
   }
   
-  async componentDidMount() {
-      if (this.task_id && this.props.state === undefined) {
-      this.setState({ requestStatus: Status.Loading });
-      const dataFromDB = await DB.getData(this.task_id)
-        .then(({ EN11612Detail, exists, ...DBState }: any) => ({ EN11612Detail, DBState, exists }));
+    async componentDidMount() {
+        if (this.task_id) {
+            this.setState({ requestStatus: Status.Loading });
+            const dataFromDB = await DB.getData(this.task_id)
+                .then(({ EN11612Detail, exists, ...DBState }: any) => ({ EN11612Detail, DBState, exists }));
 
-      B24.get_task(this.task_id)
-        .then((r: any) => {
-          this.setState({
-            ...r.state,
-            attachedFiles: r.UF_TASK_WEBDAV_FILES,
-            link: `[URL=certreport.xmtextiles.com/edit/${this.task_id}/]this task[/URL]`,
-            DBState: dataFromDB.DBState,
-            EN11612Detail: dataFromDB.EN11612Detail,
-            existsInDB: dataFromDB.exists,
-            requestStatus: Status.FillingForm
-          })
-        })
-        .catch((e) => this.setState({ hasError: true }));
+            await B24.get_task(this.task_id)
+                .then((r: any) => {
+                    this.setState({
+                        ...r.state,
+                        attachedFiles: r.ufTaskWebdavFiles,
+                        link: `[URL=certreport.xmtextiles.com/edit/${this.task_id}/]this task[/URL]`,
+                        DBState: dataFromDB.DBState,
+                        EN11612Detail: dataFromDB.EN11612Detail,
+                        existsInDB: dataFromDB.exists,
+                        requestStatus: Status.FillingForm
+                    });
+                })
+                .catch((e) => this.setState({ hasError: true }));
+        }
     }
-  }
 
   handleDateChange = (date: Date | null, prop: string): void =>
     this.setState({ [prop]: date === null ? '' : dayjs(date).format('DDMMMYYYY') });
@@ -432,7 +434,7 @@ class Form extends React.Component<IFormProps> {
     </Dimmer>
 
   render = () =>
-    <div className="container">
+    <div className="container mt-2">
       <Notification status={this.state.requestStatus} />
       <form onSubmit={(e) => this.handleCert(e)}>
         <TabbedCard initialTab="Basic Info">
@@ -460,7 +462,7 @@ class Form extends React.Component<IFormProps> {
               </div>
             </Dimmer>
           </Tab>
-          <Tab title="File Uploads">
+          <Tab title="Files">
             <Dimmer active={this.state.requestStatus !== Status.FillingForm} loader>
               <FileUploads
                 taskId={this.task_id}
@@ -469,19 +471,23 @@ class Form extends React.Component<IFormProps> {
             />
             </Dimmer>
           </Tab>
-        </TabbedCard>
-        <button type="submit" className="mx-auto col-2 btn btn-primary btn-block">Save changes</button>
+              </TabbedCard>
+            <div className="d-flex justify-content-around">
+                <button type="submit" className="col-2 btn btn-primary">Save changes</button>
+                  <Button color="gray" onClick={(e: any) => {
+                      window.close();
+                  }}>Close</Button>
+            </div>
       </form>
     </div>
-  
-  updateAttachedFiles = () => {
-    B24.get_task(this.task_id)
-      .then((r: any) => {
-        this.setState({
-          attachedFiles: r.UF_TASK_WEBDAV_FILES,
-        })
-      })
-  }
+
+    updateAttachedFiles = () =>
+        B24.get_task(this.task_id)
+            .then((r: any) => {
+                this.setState({
+                    attachedFiles: r.ufTaskWebdavFiles,
+                })
+            });
 }
 
 export default Form;

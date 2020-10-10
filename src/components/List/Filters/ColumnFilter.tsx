@@ -9,7 +9,7 @@ class ColumnFilter extends React.Component<{
   }> {
 
     static getDerivedStateFromProps(props: any, state: any) {
-        if (props.requiredStage === 'products' && state.searchingColumn === 'TITLE') {
+        if (props.requiredStage === 'products' && state.searchingColumn === 'title') {
             return {
                 searchingColumn: 'article'
             }
@@ -19,16 +19,16 @@ class ColumnFilter extends React.Component<{
   }
 
   state = {
-    searchingColumn: 'TITLE'
+    searchingColumn: 'title'
   }
 
   searchOptions: any = {
     default: {
-      TITLE: 'Task',
+      title: 'Task',
       testReport: 'Test report',
       certificate: 'Certificate',
       standards: 'Standards',
-      article: 'Fabric',
+      article: 'Article',
     },
     products: {
       article: 'Fabric',
@@ -49,7 +49,7 @@ class ColumnFilter extends React.Component<{
                 }
             });
         } else {
-            visibleData = this.props.tasks.filter((task: any) => columnToSearch === 'TITLE'
+            visibleData = this.props.tasks.filter((task: any) => columnToSearch === 'title'
                 ? task[columnToSearch].toLowerCase().includes(searchVal)
                 : task.state[columnToSearch].toLowerCase().includes(searchVal)
             );

@@ -14,35 +14,25 @@ class FileUploads extends Component<{
   updateAttachedFiles: () => void;
 }> {
 
-  state = {
-    uploading: false
-  };
+    state = {
+        uploading: false
+    };
 
-  upload = (e: any) => {
-    this.setState({ uploading: true });
-    const amountOfFiles = e.target.files.length;
-    let uploadedFiles = 0;
+    componentDidUpdate(_: any, { uploading }: any) {
+        if (uploading) {
+            this.setState({ uploading: false });
+        }
+    }
 
-    const renderToUI = (uploadedResponse: any, file: any) => {
-      uploadedFiles++;
-      if (uploadedFiles === amountOfFiles) {
-        this.setState({ uploading: false });
-      }
+    upload = (e: any) => {
+        this.setState({ uploading: true });
+        for (let file of e.target.files) {
+            const reader = new FileReader();
+            reader.readAsBinaryString(file);
+            // @ts-ignore
+            reader.onload = () => B24.fileUpload(this.props.taskId, file.name, reader.result).then(this.props.updateAttachedFiles);
+        }
     }
-    
-    for (let file of e.target.files) {
-      const reader = new FileReader();
-      reader.readAsBinaryString(file);
-      reader.onload = () => {
-        // @ts-ignore
-        B24.fileUpload(this.props.taskId, file.name, reader.result)
-          .then((res: any) => {
-            renderToUI(res, file);
-            this.props.updateAttachedFiles();
-          });
-      }
-    }
-  }
 
   deleteFile = (file: any) => {
     Promise.all([
@@ -52,15 +42,11 @@ class FileUploads extends Component<{
   }
 
   render() {
-    return <>
-      <UploadedFilesList attachedFiles={this.props.attachedFiles} deleteFile={this.deleteFile} />
+      return <>
+      <UploadedFilesList attachedFiles={this.props.attachedFiles} deleteFile={this.deleteFile} uploading={this.state.uploading} />
       <div className="input-group">
         <div className="input-group-prepend">
-          <span className="input-group-text" id="inputGroupFileAddon01">
-            {this.state.uploading
-              ? <div className="spinner-border spinner-border-sm text-primary" role="status"></div> : ''
-            }
-          </span>
+          <span className="input-group-text" id="inputGroupFileAddon01">Upload</span>
         </div>
         <div className="custom-file">
           <input type="file" className="custom-file-input"

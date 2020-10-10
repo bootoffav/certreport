@@ -13,7 +13,6 @@ class AppFormExport {
 
   constructor(state: any) {
     this.state = state;
-    
     const companyProfile = {
       table: {
         widths: [120, '*'],

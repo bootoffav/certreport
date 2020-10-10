@@ -12,7 +12,7 @@ class CacheManager {
     getCache = async () => await ClientStorage.getData();
 
     static updateTask = (taskId: string) =>
-        B24.get_task(taskId).then(task => ClientStorage.writeData([ task ]))
+        B24.get_task(taskId).then(task => ClientStorage.writeData([task]));
 }
 
 export default CacheManager;

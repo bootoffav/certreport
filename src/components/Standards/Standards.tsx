@@ -146,7 +146,7 @@ function Standards(props: StandardsProps) {
                 onChange={props.resultChange}
                 name={`radioOptions${id}`}
                 data-standard={standard}
-                id={`radioPass${id}`}
+                id={`radioPartly${id}`}
                 value="partly"
               />
               <label className="form-check-label"><Icon prefix="fe" width="60" className='yellowIcon' name="alert-circle"/></label>

@@ -31,7 +31,7 @@ function getColumns(totalPrice: number, stage?: string) {
         accessor: ({ state }: any) => state.serialNumber,
         width: 48,
         Cell: (props: any) => <a
-            href={`https://xmtextiles.bitrix24.ru/company/personal/user/460/tasks/task/view/${props.original.ID}/`}
+            href={`https://xmtextiles.bitrix24.ru/company/personal/user/460/tasks/task/view/${props.original.id}/`}
             target="_blank" rel="noopener noreferrer"
         >{props.value}</a>
     }, {
@@ -83,12 +83,12 @@ function getColumns(totalPrice: number, stage?: string) {
     }, {
         // 9
         Header: 'Task',
-        accessor: 'TITLE',
+        accessor: 'title',
         id: 'taskName',
         minWidth: 550,
         Cell: ({ original, value }: any) =>
             <Link
-                to={`/edit/${original.ID}`}
+                to={`/edit/${original.id}`}
                 target="_blank"
                 style={{ textDecoration: 'none' }}
             >{value}</Link>
@@ -186,10 +186,12 @@ function getColumns(totalPrice: number, stage?: string) {
         // 23
         Header: 'Certificate',
         id: 'certificate',
-        accessor: (row: any) =>
-            ['7. Test-report ready', '8. Certificate ready', '9. Ended'].includes(row.state.stage)
-                ? row.UF_TASK_WEBDAV_FILES.map((file: any, key: number) => <div key={key}><a href={`https://xmtextiles.bitrix24.ru${file.DOWNLOAD_URL}`}>{file.NAME}</a></div>)
-                : row.state.certificate,
+        accessor: (row: any) => {
+            if (['7. Test-report ready', '8. Certificate ready', '9. Ended'].includes(row.state.stage)) {
+                return row.ufTaskWebdavFiles.map((file: any, key: number) => <div key={key}><a href={`https://xmtextiles.bitrix24.ru${file.DOWNLOAD_URL}`}>{file.NAME}</a></div>)
+            }
+            return row.state.certificate;
+        },
         minWidth: 300,
     }, {
         // 24
@@ -303,11 +305,11 @@ function getColumns(totalPrice: number, stage?: string) {
         Header: 'Certifications',
         id: 'tasks',
         accessor: 'tasks',
-        Cell: ({ value }: any) => value.map((t: any) => <span key={t.ID}>
+        Cell: ({ value }: any) => value.map((t: any) => <span key={t.id}>
             &nbsp;<a
-                href={`https://xmtextiles.bitrix24.ru/company/personal/user/460/tasks/task/view/${t.ID}/`}
+                href={`https://xmtextiles.bitrix24.ru/company/personal/user/460/tasks/task/view/${t.id}/`}
                 target="_blank" rel="noopener noreferrer"
-            >{t.TITLE}</a>
+            >{t.title}</a>
         </span>
         )
     }, {

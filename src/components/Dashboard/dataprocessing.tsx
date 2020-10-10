@@ -30,10 +30,10 @@ function byStages(tasks: any): dataType {
   tasks.forEach((task: any) => {
     if (task.hasOwnProperty('state')) { // существует state
       task.state.stage === ''
-        ? data.names['no stage'].push(task.TITLE.substring(0, 50))
-        : data.names[task.state.stage].push(task.TITLE.substring(0, 50));
+        ? data.names['no stage'].push(task.title.substring(0, 50))
+        : data.names[task.state.stage].push(task.title.substring(0, 50));
     } else {
-      data.names['no stage'].push(task.TITLE.substring(0, 50));
+      data.names['no stage'].push(task.title.substring(0, 50));
     }
   });
   data.labels = Object.keys(data.names);
@@ -56,8 +56,8 @@ function byProducts(tasks: any): dataType {
 
     for (let i = 0; i < tasks.length; i++) {
         tasks[i].state === undefined || tasks[i].state.article === ''
-        ? data.names['no product'].push(tasks[i].TITLE.substring(0, tasks[i].TITLE.indexOf(' ')))
-        : data.names[tasks[i].state.article].push(tasks[i].TITLE.substring(0, tasks[i].TITLE.indexOf(' ')));
+        ? data.names['no product'].push(tasks[i].title.substring(0, tasks[i].title.indexOf(' ')))
+        : data.names[tasks[i].state.article].push(tasks[i].title.substring(0, tasks[i].title.indexOf(' ')));
     }
 
     data.labels = Object.keys(data.names);

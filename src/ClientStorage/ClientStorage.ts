@@ -1,46 +1,21 @@
 /* eslint-disable import/no-webpack-loader-syntax */
 // @ts-ignore
 import dataFetcher from 'workerize-loader!../workers/dataFetcher';
-import { without } from 'lodash';
-import B24 from '../B24';
 import { Products } from '../Product/Product';
 
 const worker = dataFetcher();
 
 class ClientStorage {
-    static async getFromAPI(ids: any) {
-        const fulfilledTasks: any[] = [];
-        const rejectedTasks: string[] = [];
-
-        for (let id of ids) {
-            await B24.get_task(id)
-                .then(task => fulfilledTasks.push(task))
-                .catch(() => rejectedTasks.push(id));
-        }
-
-        rejectedTasks.forEach(async id => {
-            await B24.get_task(id)
-                .then(task => fulfilledTasks.push(task))
-                .catch(() => rejectedTasks.push(id));
-        });
-
-        return fulfilledTasks;
-    }
-
     static updateTasks = () =>
-        new Promise(async res => {
-            const { addedTasksID, removedTasksID } = await ClientStorage.getDBdiffs();
-            let addedTasks = await ClientStorage.getFromAPI(addedTasksID);
-
-            if (addedTasks.length > 0) {
-                await ClientStorage.writeData(addedTasks);
+        new Promise(resolve => {
+            worker.onmessage = async ({ data }: MessageEvent) => {
+                if (Array.isArray(data)) {
+                    await ClientStorage.removeData();
+                    ClientStorage.writeData(data).then(resolve);
+                }
             }
-
-            if (removedTasksID.length > 0) {
-                await ClientStorage.removeData(removedTasksID);
-            }
-            res();
-        });
+            worker.getTasks();
+        })
 
     static updateProducts(tasks: any[]) {
         const { products } = Products(tasks);
@@ -57,31 +32,24 @@ class ClientStorage {
                 const store = tran.objectStore(storeType);
                 switch (storeType) {
                     case 'tasks':
-                        data.forEach((entity: any) => store.put(entity, entity.ID));
+                        data.forEach((entity: any) => store.put(entity, entity.id));
                         break;
                     default:
                         data.forEach((entity: any) => store.put(entity, entity.article));
                 }
-                tran.oncomplete = () =>
-                    res(`${storeType} have written to IndexedDB!`);
+                tran.oncomplete = () => res();
                 tran.onerror = () => console.error('there was an error');
             };
         });
     }
 
-    static removeData(data: any) {
-        return new Promise(res => {
+    static removeData = () => new Promise(res => {
             window.indexedDB.open("default").onsuccess = ({ target }: any) => {
                 const tran = target.result.transaction(['tasks'], "readwrite");
-                const store = tran.objectStore('tasks');
-                data.forEach((id: string) => store.delete(id));
-                tran.oncomplete = () => {
-                    console.log(`tasks ${data} have been erased from IndexedDB!`);
-                    res();
-                };
+                tran.oncomplete = () => res();
+                tran.objectStore('tasks').clear();
             };
         });
-    }
 
     static getExistingKeys(storeType: string) {
         return new Promise<string[]>((res) => {
@@ -94,27 +62,6 @@ class ClientStorage {
             }
         });
     }
-
-    /*
-    * returns array id Tasks ID that are not in indexedDB
-    */
-    static getDBdiffs = () =>
-        new Promise<{
-            addedTasksID: string[];
-            removedTasksID: string[];
-        }>(async (res) => {
-            const localIds = await ClientStorage.getExistingKeys('tasks');
-            const remoteIds = await new Promise<string[]>(resolve => {
-                worker.onmessage = ({ data }: MessageEvent) => {
-                    if (Array.isArray(data)) resolve(data);
-                }
-                worker.getTasksID();
-            });
-            res({
-                addedTasksID: without(remoteIds, ...localIds),
-                removedTasksID: without(localIds, ...remoteIds)
-            });
-        });
 
     static getData = () =>
         new Promise<{tasks: any, products: any}>((res) => {

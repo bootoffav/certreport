@@ -37,9 +37,8 @@ class FabricApplicationForm extends React.Component<{
     checked?: boolean;
     onChange?: (table: string, row: number, label: string) => void;
   }> = (props) => {
-
     const table = props.table || 'testRequirement';
-    const row = props.row !== undefined ? props.row + '_' : '';
+    const row = props.row ? props.row + '_' : '';
     const labelConverted = `${table}_${row}${props.label.replace(/ /g, "-")}`;
 
     return <div className="form-check form-check-inline">
@@ -83,6 +82,7 @@ class FabricApplicationForm extends React.Component<{
               <td key={item}>
                 <FabricApplicationForm.CheckBox
                   label={item}
+                  row={0}
                   checked={this.props.state.testRequirement[0].includes(item)}
                   onChange={() => this.toggleCheckboxState('testRequirement', 0, item)}
                 />
@@ -95,6 +95,7 @@ class FabricApplicationForm extends React.Component<{
             <td key={item}>
               <FabricApplicationForm.CheckBox
                 label={item}
+                row={1}
                 checked={this.props.state.testRequirement[1].includes(item)}
                 onChange={() => this.toggleCheckboxState('testRequirement', 1, item)}
               />

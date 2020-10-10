@@ -3,8 +3,8 @@ type ProductType = {
     standards: string[],
     brand: string,
     tasks: {
-        ID: string;
-        TITLE: string;
+        id: string;
+        title: string;
     }[]
 }[];
 
@@ -22,7 +22,7 @@ function Products(tasks: any[]) {
       const indexOfProduct = products.findIndex(product => product.article === article);
       const convertedTitle = {
         ...t,
-        TITLE: t.TITLE.substring(0, t.TITLE.indexOf(' ')),
+        title: t.title.substring(0, t.title.indexOf(' ')),
       };
 
       if (indexOfProduct > 0) {

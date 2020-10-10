@@ -19,7 +19,7 @@ class ListExport extends Component<{
   generateTableStructureForResults = () => ({
     accessors: [
       'position', 'state.serialNumber', 'state.brand', 'state.stage', 'lastActionDate',
-      'TITLE', 'state.article', 'state.testReport',
+      'title', 'state.article', 'state.testReport',
       'state.certificate', 'state.standardsResult', 'state.news'
     ],
     headers: [
@@ -42,7 +42,7 @@ class ListExport extends Component<{
       headers = this.props.columns.map(({ Header }: any) => this.boldText(Header))
       widths = this.props.columns.map(({ accessor, minWidth, width }: any) => {
         switch (accessor) {
-          case 'TITLE':
+          case 'title':
             return 'auto'
           case 'state.readyOn':
             return 70;
@@ -103,11 +103,11 @@ class ListExport extends Component<{
 
       accessors.forEach((acc: string) => {
         switch (acc) {
-          case 'TITLE':
+          case 'title':
             row.push({
               text: tasks[i][acc],
               color: 'blue',
-              link: `${process.env.REACT_APP_B24_HOST}/company/personal/user/${process.env.REACT_APP_B24_USER_ID}/tasks/task/view/${tasks[i].ID}/`
+              link: `${process.env.REACT_APP_B24_HOST}/company/personal/user/${process.env.REACT_APP_B24_USER_ID}/tasks/task/view/${tasks[i].id}/`
             });
           break;
           case 'state.article':

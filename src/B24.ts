@@ -2,9 +2,8 @@ import qs from 'qs';
 import dayjs from 'dayjs';
 import { dataSeparator } from './Task/Task';
 import Task from './Task/Task';
-import StateAdapter from './StateAdapter';
+import { StateAdapter } from './StateAdapter';
 import { AppFormExport } from './components/Export/PDF/AppFormExport';
-import { IState } from './defaults';
 
 const creator_id = process.env.REACT_APP_B24_USER_ID;
 const tag = process.env.REACT_APP_TAG;
@@ -39,10 +38,10 @@ class B24 {
       XMT: 'C_10033',
       XMG: 'C_10041'
     };
-    let UF_CRM_TASK = [];
+    let ufCrmTask = [];
     
-    if (state.UF_CRM_TASK) {
-      state.UF_CRM_TASK.forEach((item : string)=> {
+    if (state.ufCrmTask) {
+      state.ufCrmTask.forEach((item : string)=> {
         if (![
           'C_10033',
           'C_10035',
@@ -51,17 +50,17 @@ class B24 {
           'CO_6295'
         ].includes(item)
         ) {
-          UF_CRM_TASK.push(item);
+          ufCrmTask.push(item);
         }
       });
     }
     
-    UF_CRM_TASK.push(brands_map[state.brand], 'CO_6295');
+    ufCrmTask.push(brands_map[state.brand], 'CO_6295');
     
-    return UF_CRM_TASK;
+    return ufCrmTask;
   }
-    
-  static formTaskFields = (state : IState) => {
+
+  static formTaskFields = (state: any) => {
     let stAd = new StateAdapter(state);
     const taskFields: any = {
       ...B24.defaultParams,
@@ -105,29 +104,29 @@ class B24 {
         `${state.resume === undefined ? '' : `[B]Resume:[/B] ${state.resume}\n`}` +
         `${state.comments && `[B]Comments:[/B] ${state.comments}\n`}` +
         `${state.link && `[B]Edit:[/B] ${state.link}\n`}` +
-        `${dataSeparator}` + (state.otherTextInDescription || ''),
+        `${dataSeparator}\n` + (state.otherTextInDescription || ''),
     };
     if (state.certReceivedOnPlanDate) taskFields.DEADLINE = dayjs(state.certReceivedOnPlanDate).toISOString(); 
 
     return taskFields;
   };
 
-    static async handleApplicationForm(taskId: string, state: IState) {
+    static async handleApplicationForm(taskId: string, state: any) {
         const fileName = `Fabric Test Application Form_${state.serialNumber}_${state.article}.pdf`;
         await fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.getfiles?` + qs.stringify({ TASKID: taskId }))
             .then(res => res.json())
             .then(res => 
                 res.result.forEach((file: any) => {
-                // 29 is 'Fabric Test Application Form_'
-                if ('NAME' in file && fileName.substr(0, 29) === file.NAME.substr(0, 29)) {
-                    // remove this file from task
-                    fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.deletefile?` + qs.stringify({ TASK_ID: taskId, ATTACHMENT_ID: file.ATTACHMENT_ID }));
-                    // delete from Bitrix
-                    fetch(`${main_url}/${creator_id}/${webhook_key}/disk.file.delete?` + qs.stringify({ id: file.FILE_ID }));
-                }
+                    // 29 is 'Fabric Test Application Form_'
+                    if ('NAME' in file && fileName.substr(0, 29) === file.NAME.substr(0, 29)) {
+                        // remove this file from task
+                        fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.deletefile?` + qs.stringify({ TASK_ID: taskId, ATTACHMENT_ID: file.ATTACHMENT_ID }));
+                        // delete from Bitrix
+                        fetch(`${main_url}/${creator_id}/${webhook_key}/disk.file.delete?` + qs.stringify({ id: file.FILE_ID }));
+                    }
                 }
                 ));
-        const pdf = await new AppFormExport({ state }).create();
+        const pdf = await new AppFormExport(state).create();
         pdf.getBase64((base64: string) => {
             fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.addfile/`, {
                 method: 'post',
@@ -199,32 +198,35 @@ class B24 {
     }
   }
 
-    static async getTasksID() {
-        let tasks: { id: string }[] = [];
-
-        do {
-            tasks = tasks.concat(await fetch(`${main_url}/${creator_id}/${webhook_key}/tasks.task.list?` +
-                qs.stringify({
-                    order: { ID: 'desc' },
-                    filter: { TAG: tag },
-                    select: ['ID'],
-                    start: B24.start
-                }))
-                .then(res => res.json())
-                .then(json => B24.step(json).tasks));
-
-        } while (B24.start !== undefined);
-        return tasks.map(t => t.id);
-    }
-
-    static get_task(id : string | undefined) {
+    static async get_task(id: string | undefined) {
         if (id === null) {
             throw new Error('id is undefined');
         }
 
-        return fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.getdata?ID=${id}`)
+        const getAttachedFiles = () =>
+            fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.getfiles?` + qs.stringify({ TASKID: id }))
+                .then(res => res.json())
+                .then(({ result }: any) => result);
+
+        const test = await fetch(`${main_url}/${creator_id}/${webhook_key}/tasks.task.get?` +
+            qs.stringify({
+                taskId: id,
+                select: ['ID', 'TITLE', 'DESCRIPTION', 'UF_CRM_TASK', 'UF_TASK_WEBDAV_FILES'],
+            }))
             .then(rsp => rsp.json())
-            .then(rsp => new Task(rsp.result))
+            .then(async({result}: any) => {
+                const { description, ufCrmTask, id, title } = result.task;
+                return {
+                    ...new Task({
+                        description,
+                        ufCrmTask
+                    }),
+                    id, title,
+                    ufTaskWebdavFiles: await getAttachedFiles()
+                }
+            });
+
+        return test;
     }
 
     static async get_standards() {

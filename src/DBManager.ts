@@ -1,5 +1,5 @@
 import faunadb, { query as q } from "faunadb";
-import { emptyState } from './defaults';
+import { emptyState } from './Task/emptyState';
 
 class DB {
 
