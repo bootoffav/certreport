@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 
 const dataSeparator = "-------------------------------------------------";
 
-export enum Stage {
+enum Stage {
   "00. Paused",
   "0. Sample to be prepared",
   "1. Sample Sent",
@@ -359,4 +359,4 @@ class Task {
   }
 }
 
-export { dataSeparator, Task as default };
+export { dataSeparator, Task as default, Stage };

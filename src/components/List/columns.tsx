@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import dayjs from "dayjs";
 import { Icon } from "tabler-react";
-import { dateConverter } from "../../helpers";
+import { dateConverter, printStage } from "../../helpers";
+import type { CellInfo } from "react-table";
 
 function sortDates(a: string | undefined, b: string | undefined): number {
   if (a === undefined) return -1;
@@ -62,7 +63,8 @@ function getColumns(totalPrice: number, stage?: string) {
       Header: "Status",
       id: "stage",
       accessor: "state.stage",
-      width: 160,
+      Cell: ({ value: stage }: CellInfo) => printStage(stage, "table"),
+      width: 60,
     },
     {
       //5

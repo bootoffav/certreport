@@ -56,11 +56,13 @@ const StageFilter: React.FunctionComponent<{
 
   const more = ["products", "overdue"];
 
-  const DropDownItem = (item: string) => ({
-    value: item.charAt(0).toUpperCase() + item.slice(1),
-    key: item,
-    onClick: () => filter(item),
-  });
+  const DropDownItem = (item: any) => {
+    return {
+      value: item,
+      key: item,
+      onClick: () => filter(item),
+    };
+  };
 
   return (
     <div
@@ -74,7 +76,11 @@ const StageFilter: React.FunctionComponent<{
           type="button"
           value="Stages"
           color="indigo"
-          triggerContent="Stages"
+          triggerContent={
+            <>
+              Stages<sup>*</sup>
+            </>
+          }
           itemsObject={stages.map(DropDownItem)}
         ></Dropdown>
       </div>

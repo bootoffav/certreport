@@ -60,4 +60,33 @@ function countTotalPrice(tasks: any[]) {
   );
 }
 
-export { countTotalPrice };
+const StageShortNames: {
+  [key: string]: string;
+} = {
+  "00. Paused": "00.P",
+  "0. Sample to be prepared": "0.STP",
+  "1. Sample Sent": "1.SS",
+  "2. Sample Arrived": "2.SA",
+  "3. PI Issued": "3.PI",
+  "4. Payment Done": "4.PD",
+  "5. Testing is started": "5.TS",
+  "6. Pre-treatment done": "6.PTD",
+  "7. Test-report ready": "7.TR",
+  "8. Certificate ready": "8.CR",
+  "9. Ended": "9.End",
+};
+
+function printStage(stage: string, place: "table" | "select" | "dropdown") {
+  switch (place) {
+    case "table":
+      return StageShortNames[stage];
+    case "select":
+      return stage.substring(stage.indexOf(" ") + 1);
+    case "dropdown":
+      return `${StageShortNames[stage]} - ${stage.substring(
+        stage.indexOf(" ") + 1
+      )}`;
+  }
+}
+
+export { countTotalPrice, printStage };

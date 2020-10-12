@@ -135,8 +135,9 @@ export default class List extends React.Component<{
         }
         noDataText="First time update takes a little while, please do not close page until it is done. See for green button at top right corner"
         ref={(ref) => (this.ref = ref)}
-        className="-striped -highlight table"
+        className="-highlight table"
         getTrProps={this.getTrProps}
+        defaultPageSize={10}
       />
     </>
   );

@@ -43,7 +43,7 @@ class Form extends React.Component<IFormProps> {
     this.task_id = props.match.params.id;
     this.state = {
       ...emptyState,
-      requestStatus: Status.FillingForm
+      requestStatus: Status.FillingForm,
     };
   }
 
@@ -58,7 +58,7 @@ class Form extends React.Component<IFormProps> {
         ({ EN11612Detail, exists, ...DBState }: any) => ({
           EN11612Detail,
           DBState,
-          exists
+          exists,
         })
       );
 
@@ -71,21 +71,21 @@ class Form extends React.Component<IFormProps> {
             DBState: dataFromDB.DBState,
             EN11612Detail: dataFromDB.EN11612Detail,
             existsInDB: dataFromDB.exists,
-            requestStatus: Status.FillingForm
+            requestStatus: Status.FillingForm,
           });
         })
-        .catch(e => this.setState({ hasError: true }));
+        .catch((e) => this.setState({ hasError: true }));
     }
   }
 
   handleDateChange = (date: Date | null, prop: string): void =>
     this.setState({
-      [prop]: date === null ? "" : dayjs(date).format("DDMMMYYYY")
+      [prop]: date === null ? "" : dayjs(date).format("DDMMMYYYY"),
     });
 
   handleCheckboxChange = ({ currentTarget }: React.SyntheticEvent): void =>
     this.setState({
-      [currentTarget.id]: (currentTarget as HTMLInputElement).checked
+      [currentTarget.id]: (currentTarget as HTMLInputElement).checked,
     });
 
   handleSelectChange = (
@@ -103,7 +103,7 @@ class Form extends React.Component<IFormProps> {
             ? `${endValue}${currentValue.label}`
             : `${endValue}${currentValue.label}, `,
         ""
-      )
+      ),
     });
   };
 
@@ -117,7 +117,7 @@ class Form extends React.Component<IFormProps> {
     const OK = await swal({
       title: "Are you sure?",
       icon: "info",
-      buttons: ["Cancel", "OK"]
+      buttons: ["Cancel", "OK"],
     });
 
     if (OK) {
@@ -125,7 +125,7 @@ class Form extends React.Component<IFormProps> {
       // update in Bitrix
       const taskId = this.task_id
         ? await B24.updateTask(this.state, this.task_id)
-            .then(_ => this.task_id)
+            .then((_) => this.task_id)
             .catch(this.unsuccessfullySubmitted)
         : await B24.createTask(this.state).catch(this.unsuccessfullySubmitted);
 
@@ -137,7 +137,7 @@ class Form extends React.Component<IFormProps> {
       this.state.existsInDB
         ? DB.updateInstance(taskId, {
             ...this.state.DBState,
-            EN11612Detail: this.state.EN11612Detail
+            EN11612Detail: this.state.EN11612Detail,
           })
             .then(this.successfullySubmitted)
             .catch(this.unsuccessfullySubmitted)
@@ -152,7 +152,7 @@ class Form extends React.Component<IFormProps> {
       const splitted: string[] = value.split(", ");
       return splitted.length === 1
         ? [{ label: value, value }]
-        : splitted.map(label => ({ label, value: label }));
+        : splitted.map((label) => ({ label, value: label }));
     }
   };
 
@@ -173,7 +173,7 @@ class Form extends React.Component<IFormProps> {
     setTimeout(
       () =>
         this.setState({
-          requestStatus: Status.FillingForm
+          requestStatus: Status.FillingForm,
         }),
       1500
     );
@@ -401,7 +401,7 @@ class Form extends React.Component<IFormProps> {
                     checked={this.state.pretreatment1Result === "fail"}
                     onChange={() =>
                       this.setState({
-                        pretreatment1Result: "fail"
+                        pretreatment1Result: "fail",
                       })
                     }
                   />
@@ -425,7 +425,7 @@ class Form extends React.Component<IFormProps> {
                     checked={this.state.pretreatment1Result === "pass"}
                     onChange={() =>
                       this.setState({
-                        pretreatment1Result: "pass"
+                        pretreatment1Result: "pass",
                       })
                     }
                   />
@@ -647,7 +647,7 @@ class Form extends React.Component<IFormProps> {
           Total:{" "}
           {(+this.state.price + +this.state.price2).toLocaleString("ru-RU", {
             style: "currency",
-            currency: "EUR"
+            currency: "EUR",
           })}
         </p>
       </div>
@@ -664,7 +664,7 @@ class Form extends React.Component<IFormProps> {
         resultChange={({ currentTarget }: any) => {
           const standardsResult = {
             ...this.state.standardsResult,
-            [currentTarget.dataset.standard]: currentTarget.value
+            [currentTarget.dataset.standard]: currentTarget.value,
           };
           removeEmptyProps(standardsResult);
           this.setState({ standardsResult });
@@ -676,7 +676,7 @@ class Form extends React.Component<IFormProps> {
   render = () => (
     <div className="container mt-2">
       <Notification status={this.state.requestStatus} />
-      <form onSubmit={e => this.handleCert(e)}>
+      <form onSubmit={(e) => this.handleCert(e)}>
         <TabbedCard initialTab="Basic Info">
           <Tab title="Basic Info">{this.renderBasicInfo()}</Tab>
           <Tab title="Dates">{this.renderDates()}</Tab>
@@ -754,7 +754,7 @@ class Form extends React.Component<IFormProps> {
   updateAttachedFiles = () =>
     B24.get_task(this.task_id).then((r: any) => {
       this.setState({
-        attachedFiles: r.ufTaskWebdavFiles
+        attachedFiles: r.ufTaskWebdavFiles,
       });
     });
 }

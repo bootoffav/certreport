@@ -13,6 +13,7 @@ import Dashboard from "../Dashboard/Dashboard";
 import ErrorBoundary from "../../ErrorBoundary";
 import { BrandFilter } from "../Filters/BrandFilter";
 import DateFilter from "../Filters/DateFilter";
+import { StageShortNames } from "../StageShortNames/StageShortNames";
 
 class Main extends Component {
   cache = new CacheManager();
@@ -156,11 +157,14 @@ class Main extends Component {
               exact
               path="/"
               render={() => (
-                <List
-                  tasks={this.state.filteredTasks}
-                  products={this.state.filteredProducts}
-                  updated={this.state.updated}
-                />
+                <>
+                  <List
+                    tasks={this.state.filteredTasks}
+                    products={this.state.filteredProducts}
+                    updated={this.state.updated}
+                  />
+                  <StageShortNames />
+                </>
               )}
             />
             <Route
