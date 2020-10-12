@@ -1,21 +1,20 @@
-import B24 from './B24';
-import { ClientStorage } from './ClientStorage/ClientStorage';
+import B24 from "./B24";
+import { ClientStorage } from "./ClientStorage/ClientStorage";
 
 class CacheManager {
-
-    doUpdate = async () => {
-        if (sessionStorage.getItem('updated') === null) {
-            await ClientStorage.updateTasks();
-            const { tasks } = await this.getCache();
-            await ClientStorage.updateProducts(tasks);
-            sessionStorage.setItem('updated', '1');
-        }
+  doUpdate = async () => {
+    if (sessionStorage.getItem("updated") === null) {
+      await ClientStorage.updateTasks();
+      const { tasks } = await this.getCache();
+      await ClientStorage.updateProducts(tasks);
+      sessionStorage.setItem("updated", "1");
     }
+  };
 
-    getCache = async () => await ClientStorage.getData();
+  getCache = async () => await ClientStorage.getData();
 
-    static updateTask = (taskId: string) =>
-        B24.get_task(taskId).then(task => ClientStorage.writeData([task]));
+  static updateTask = (taskId: string) =>
+    B24.get_task(taskId).then((task) => ClientStorage.writeData([task]));
 }
 
 export default CacheManager;

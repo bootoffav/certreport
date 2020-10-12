@@ -1,10 +1,10 @@
 export interface IState {
   standardsResult: {
-    [key: string]: 'pass' | 'fail';
+    [key: string]: "pass" | "fail";
   };
   attachedFiles: any;
   DBState: any;
-  EN11612Detail?: any,
+  EN11612Detail?: any;
   link: string;
   news: string;
   testingTime: string;
@@ -15,7 +15,7 @@ export interface IState {
   standards: string;
   price: string;
   paid: boolean;
-  paymentDate : string;
+  paymentDate: string;
   proformaReceived: string;
   proforma: string;
   proformaReceivedDate: string;
@@ -28,7 +28,7 @@ export interface IState {
   proformaNumber2: string;
   article: string;
   product: string;
-  code : string;
+  code: string;
   colour: string;
   testReport: string;
   certificate: string;
@@ -53,78 +53,78 @@ export interface IState {
   certReceivedOnRealDate: string;
   comments: string;
   otherTextInDescription: string | null;
-  resume: undefined | 'fail' | 'pass' | 'no sample' | 'partly';
+  resume: undefined | "fail" | "pass" | "no sample" | "partly";
 }
 
 const emptyState: IState = {
   standardsResult: {},
   DBState: {
-    testRequirement: [[],[],[],[],[],[],[],[],[]],
-    washPreTreatment: [[],[]],
-    footer: [[],[]],
-    cycles: ['5', ''],
+    testRequirement: [[], [], [], [], [], [], [], [], []],
+    washPreTreatment: [[], []],
+    footer: [[], []],
+    cycles: ["5", ""],
     washTemp: "60",
-    otherStandard1: 'According to Standard Mandotory Test Requirement',
-    otherStandard2: 'According to Standard Mandotory Test Requirement'
+    otherStandard1: "According to Standard Mandotory Test Requirement",
+    otherStandard2: "According to Standard Mandotory Test Requirement",
   },
   attachedFiles: [],
   EN11612Detail: {},
   resume: undefined,
-  link: '',
+  link: "",
   paid: false,
-  proforma: '',
+  proforma: "",
   paid2: false,
-  news: '',
-  length: '1',
-  stage: '',
-  testingTime: '21',
-  width: '1.5',
-  proformaReceivedDate: '',
-  proformaReceivedDate2: '',
-  pausedUntil: '',
-  readyOn: '',
-  sentOn: '',
-  receivedOn: '',
-  startedOn: '',
-  testFinishedOnPlanDate: '',
-  testFinishedOnRealDate: '',
-  certReceivedOnPlanDate: '',
-  certReceivedOnRealDate: '',
-  paymentDate: '',
-  paymentDate2: '',
-  proformaReceived: '',
-  proformaReceived2: '',
-  proformaNumber: '',
-  proformaNumber2: '',
-  applicantName: '',
-  product: '',
-  code: '',
-  article: '',
-  colour: '',
-  partNumber: '',
-  rollNumber: '',
-  serialNumber: '',
-  materialNeeded: '',
-  standards: '',
-  testingCompany: '',
-  brand: '',
-  price: '',
-  price2: '',
-  comments: '',
-  testReport: '',
-  certificate: '',
-  pretreatment1: '',
-  pretreatment1Result: '',
-  pretreatment2: '',
-  pretreatment3: '',
-  otherTextInDescription: ''
+  news: "",
+  length: "1",
+  stage: "",
+  testingTime: "21",
+  width: "1.5",
+  proformaReceivedDate: "",
+  proformaReceivedDate2: "",
+  pausedUntil: "",
+  readyOn: "",
+  sentOn: "",
+  receivedOn: "",
+  startedOn: "",
+  testFinishedOnPlanDate: "",
+  testFinishedOnRealDate: "",
+  certReceivedOnPlanDate: "",
+  certReceivedOnRealDate: "",
+  paymentDate: "",
+  paymentDate2: "",
+  proformaReceived: "",
+  proformaReceived2: "",
+  proformaNumber: "",
+  proformaNumber2: "",
+  applicantName: "",
+  product: "",
+  code: "",
+  article: "",
+  colour: "",
+  partNumber: "",
+  rollNumber: "",
+  serialNumber: "",
+  materialNeeded: "",
+  standards: "",
+  testingCompany: "",
+  brand: "",
+  price: "",
+  price2: "",
+  comments: "",
+  testReport: "",
+  certificate: "",
+  pretreatment1: "",
+  pretreatment1Result: "",
+  pretreatment2: "",
+  pretreatment3: "",
+  otherTextInDescription: "",
 };
 
 const brand = [
-    { value: 'C_10033', label: 'XMT' },
-    { value: 'C_10035', label: 'XMF' },
-    { value: 'C_10037', label: 'XMS' },
-    { value: 'C_10041', label: 'XMG' }
+  { value: "C_10033", label: "XMT" },
+  { value: "C_10035", label: "XMF" },
+  { value: "C_10037", label: "XMS" },
+  { value: "C_10041", label: "XMG" },
 ];
 
 export { emptyState, brand };

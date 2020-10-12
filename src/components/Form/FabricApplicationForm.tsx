@@ -1,18 +1,20 @@
-import * as React from 'react';
-import { without } from 'lodash';
-import { Form, Button, Icon } from 'tabler-react';
-import { AppFormExport } from '../Export/PDF/AppFormExport';
+import * as React from "react";
+import { without } from "lodash";
+import { Form, Button, Icon } from "tabler-react";
+import { AppFormExport } from "../Export/PDF/AppFormExport";
 
-import './FabricApplicationForm.css';
+import "./FabricApplicationForm.css";
 
-class FabricApplicationForm extends React.Component<{
+class FabricApplicationForm extends React.Component<
+  {
     state: any;
     appForm: any;
     updateParent: (DBState: any) => void;
-}, {
-      [key: string]: any;
-  }> {
-
+  },
+  {
+    [key: string]: any;
+  }
+> {
   toggleCheckboxState = (table: string, row: number, label: string) => {
     const { [table]: replacer } = this.props.state;
 
@@ -22,13 +24,13 @@ class FabricApplicationForm extends React.Component<{
       replacer[row].includes(label)
         ? without(replacer[row], label)
         : [...replacer[row], label]
-    )
+    );
 
     this.props.updateParent({
       ...this.props.state,
-      [table]: replacer
+      [table]: replacer,
     });
-  }
+  };
 
   static CheckBox: React.FunctionComponent<{
     label: string;
@@ -37,38 +39,46 @@ class FabricApplicationForm extends React.Component<{
     checked?: boolean;
     onChange?: (table: string, row: number, label: string) => void;
   }> = (props) => {
-    const table = props.table || 'testRequirement';
-    const row = props.row ? props.row + '_' : '';
+    const table = props.table || "testRequirement";
+    const row = props.row ? props.row + "_" : "";
     const labelConverted = `${table}_${row}${props.label.replace(/ /g, "-")}`;
 
-    return <div className="form-check form-check-inline">
-      <input type="checkbox" className="form-check-input" checked={props.checked}
-        // @ts-ignore
-        id={labelConverted} name={labelConverted} onChange={props.onChange}
-      />
-      <label
-        className="form-check-label"
-        htmlFor={labelConverted}>
-        {props.label}
-      </label>
-    </div>;
+    return (
+      <div className="form-check form-check-inline">
+        <input
+          type="checkbox"
+          className="form-check-input"
+          checked={props.checked}
+          id={labelConverted}
+          name={labelConverted}
+          // @ts-ignore
+          onChange={props.onChange}
+        />
+        <label className="form-check-label" htmlFor={labelConverted}>
+          {props.label}
+        </label>
+      </div>
+    );
   };
 
-  TestRequirement = () =>
+  TestRequirement = () => (
     <table id="testRequirement" className="table table-sm table-bordered">
       <thead className="text-center">
         <tr>
-            <th colSpan={8}>
-                <span className="align-middle">Test Requirement</span>
-                <div className="float-right">
-                    <Button link
-                        onClick={(e: any) => {
-                            e.preventDefault();
-                            new AppFormExport(this.props.appForm).save();
-                        }}
-                    ><Icon prefix="fe" name="download" /></Button>
-                </div>
-            </th>
+          <th colSpan={8}>
+            <span className="align-middle">Test Requirement</span>
+            <div className="float-right">
+              <Button
+                link
+                onClick={(e: any) => {
+                  e.preventDefault();
+                  new AppFormExport(this.props.appForm).save();
+                }}
+              >
+                <Icon prefix="fe" name="download" />
+              </Button>
+            </div>
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -77,142 +87,186 @@ class FabricApplicationForm extends React.Component<{
           <td colSpan={7}>Optional Test Item Under Standard</td>
         </tr>
         <tr>
-          {
-            ['EN 11611', 'A1', 'A2'].map(item =>
-              <td key={item}>
-                <FabricApplicationForm.CheckBox
-                  label={item}
-                  row={0}
-                  checked={this.props.state.testRequirement[0].includes(item)}
-                  onChange={() => this.toggleCheckboxState('testRequirement', 0, item)}
-                />
-            </td>)
-          }
+          {["EN 11611", "A1", "A2"].map((item) => (
+            <td key={item}>
+              <FabricApplicationForm.CheckBox
+                label={item}
+                row={0}
+                checked={this.props.state.testRequirement[0].includes(item)}
+                onChange={() =>
+                  this.toggleCheckboxState("testRequirement", 0, item)
+                }
+              />
+            </td>
+          ))}
           <td colSpan={5}></td>
         </tr>
         <tr>
-          {['EN 11612', 'A1', 'A2', 'B', 'C', 'D', 'E', 'F'].map(item =>
+          {["EN 11612", "A1", "A2", "B", "C", "D", "E", "F"].map((item) => (
             <td key={item}>
               <FabricApplicationForm.CheckBox
                 label={item}
                 row={1}
                 checked={this.props.state.testRequirement[1].includes(item)}
-                onChange={() => this.toggleCheckboxState('testRequirement', 1, item)}
+                onChange={() =>
+                  this.toggleCheckboxState("testRequirement", 1, item)
+                }
               />
-            </td>)
-          }
+            </td>
+          ))}
         </tr>
         <tr>
-          {['EN 1149-5', 'EN 1149-1', 'EN 1149-3'].map(item =>
+          {["EN 1149-5", "EN 1149-1", "EN 1149-3"].map((item) => (
             <td key={item}>
               <FabricApplicationForm.CheckBox
                 label={item}
                 checked={this.props.state.testRequirement[2].includes(item)}
-                onChange={() => this.toggleCheckboxState('testRequirement', 2, item)}
+                onChange={() =>
+                  this.toggleCheckboxState("testRequirement", 2, item)
+                }
               />
-            </td>)
-          }
+            </td>
+          ))}
           <td colSpan={5}></td>
         </tr>
         <tr>
-          {['EN 61482-1-2', 'Class 1', 'Class 2'].map(item =>
+          {["EN 61482-1-2", "Class 1", "Class 2"].map((item) => (
             <td key={item}>
               <FabricApplicationForm.CheckBox
                 label={item}
                 checked={this.props.state.testRequirement[3].includes(item)}
-                onChange={() => this.toggleCheckboxState('testRequirement', 3, item)}
+                onChange={() =>
+                  this.toggleCheckboxState("testRequirement", 3, item)
+                }
               />
-            </td>)
-          }
+            </td>
+          ))}
           <td colSpan={5}></td>
         </tr>
         <tr>
           <td>
-            <FabricApplicationForm.CheckBox label={'EN 20471'}
-              checked={this.props.state.testRequirement[4].includes('EN 20471')}
-              onChange={() => this.toggleCheckboxState('testRequirement', 4, 'EN 20471')}
+            <FabricApplicationForm.CheckBox
+              label={"EN 20471"}
+              checked={this.props.state.testRequirement[4].includes("EN 20471")}
+              onChange={() =>
+                this.toggleCheckboxState("testRequirement", 4, "EN 20471")
+              }
             />
           </td>
           <td colSpan={7}>According to Standard Mandotory Test Requirement</td>
         </tr>
         <tr>
           <td>
-            <FabricApplicationForm.CheckBox label={'EN 14116'}
-              checked={this.props.state.testRequirement[5].includes('EN 11416')}
-              onChange={() => this.toggleCheckboxState('testRequirement', 5, 'EN 11416')}
+            <FabricApplicationForm.CheckBox
+              label={"EN 14116"}
+              checked={this.props.state.testRequirement[5].includes("EN 11416")}
+              onChange={() =>
+                this.toggleCheckboxState("testRequirement", 5, "EN 11416")
+              }
             />
           </td>
           <td colSpan={7}>According to Standard Mandotory Test Requirement</td>
         </tr>
         <tr>
           <td>
-            <FabricApplicationForm.CheckBox label={'EN 343'}
-              checked={this.props.state.testRequirement[6].includes('EN 343')}
-              onChange={() => this.toggleCheckboxState('testRequirement', 6, 'EN 343')}
-          />
+            <FabricApplicationForm.CheckBox
+              label={"EN 343"}
+              checked={this.props.state.testRequirement[6].includes("EN 343")}
+              onChange={() =>
+                this.toggleCheckboxState("testRequirement", 6, "EN 343")
+              }
+            />
           </td>
           <td colSpan={7}>According to Standard Mandotory Test Requirement</td>
         </tr>
         <tr>
-            <td>
-                <div className="form-check form-check-inline">
-                    <Form.Switch
-                        label="Other Standard 1"
-                        checked={this.props.state.testRequirement[7].includes('Other Standard 1')}
-                        type="checkbox"
-                        onChange={() => this.toggleCheckboxState('testRequirement', 7, 'Other Standard 1')}
-                    />
-                </div>
-            </td>
+          <td>
+            <div className="form-check form-check-inline">
+              <Form.Switch
+                label="Other Standard 1"
+                checked={this.props.state.testRequirement[7].includes(
+                  "Other Standard 1"
+                )}
+                type="checkbox"
+                onChange={() =>
+                  this.toggleCheckboxState(
+                    "testRequirement",
+                    7,
+                    "Other Standard 1"
+                  )
+                }
+              />
+            </div>
+          </td>
           <td colSpan={7}>
-            <input className="form-control form-control-sm input-xs"
-              id='testRequirement_Other-Standard-1-description'
+            <input
+              className="form-control form-control-sm input-xs"
+              id="testRequirement_Other-Standard-1-description"
               value={this.props.state.otherStandard1}
-              onChange={
-                ({ currentTarget: { value } }) => 
-                  this.props.updateParent({
-                    ...this.props.state,
-                    otherStandard1: value
-                  })
+              onChange={({ currentTarget: { value } }) =>
+                this.props.updateParent({
+                  ...this.props.state,
+                  otherStandard1: value,
+                })
               }
-              disabled={!this.props.state.testRequirement[7].includes('Other Standard 1')}
+              disabled={
+                !this.props.state.testRequirement[7].includes(
+                  "Other Standard 1"
+                )
+              }
             />
           </td>
         </tr>
         <tr>
-            <td>
-                <div className="form-check form-check-inline">
-                    <Form.Switch
-                        label="Other Standard 2"
-                        checked={this.props.state.testRequirement[8].includes('Other Standard 2')}
-                        type="checkbox"
-                        onChange={() => this.toggleCheckboxState('testRequirement', 8, 'Other Standard 2')}
-                    />
-                </div>
+          <td>
+            <div className="form-check form-check-inline">
+              <Form.Switch
+                label="Other Standard 2"
+                checked={this.props.state.testRequirement[8].includes(
+                  "Other Standard 2"
+                )}
+                type="checkbox"
+                onChange={() =>
+                  this.toggleCheckboxState(
+                    "testRequirement",
+                    8,
+                    "Other Standard 2"
+                  )
+                }
+              />
+            </div>
           </td>
           <td colSpan={7}>
-            <input className="form-control form-control-sm input-xs"
-              id='testRequirement_Other-Standard-2-description'
+            <input
+              className="form-control form-control-sm input-xs"
+              id="testRequirement_Other-Standard-2-description"
               value={this.props.state.otherStandard2}
-              onChange={
-                ({ currentTarget: { value } }) => 
-                  this.props.updateParent({
-                    ...this.props.state,
-                    otherStandard2: value
-                  })
+              onChange={({ currentTarget: { value } }) =>
+                this.props.updateParent({
+                  ...this.props.state,
+                  otherStandard2: value,
+                })
               }
-              disabled={!this.props.state.testRequirement[8].includes('Other Standard 2')}
+              disabled={
+                !this.props.state.testRequirement[8].includes(
+                  "Other Standard 2"
+                )
+              }
             />
           </td>
         </tr>
       </tbody>
     </table>
-  
-  WashPreTreatmentRequirement = () => 
+  );
+
+  WashPreTreatmentRequirement = () => (
     <table id="washPreTreatment" className="table table-sm table-bordered">
       <thead className="text-center">
         <tr>
-          <th colSpan={9}>Wash Pre-treatment Requirement - Please mark down below for your wash requirement</th>
+          <th colSpan={9}>
+            Wash Pre-treatment Requirement - Please mark down below for your
+            wash requirement
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -225,118 +279,137 @@ class FabricApplicationForm extends React.Component<{
         <tr>
           <td>Domestic Wash(ISO 6330)</td>
           <td>
-            <input type="number"
+            <input
+              type="number"
               className="form-control form-control-sm input-xs"
               id="washPreTreatment_0_cycles"
               value={this.props.state.cycles[0]}
-              onChange={
-                ({ currentTarget: { value } }) =>
-                  this.props.updateParent({
-                    ...this.props.state,
-                    cycles: [value, this.props.state.cycles[1]]
-                  })
-              }/>
+              onChange={({ currentTarget: { value } }) =>
+                this.props.updateParent({
+                  ...this.props.state,
+                  cycles: [value, this.props.state.cycles[1]],
+                })
+              }
+            />
           </td>
           <td>
-            <input type="number"
+            <input
+              type="number"
               className="form-control form-control-sm input-xs"
               id="washPreTreatment_0_temperature"
               value={this.props.state.washTemp}
-              onChange={
-                ({ currentTarget: { value } }) =>
-                  this.props.updateParent({ ...this.props.state, washTemp: value })
+              onChange={({ currentTarget: { value } }) =>
+                this.props.updateParent({
+                  ...this.props.state,
+                  washTemp: value,
+                })
               }
             />
           </td>
 
-          {['A', 'B', 'C', 'D', 'E', 'F'].map(item =>
+          {["A", "B", "C", "D", "E", "F"].map((item) => (
             <td key={item}>
               <FabricApplicationForm.CheckBox
-                table={'washPreTreatment'}
+                table={"washPreTreatment"}
                 label={item}
                 checked={this.props.state.washPreTreatment[0].includes(item)}
-                onChange={() => this.toggleCheckboxState('washPreTreatment', 0, item)}
+                onChange={() =>
+                  this.toggleCheckboxState("washPreTreatment", 0, item)
+                }
               />
             </td>
-          )}
+          ))}
         </tr>
         <tr>
           <td>Industrial Wash(ISO 15797)</td>
           <td>
-            <input type="number"
+            <input
+              type="number"
               className="form-control form-control-sm input-xs"
               id="washPreTreatment_1_cycles"
               value={this.props.state.cycles[1]}
               onChange={({ currentTarget: { value } }) =>
                 this.props.updateParent({
                   ...this.props.state,
-                  cycles: [this.props.state.cycles[0], value]
-                })}
-            
+                  cycles: [this.props.state.cycles[0], value],
+                })
+              }
             />
           </td>
           <td>According to standard</td>
-          {['Tumble Dry', 'Tunnel Dry'].map(item =>
+          {["Tumble Dry", "Tunnel Dry"].map((item) => (
             <td colSpan={3} key={item}>
               <FabricApplicationForm.CheckBox
-                table={'washPreTreatment'}
+                table={"washPreTreatment"}
                 label={item}
                 checked={this.props.state.washPreTreatment[1].includes(item)}
-                onChange={() => this.toggleCheckboxState('washPreTreatment', 1, item)}
+                onChange={() =>
+                  this.toggleCheckboxState("washPreTreatment", 1, item)
+                }
               />
             </td>
-          )}
+          ))}
         </tr>
       </tbody>
     </table>
+  );
 
   formFooter: React.FunctionComponent = () => {
-    const row1 = ['EUR', 'USD', 'RMB'];
-    const row2 = ['NO', 'Required'];
+    const row1 = ["EUR", "USD", "RMB"];
+    const row2 = ["NO", "Required"];
 
-    return <table id="footer" className="table table-sm table-borderless">
-      <tbody>
-        <tr>
-          <td>PI/OFFER in:</td>
-          <td>
-            {row1.map(currency => 
-              <FabricApplicationForm.CheckBox
-                key={currency}
-                table='footer'
-                label={currency}
-                checked={this.props.state.footer[0].includes(currency)}
-                onChange={() => this.toggleCheckboxState('footer', 0, currency)}
-              >/&nbsp;&nbsp;&nbsp;</FabricApplicationForm.CheckBox>
-            )}
-          </td>
-        </tr>
+    return (
+      <table id="footer" className="table table-sm table-borderless">
+        <tbody>
+          <tr>
+            <td>PI/OFFER in:</td>
+            <td>
+              {row1.map((currency) => (
+                <FabricApplicationForm.CheckBox
+                  key={currency}
+                  table="footer"
+                  label={currency}
+                  checked={this.props.state.footer[0].includes(currency)}
+                  onChange={() =>
+                    this.toggleCheckboxState("footer", 0, currency)
+                  }
+                >
+                  /&nbsp;&nbsp;&nbsp;
+                </FabricApplicationForm.CheckBox>
+              ))}
+            </td>
+          </tr>
 
-        <tr>
-          <td>Test Certificate:</td>
-          <td>
-            {row2.map(item =>
-              <FabricApplicationForm.CheckBox
-                key={item}
-                table='footer'
-                label={item}
-                checked={this.props.state.footer[1].includes(item)}
-                onChange={() => this.toggleCheckboxState('footer', 1, item)}
-              >/</FabricApplicationForm.CheckBox>
-            )}
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  }
+          <tr>
+            <td>Test Certificate:</td>
+            <td>
+              {row2.map((item) => (
+                <FabricApplicationForm.CheckBox
+                  key={item}
+                  table="footer"
+                  label={item}
+                  checked={this.props.state.footer[1].includes(item)}
+                  onChange={() => this.toggleCheckboxState("footer", 1, item)}
+                >
+                  /
+                </FabricApplicationForm.CheckBox>
+              ))}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    );
+  };
 
-    render() {
-        return <>
-
+  render() {
+    return (
+      <>
         <this.TestRequirement />
         <this.WashPreTreatmentRequirement />
         <this.formFooter />
-        </>;
-    }
+      </>
+    );
+  }
 }
 
 export { FabricApplicationForm };

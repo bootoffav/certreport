@@ -1,6 +1,6 @@
 let doughnutOptions = {
   legend: {
-    display: false
+    display: false,
   },
   tooltips: {
     callbacks: {
@@ -8,9 +8,9 @@ let doughnutOptions = {
         const { index } = toolTipItem.pop();
         const stage = passedData.labels[index];
         return passedData.names[stage];
-      }
-    }
-  }
+      },
+    },
+  },
 };
 
 export { doughnutOptions };

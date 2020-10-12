@@ -1,26 +1,28 @@
 body {
-    font-size: 12px;
-    font-family: 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+  font-size: 12px;
+  font-family: "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial,
+    sans-serif;
 }
 
-label, p {
-    font-weight: 200;
+label,
+p {
+  font-weight: 200;
 }
 .navbar-light {
-    font-size: 1.2em;
-    background-color: rgba(166, 188, 212, 0.5)
+  font-size: 1.2em;
+  background-color: rgba(166, 188, 212, 0.5);
 }
 
 a.nav-item {
-    font-size: 1.1em;
+  font-size: 1.1em;
 }
 
 .vl {
-    margin: 1em;
-    border: 1px solid grey;
-    height: 2em;
+  margin: 1em;
+  border: 1px solid grey;
+  height: 2em;
 }
 
 p {
-    padding-top: 1em;
+  padding-top: 1em;
 }
