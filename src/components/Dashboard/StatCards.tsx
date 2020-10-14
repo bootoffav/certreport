@@ -83,33 +83,23 @@ const AmountOfCertifications = () => {
   );
 };
 
-const AmountSpent = ({ spent }: any) => {
-  // const { tasks, startDate, endDate}: any = useContext(StatCardsContext);
-  // const spent = () => {
-  //   let spent = 0;
-  //   let t = startDate || endDate
-  //     ? tasksInRange(tasks, 'CREATED_DATE', startDate, endDate)
-  //     : tasks;
+interface IAmountSpent {
+  start: string;
+  end: string;
+  amount: number;
+}
 
-  //   t.forEach(({ state }: any) => {
-  //     spent += +state.price;
-  //   });
-
-  //   return spent ? `€${Math.round(spent).toLocaleString()}` : 'could not count';
-  // }
-
+const AmountSpent = (props: IAmountSpent) => {
   return (
     <div style={{ marginTop: '0.2em' }}>
       <Card
         body={
           <>
-            <div className="display-5 text-center">TOTAL:</div>
+            <div className="display-5 text-center">
+              {props.start} - {props.end}
+            </div>
             <Header.H3 className="display-5 text-center">
-              <div
-              // onClick={displayNone}
-              >
-                €{spent.toLocaleString()}
-              </div>
+              <div>TOTAL: €{props.amount.toLocaleString()}</div>
             </Header.H3>
           </>
         }
@@ -124,3 +114,4 @@ export {
   CompletedCertifications,
   Products,
 };
+export type { IAmountSpent };

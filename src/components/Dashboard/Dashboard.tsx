@@ -13,6 +13,8 @@ import {
   AmountSpent,
   CompletedCertifications,
 } from './StatCards';
+import type { IAmountSpent } from './StatCards';
+
 import { getColumns } from '../List/columns';
 import { countTotalPrice } from '../../helpers';
 
@@ -20,6 +22,7 @@ interface IDashboard {
   tasks: any;
   startDate?: Date;
   endDate?: Date;
+  totalSpendings: IAmountSpent;
 }
 
 function tasksInRange(
@@ -44,12 +47,16 @@ function tasksInRange(
 }
 
 class Dashboard extends Component<any, IDashboard> {
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      tasks: this.props.tasks,
-    };
-  }
+  state = {
+    tasks: this.props.tasks,
+    totalSpendings: {
+      start: '',
+      end: '',
+      amount: 0,
+    },
+    startDate: undefined,
+    endDate: undefined,
+  };
 
   componentDidUpdate(prevProps: any, prevState: any) {
     if (prevProps.tasks !== this.props.tasks) {
@@ -72,6 +79,9 @@ class Dashboard extends Component<any, IDashboard> {
                 renderTable={(tasks) =>
                   this.renderTableOfDiagramSegment('', '', tasks)
                 }
+                updateTotalSpending={(totalSpendings) =>
+                  this.setState({ totalSpendings })
+                }
                 tasks={this.state.tasks}
                 startDate={this.props.startDate}
                 endDate={this.props.endDate}
@@ -80,7 +90,7 @@ class Dashboard extends Component<any, IDashboard> {
           </Grid.Col>
 
           <Grid.Col width={4}>
-            <AmountSpent spent={countTotalPrice(this.state.tasks)} />
+            <AmountSpent {...this.state.totalSpendings} />
           </Grid.Col>
         </Grid.Row>
         <Grid.Row>

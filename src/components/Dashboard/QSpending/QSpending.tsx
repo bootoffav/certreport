@@ -3,12 +3,13 @@ import { Component } from 'react';
 import dayjs from 'dayjs';
 import quarterOfYear from 'dayjs/plugin/quarterOfYear';
 import './QSpending.css';
+import type { IAmountSpent } from '../StatCards';
 
 dayjs.extend(quarterOfYear);
 
 class QSpending extends Component<{
   renderTable: (t: any[]) => void;
-  //   saveTotal: (total: number) => void;
+  updateTotalSpending: (amount: IAmountSpent) => void;
   tasks: any;
   startDate?: Date;
   endDate?: Date;
@@ -25,12 +26,14 @@ class QSpending extends Component<{
     let quarters = this.findQuarters(this.props.startDate, this.props.endDate);
     //привяжем суммы трат
     quarters = this.countQuarterSpendings(quarters);
-    // this.props.saveTotal(
-    //   Math.round(
-    //     Object.values(quarters)
-    //       .reduce((acc: number, quarter: any) => acc + quarter.spent, 0)
-    //   )
-    // );
+
+    const { start, end } = this.getFirstLastTotalSpendingsQuarters(quarters);
+    this.props.updateTotalSpending({
+      start,
+      end,
+      amount: this.countTotalSpendings(quarters),
+    });
+
     this.state = { quarters };
   }
 
@@ -45,7 +48,7 @@ class QSpending extends Component<{
     };
   }
 
-  //  находит целые кварталы
+  // находит целые кварталы
   findQuarters(startDate?: Date, endDate?: Date) {
     var quarters: any = [];
     if (startDate && endDate) {
@@ -103,6 +106,7 @@ class QSpending extends Component<{
         }
       });
     });
+
     return quarters;
   }
 
@@ -120,8 +124,36 @@ class QSpending extends Component<{
     ) {
       let quarters = this.findQuarters(startDate, endDate);
       quarters = this.countQuarterSpendings(quarters);
+      const { start, end } = this.getFirstLastTotalSpendingsQuarters(quarters);
+
+      this.props.updateTotalSpending({
+        start,
+        end,
+        amount: this.countTotalSpendings(quarters),
+      });
+
       this.setState({ quarters, startDate, endDate });
     }
+  }
+
+  countTotalSpendings = (quarters: any) => {
+    return Math.round(
+      Object.values(quarters).reduce(
+        (acc: number, quarter: any) => acc + quarter.spent,
+        0
+      )
+    );
+  };
+
+  getFirstLastTotalSpendingsQuarters(quarters: any) {
+    const start = `${quarters[0].start.format(
+      'YYYY'
+    )}.Q${quarters[0].start.quarter()}`;
+
+    const end = `${quarters[quarters.length - 1].start.format(
+      'YYYY'
+    )}.Q${quarters[quarters.length - 1].start.quarter()}`;
+    return { start, end };
   }
 
   render() {
