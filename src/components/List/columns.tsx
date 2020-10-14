@@ -411,9 +411,7 @@ function getColumns(totalPrice: number, stage?: string) {
       accessor: ({ state }: any) => (+state.price || 0) + (+state.price2 || 0),
       minWidth: 90,
       Cell: (props: any) => (
-        <>
-          €<span style={{ float: 'right' }}>{formatPrice(props.value)}</span>
-        </>
+        <span style={{ float: 'right' }}>{formatPrice(props.value)}</span>
       ),
     },
     {
