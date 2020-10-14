@@ -1,13 +1,13 @@
-import * as React from "react";
-import ReactTable from "react-table";
-import { Button } from "tabler-react";
-import Task from "../../Task/Task";
-import { getColumns } from "./columns";
-import StageFilter from "./Filters/StageFilter";
-import ColumnFilter from "./Filters/ColumnFilter";
+import * as React from 'react';
+import ReactTable from 'react-table';
+import { Button } from 'tabler-react';
+import Task from '../../Task/Task';
+import { getColumns } from './columns';
+import StageFilter from './Filters/StageFilter';
+import ColumnFilter from './Filters/ColumnFilter';
 
-import "./List.css";
-import { countTotalPrice } from "../../helpers";
+import './List.css';
+import { countTotalPrice } from '../../helpers';
 
 interface IListState {
   visibleData: any[];
@@ -26,12 +26,12 @@ export default class List extends React.Component<{
 }> {
   state: IListState = {
     visibleData: [],
-    columnFilterValue: "",
+    columnFilterValue: '',
 
     //used for Task PDF list (ejected out of react-table ref)
     sortedData: undefined,
     totalPrice: 0,
-    stage: "all",
+    stage: 'all',
   };
   ref: any;
 
@@ -60,8 +60,8 @@ export default class List extends React.Component<{
     this.setState({
       startDate: undefined,
       endDate: undefined,
-      stage: "all",
-      columnFilterValue: "",
+      stage: 'all',
+      columnFilterValue: '',
     });
   };
 
@@ -84,7 +84,7 @@ export default class List extends React.Component<{
     if (rowInfo === undefined) {
       return {};
     }
-    return rowInfo.original.overdue ? { className: "missedDeadline" } : {};
+    return rowInfo.original.overdue ? { className: 'missedDeadline' } : {};
   }
 
   render = (): JSX.Element => (

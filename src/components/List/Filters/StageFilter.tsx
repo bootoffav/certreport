@@ -1,7 +1,7 @@
-import * as React from "react";
-import Task from "../../../Task/Task";
-import { Dropdown } from "tabler-react";
-import { countTotalPrice } from "../../../helpers";
+import * as React from 'react';
+import Task from '../../../Task/Task';
+import { Dropdown } from 'tabler-react';
+import { countTotalPrice } from '../../../helpers';
 
 const StageFilter: React.FunctionComponent<{
   allProducts: any;
@@ -11,7 +11,7 @@ const StageFilter: React.FunctionComponent<{
   function filter(stage?: string) {
     let visibleData;
 
-    if (stage === "products") {
+    if (stage === 'products') {
       update({
         stage,
         visibleData: allProducts,
@@ -20,10 +20,10 @@ const StageFilter: React.FunctionComponent<{
     }
 
     switch (stage) {
-      case "all":
+      case 'all':
         visibleData = tasks;
         break;
-      case "overdue":
+      case 'overdue':
         visibleData = tasks.filter((t: Task) => t.overdue);
         break;
       default:
@@ -34,27 +34,27 @@ const StageFilter: React.FunctionComponent<{
       visibleData,
       stage,
       totalPrice: countTotalPrice(visibleData),
-      columnFilterValue: "",
+      columnFilterValue: '',
       startDate: undefined,
       endDate: undefined,
     });
   }
 
   const stages = [
-    "00. Paused",
-    "0. Sample to be prepared",
-    "1. Sample Sent",
-    "2. Sample Arrived",
-    "3. PI Issued",
-    "4. Payment Done",
-    "5. Testing is started",
-    "6. Pre-treatment done",
-    "7. Test-report ready",
-    "8. Certificate ready",
-    "9. Ended",
+    '00. Paused',
+    '0. Sample to be prepared',
+    '1. Sample Sent',
+    '2. Sample Arrived',
+    '3. PI Issued',
+    '4. Payment Done',
+    '5. Testing is started',
+    '6. Pre-treatment done',
+    '7. Test-report ready',
+    '8. Certificate ready',
+    '9. Ended',
   ];
 
-  const more = ["products", "overdue"];
+  const more = ['products', 'overdue'];
 
   const DropDownItem = (item: any) => {
     return {
@@ -67,7 +67,7 @@ const StageFilter: React.FunctionComponent<{
   return (
     <div
       id="toolbar"
-      style={{ width: "inherit" }}
+      style={{ width: 'inherit' }}
       className="btn-group"
       role="group"
     >

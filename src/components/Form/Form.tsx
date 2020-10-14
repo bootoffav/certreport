@@ -1,21 +1,21 @@
-import * as React from "react";
-import swal from "sweetalert";
-import "react-datepicker/dist/react-datepicker.css";
-import Select from "react-select";
-import dayjs from "dayjs";
-import { PickDate, BaseInput, Article, Price, Paid, Pi } from "./FormFields";
-import B24 from "../../B24";
-import Notification, { Status } from "../Notification/Notification";
-import SerialNumber from "../SerialNumber/SerialNumber";
-import { selectOptions } from "../../defaults";
-import { IState, emptyState } from "../../Task/emptyState";
-import Standards from "../Standards/Standards";
-import FileUploads from "../FileUploads/FileUploads";
-import { FabricApplicationForm } from "./FabricApplicationForm";
-import { DB } from "../../DBManager";
-import { removeEmptyProps } from "../../helpers";
-import { TabbedCard, Tab, Dimmer, Icon, Button } from "tabler-react";
-import CacheManager from "../../CacheManager";
+import * as React from 'react';
+import swal from 'sweetalert';
+import 'react-datepicker/dist/react-datepicker.css';
+import Select from 'react-select';
+import dayjs from 'dayjs';
+import { PickDate, BaseInput, Article, Price, Paid, Pi } from './FormFields';
+import B24 from '../../B24';
+import Notification, { Status } from '../Notification/Notification';
+import SerialNumber from '../SerialNumber/SerialNumber';
+import { selectOptions } from '../../defaults';
+import { IState, emptyState } from '../../Task/emptyState';
+import Standards from '../Standards/Standards';
+import FileUploads from '../FileUploads/FileUploads';
+import { FabricApplicationForm } from './FabricApplicationForm';
+import { DB } from '../../DBManager';
+import { removeEmptyProps } from '../../helpers';
+import { TabbedCard, Tab, Dimmer, Icon, Button } from 'tabler-react';
+import CacheManager from '../../CacheManager';
 
 interface IFormState extends IState {
   requestStatus: Status;
@@ -48,7 +48,7 @@ class Form extends React.Component<IFormProps> {
   }
 
   componentDidUpdate = () => {
-    if (this.state.hasError) throw new Error("Task not found");
+    if (this.state.hasError) throw new Error('Task not found');
   };
 
   async componentDidMount() {
@@ -80,7 +80,7 @@ class Form extends React.Component<IFormProps> {
 
   handleDateChange = (date: Date | null, prop: string): void =>
     this.setState({
-      [prop]: date === null ? "" : dayjs(date).format("DDMMMYYYY"),
+      [prop]: date === null ? '' : dayjs(date).format('DDMMMYYYY'),
     });
 
   handleCheckboxChange = ({ currentTarget }: React.SyntheticEvent): void =>
@@ -102,22 +102,22 @@ class Form extends React.Component<IFormProps> {
           index === selected.length - 1
             ? `${endValue}${currentValue.label}`
             : `${endValue}${currentValue.label}, `,
-        ""
+        ''
       ),
     });
   };
 
   handleChange = (e: any) =>
-    ["price", "price2"].includes(e.target.id)
-      ? this.setState({ [e.target.id]: e.target.value.replace(",", ".") })
+    ['price', 'price2'].includes(e.target.id)
+      ? this.setState({ [e.target.id]: e.target.value.replace(',', '.') })
       : this.setState({ [e.target.id]: e.target.value });
 
   async handleCert(e: any) {
     e.preventDefault();
     const OK = await swal({
-      title: "Are you sure?",
-      icon: "info",
-      buttons: ["Cancel", "OK"],
+      title: 'Are you sure?',
+      icon: 'info',
+      buttons: ['Cancel', 'OK'],
     });
 
     if (OK) {
@@ -148,8 +148,8 @@ class Form extends React.Component<IFormProps> {
   }
 
   asSelectable = (value: string) => {
-    if (value !== "") {
-      const splitted: string[] = value.split(", ");
+    if (value !== '') {
+      const splitted: string[] = value.split(', ');
       return splitted.length === 1
         ? [{ label: value, value }]
         : splitted.map((label) => ({ label, value: label }));
@@ -162,7 +162,7 @@ class Form extends React.Component<IFormProps> {
       () =>
         window.history.length === 1
           ? window.close()
-          : window.location.assign("/"),
+          : window.location.assign('/'),
       500
     );
   };
@@ -195,7 +195,7 @@ class Form extends React.Component<IFormProps> {
             <Select
               value={this.asSelectable(this.state.testingCompany)}
               onChange={(e: any) => {
-                this.handleSelectChange(e, "testingCompany");
+                this.handleSelectChange(e, 'testingCompany');
               }}
               options={selectOptions.testingCompany}
             />
@@ -208,7 +208,7 @@ class Form extends React.Component<IFormProps> {
               isMulti
               value={this.asSelectable(this.state.standards)}
               onChange={(e: any) => {
-                this.handleSelectChange(e, "standards");
+                this.handleSelectChange(e, 'standards');
               }}
               options={selectOptions.standards}
             />
@@ -220,7 +220,7 @@ class Form extends React.Component<IFormProps> {
             <Select
               value={this.asSelectable(this.state.stage)}
               onChange={(e: any) => {
-                this.handleSelectChange(e, "stage");
+                this.handleSelectChange(e, 'stage');
               }}
               options={selectOptions.stages}
             />
@@ -232,8 +232,8 @@ class Form extends React.Component<IFormProps> {
             <div className="btn-group btn-group-toggle" data-toggle="buttons">
               <label
                 className={
-                  "btn btn-outline-secondary " +
-                  `${this.state.resume === undefined ? "active" : ""}`
+                  'btn btn-outline-secondary ' +
+                  `${this.state.resume === undefined ? 'active' : ''}`
                 }
                 onClick={() => this.setState({ resume: undefined })}
               >
@@ -242,40 +242,40 @@ class Form extends React.Component<IFormProps> {
               </label>
               <label
                 className={
-                  "btn btn-outline-danger " +
-                  `${this.state.resume === "fail" ? "active" : ""}`
+                  'btn btn-outline-danger ' +
+                  `${this.state.resume === 'fail' ? 'active' : ''}`
                 }
-                onClick={() => this.setState({ resume: "fail" })}
+                onClick={() => this.setState({ resume: 'fail' })}
               >
                 <input type="radio" />
                 FAIL
               </label>
               <label
                 className={
-                  "btn btn-outline-success " +
-                  `${this.state.resume === "pass" ? "active" : ""}`
+                  'btn btn-outline-success ' +
+                  `${this.state.resume === 'pass' ? 'active' : ''}`
                 }
-                onClick={() => this.setState({ resume: "pass" })}
+                onClick={() => this.setState({ resume: 'pass' })}
               >
                 <input type="radio" />
                 PASS
               </label>
               <label
                 className={
-                  "btn btn-outline-warning " +
-                  `${this.state.resume === "partly" ? "active" : ""}`
+                  'btn btn-outline-warning ' +
+                  `${this.state.resume === 'partly' ? 'active' : ''}`
                 }
-                onClick={() => this.setState({ resume: "partly" })}
+                onClick={() => this.setState({ resume: 'partly' })}
               >
                 <input type="radio" />
                 PASS (partly)
               </label>
               <label
                 className={
-                  "btn btn-outline-dark " +
-                  `${this.state.resume === "no sample" ? "active" : ""}`
+                  'btn btn-outline-dark ' +
+                  `${this.state.resume === 'no sample' ? 'active' : ''}`
                 }
-                onClick={() => this.setState({ resume: "no sample" })}
+                onClick={() => this.setState({ resume: 'no sample' })}
               >
                 <input type="radio" />
                 NO Sample
@@ -289,7 +289,7 @@ class Form extends React.Component<IFormProps> {
           <Article
             value={this.asSelectable(this.state.article)}
             options={selectOptions.articles}
-            handleChange={(e: any) => this.handleSelectChange([e], "article")}
+            handleChange={(e: any) => this.handleSelectChange([e], 'article')}
             handleSlaveChange={(product, code, brand) =>
               this.setState({ product, code, brand })
             }
@@ -322,7 +322,7 @@ class Form extends React.Component<IFormProps> {
           Brand
           <Select
             value={this.asSelectable(this.state.brand)}
-            onChange={(e: any) => this.handleSelectChange([e], "brand")}
+            onChange={(e: any) => this.handleSelectChange([e], 'brand')}
             options={selectOptions.brand}
           />
         </div>
@@ -398,10 +398,10 @@ class Form extends React.Component<IFormProps> {
                     type="radio"
                     name="pretreatment1Result"
                     id="pretreatment1Fail"
-                    checked={this.state.pretreatment1Result === "fail"}
+                    checked={this.state.pretreatment1Result === 'fail'}
                     onChange={() =>
                       this.setState({
-                        pretreatment1Result: "fail",
+                        pretreatment1Result: 'fail',
                       })
                     }
                   />
@@ -422,10 +422,10 @@ class Form extends React.Component<IFormProps> {
                     type="radio"
                     name="pretreatment1Result"
                     id="pretreatment1Pass"
-                    checked={this.state.pretreatment1Result === "pass"}
+                    checked={this.state.pretreatment1Result === 'pass'}
                     onChange={() =>
                       this.setState({
-                        pretreatment1Result: "pass",
+                        pretreatment1Result: 'pass',
                       })
                     }
                   />
@@ -444,7 +444,7 @@ class Form extends React.Component<IFormProps> {
                 <button
                   type="button"
                   className="btn btn-sm btn-link btn-reset"
-                  onClick={() => this.setState({ pretreatment1Result: "" })}
+                  onClick={() => this.setState({ pretreatment1Result: '' })}
                 >
                   Reset
                 </button>
@@ -495,18 +495,18 @@ class Form extends React.Component<IFormProps> {
           date={this.state.pausedUntil}
           label="Paused until:"
           handleChange={(date: Date) =>
-            this.handleDateChange(date, "pausedUntil")
+            this.handleDateChange(date, 'pausedUntil')
           }
         />
         <PickDate
           date={this.state.readyOn}
           label="Sample to be prepared:"
-          handleChange={(date: Date) => this.handleDateChange(date, "readyOn")}
+          handleChange={(date: Date) => this.handleDateChange(date, 'readyOn')}
         />
         <PickDate
           date={this.state.sentOn}
           label="Sample has sent:"
-          handleChange={(date: Date) => this.handleDateChange(date, "sentOn")}
+          handleChange={(date: Date) => this.handleDateChange(date, 'sentOn')}
         />
       </div>
       <div className="d-flex justify-content-center">
@@ -514,21 +514,21 @@ class Form extends React.Component<IFormProps> {
           date={this.state.receivedOn}
           label="Sample has received by lab:"
           handleChange={(date: Date) =>
-            this.handleDateChange(date, "receivedOn")
+            this.handleDateChange(date, 'receivedOn')
           }
         />
         <PickDate
           date={this.state.startedOn}
           label="Test is started:"
           handleChange={(date: Date) =>
-            this.handleDateChange(date, "startedOn")
+            this.handleDateChange(date, 'startedOn')
           }
         />
         <PickDate
           date={this.state.testFinishedOnPlanDate}
           label="ETD (Test-report)"
           handleChange={(date: Date) =>
-            this.handleDateChange(date, "testFinishedOnPlanDate")
+            this.handleDateChange(date, 'testFinishedOnPlanDate')
           }
         />
       </div>
@@ -537,21 +537,21 @@ class Form extends React.Component<IFormProps> {
           date={this.state.testFinishedOnRealDate}
           label="Test really finished on:"
           handleChange={(date: Date) =>
-            this.handleDateChange(date, "testFinishedOnRealDate")
+            this.handleDateChange(date, 'testFinishedOnRealDate')
           }
         />
         <PickDate
           date={this.state.certReceivedOnPlanDate}
           label="ETD (Certificate)"
           handleChange={(date: Date) =>
-            this.handleDateChange(date, "certReceivedOnPlanDate")
+            this.handleDateChange(date, 'certReceivedOnPlanDate')
           }
         />
         <PickDate
           date={this.state.certReceivedOnRealDate}
           label="Certificate really received on:"
           handleChange={(date: Date) =>
-            this.handleDateChange(date, "certReceivedOnRealDate")
+            this.handleDateChange(date, 'certReceivedOnRealDate')
           }
         />
       </div>
@@ -572,7 +572,7 @@ class Form extends React.Component<IFormProps> {
           checkboxState={this.state.paid}
           date={this.state.paymentDate}
           handleChange={(date: any) =>
-            this.handleDateChange(date, "paymentDate")
+            this.handleDateChange(date, 'paymentDate')
           }
           handleCheckboxChange={(e: any) => {
             if (!e.target.checked) {
@@ -588,15 +588,15 @@ class Form extends React.Component<IFormProps> {
           date={this.state.proformaReceivedDate}
           handleCheckboxChange={(e: any) => {
             if (!e.target.checked) {
-              this.setState({ proformaReceivedDate: "", proformaNumber: "" });
+              this.setState({ proformaReceivedDate: '', proformaNumber: '' });
             }
             this.handleCheckboxChange(e);
           }}
           handleDateChange={(date: any) =>
-            this.handleDateChange(date, "proformaReceivedDate")
+            this.handleDateChange(date, 'proformaReceivedDate')
           }
           handleNumberChange={(e: any) => this.handleChange(e)}
-          numberId={"proformaNumber"}
+          numberId={'proformaNumber'}
           number={this.state.proformaNumber}
         />
       </div>
@@ -613,7 +613,7 @@ class Form extends React.Component<IFormProps> {
           checkboxState={this.state.paid2}
           date={this.state.paymentDate2}
           handleChange={(date: Date) =>
-            this.handleDateChange(date, "paymentDate2")
+            this.handleDateChange(date, 'paymentDate2')
           }
           handleCheckboxChange={(e: any) => {
             if (!e.target.checked) {
@@ -629,25 +629,25 @@ class Form extends React.Component<IFormProps> {
           date={this.state.proformaReceivedDate2}
           handleCheckboxChange={(e: any) => {
             if (!e.target.checked) {
-              this.setState({ proformaReceivedDate2: "", proformaNumber2: "" });
+              this.setState({ proformaReceivedDate2: '', proformaNumber2: '' });
             }
             this.handleCheckboxChange(e);
           }}
           handleDateChange={(date: Date) =>
-            this.handleDateChange(date, "proformaReceivedDate2")
+            this.handleDateChange(date, 'proformaReceivedDate2')
           }
           handleNumberChange={(e: React.SyntheticEvent) => this.handleChange(e)}
-          numberId={"proformaNumber2"}
+          numberId={'proformaNumber2'}
           number={this.state.proformaNumber2}
         />
       </div>
 
       <div className="col-10 offset-1">
         <p className="text-right font-weight-bold">
-          Total:{" "}
-          {(+this.state.price + +this.state.price2).toLocaleString("ru-RU", {
-            style: "currency",
-            currency: "EUR",
+          Total:{' '}
+          {(+this.state.price + +this.state.price2).toLocaleString('ru-RU', {
+            style: 'currency',
+            currency: 'EUR',
           })}
         </p>
       </div>

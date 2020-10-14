@@ -1,9 +1,9 @@
-import * as React from "react";
-import DatePicker from "react-datepicker";
-import B24 from "../../B24";
-import Select from "react-select";
-import "./FormFields.css";
-import { dateConverter } from "../../helpers";
+import * as React from 'react';
+import DatePicker from 'react-datepicker';
+import B24 from '../../B24';
+import Select from 'react-select';
+import './FormFields.css';
+import { dateConverter } from '../../helpers';
 
 const selected = (date: string) =>
   date ? new Date(dateConverter(date)) : null;
@@ -33,11 +33,11 @@ const BaseInput = (props: {
   value: string;
   handleChange: (e: React.SyntheticEvent) => void;
 }) => (
-  <div className={`${props.className ? props.className : ""}`}>
+  <div className={`${props.className ? props.className : ''}`}>
     <div className="form-group">
       {props.label}
       <input
-        type={props.type || "text"}
+        type={props.type || 'text'}
         required={props.required !== undefined ? props.required : true}
         className="form-control"
         placeholder={props.placeholder}
@@ -117,15 +117,15 @@ const Pi = (props: any) => (
         selected={selected(props.date)}
         dateFormat="dd.MM.yyyy"
         onChange={props.handleDateChange}
-        placeholderText={props.checkboxState && "Receiving date"}
-        todayButton={"Today"}
+        placeholderText={props.checkboxState && 'Receiving date'}
+        todayButton={'Today'}
       />
       <input
         type="text"
         className="form-control"
         disabled={!props.checkboxState}
         onChange={props.handleNumberChange}
-        placeholder={props.checkboxState && "#"}
+        placeholder={props.checkboxState && '#'}
         id={props.numberId}
         value={props.number}
       />
@@ -152,9 +152,9 @@ class Article extends React.Component<ArticleProps> {
     const brand_map: {
       [key: number]: string;
     } = {
-      8568: "XMF",
-      8574: "XMT",
-      8572: "XMS",
+      8568: 'XMF',
+      8574: 'XMT',
+      8572: 'XMS',
     };
 
     this.props.handleChange({ value, label });
@@ -164,9 +164,9 @@ class Article extends React.Component<ArticleProps> {
       PROPERTY_380,
       SECTION_ID,
     } = await B24.get_product(value);
-    const product = `${PROPERTY_386.value || ""}, ${PROPERTY_384.value || ""}`;
-    const code = PROPERTY_380.value || "";
-    const brand = brand_map[SECTION_ID] || "";
+    const product = `${PROPERTY_386.value || ''}, ${PROPERTY_384.value || ''}`;
+    const code = PROPERTY_380.value || '';
+    const brand = brand_map[SECTION_ID] || '';
     this.props.handleSlaveChange(product, code, brand);
   };
 

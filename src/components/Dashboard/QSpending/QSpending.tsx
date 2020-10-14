@@ -1,8 +1,8 @@
-import { Grid, Card, Header } from "tabler-react";
-import { Component } from "react";
-import dayjs from "dayjs";
-import quarterOfYear from "dayjs/plugin/quarterOfYear";
-import "./QSpending.css";
+import { Grid, Card, Header } from 'tabler-react';
+import { Component } from 'react';
+import dayjs from 'dayjs';
+import quarterOfYear from 'dayjs/plugin/quarterOfYear';
+import './QSpending.css';
 
 dayjs.extend(quarterOfYear);
 
@@ -35,11 +35,11 @@ class QSpending extends Component<{
   }
 
   findQuarter(howMany: number, startDate?: Date) {
-    let start = startDate ? dayjs(startDate) : dayjs().subtract(4, "quarter");
-    const q = start.add(howMany, "quarter");
+    let start = startDate ? dayjs(startDate) : dayjs().subtract(4, 'quarter');
+    const q = start.add(howMany, 'quarter');
     return {
-      start: q.startOf("quarter"),
-      end: q.endOf("quarter"),
+      start: q.startOf('quarter'),
+      end: q.endOf('quarter'),
       spent: 0,
       tasks: [],
     };
@@ -54,24 +54,24 @@ class QSpending extends Component<{
       const end = dayjs(endDate);
 
       // checking if startDate is a start of its quarter
-      if (start.isSame(start.startOf("quarter"), "day")) {
+      if (start.isSame(start.startOf('quarter'), 'day')) {
         quarters.push({
-          start: start.startOf("quarter"),
-          end: start.endOf("quarter"),
+          start: start.startOf('quarter'),
+          end: start.endOf('quarter'),
           spent: 0,
           tasks: [],
         });
       }
 
-      while (start.add(i, "quarter").endOf("quarter") < end) {
+      while (start.add(i, 'quarter').endOf('quarter') < end) {
         quarters.push(this.findQuarter(i++, startDate));
       }
 
       // checking if endDate is an end of its quarter
-      if (start.add(i, "quarter").endOf("quarter").isSame(end, "day")) {
+      if (start.add(i, 'quarter').endOf('quarter').isSame(end, 'day')) {
         quarters.push({
-          start: start.add(i, "quarter").startOf("quarter"),
-          end: start.add(i, "quarter").endOf("quarter"),
+          start: start.add(i, 'quarter').startOf('quarter'),
+          end: start.add(i, 'quarter').endOf('quarter'),
           spent: 0,
           tasks: [],
         });
@@ -134,7 +134,7 @@ class QSpending extends Component<{
                 className="mx-auto quarterHeader"
                 onClick={() => this.props.renderTable(quarter.tasks)}
               >
-                {`Q${quarter.start.quarter()}-${quarter.start.format("YY")}`}
+                {`Q${quarter.start.quarter()}-${quarter.start.format('YY')}`}
               </div>
             </Card.Header>
             <Card.Body>

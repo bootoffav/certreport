@@ -1,20 +1,20 @@
-import { Component, createContext } from "react";
-import "./Dashboard.css";
-import { BrowserRouter } from "react-router-dom";
-import { render, unmountComponentAtNode } from "react-dom";
-import ReactTable from "react-table";
-import { Grid, Card } from "tabler-react";
-import { Doughnut } from "react-chartjs-2";
-import { QSpending } from "./QSpending/QSpending";
-import { doughnutOptions } from "./configs";
-import { byStages, byProducts } from "./dataprocessing";
+import { Component, createContext } from 'react';
+import './Dashboard.css';
+import { BrowserRouter } from 'react-router-dom';
+import { render, unmountComponentAtNode } from 'react-dom';
+import ReactTable from 'react-table';
+import { Grid, Card } from 'tabler-react';
+import { Doughnut } from 'react-chartjs-2';
+import { QSpending } from './QSpending/QSpending';
+import { doughnutOptions } from './configs';
+import { byStages, byProducts } from './dataprocessing';
 import {
   AmountOfCertifications,
   AmountSpent,
   CompletedCertifications,
-} from "./StatCards";
-import { getColumns } from "../List/columns";
-import { countTotalPrice } from "../../helpers";
+} from './StatCards';
+import { getColumns } from '../List/columns';
+import { countTotalPrice } from '../../helpers';
 
 interface IDashboard {
   tasks: any;
@@ -32,7 +32,7 @@ function tasksInRange(
 
   const tasksInRange = tasks.filter((task) => {
     const comparingDate = new Date(
-      filterParam === "CREATED_DATE"
+      filterParam === 'CREATED_DATE'
         ? task[filterParam]
         : task.state[filterParam]
     );
@@ -57,7 +57,7 @@ class Dashboard extends Component<any, IDashboard> {
         tasks: this.props.tasks,
       });
 
-      const tableSegment = document.getElementById("tableOfDiagramSegment");
+      const tableSegment = document.getElementById('tableOfDiagramSegment');
       if (tableSegment) unmountComponentAtNode(tableSegment);
     }
   }
@@ -70,7 +70,7 @@ class Dashboard extends Component<any, IDashboard> {
             <Grid.Row deck>
               <QSpending
                 renderTable={(tasks) =>
-                  this.renderTableOfDiagramSegment("", "", tasks)
+                  this.renderTableOfDiagramSegment('', '', tasks)
                 }
                 tasks={this.state.tasks}
                 startDate={this.props.startDate}
@@ -93,14 +93,14 @@ class Dashboard extends Component<any, IDashboard> {
                   data={byStages(this.state.tasks)}
                   options={{
                     legend: {
-                      position: "bottom",
+                      position: 'bottom',
                     },
                     onClick: (_: MouseEvent, chartElement: any) => {
                       if (chartElement.length !== 0) {
                         const {
                           _model: { label: stage },
                         } = chartElement.pop();
-                        this.renderTableOfDiagramSegment(stage, "stage");
+                        this.renderTableOfDiagramSegment(stage, 'stage');
                       }
                     },
                   }}
@@ -121,7 +121,7 @@ class Dashboard extends Component<any, IDashboard> {
                       const {
                         _model: { label: article },
                       } = chartElement.pop();
-                      this.renderTableOfDiagramSegment(article, "article");
+                      this.renderTableOfDiagramSegment(article, 'article');
                     },
                   }}
                 />
@@ -155,7 +155,7 @@ class Dashboard extends Component<any, IDashboard> {
     param: string,
     tasks?: any
   ) {
-    if (["no product", "no stage"].includes(checkedValue)) checkedValue = "";
+    if (['no product', 'no stage'].includes(checkedValue)) checkedValue = '';
 
     tasks =
       tasks ||
@@ -176,7 +176,7 @@ class Dashboard extends Component<any, IDashboard> {
           defaultPageSize={10}
         />
       </BrowserRouter>,
-      document.getElementById("tableOfDiagramSegment")
+      document.getElementById('tableOfDiagramSegment')
     );
   }
 }

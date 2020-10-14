@@ -1,9 +1,9 @@
-import { Component } from "react";
-import pdfMake from "pdfmake/build/pdfmake";
-import dayjs from "dayjs";
-import { vfs } from "./vfs_fonts.js";
+import { Component } from 'react';
+import pdfMake from 'pdfmake/build/pdfmake';
+import dayjs from 'dayjs';
+import { vfs } from './vfs_fonts.js';
 
-import { tableLayout, fonts } from "./settings";
+import { tableLayout, fonts } from './settings';
 
 class ListExport extends Component<{
   tasks: any;
@@ -17,36 +17,36 @@ class ListExport extends Component<{
 
   generateTableStructureForResults = () => ({
     accessors: [
-      "position",
-      "state.serialNumber",
-      "state.brand",
-      "state.stage",
-      "lastActionDate",
-      "title",
-      "state.article",
-      "state.testReport",
-      "state.certificate",
-      "state.standardsResult",
-      "state.news",
+      'position',
+      'state.serialNumber',
+      'state.brand',
+      'state.stage',
+      'lastActionDate',
+      'title',
+      'state.article',
+      'state.testReport',
+      'state.certificate',
+      'state.standardsResult',
+      'state.news',
     ],
     headers: [
-      "#",
-      "##",
-      "Brand",
-      "Status",
-      "L. A. D.",
-      "Task title",
-      "Fabric",
-      "Test report",
-      "Certificate",
-      "Result",
-      "News",
+      '#',
+      '##',
+      'Brand',
+      'Status',
+      'L. A. D.',
+      'Task title',
+      'Fabric',
+      'Test report',
+      'Certificate',
+      'Result',
+      'News',
     ].map(this.boldText),
-    widths: [20, 40, 50, 60, 70, "*", 100, 100, 180, 100, 100],
+    widths: [20, 40, 50, 60, 70, '*', 100, 100, 180, 100, 100],
   });
 
   generateContent() {
-    if (this.props.stage === "all") {
+    if (this.props.stage === 'all') {
       var {
         accessors,
         headers,
@@ -54,7 +54,7 @@ class ListExport extends Component<{
       } = this.generateTableStructureForResults();
     } else {
       accessors = this.props.columns.map((col: any) => {
-        return typeof col.accessor != "function"
+        return typeof col.accessor != 'function'
           ? col.accessor
           : `state.${col.id}`;
       });
@@ -64,14 +64,14 @@ class ListExport extends Component<{
       );
       widths = this.props.columns.map(({ accessor, minWidth, width }: any) => {
         switch (accessor) {
-          case "title":
-            return "auto";
-          case "state.readyOn":
+          case 'title':
+            return 'auto';
+          case 'state.readyOn':
             return 70;
-          case "state.article":
+          case 'state.article':
             return 130;
           default:
-            return minWidth || width || "*";
+            return minWidth || width || '*';
         }
       });
     }
@@ -102,18 +102,18 @@ class ListExport extends Component<{
 
     // add TotalPrice
     table.table.body.push([
-      { text: "", colSpan: accessors.length - 1 }, // empty columns
-      ...Array(accessors.length - 2).fill({ text: "", border: "none" }), // required by pdkMake
+      { text: '', colSpan: accessors.length - 1 }, // empty columns
+      ...Array(accessors.length - 2).fill({ text: '', border: 'none' }), // required by pdkMake
       {
-        alignment: "right",
+        alignment: 'right',
         text: `€${Math.round(this.totalPrice)
           .toLocaleString()
-          .replace(/,/g, " ")}`,
+          .replace(/,/g, ' ')}`,
       },
     ]);
 
     return [
-      { text: this.stage, fontSize: 30, alignment: "center", margin: [5, 4] },
+      { text: this.stage, fontSize: 30, alignment: 'center', margin: [5, 4] },
       table,
     ];
   }
@@ -121,7 +121,7 @@ class ListExport extends Component<{
   boldText = (text: string) => ({
     text,
     fontSize: 16,
-    alignment: "center",
+    alignment: 'center',
     bold: true,
   });
 
@@ -131,41 +131,41 @@ class ListExport extends Component<{
 
       accessors.forEach((acc: string) => {
         switch (acc) {
-          case "title":
+          case 'title':
             row.push({
               text: tasks[i][acc],
-              color: "blue",
+              color: 'blue',
               link: `${process.env.REACT_APP_B24_HOST}/company/personal/user/${process.env.REACT_APP_B24_USER_ID}/tasks/task/view/${tasks[i].id}/`,
             });
             break;
-          case "state.article":
+          case 'state.article':
             row.push({
               ...this.boldText(tasks[i].state.article),
-              alignment: "left",
+              alignment: 'left',
             });
             break;
-          case "state.certificate":
-            const files = tasks[i]["UF_TASK_WEBDAV_FILES"] || [];
+          case 'state.certificate':
+            const files = tasks[i]['UF_TASK_WEBDAV_FILES'] || [];
             row.push(
               files.map((file: any) => ({
                 text: `${file.NAME}`,
-                decoration: "underline",
-                color: "blue",
+                decoration: 'underline',
+                color: 'blue',
                 link: `${process.env.REACT_APP_B24_HOST}${file.VIEW_URL}`,
               }))
             );
             break;
-          case "state.standardsResult":
+          case 'state.standardsResult':
             const colorMap: {
               [key: string]: any;
             } = {
-              pass: "green",
-              fail: "red",
-              undefined: "black",
+              pass: 'green',
+              fail: 'red',
+              undefined: 'black',
             };
             const results = [
               {
-                text: "Result: " + (tasks[i].state.resume || "none"),
+                text: 'Result: ' + (tasks[i].state.resume || 'none'),
                 color: colorMap[tasks[i].state.resume],
               },
             ];
@@ -174,7 +174,7 @@ class ListExport extends Component<{
             )) {
               results.push({
                 text: `${standard} - ${result}`,
-                color: result === "pass" ? "green" : "red",
+                color: result === 'pass' ? 'green' : 'red',
               });
               // if (standard === 'EN 11612') {
               //   const passes = [];
@@ -188,22 +188,22 @@ class ListExport extends Component<{
             }
             row.push(results);
             break;
-          case "state.price":
+          case 'state.price':
             this.totalPrice += Number(tasks[i].state.price);
             row.push({
-              alignment: "right",
+              alignment: 'right',
               text:
-                tasks[i].state.price === ""
-                  ? ""
+                tasks[i].state.price === ''
+                  ? ''
                   : `€${Math.round(tasks[i].state.price)
                       .toLocaleString()
-                      .replace(/,/g, " ")}`,
+                      .replace(/,/g, ' ')}`,
             });
             break;
           default:
-            acc.includes("state.") && !!tasks[i].state[acc.substring(6)]
+            acc.includes('state.') && !!tasks[i].state[acc.substring(6)]
               ? row.push(tasks[i].state[acc.substring(6)])
-              : row.push(tasks[i][acc] || "");
+              : row.push(tasks[i][acc] || '');
         }
       });
 
@@ -213,26 +213,26 @@ class ListExport extends Component<{
 
   export = () => {
     switch (this.props.stage) {
-      case "overdue":
+      case 'overdue':
         this.stage = `Overdue Certifications in Testing Lab (on ${dayjs().format(
-          "DD.MM.YYYY"
+          'DD.MM.YYYY'
         )})`;
         break;
-      case "all":
-        this.stage = "All";
+      case 'all':
+        this.stage = 'All';
         break;
       default:
-        this.stage = "ALL";
+        this.stage = 'ALL';
     }
 
     let docDefinition = {
       content: this.generateContent(),
       defaultStyle: {
         fontSize: 12,
-        font: "Arial",
+        font: 'Arial',
       },
-      pageOrientation: "landscape",
-      pageSize: "A3",
+      pageOrientation: 'landscape',
+      pageSize: 'A3',
     };
     return pdfMake
       .createPdf(
@@ -246,11 +246,11 @@ class ListExport extends Component<{
   };
 
   get filename() {
-    if (this.stage === "All") {
+    if (this.stage === 'All') {
       return this.props.startDate && this.props.endDate
         ? `Certification results for ${dayjs(this.props.startDate).format(
-            "DDMMMYYYY"
-          )} - ${dayjs(this.props.endDate).format("DDMMMYYYY")}.pdf`
+            'DDMMMYYYY'
+          )} - ${dayjs(this.props.endDate).format('DDMMMYYYY')}.pdf`
         : `Certification results of all time.pdf`;
     }
 

@@ -1,28 +1,28 @@
-import * as React from "react";
-import { Icon } from "tabler-react";
-import "./Standards.css";
+import * as React from 'react';
+import { Icon } from 'tabler-react';
+import './Standards.css';
 
 type IEN11612Detail = {
-  A1?: "pass" | "fail";
-  A2?: "pass" | "fail";
-  B?: "pass" | "fail";
-  C?: "pass" | "fail";
-  D?: "pass" | "fail";
-  E?: "pass" | "fail";
-  F?: "pass" | "fail";
+  A1?: 'pass' | 'fail';
+  A2?: 'pass' | 'fail';
+  B?: 'pass' | 'fail';
+  C?: 'pass' | 'fail';
+  D?: 'pass' | 'fail';
+  E?: 'pass' | 'fail';
+  F?: 'pass' | 'fail';
   [key: string]: any;
 };
 
 class EN11612Detail extends React.Component<{
   updateParent: (state: IEN11612Detail) => void;
 }> {
-  blocks = ["A1", "A2", "B", "C", "D", "E", "F"];
+  blocks = ['A1', 'A2', 'B', 'C', 'D', 'E', 'F'];
 
   onChange = ({ currentTarget: { name, dataset } }: any) => {
     const { updateParent, ...noUpdateParent } = this.props;
     this.props.updateParent({
       ...noUpdateParent,
-      [name]: dataset["result"],
+      [name]: dataset['result'],
     });
   };
 
@@ -43,7 +43,7 @@ class EN11612Detail extends React.Component<{
                     name={name}
                     data-result="fail"
                     // @ts-ignore
-                    checked={this.props[name] === "fail"}
+                    checked={this.props[name] === 'fail'}
                     onChange={this.onChange}
                   />
                   <label className="form-check-label">
@@ -62,7 +62,7 @@ class EN11612Detail extends React.Component<{
                     name={name}
                     data-result="pass"
                     // @ts-ignore
-                    checked={this.props[name] === "pass"}
+                    checked={this.props[name] === 'pass'}
                     onChange={this.onChange}
                   />
                   <label className="form-check-label">
@@ -81,7 +81,7 @@ class EN11612Detail extends React.Component<{
                     name={name}
                     data-result="partly"
                     // @ts-ignore
-                    checked={this.props[name] === "partly"}
+                    checked={this.props[name] === 'partly'}
                     onChange={this.onChange}
                   />
                   <label className="form-check-label">
@@ -113,7 +113,7 @@ type StandardsProps = {
 };
 
 function Standards(props: StandardsProps) {
-  if (props.standards === "") {
+  if (props.standards === '') {
     return (
       <div className="d-flex justify-content-center align-items-center h-100">
         <h5 className="text-uppercase">No standard chosen</h5>
@@ -121,7 +121,7 @@ function Standards(props: StandardsProps) {
     );
   }
 
-  const standards = props.standards.split(", ");
+  const standards = props.standards.split(', ');
 
   /**
    * Return JSX element for standard in form of accordion
@@ -130,8 +130,8 @@ function Standards(props: StandardsProps) {
    * @returns {JSX}
    */
   function renderStandard(standard: string, i: any) {
-    const EN11612 = standard === "EN 11612" ? props.EN11612Detail : {};
-    const id = standard.replace(/\s/g, "");
+    const EN11612 = standard === 'EN 11612' ? props.EN11612Detail : {};
+    const id = standard.replace(/\s/g, '');
     return (
       <div key={i}>
         <div className="card">
@@ -151,7 +151,7 @@ function Standards(props: StandardsProps) {
                 <input
                   className="form-check-input"
                   type="radio"
-                  checked={props.standardsResult[standard] === "fail"}
+                  checked={props.standardsResult[standard] === 'fail'}
                   onChange={props.resultChange}
                   name={`radioOptions${id}`}
                   data-standard={standard}
@@ -171,7 +171,7 @@ function Standards(props: StandardsProps) {
                 <input
                   className="form-check-input"
                   type="radio"
-                  checked={props.standardsResult[standard] === "pass"}
+                  checked={props.standardsResult[standard] === 'pass'}
                   onChange={props.resultChange}
                   name={`radioOptions${id}`}
                   data-standard={standard}
@@ -191,7 +191,7 @@ function Standards(props: StandardsProps) {
                 <input
                   className="form-check-input"
                   type="radio"
-                  checked={props.standardsResult[standard] === "partly"}
+                  checked={props.standardsResult[standard] === 'partly'}
                   onChange={props.resultChange}
                   name={`radioOptions${id}`}
                   data-standard={standard}
@@ -222,12 +222,12 @@ function Standards(props: StandardsProps) {
           </div>
           <div
             id={`collapse_${id}`}
-            className={standard === "EN 11612" ? "show" : "collapse"}
+            className={standard === 'EN 11612' ? 'show' : 'collapse'}
             aria-labelledby={`heading_${id}`}
             data-parent="#accordionStandards"
           >
             <div className="card-body">
-              {standard === "EN 11612" && (
+              {standard === 'EN 11612' && (
                 <EN11612Detail {...EN11612} updateParent={props.updateParent} />
               )}
             </div>

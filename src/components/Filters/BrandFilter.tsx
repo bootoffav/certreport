@@ -1,4 +1,4 @@
-import { Component } from "react";
+import { Component } from 'react';
 
 class BrandFilter extends Component<{
   tasks: any;
@@ -10,7 +10,7 @@ class BrandFilter extends Component<{
     XMT: true,
     XMS: true,
     XMF: true,
-    "No brand": false,
+    'No brand': false,
   };
 
   getActiveBrands = () =>
@@ -36,7 +36,7 @@ class BrandFilter extends Component<{
               value={brand}
               defaultChecked={this.state[brand]}
               onClick={this.handleChange}
-            />{" "}
+            />{' '}
             {brand}
           </label>
         ))}

@@ -1,9 +1,9 @@
-import qs from "qs";
-import dayjs from "dayjs";
-import { dataSeparator } from "./Task/Task";
-import Task from "./Task/Task";
-import { StateAdapter } from "./StateAdapter";
-import { AppFormExport } from "./components/Export/PDF/AppFormExport";
+import qs from 'qs';
+import dayjs from 'dayjs';
+import { dataSeparator } from './Task/Task';
+import Task from './Task/Task';
+import { StateAdapter } from './StateAdapter';
+import { AppFormExport } from './components/Export/PDF/AppFormExport';
 
 const creator_id = process.env.REACT_APP_B24_USER_ID;
 const tag = process.env.REACT_APP_TAG;
@@ -12,7 +12,7 @@ const webhook_key = process.env.REACT_APP_B24_WEBHOOK_KEY;
 const main_url = process.env.REACT_APP_B24_MAIN_URL;
 
 const auditors: string[] = process.env.REACT_APP_B24_AUDITORS
-  ? process.env.REACT_APP_B24_AUDITORS.split(",")
+  ? process.env.REACT_APP_B24_AUDITORS.split(',')
   : [];
 
 class B24 {
@@ -33,17 +33,17 @@ class B24 {
     const brands_map: {
       [key: string]: string;
     } = {
-      XMS: "C_10037",
-      XMF: "C_10035",
-      XMT: "C_10033",
-      XMG: "C_10041",
+      XMS: 'C_10037',
+      XMF: 'C_10035',
+      XMT: 'C_10033',
+      XMG: 'C_10041',
     };
     let ufCrmTask = [];
 
     if (state.ufCrmTask) {
       state.ufCrmTask.forEach((item: string) => {
         if (
-          !["C_10033", "C_10035", "C_10037", "C_10041", "CO_6295"].includes(
+          !['C_10033', 'C_10035', 'C_10037', 'C_10041', 'CO_6295'].includes(
             item
           )
         ) {
@@ -52,7 +52,7 @@ class B24 {
       });
     }
 
-    ufCrmTask.push(brands_map[state.brand], "CO_6295");
+    ufCrmTask.push(brands_map[state.brand], 'CO_6295');
 
     return ufCrmTask;
   };
@@ -66,9 +66,9 @@ class B24 {
         `${state.serialNumber}_${state.testingCompany} - ${state.standards} (${state.pretreatment1}) - ${state.article}, ${state.colour} ` +
         `(send ${state.sentOn} - plan ${state.testFinishedOnPlanDate}) = ${(
           +state.price + +state.price2
-        ).toLocaleString("ru-RU", {
-          style: "currency",
-          currency: "EUR",
+        ).toLocaleString('ru-RU', {
+          style: 'currency',
+          currency: 'EUR',
         })} | ${stAd.getStageForTitle()}${stAd.getNADForTitle()}`,
       DESCRIPTION:
         `${
@@ -93,7 +93,7 @@ class B24 {
         }` +
         `${state.price && `[B]Price:[/B] ${state.price} €\n`}` +
         `${
-          state.paymentDate ? `[B]Payment date:[/B] ${state.paymentDate}\n` : ""
+          state.paymentDate ? `[B]Payment date:[/B] ${state.paymentDate}\n` : ''
         }` +
         `${
           stAd.secondPayment && `[B]Second payment:[/B] ${stAd.secondPayment}\n`
@@ -122,7 +122,7 @@ class B24 {
           `[B]Pre-treatment 1:[/B] ${state.pretreatment1}`
         } ` +
         `${state.pretreatment1Result && `(${state.pretreatment1Result})`}` +
-        "\n" +
+        '\n' +
         `${
           state.pretreatment2 &&
           `[B]Pre-treatment 2:[/B] ${state.pretreatment2}\n`
@@ -154,12 +154,12 @@ class B24 {
         `${state.stage && `[B]Stage:[/B] ${state.stage}\n`}` +
         `${state.news && `[B]News:[/B] ${state.news}\n`}` +
         `${
-          state.resume === undefined ? "" : `[B]Resume:[/B] ${state.resume}\n`
+          state.resume === undefined ? '' : `[B]Resume:[/B] ${state.resume}\n`
         }` +
         `${state.comments && `[B]Comments:[/B] ${state.comments}\n`}` +
         `${state.link && `[B]Edit:[/B] ${state.link}\n`}` +
         `${dataSeparator}\n` +
-        (state.otherTextInDescription || ""),
+        (state.otherTextInDescription || ''),
     };
     if (state.certReceivedOnPlanDate)
       taskFields.DEADLINE = dayjs(state.certReceivedOnPlanDate).toISOString();
@@ -178,7 +178,7 @@ class B24 {
         res.result.forEach((file: any) => {
           // 29 is 'Fabric Test Application Form_'
           if (
-            "NAME" in file &&
+            'NAME' in file &&
             fileName.substr(0, 29) === file.NAME.substr(0, 29)
           ) {
             // remove this file from task
@@ -200,7 +200,7 @@ class B24 {
     const pdf = await new AppFormExport(state).create();
     pdf.getBase64((base64: string) => {
       fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.addfile/`, {
-        method: "post",
+        method: 'post',
         body: qs.stringify({
           TASK_ID: taskId,
           FILE: {
@@ -222,8 +222,8 @@ class B24 {
     const taskData = { ...B24.formTaskFields(state), ...defaultParams };
 
     return fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.add/`, {
-      method: "post",
-      headers: { "content-type": "application/x-www-form-urlencoded" },
+      method: 'post',
+      headers: { 'content-type': 'application/x-www-form-urlencoded' },
       body: qs.stringify([taskData]),
     })
       .then((r) => r.json())
@@ -236,13 +236,13 @@ class B24 {
 
   static updateTask(state: any, task_id: string | null = null) {
     if (task_id === null) {
-      throw new Error("task id is not defined");
+      throw new Error('task id is not defined');
     }
     const task_data = B24.formTaskFields(state);
     B24.handleApplicationForm(task_id, state);
     return fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.update/`, {
-      method: "post",
-      headers: { "content-type": "application/x-www-form-urlencoded" },
+      method: 'post',
+      headers: { 'content-type': 'application/x-www-form-urlencoded' },
       body: qs.stringify([task_id, task_data]),
     });
   }
@@ -252,7 +252,7 @@ class B24 {
       return fetch(
         `${main_url}/${creator_id}/${webhook_key}/task.item.addfile/`,
         {
-          method: "post",
+          method: 'post',
           body: qs.stringify({
             TASK_ID: taskId,
             FILE: {
@@ -263,13 +263,13 @@ class B24 {
         }
       ).then((res) => res.json());
     } else {
-      throw new Error("Task Id is not defined");
+      throw new Error('Task Id is not defined');
     }
   }
 
   static async get_task(id: string | undefined) {
     if (id === null) {
-      throw new Error("id is undefined");
+      throw new Error('id is undefined');
     }
 
     const getAttachedFiles = () =>
@@ -286,11 +286,11 @@ class B24 {
         qs.stringify({
           taskId: id,
           select: [
-            "ID",
-            "TITLE",
-            "DESCRIPTION",
-            "UF_CRM_TASK",
-            "UF_TASK_WEBDAV_FILES",
+            'ID',
+            'TITLE',
+            'DESCRIPTION',
+            'UF_CRM_TASK',
+            'UF_TASK_WEBDAV_FILES',
           ],
         })
     )
@@ -324,12 +324,12 @@ class B24 {
           `${main_url}/${creator_id}/${webhook_key}/crm.product.list?` +
             qs.stringify({
               order: {
-                NAME: "ASC",
+                NAME: 'ASC',
               },
               filter: {
                 SECTION_ID: 8582,
               },
-              select: ["NAME"],
+              select: ['NAME'],
               start: B24.start,
             })
         )
@@ -347,9 +347,9 @@ class B24 {
     const products = [];
 
     const productSections = [
-      [8568, "XMF"],
-      [8574, "XMT"],
-      [8572, "XMS"],
+      [8568, 'XMF'],
+      [8574, 'XMT'],
+      [8572, 'XMS'],
     ];
     let productsInSection: any[] = [];
 
@@ -360,12 +360,12 @@ class B24 {
             `${main_url}/${creator_id}/${webhook_key}/crm.product.list?` +
               qs.stringify({
                 order: {
-                  NAME: "ASC",
+                  NAME: 'ASC',
                 },
                 filter: {
                   SECTION_ID: sectionId,
                 },
-                select: ["ID", "NAME"],
+                select: ['ID', 'NAME'],
                 start: B24.start,
               })
           )
@@ -390,7 +390,7 @@ class B24 {
 
   static get_product(id = null) {
     if (id === null) {
-      throw Error("Product id is not provided");
+      throw Error('Product id is not provided');
     }
 
     return fetch(

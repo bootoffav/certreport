@@ -13,9 +13,9 @@ function Products(tasks: any[]) {
   var products: ProductType = [];
 
   tasks.forEach((t) => {
-    if (t.state && t.state.article !== "") {
+    if (t.state && t.state.article !== '') {
       let { article, standards, brand } = t.state;
-      standards = standards.split(", ");
+      standards = standards.split(', ');
 
       // check for existence
       const indexOfProduct = products.findIndex(
@@ -23,7 +23,7 @@ function Products(tasks: any[]) {
       );
       const convertedTitle = {
         ...t,
-        title: t.title.substring(0, t.title.indexOf(" ")),
+        title: t.title.substring(0, t.title.indexOf(' ')),
       };
 
       if (indexOfProduct > 0) {

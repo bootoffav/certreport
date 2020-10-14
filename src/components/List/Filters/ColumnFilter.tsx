@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 
 class ColumnFilter extends React.Component<{
   tasks: any;
@@ -9,11 +9,11 @@ class ColumnFilter extends React.Component<{
 }> {
   static getDerivedStateFromProps(props: any, state: any) {
     if (
-      props.requiredStage === "products" &&
-      state.searchingColumn === "title"
+      props.requiredStage === 'products' &&
+      state.searchingColumn === 'title'
     ) {
       return {
-        searchingColumn: "article",
+        searchingColumn: 'article',
       };
     }
 
@@ -21,27 +21,27 @@ class ColumnFilter extends React.Component<{
   }
 
   state = {
-    searchingColumn: "title",
+    searchingColumn: 'title',
   };
 
   filter(searchVal: string, columnToSearch: string) {
     let visibleData;
     const searchValOrig = searchVal;
     searchVal = searchVal.toLowerCase();
-    if (this.props.requiredStage === "products") {
+    if (this.props.requiredStage === 'products') {
       visibleData = this.props.allProducts.filter((product: any) => {
-        if (columnToSearch === "article") {
+        if (columnToSearch === 'article') {
           return product[columnToSearch].toLowerCase().includes(searchVal);
         } else {
           return product[columnToSearch]
-            .join(", ")
+            .join(', ')
             .toLowerCase()
             .includes(searchVal);
         }
       });
     } else {
       visibleData = this.props.tasks.filter((task: any) =>
-        columnToSearch === "title"
+        columnToSearch === 'title'
           ? task[columnToSearch].toLowerCase().includes(searchVal)
           : task.state[columnToSearch].toLowerCase().includes(searchVal)
       );
@@ -50,7 +50,7 @@ class ColumnFilter extends React.Component<{
     this.props.update({
       visibleData,
       columnFilterValue: searchValOrig,
-      stage: "all",
+      stage: 'all',
       startDate: undefined,
       endDate: undefined,
     });
@@ -64,19 +64,19 @@ class ColumnFilter extends React.Component<{
   render = () => {
     const searchOptions: { [key: string]: any } = {
       default: {
-        title: "Task",
-        testReport: "Test report",
-        certificate: "Certificate",
-        standards: "Standards",
-        article: "Article",
+        title: 'Task',
+        testReport: 'Test report',
+        certificate: 'Certificate',
+        standards: 'Standards',
+        article: 'Article',
       },
       products: {
-        article: "Fabric",
-        standards: "Standards",
+        article: 'Fabric',
+        standards: 'Standards',
       },
     };
     const prop =
-      this.props.requiredStage === "products" ? "products" : "default";
+      this.props.requiredStage === 'products' ? 'products' : 'default';
     return (
       <div className="mr-1 input-group">
         <input

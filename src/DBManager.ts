@@ -1,13 +1,13 @@
-import faunadb, { query as q } from "faunadb";
-import { emptyState } from "./Task/emptyState";
+import faunadb, { query as q } from 'faunadb';
+import { emptyState } from './Task/emptyState';
 
 class DB {
-  static fdbCollection = process.env.REACT_APP_FAUNADB_CLASS || "aitex";
-  static fdbIndex = process.env.REACT_APP_FAUNADB_INDEX || "id";
+  static fdbCollection = process.env.REACT_APP_FAUNADB_CLASS || 'aitex';
+  static fdbIndex = process.env.REACT_APP_FAUNADB_INDEX || 'id';
 
   static client() {
-    if (typeof process.env.REACT_APP_FAUNADB_KEY !== "string") {
-      throw new Error("Problem with db key");
+    if (typeof process.env.REACT_APP_FAUNADB_KEY !== 'string') {
+      throw new Error('Problem with db key');
     }
 
     return new faunadb.Client({
@@ -31,11 +31,11 @@ class DB {
       });
     const props = Object.getOwnPropertyNames(data);
 
-    if (!props.includes("testRequirement"))
+    if (!props.includes('testRequirement'))
       data.testRequirement = emptyState.DBState.testRequirement;
-    if (!props.includes("washPreTreatment"))
+    if (!props.includes('washPreTreatment'))
       data.washPreTreatment = emptyState.DBState.washPreTreatment;
-    if (!props.includes("footer")) data.footer = emptyState.DBState.footer;
+    if (!props.includes('footer')) data.footer = emptyState.DBState.footer;
 
     return data;
   }

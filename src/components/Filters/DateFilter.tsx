@@ -1,6 +1,6 @@
-import { Component } from "react";
-import DatePicker from "react-datepicker";
-import { Button } from "tabler-react";
+import { Component } from 'react';
+import DatePicker from 'react-datepicker';
+import { Button } from 'tabler-react';
 
 class DateFilter extends Component<any, any> {
   constructor(props: any) {

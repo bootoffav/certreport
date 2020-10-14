@@ -1,5 +1,5 @@
-import { Icon, Dimmer } from "tabler-react";
-import "./UploadedFilesList.css";
+import { Icon, Dimmer } from 'tabler-react';
+import './UploadedFilesList.css';
 
 const UploadedFilesList = ({ attachedFiles, deleteFile, uploading }: any) => (
   <div className="uploadedFiles">

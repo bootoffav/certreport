@@ -1,5 +1,5 @@
-import qs from "qs";
-import Task from "../Task/Task";
+import qs from 'qs';
+import Task from '../Task/Task';
 
 const creator_id = process.env.REACT_APP_B24_USER_ID;
 const tag = process.env.REACT_APP_TAG;
@@ -35,9 +35,9 @@ export async function getTasks() {
       await fetch(
         `${main_url}/${creator_id}/${webhook_key}/tasks.task.list?` +
           qs.stringify({
-            order: { ID: "desc" },
+            order: { ID: 'desc' },
             filter: { TAG: tag },
-            select: ["ID", "TITLE", "DESCRIPTION", "UF_CRM_TASK"],
+            select: ['ID', 'TITLE', 'DESCRIPTION', 'UF_CRM_TASK'],
             start,
           })
       )
@@ -58,7 +58,7 @@ export async function getTasks() {
     };
 
     if (
-      ["7. Test-report ready", "8. Certificate ready", "9. Ended"].includes(
+      ['7. Test-report ready', '8. Certificate ready', '9. Ended'].includes(
         task.state.stage
       )
     ) {

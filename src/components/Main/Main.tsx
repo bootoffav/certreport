@@ -1,19 +1,19 @@
-import { Component } from "react";
+import { Component } from 'react';
 import {
   BrowserRouter as Router,
   Route,
   NavLink,
   Switch,
-} from "react-router-dom";
-import { Error404Page } from "tabler-react";
-import CacheManager from "../../CacheManager";
-import List from "../List/List";
-import Form from "../Form/Form";
-import Dashboard from "../Dashboard/Dashboard";
-import ErrorBoundary from "../../ErrorBoundary";
-import { BrandFilter } from "../Filters/BrandFilter";
-import DateFilter from "../Filters/DateFilter";
-import { StageShortNames } from "../StageShortNames/StageShortNames";
+} from 'react-router-dom';
+import { Error404Page } from 'tabler-react';
+import CacheManager from '../../CacheManager';
+import List from '../List/List';
+import Form from '../Form/Form';
+import Dashboard from '../Dashboard/Dashboard';
+import ErrorBoundary from '../../ErrorBoundary';
+import { BrandFilter } from '../Filters/BrandFilter';
+import DateFilter from '../Filters/DateFilter';
+import { StageShortNames } from '../StageShortNames/StageShortNames';
 
 class Main extends Component {
   cache = new CacheManager();
@@ -25,9 +25,9 @@ class Main extends Component {
     updated: false,
     startDate: undefined,
     endDate: undefined,
-    activeBrands: ["XMT", "XMS", "XMF"],
+    activeBrands: ['XMT', 'XMS', 'XMF'],
   };
-  locations = ["/", "/dashboard"];
+  locations = ['/', '/dashboard'];
 
   async componentDidMount() {
     if (this.locations.includes(window.location.pathname)) {
@@ -73,16 +73,16 @@ class Main extends Component {
 
     // brandfiltering for Tasks
     let filteredTasks = allTasks.filter((task: any) => {
-      if (task.state.brand === "") {
-        if (activeBrands.includes("No brand")) return true;
+      if (task.state.brand === '') {
+        if (activeBrands.includes('No brand')) return true;
       }
       return activeBrands.includes(task.state.brand);
     });
 
     // brandfiltering for Products
     let filteredProducts = allProducts.filter((product: any) => {
-      if (product.brand === "") {
-        if (activeBrands.includes("No brand")) return true;
+      if (product.brand === '') {
+        if (activeBrands.includes('No brand')) return true;
       }
       return activeBrands.includes(product.brand);
     });
@@ -120,7 +120,7 @@ class Main extends Component {
               <div className="container">
                 <div
                   className="d-flex h-100 justify-content-end align-items-center"
-                  style={{ fontSize: "16px" }}
+                  style={{ fontSize: '16px' }}
                 >
                   <div>
                     <NavLink className="navbar-link" exact to="/dashboard">

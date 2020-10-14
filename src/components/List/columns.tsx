@@ -1,8 +1,8 @@
-import { Link } from "react-router-dom";
-import dayjs from "dayjs";
-import { Icon } from "tabler-react";
-import { dateConverter, printStage } from "../../helpers";
-import type { CellInfo } from "react-table";
+import { Link } from 'react-router-dom';
+import dayjs from 'dayjs';
+import { Icon } from 'tabler-react';
+import { dateConverter, printStage } from '../../helpers';
+import type { CellInfo } from 'react-table';
 
 function sortDates(a: string | undefined, b: string | undefined): number {
   if (a === undefined) return -1;
@@ -21,16 +21,16 @@ function getColumns(totalPrice: number, stage?: string) {
   const allColumns = [
     {
       // 0
-      Header: "#",
-      id: "position",
+      Header: '#',
+      id: 'position',
       sortable: true,
-      accessor: "position",
+      accessor: 'position',
       width: 30,
     },
     {
       // 1
-      Header: "##",
-      id: "serialNumber",
+      Header: '##',
+      id: 'serialNumber',
       accessor: ({ state }: any) => state.serialNumber,
       width: 48,
       Cell: (props: any) => (
@@ -45,69 +45,69 @@ function getColumns(totalPrice: number, stage?: string) {
     },
     {
       // 2
-      Header: "Created",
-      id: "createdDate",
-      accessor: "CREATED_DATE",
+      Header: 'Created',
+      id: 'createdDate',
+      accessor: 'CREATED_DATE',
       width: 80,
-      Cell: ({ value }: any) => dayjs(value).format("DD.MM.YYYY"),
+      Cell: ({ value }: any) => dayjs(value).format('DD.MM.YYYY'),
     },
     {
       // 3
-      Header: "XM_",
-      id: "brand",
-      accessor: "state.brand",
+      Header: 'XM_',
+      id: 'brand',
+      accessor: 'state.brand',
       width: 37,
     },
     {
       // 4
-      Header: "Status",
-      id: "stage",
-      accessor: "state.stage",
-      Cell: ({ value: stage }: CellInfo) => printStage(stage, "table"),
+      Header: 'Status',
+      id: 'stage',
+      accessor: 'state.stage',
+      Cell: ({ value: stage }: CellInfo) => printStage(stage, 'table'),
       width: 60,
     },
     {
       //5
-      Header: "L. A. D.",
-      id: "lastActionDate",
-      accessor: "lastActionDate",
+      Header: 'L. A. D.',
+      id: 'lastActionDate',
+      accessor: 'lastActionDate',
       sortMethod: sortDates,
       width: 79,
     },
     {
       // 6
-      Header: "N. A. D.",
-      id: "nextActionDate",
-      accessor: "nextActionDate",
+      Header: 'N. A. D.',
+      id: 'nextActionDate',
+      accessor: 'nextActionDate',
       sortMethod: sortDates,
     },
     {
       // 7
-      Header: "Cert received",
-      id: "certReceivedDate",
-      accessor: "state.certReceivedOnRealDate",
+      Header: 'Cert received',
+      id: 'certReceivedDate',
+      accessor: 'state.certReceivedOnRealDate',
       minWidth: 100,
       sortMethod: sortDates,
     },
     {
       // 8
-      Header: "Test-report received",
-      id: "testReceivedDate",
-      accessor: "state.testFinishedOnRealDate",
+      Header: 'Test-report received',
+      id: 'testReceivedDate',
+      accessor: 'state.testFinishedOnRealDate',
       minWidth: 100,
       sortMethod: sortDates,
     },
     {
       // 9
-      Header: "Task",
-      accessor: "title",
-      id: "taskName",
+      Header: 'Task',
+      accessor: 'title',
+      id: 'taskName',
       minWidth: 550,
       Cell: ({ original, value }: any) => (
         <Link
           to={`/edit/${original.id}`}
           target="_blank"
-          style={{ textDecoration: "none" }}
+          style={{ textDecoration: 'none' }}
         >
           {value}
         </Link>
@@ -115,115 +115,115 @@ function getColumns(totalPrice: number, stage?: string) {
     },
     {
       // 10
-      Header: "Sample NAD",
-      accessor: "state.readyOn",
-      id: "readyOn",
+      Header: 'Sample NAD',
+      accessor: 'state.readyOn',
+      id: 'readyOn',
       width: 130,
       sortMethod: sortDates,
     },
     {
       // 11
-      Header: "Sent On",
-      accessor: "state.sentOn",
-      id: "sentOn",
+      Header: 'Sent On',
+      accessor: 'state.sentOn',
+      id: 'sentOn',
       width: 130,
       sortMethod: sortDates,
     },
     {
       // 12
-      Header: "Sample has received On",
-      accessor: "state.receivedOn",
-      id: "receivedOn",
+      Header: 'Sample has received On',
+      accessor: 'state.receivedOn',
+      id: 'receivedOn',
       width: 130,
       sortMethod: sortDates,
     },
     {
       // 13
-      Header: "Tests to be finished On",
-      accessor: "state.finishedOn",
-      id: "receivedOn",
+      Header: 'Tests to be finished On',
+      accessor: 'state.finishedOn',
+      id: 'receivedOn',
       width: 130,
       sortMethod: sortDates,
     },
     {
       // 14
-      Header: "Proforma date",
-      accessor: "state.proformaReceivedDate",
-      id: "proformaReceivedDate",
+      Header: 'Proforma date',
+      accessor: 'state.proformaReceivedDate',
+      id: 'proformaReceivedDate',
       width: 130,
       sortMethod: sortDates,
     },
     {
       // 15
-      Header: "Proforma #",
-      accessor: "state.proformaNumber",
-      id: "proformaNumber",
+      Header: 'Proforma #',
+      accessor: 'state.proformaNumber',
+      id: 'proformaNumber',
       width: 100,
     },
     {
       // 16
-      Header: "Paid",
-      id: "paid",
-      accessor: "state.paymentDate",
+      Header: 'Paid',
+      id: 'paid',
+      accessor: 'state.paymentDate',
       minWidth: 40,
       Cell: (props: any) =>
-        props.value ? <span className="oi oi-check"> </span> : "",
+        props.value ? <span className="oi oi-check"> </span> : '',
       sortMethod: sortDates,
     },
     {
       // 17
-      Header: "Payment date",
-      id: "paymentDate",
-      accessor: "state.paymentDate",
+      Header: 'Payment date',
+      id: 'paymentDate',
+      accessor: 'state.paymentDate',
       width: 130,
       sortMethod: sortDates,
     },
     {
       // 18
-      Header: "Article",
-      id: "article",
-      accessor: "state.article",
+      Header: 'Article',
+      id: 'article',
+      accessor: 'state.article',
       width: 100,
     },
     {
       // 19
-      Header: "ETD (Test-report)",
-      id: "etdTestReport",
-      accessor: "state.testFinishedOnPlanDate",
+      Header: 'ETD (Test-report)',
+      id: 'etdTestReport',
+      accessor: 'state.testFinishedOnPlanDate',
       minWidth: 100,
       sortMethod: sortDates,
     },
     {
       // 20
-      Header: "Test report",
-      id: "testReport",
-      accessor: "state.testReport",
+      Header: 'Test report',
+      id: 'testReport',
+      accessor: 'state.testReport',
       minWidth: 100,
     },
     {
       // 21
-      Header: "Test really finished on",
-      id: "testFinishedOnRealDate",
-      accessor: "state.testFinishedOnRealDate",
+      Header: 'Test really finished on',
+      id: 'testFinishedOnRealDate',
+      accessor: 'state.testFinishedOnRealDate',
       minWidth: 100,
     },
     {
       // 22
-      Header: "ETD (Certificate)",
-      id: "etdCertificate",
-      accessor: "state.certReceivedOnPlanDate",
+      Header: 'ETD (Certificate)',
+      id: 'etdCertificate',
+      accessor: 'state.certReceivedOnPlanDate',
       minWidth: 100,
       sortMethod: sortDates,
     },
     {
       // 23
-      Header: "Certificate",
-      id: "certificate",
+      Header: 'Certificate',
+      id: 'certificate',
       accessor: ({ ufTaskWebdavFiles: files, state }: any) => {
         const stages = [
-          "7. Test-report ready",
-          "8. Certificate ready",
-          "9. Ended",
+          '7. Test-report ready',
+          '8. Certificate ready',
+          '9. Ended',
         ];
         if (stages.includes(state.stage)) {
           return files.map((file: any, key: number) => (
@@ -241,68 +241,68 @@ function getColumns(totalPrice: number, stage?: string) {
     },
     {
       // 24
-      Header: "Certificate really received on",
-      id: "certReceivedOnRealDate",
-      accessor: "state.certReceivedOnRealDate",
+      Header: 'Certificate really received on',
+      id: 'certReceivedOnRealDate',
+      accessor: 'state.certReceivedOnRealDate',
       minWidth: 100,
       sortMethod: sortDates,
     },
     {
       // 25
-      Header: "Standards",
-      id: "standards",
-      accessor: "state.standards",
+      Header: 'Standards',
+      id: 'standards',
+      accessor: 'state.standards',
       minWidth: 100,
       Cell: ({ original }: any) =>
         original.state.standards
-          .split(", ")
+          .split(', ')
           .map((st: string, i: number, stArr: string[]) => {
             const lastItem = stArr.length !== i + 1;
             switch (original.state.standardsResult[st]) {
-              case "pass":
+              case 'pass':
                 return (
                   <div key={i}>
-                    {st}{" "}
+                    {st}{' '}
                     <Icon
                       prefix="fe"
                       width="60"
                       className="greenIcon"
                       name="thumbs-up"
                     />
-                    {lastItem ? <br /> : ""}
+                    {lastItem ? <br /> : ''}
                   </div>
                 );
-              case "fail":
+              case 'fail':
                 return (
                   <div key={i}>
-                    {st}{" "}
+                    {st}{' '}
                     <Icon
                       prefix="fe"
                       width="60"
                       className="redIcon"
                       name="thumbs-down"
                     />
-                    {lastItem ? <br /> : ""}
+                    {lastItem ? <br /> : ''}
                   </div>
                 );
             }
             return (
               <div key={i}>
                 {st}
-                {lastItem ? <br /> : ""}
+                {lastItem ? <br /> : ''}
               </div>
             );
           }),
     },
     {
       // 26
-      Header: "Result",
-      id: "result",
-      accessor: "state.resume",
+      Header: 'Result',
+      id: 'result',
+      accessor: 'state.resume',
       minWidth: 50,
       Cell: (props: any) => {
         switch (props.value) {
-          case "fail":
+          case 'fail':
             return (
               <Icon
                 prefix="fe"
@@ -311,7 +311,7 @@ function getColumns(totalPrice: number, stage?: string) {
                 name="thumbs-down"
               />
             );
-          case "pass":
+          case 'pass':
             return (
               <Icon
                 prefix="fe"
@@ -320,7 +320,7 @@ function getColumns(totalPrice: number, stage?: string) {
                 name="thumbs-up"
               />
             );
-          case "partly":
+          case 'partly':
             return (
               <Icon
                 prefix="fe"
@@ -329,21 +329,21 @@ function getColumns(totalPrice: number, stage?: string) {
                 name="alert-circle"
               />
             );
-          case "no sample":
-            return "NO Sample";
+          case 'no sample':
+            return 'NO Sample';
           default:
-            return "";
+            return '';
         }
       },
     },
     {
       // 27
-      Header: "Pre-treatment Result",
-      id: "pretreatment1",
-      accessor: "state.pretreatment1Result",
+      Header: 'Pre-treatment Result',
+      id: 'pretreatment1',
+      accessor: 'state.pretreatment1Result',
       Cell: (props: any) => {
         switch (props.value) {
-          case "fail":
+          case 'fail':
             return (
               <Icon
                 prefix="fe"
@@ -352,7 +352,7 @@ function getColumns(totalPrice: number, stage?: string) {
                 name="thumbs-down"
               />
             );
-          case "pass":
+          case 'pass':
             return (
               <Icon
                 prefix="fe"
@@ -362,80 +362,80 @@ function getColumns(totalPrice: number, stage?: string) {
               />
             );
           default:
-            return "";
+            return '';
         }
       },
     },
     {
       // 28
-      Header: "News",
-      id: "news",
-      accessor: "state.news",
+      Header: 'News',
+      id: 'news',
+      accessor: 'state.news',
       Cell: ({ value }: any) =>
         value ? (
           <a
             href={`https://${value}`}
             style={{
-              overflow: "break-word",
-              wordWrap: "break-word",
+              overflow: 'break-word',
+              wordWrap: 'break-word',
             }}
             target="_blank"
             rel="noopener noreferrer"
           >{`https://${value}`}</a>
         ) : (
-          ""
+          ''
         ),
     },
     {
       // 29
-      Header: "Part #",
-      id: "partNumber",
-      accessor: "state.partNumber",
+      Header: 'Part #',
+      id: 'partNumber',
+      accessor: 'state.partNumber',
     },
     {
       // 30
-      Header: "Wash",
-      id: "wash",
-      accessor: "state.pretreatment1",
+      Header: 'Wash',
+      id: 'wash',
+      accessor: 'state.pretreatment1',
     },
     {
       // 31
-      Header: "Price, €",
+      Header: 'Price, €',
       Footer: (
         <>
-          Total:{" "}
-          <span style={{ float: "right" }}>{formatPrice(totalPrice)}</span>
+          Total:{' '}
+          <span style={{ float: 'right' }}>{formatPrice(totalPrice)}</span>
         </>
       ),
-      id: "price",
+      id: 'price',
       accessor: ({ state }: any) => (+state.price || 0) + (+state.price2 || 0),
       minWidth: 90,
       Cell: (props: any) => (
         <>
-          €<span style={{ float: "right" }}>{formatPrice(props.value)}</span>
+          €<span style={{ float: 'right' }}>{formatPrice(props.value)}</span>
         </>
       ),
     },
     {
       // 32
-      Header: "Fabric",
-      id: "article",
-      accessor: "article",
+      Header: 'Fabric',
+      id: 'article',
+      accessor: 'article',
       width: 150,
     },
     {
       // 33
-      Header: "Standards",
-      id: "standards",
-      accessor: "standards",
+      Header: 'Standards',
+      id: 'standards',
+      accessor: 'standards',
       width: 450,
-      Cell: ({ value }: any) => value.join(", "),
+      Cell: ({ value }: any) => value.join(', '),
     },
     {
       // 34
-      Header: "Certifications",
-      id: "tasks",
-      accessor: "tasks",
+      Header: 'Certifications',
+      id: 'tasks',
+      accessor: 'tasks',
       Cell: ({ value }: any) =>
         value.map((t: any) => (
           <span key={t.id}>
@@ -452,35 +452,35 @@ function getColumns(totalPrice: number, stage?: string) {
     },
     {
       // 35
-      Header: "Brand",
-      id: "brand",
-      accessor: "brand",
+      Header: 'Brand',
+      id: 'brand',
+      accessor: 'brand',
       width: 50,
     },
-  ].map((column) => ({ ...column, style: { whiteSpace: "unset" } }));
+  ].map((column) => ({ ...column, style: { whiteSpace: 'unset' } }));
 
   const takeColumns = (columnPositions: number[]) => {
     return [0, ...columnPositions].map((num: number) => allColumns[num]);
   };
 
   switch (stage) {
-    case "00. Paused":
+    case '00. Paused':
       return takeColumns([1, 2, 3, 9, 10, 18, 20, 27, 31]);
-    case "0. Sample to be prepared":
+    case '0. Sample to be prepared':
       return takeColumns([1, 2, 3, 9, 10, 18, 30, 31]);
-    case "1. Sample Sent":
+    case '1. Sample Sent':
       return takeColumns([1, 2, 3, 9, 10, 11, 18, 20, 23, 31]);
-    case "2. Sample Arrived":
+    case '2. Sample Arrived':
       return takeColumns([1, 2, 3, 9, 11, 12, 18, 20, 23, 31]);
-    case "3. PI Issued":
+    case '3. PI Issued':
       return takeColumns([1, 2, 3, 9, 14, 15, 17, 19, 22, 26, 31]);
-    case "4. Payment Done":
+    case '4. Payment Done':
       return takeColumns([1, 2, 3, 9, 14, 15, 16, 17, 22, 25, 31]);
-    case "5. Testing is started":
+    case '5. Testing is started':
       return takeColumns([1, 2, 3, 9, 17, 18, 19, 20, 22, 25, 31]);
-    case "7. Test-report ready":
+    case '7. Test-report ready':
       return takeColumns([1, 2, 3, 8, 9, 19, 21, 22, 23, 25, 26, 27, 29, 31]);
-    case "8. Certificate ready":
+    case '8. Certificate ready':
       return takeColumns([
         1,
         2,
@@ -498,11 +498,11 @@ function getColumns(totalPrice: number, stage?: string) {
         27,
         31,
       ]);
-    case "all":
+    case 'all':
       return takeColumns([1, 2, 3, 4, 5, 9, 18, 20, 23, 24, 25, 28, 31]);
-    case "products":
+    case 'products':
       return takeColumns([32, 35, 33, 34]);
-    case "overdue":
+    case 'overdue':
       return takeColumns([1, 2, 3, 4, 5, 6, 9, 19, 21, 22, 24, 25, 27, 31]);
     default:
       return takeColumns([1, 2, 3, 4, 9, 18, 20, 24, 26, 31]);
@@ -511,12 +511,12 @@ function getColumns(totalPrice: number, stage?: string) {
 
 function formatPrice(price: number) {
   return price
-    .toLocaleString("en-US", {
-      style: "currency",
-      currency: "EUR",
+    .toLocaleString('en-US', {
+      style: 'currency',
+      currency: 'EUR',
     })
-    .replace(/,/g, " ")
-    .replace(/\./g, ",");
+    .replace(/,/g, ' ')
+    .replace(/\./g, ',');
 }
 
 export { getColumns };

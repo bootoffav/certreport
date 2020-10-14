@@ -94,4 +94,4 @@
 // it("can correctly determine Stage", () => {
 //   expect(task.state.stage).toBe("8. Certificate ready");
 // });
-// // 
+// //

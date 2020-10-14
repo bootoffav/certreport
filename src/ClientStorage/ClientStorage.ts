@@ -1,7 +1,7 @@
 /* eslint-disable import/no-webpack-loader-syntax */
 // @ts-ignore
-import dataFetcher from "workerize-loader!../workers/dataFetcher";
-import { Products } from "../Product/Product";
+import dataFetcher from 'workerize-loader!../workers/dataFetcher';
+import { Products } from '../Product/Product';
 
 const worker = dataFetcher();
 
@@ -20,41 +20,41 @@ class ClientStorage {
   static updateProducts(tasks: any[]) {
     const { products } = Products(tasks);
     return new Promise(async (res) => {
-      await ClientStorage.writeData(products, "products");
+      await ClientStorage.writeData(products, 'products');
       res();
     });
   }
 
-  static writeData(data: any, storeType = "tasks") {
+  static writeData(data: any, storeType = 'tasks') {
     return new Promise((res) => {
-      window.indexedDB.open("default").onsuccess = ({ target }: any) => {
-        const tran = target.result.transaction([storeType], "readwrite");
+      window.indexedDB.open('default').onsuccess = ({ target }: any) => {
+        const tran = target.result.transaction([storeType], 'readwrite');
         const store = tran.objectStore(storeType);
         switch (storeType) {
-          case "tasks":
+          case 'tasks':
             data.forEach((entity: any) => store.put(entity, entity.id));
             break;
           default:
             data.forEach((entity: any) => store.put(entity, entity.article));
         }
         tran.oncomplete = () => res();
-        tran.onerror = () => console.error("there was an error");
+        tran.onerror = () => console.error('there was an error');
       };
     });
   }
 
   static removeData = () =>
     new Promise((res) => {
-      window.indexedDB.open("default").onsuccess = ({ target }: any) => {
-        const tran = target.result.transaction(["tasks"], "readwrite");
+      window.indexedDB.open('default').onsuccess = ({ target }: any) => {
+        const tran = target.result.transaction(['tasks'], 'readwrite');
         tran.oncomplete = () => res();
-        tran.objectStore("tasks").clear();
+        tran.objectStore('tasks').clear();
       };
     });
 
   static getExistingKeys(storeType: string) {
     return new Promise<string[]>((res) => {
-      let request = window.indexedDB.open("default");
+      let request = window.indexedDB.open('default');
 
       request.onsuccess = (e: any) => {
         const conn = e.target.result;
@@ -68,18 +68,18 @@ class ClientStorage {
 
   static getData = () =>
     new Promise<{ tasks: any; products: any }>((res) => {
-      const db = window.indexedDB.open("default", 2);
+      const db = window.indexedDB.open('default', 2);
 
       db.onsuccess = ({ target }) => {
         // @ts-ignore
         const db = target.result;
 
         db
-          .transaction("products")
-          .objectStore("products")
+          .transaction('products')
+          .objectStore('products')
           .getAll().onsuccess = ({ target }: any) => {
           const products = target.result;
-          db.transaction("tasks").objectStore("tasks").getAll().onsuccess = ({
+          db.transaction('tasks').objectStore('tasks').getAll().onsuccess = ({
             target,
           }: any) => {
             const tasks = target.result;
@@ -97,11 +97,11 @@ class ClientStorage {
             e.target.result.createObjectStore(obs);
           });
         } else {
-          e.target.result.createObjectStore("tasks");
-          e.target.result.createObjectStore("products");
+          e.target.result.createObjectStore('tasks');
+          e.target.result.createObjectStore('products');
         }
 
-        sessionStorage.removeItem("updated");
+        sessionStorage.removeItem('updated');
       };
     });
 }

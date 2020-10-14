@@ -9,12 +9,12 @@ const tableLayout = {
 
 const fonts = {
   Arial: {
-    normal: "arial.ttf",
-    bold: "arialbd.ttf",
-    italics: "arial-corsivo-2.ttf",
+    normal: 'arial.ttf',
+    bold: 'arialbd.ttf',
+    italics: 'arial-corsivo-2.ttf',
   },
   Icons: {
-    normal: "fontello.ttf",
+    normal: 'fontello.ttf',
   },
 };
 

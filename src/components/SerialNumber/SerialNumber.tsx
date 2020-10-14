@@ -1,4 +1,4 @@
-import { Component } from "react";
+import { Component } from 'react';
 // import firebase from '../../../old_code/DB';
 
 interface SerialNumberProps {
