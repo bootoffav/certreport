@@ -4,7 +4,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import Select from 'react-select';
 import dayjs from 'dayjs';
 import { PickDate, BaseInput, Article, Price, Paid, Pi } from './FormFields';
-import B24 from '../../B24';
+import * as B24 from '../../B24/B24';
 import Notification, { Status } from '../Notification/Notification';
 import SerialNumber from '../SerialNumber/SerialNumber';
 import { selectOptions } from '../../defaults';

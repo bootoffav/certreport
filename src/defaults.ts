@@ -1,4 +1,4 @@
-import B24 from './B24';
+import * as B24 from './B24/B24';
 import * as Sentry from '@sentry/browser';
 
 let selectOptions: {

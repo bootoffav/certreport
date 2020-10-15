@@ -1,6 +1,6 @@
 import * as React from 'react';
 import DatePicker from 'react-datepicker';
-import B24 from '../../B24';
+import * as B24 from '../../B24/B24';
 import Select from 'react-select';
 import './FormFields.css';
 import { dateConverter } from '../../helpers';

@@ -1,6 +1,6 @@
 import qs from 'qs';
 import { Component } from 'react';
-import B24 from '../../B24';
+import * as B24 from '../../B24/B24';
 import { UploadedFilesList } from './UploadedFilesList';
 
 const creator_id = process.env.REACT_APP_B24_USER_ID;
