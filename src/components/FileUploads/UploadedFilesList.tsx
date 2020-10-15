@@ -8,7 +8,10 @@ const UploadedFilesList = ({ attachedFiles, deleteFile, uploading }: any) => (
       {attachedFiles.map((file: any, index: number) => (
         <p key={file.FILE_ID} className="pl-2">
           {<span className="font-weight-bold">{index + 1}</span>}.
-          <a href={file.DOWNLOAD_URL}> {file.NAME}</a>
+          <a href={'https://xmtextiles.bitrix24.ru' + file.DOWNLOAD_URL}>
+            {' '}
+            {file.NAME}
+          </a>
           <Icon
             prefix="fe"
             name="trash"

@@ -339,7 +339,7 @@ class AppFormExport {
             {},
             {
               text: [
-                this.renderProperSquare('testRequirement', 3, 'Class-2'),
+                this.renderProperSquare('testRequirement', 3, 'Class 2'),
                 ' Class 2',
               ],
               colSpan: 2,

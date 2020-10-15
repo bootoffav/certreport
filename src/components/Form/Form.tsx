@@ -62,7 +62,7 @@ class Form extends React.Component<IFormProps> {
         })
       );
 
-      await B24.get_task(this.task_id)
+      await B24.getTask(this.task_id)
         .then((r: any) => {
           this.setState({
             ...r.state,
@@ -752,10 +752,8 @@ class Form extends React.Component<IFormProps> {
   );
 
   updateAttachedFiles = () =>
-    B24.get_task(this.task_id).then((r: any) => {
-      this.setState({
-        attachedFiles: r.ufTaskWebdavFiles,
-      });
+    B24.getAttachedFiles(this.task_id as string).then((r: []) => {
+      this.setState({ attachedFiles: r });
     });
 }
 

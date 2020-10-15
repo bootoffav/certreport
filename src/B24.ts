@@ -167,44 +167,55 @@ class B24 {
     return taskFields;
   };
 
-  static async handleApplicationForm(taskId: string, state: any) {
-    const fileName = `Fabric Test Application Form_${state.serialNumber}_${state.article}.pdf`;
-    await fetch(
-      `${main_url}/${creator_id}/${webhook_key}/task.item.getfiles?` +
-        qs.stringify({ TASKID: taskId })
-    )
-      .then((res) => res.json())
-      .then((res) =>
-        res.result.forEach((file: any) => {
-          // 29 is 'Fabric Test Application Form_'
-          if (
-            'NAME' in file &&
-            fileName.substr(0, 29) === file.NAME.substr(0, 29)
-          ) {
-            // remove this file from task
-            fetch(
-              `${main_url}/${creator_id}/${webhook_key}/task.item.deletefile?` +
-                qs.stringify({
-                  TASK_ID: taskId,
-                  ATTACHMENT_ID: file.ATTACHMENT_ID,
-                })
-            );
-            // delete from Bitrix
-            fetch(
-              `${main_url}/${creator_id}/${webhook_key}/disk.file.delete?` +
-                qs.stringify({ id: file.FILE_ID })
-            );
-          }
+  /**
+   * Remove link to the file from specified task
+   * @param  {string} id task from which to detach file
+   * @param  {string} attachmentId specified ID of file
+   */
+  static detachFileFromTask(id: string, attachmentId: string) {
+    fetch(
+      `${main_url}/${creator_id}/${webhook_key}/task.item.deletefile?` +
+        qs.stringify({
+          TASK_ID: id,
+          ATTACHMENT_ID: attachmentId,
         })
-      );
+    );
+  }
+
+  /**
+   * Removes file from B24 disk permanently
+   * @param  {string} ID of file in Bitrix file-system
+   */
+  static removeFileFromDisk(id: string) {
+    fetch(
+      `${main_url}/${creator_id}/${webhook_key}/disk.file.delete?` +
+        qs.stringify({ id })
+    );
+  }
+  /**
+   * @param  {string} id task ID
+   * @param  {any} state
+   */
+  static async handleApplicationForm(id: string, state: any) {
+    const fileNamePrefix = 'Fabric Test Application Form_';
+
+    // look for old appForm and remove it from task
+    const attachedFiles = await B24.getAttachedFiles(id);
+    attachedFiles.forEach(({ NAME, FILE_ID, ATTACHMENT_ID }: any) => {
+      if (NAME.startsWith(fileNamePrefix)) {
+        B24.detachFileFromTask(id, ATTACHMENT_ID);
+        B24.removeFileFromDisk(FILE_ID);
+      }
+    });
+
     const pdf = await new AppFormExport(state).create();
     pdf.getBase64((base64: string) => {
       fetch(`${main_url}/${creator_id}/${webhook_key}/task.item.addfile/`, {
         method: 'post',
         body: qs.stringify({
-          TASK_ID: taskId,
+          TASK_ID: id,
           FILE: {
-            NAME: fileName,
+            NAME: `${fileNamePrefix}${state.serialNumber}_${state.article}.pdf`,
             CONTENT: base64,
           },
         }),
@@ -267,19 +278,28 @@ class B24 {
     }
   }
 
-  static async get_task(id: string | undefined) {
+  /**
+   * Get array of attached files.
+   * @param {string} id TaskID
+   * @returns {}
+   */
+  static getAttachedFiles(id: string) {
+    return fetch(
+      `${main_url}/${creator_id}/${webhook_key}/task.item.getfiles?` +
+        qs.stringify({ TASKID: id })
+    )
+      .then((r) => r.json())
+      .then(({ result }: any) => result)
+      .catch((e) => {
+        console.log(e);
+        return [];
+      });
+  }
+
+  static async getTask(id: string | undefined) {
     if (id === null) {
       throw new Error('id is undefined');
     }
-
-    const getAttachedFiles = () =>
-      fetch(
-        `${main_url}/${creator_id}/${webhook_key}/task.item.getfiles?` +
-          qs.stringify({ TASKID: id })
-      )
-        .then((res) => res.json())
-        .then(({ result }: any) => result)
-        .catch((e) => []);
 
     const test = await fetch(
       `${main_url}/${creator_id}/${webhook_key}/tasks.task.get?` +
@@ -304,7 +324,7 @@ class B24 {
           }),
           id,
           title,
-          ufTaskWebdavFiles: await getAttachedFiles(),
+          ufTaskWebdavFiles: await B24.getAttachedFiles(id),
         };
       });
 
