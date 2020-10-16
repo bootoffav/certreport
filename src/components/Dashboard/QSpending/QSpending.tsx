@@ -14,7 +14,6 @@ interface ITotalQuarterSpent {
 
 class QSpending extends Component<{
   renderTable: (t: any[]) => void;
-  // updateTotalSpending: (amount: IAmountSpent) => void;
   tasks: any;
   startDate?: Date;
   endDate?: Date;
