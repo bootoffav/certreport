@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { StatsCard, Header, Card } from 'tabler-react';
+import { StatsCard } from 'tabler-react';
 import { tasksInRange, StatCardsContext } from './Dashboard';
 
 const CompletedCertifications = () => {
@@ -83,35 +83,4 @@ const AmountOfCertifications = () => {
   );
 };
 
-interface IAmountSpent {
-  start: string;
-  end: string;
-  amount: number;
-}
-
-const AmountSpent = (props: IAmountSpent) => {
-  return (
-    <div style={{ marginTop: '0.2em' }}>
-      <Card
-        body={
-          <>
-            <div className="display-5 text-center">
-              {props.start} - {props.end}
-            </div>
-            <Header.H3 className="display-5 text-center">
-              <div>TOTAL: €{props.amount.toLocaleString()}</div>
-            </Header.H3>
-          </>
-        }
-      />
-    </div>
-  );
-};
-
-export {
-  AmountOfCertifications,
-  AmountSpent,
-  CompletedCertifications,
-  Products,
-};
-export type { IAmountSpent };
+export { AmountOfCertifications, CompletedCertifications, Products };

@@ -8,12 +8,7 @@ import { Doughnut } from 'react-chartjs-2';
 import { QSpending } from './QSpending/QSpending';
 import { doughnutOptions } from './configs';
 import { byStages, byProducts } from './dataprocessing';
-import {
-  AmountOfCertifications,
-  AmountSpent,
-  CompletedCertifications,
-} from './StatCards';
-import type { IAmountSpent } from './StatCards';
+import { AmountOfCertifications, CompletedCertifications } from './StatCards';
 
 import { getColumns } from '../List/columns';
 import { countTotalPrice } from '../../helpers';
@@ -22,7 +17,6 @@ interface IDashboard {
   tasks: any;
   startDate?: Date;
   endDate?: Date;
-  totalSpendings: IAmountSpent;
 }
 
 function tasksInRange(
@@ -72,25 +66,18 @@ class Dashboard extends Component<any, IDashboard> {
   render() {
     return (
       <>
-        <Grid.Row>
-          <Grid.Col width={8}>
+        <Grid.Row width={12}>
+          <Grid.Col>
             <Grid.Row deck>
               <QSpending
                 renderTable={(tasks) =>
                   this.renderTableOfDiagramSegment('', '', tasks)
-                }
-                updateTotalSpending={(totalSpendings) =>
-                  this.setState({ totalSpendings })
                 }
                 tasks={this.state.tasks}
                 startDate={this.props.startDate}
                 endDate={this.props.endDate}
               />
             </Grid.Row>
-          </Grid.Col>
-
-          <Grid.Col width={4}>
-            <AmountSpent {...this.state.totalSpendings} />
           </Grid.Col>
         </Grid.Row>
         <Grid.Row>
