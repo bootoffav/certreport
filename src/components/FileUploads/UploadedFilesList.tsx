@@ -11,8 +11,7 @@ const UploadedFilesList = ({ attachedFiles, deleteFile, uploading }: any) => (
           <a href={'https://xmtextiles.bitrix24.ru' + file.DOWNLOAD_URL}>
             {' '}
             {file.NAME} (
-            {(Number(file.SIZE) / 1024 / 1024).toPrecision(2).toLocaleString()}{' '}
-            MB)
+            {(Number(file.SIZE) / 1024).toFixed(2).toLocaleString()} Kb)
           </a>
           <Icon
             prefix="fe"
