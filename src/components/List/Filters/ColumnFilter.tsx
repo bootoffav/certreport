@@ -7,59 +7,48 @@ class ColumnFilter extends React.Component<{
   allProducts: any;
   value: string;
 }> {
-  static getDerivedStateFromProps(props: any, state: any) {
-    if (
-      props.requiredStage === 'products' &&
-      state.searchingColumn === 'title'
-    ) {
-      return {
-        searchingColumn: 'article',
-      };
-    }
-
-    return null;
-  }
+  static getDerivedStateFromProps = ({ requiredStage }: any) =>
+    requiredStage === 'products'
+      ? {
+          searchingColumn: 'article',
+        }
+      : null;
 
   state = {
     searchingColumn: 'title',
   };
 
-  filter(searchVal: string, columnToSearch: string) {
+  filter({ currentTarget }: React.SyntheticEvent) {
     let visibleData;
-    const searchValOrig = searchVal;
-    searchVal = searchVal.toLowerCase();
+    const { value } = currentTarget as HTMLInputElement;
+    const { searchingColumn } = this.state;
+    const valueLowered = value.toLowerCase();
+
     if (this.props.requiredStage === 'products') {
-      visibleData = this.props.allProducts.filter((product: any) => {
-        if (columnToSearch === 'article') {
-          return product[columnToSearch].toLowerCase().includes(searchVal);
-        } else {
-          return product[columnToSearch]
-            .join(', ')
-            .toLowerCase()
-            .includes(searchVal);
-        }
-      });
+      visibleData = this.props.allProducts.filter((product: any) =>
+        searchingColumn === 'article'
+          ? product.article.toLowerCase().includes(valueLowered)
+          : product[searchingColumn]
+              .join(', ')
+              .toLowerCase()
+              .includes(valueLowered)
+      );
     } else {
       visibleData = this.props.tasks.filter((task: any) =>
-        columnToSearch === 'title'
-          ? task[columnToSearch].toLowerCase().includes(searchVal)
-          : task.state[columnToSearch].toLowerCase().includes(searchVal)
+        searchingColumn === 'title'
+          ? task[searchingColumn].toLowerCase().includes(valueLowered)
+          : task.state[searchingColumn].toLowerCase().includes(valueLowered)
       );
     }
 
     this.props.update({
       visibleData,
-      columnFilterValue: searchValOrig,
-      stage: 'all',
+      columnFilterValue: value,
+      stage: this.props.requiredStage === 'products' ? 'products' : 'all',
       startDate: undefined,
       endDate: undefined,
     });
   }
-
-  onChange = ({ currentTarget }: React.SyntheticEvent) => {
-    const value = (currentTarget as HTMLInputElement).value;
-    this.filter(value, this.state.searchingColumn);
-  };
 
   render = () => {
     const searchOptions: { [key: string]: any } = {
@@ -83,7 +72,7 @@ class ColumnFilter extends React.Component<{
           type="text"
           className="form-control"
           placeholder="search"
-          onChange={this.onChange}
+          onChange={this.filter.bind(this)}
           value={this.props.value}
         />
         <div className="input-group-append">
@@ -116,4 +105,4 @@ class ColumnFilter extends React.Component<{
   };
 }
 
-export default ColumnFilter;
+export { ColumnFilter };

@@ -31,7 +31,7 @@ function getColumns(totalPrice: number, stage?: string) {
       // 1
       Header: '##',
       id: 'serialNumber',
-      accessor: ({ state }: any) => state.serialNumber,
+      accessor: 'state.serialNumber',
       width: 48,
       Cell: (props: any) => (
         <a
