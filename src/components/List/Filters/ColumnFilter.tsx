@@ -1,18 +1,21 @@
 import * as React from 'react';
 
-class ColumnFilter extends React.Component<{
+interface IColumnFilterProps {
   tasks: any;
   requiredStage?: string;
   update: any;
   allProducts: any;
   value: string;
-}> {
-  static getDerivedStateFromProps = ({ requiredStage }: any) =>
-    requiredStage === 'products'
+}
+
+class ColumnFilter extends React.Component<IColumnFilterProps> {
+  static getDerivedStateFromProps(props: IColumnFilterProps) {
+    return props.requiredStage === 'products'
       ? {
           searchingColumn: 'article',
         }
       : null;
+  }
 
   state = {
     searchingColumn: 'title',
@@ -60,8 +63,8 @@ class ColumnFilter extends React.Component<{
         article: 'Article',
       },
       products: {
-        article: 'Fabric',
-        standards: 'Standards',
+        article: 'Article',
+        // standards: 'Standards',
       },
     };
     const prop =
@@ -80,8 +83,9 @@ class ColumnFilter extends React.Component<{
             className="btn btn-outline-success dropdown-toggle"
             id="columnSearch"
             data-toggle="dropdown"
+            /* TODO: change this weird ?? ASAP */
           >
-            {searchOptions[prop][this.state.searchingColumn]}
+            {searchOptions[prop][this.state.searchingColumn] ?? 'Article'}
           </button>
           <div className="dropdown-menu">
             {Object.entries(searchOptions[prop]).map(([key, value]: any) => (

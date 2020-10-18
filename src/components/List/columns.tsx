@@ -416,7 +416,7 @@ function getColumns(totalPrice: number, stage?: string) {
     },
     {
       // 32
-      Header: 'Fabric',
+      Header: 'Article',
       id: 'article',
       accessor: 'article',
       width: 150,
