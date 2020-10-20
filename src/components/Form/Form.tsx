@@ -183,6 +183,7 @@ class Form extends React.Component<IFormProps> {
     <Dimmer active={this.state.requestStatus !== Status.FillingForm} loader>
       <div className="d-flex">
         <BaseInput
+          className="w-50"
           value={this.state.applicantName}
           placeholder="SHANGHAI XM GROUP LTD"
           id="applicantName"
@@ -201,7 +202,7 @@ class Form extends React.Component<IFormProps> {
             />
           </div>
         </div>
-        <div className="w-25">
+        <div className="w-50">
           <div className="form-group">
             Standards
             <Select
@@ -214,7 +215,9 @@ class Form extends React.Component<IFormProps> {
             />
           </div>
         </div>
-        <div className="w-25 mx-2">
+      </div>
+      <div className="d-flex">
+        <div className="w-50">
           <div className="form-group">
             Stage
             <Select
@@ -226,7 +229,7 @@ class Form extends React.Component<IFormProps> {
             />
           </div>
         </div>
-        <div>
+        <div className="ml-2">
           Results:
           <div className="form-group">
             <div className="btn-group btn-group-toggle" data-toggle="buttons">
@@ -675,6 +678,16 @@ class Form extends React.Component<IFormProps> {
 
   render = () => (
     <div className="container mt-2">
+      <Button
+        RootComponent="a"
+        href={`https://xmtextiles.bitrix24.ru/company/personal/user/460/tasks/task/view/${this.task_id}/`}
+        target="_blank"
+        rel="noopener noreferrer"
+        link
+        className="float-right"
+      >
+        Task in B24
+      </Button>
       <Notification status={this.state.requestStatus} />
       <form onSubmit={(e) => this.handleCert(e)}>
         <TabbedCard initialTab="Basic Info">
