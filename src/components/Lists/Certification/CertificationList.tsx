@@ -1,13 +1,13 @@
 import * as React from 'react';
 import ReactTable from 'react-table';
 import { Button } from 'tabler-react';
-import Task from '../../Task/Task';
+import Task from '../../../Task/Task';
 import { getColumns } from './columns';
-import StageFilter from './Filters/StageFilter';
-import { ColumnFilter } from './Filters/ColumnFilter';
+import StageFilter from '../Filters/StageFilter';
+import { ColumnFilter } from '../Filters/ColumnFilter';
 
 import './List.css';
-import { countTotalPrice } from '../../helpers';
+import { countTotalPrice } from '../../../helpers';
 
 interface IListState {
   visibleData: any[];
@@ -18,9 +18,8 @@ interface IListState {
   endDate?: Date;
 }
 
-export default class List extends React.Component<{
+class CertificationList extends React.Component<{
   tasks: any;
-  products: any;
   updated: boolean;
 }> {
   state: IListState = {
@@ -59,7 +58,6 @@ export default class List extends React.Component<{
       startDate: undefined,
       endDate: undefined,
       stage: 'all',
-      columnFilterValue: '',
     });
   };
 
@@ -92,17 +90,12 @@ export default class List extends React.Component<{
           <div className="mr-2">
             <StageFilter
               tasks={this.props.tasks}
-              allProducts={this.props.products}
               update={this.setState.bind(this)}
             />
           </div>
           <ColumnFilter
-            dataToFilter={
-              this.state.stage === 'products'
-                ? this.props.products
-                : this.props.tasks
-            }
-            requiredStage={this.state.stage}
+            dataToFilter={this.props.tasks}
+            typeOfFilteringData="tasks"
             update={this.setState.bind(this)}
           />
         </div>
@@ -114,7 +107,7 @@ export default class List extends React.Component<{
                     startDate={this.state.startDate}
                     endDate={this.state.endDate}
                     /> */}
-          <List.State status={this.props.updated} />
+          <CertificationList.State status={this.props.updated} />
         </div>
       </div>
       <ReactTable
@@ -142,3 +135,5 @@ export default class List extends React.Component<{
     </>
   );
 }
+
+export { CertificationList };

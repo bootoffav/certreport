@@ -4,21 +4,11 @@ import { Dropdown } from 'tabler-react';
 import { countTotalPrice } from '../../../helpers';
 
 const StageFilter: React.FunctionComponent<{
-  allProducts: any;
   update: any;
   tasks: any;
-}> = ({ tasks, update, allProducts }) => {
+}> = ({ tasks, update }) => {
   function filter(stage?: string) {
     let visibleData;
-
-    if (stage === 'products') {
-      update({
-        stage,
-        visibleData: allProducts,
-      });
-      return;
-    }
-
     switch (stage) {
       case 'all':
         visibleData = tasks;
@@ -34,7 +24,6 @@ const StageFilter: React.FunctionComponent<{
       visibleData,
       stage,
       totalPrice: countTotalPrice(visibleData),
-      columnFilterValue: '',
       startDate: undefined,
       endDate: undefined,
     });
@@ -54,7 +43,7 @@ const StageFilter: React.FunctionComponent<{
     '9. Ended',
   ];
 
-  const more = ['products', 'overdue'];
+  const more = ['all', 'overdue'];
 
   const DropDownItem = (item: any) => {
     return {

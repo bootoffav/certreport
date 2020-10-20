@@ -7,7 +7,8 @@ import {
 } from 'react-router-dom';
 import { Error404Page } from 'tabler-react';
 import CacheManager from '../../CacheManager';
-import List from '../List/List';
+import { CertificationList } from '../Lists/Certification/CertificationList';
+import { ArticleList } from '../Lists/Article/ArticleList';
 import Form from '../Form/Form';
 import Dashboard from '../Dashboard/Dashboard';
 import ErrorBoundary from '../../ErrorBoundary';
@@ -27,7 +28,7 @@ class Main extends Component {
     endDate: undefined,
     activeBrands: ['XMT', 'XMS', 'XMF'],
   };
-  locations = ['/', '/dashboard'];
+  locations = ['/', '/dashboard', '/articles'];
 
   async componentDidMount() {
     if (this.locations.includes(window.location.pathname)) {
@@ -122,21 +123,24 @@ class Main extends Component {
                   className="d-flex h-100 justify-content-end align-items-center"
                   style={{ fontSize: '16px' }}
                 >
-                  <div>
-                    <NavLink className="navbar-link" exact to="/dashboard">
-                      <p>Dashboard</p>
-                    </NavLink>
-                  </div>
-                  <span className="vl"></span>
-                  <NavLink className="navbar-link" to="/">
-                    <p>Certification list</p>
+                  <NavLink className="navbar-link" exact to="/dashboard">
+                    <p>Dashboard</p>
                   </NavLink>
                   <span className="vl"></span>
-                  <div>
-                    <NavLink exact to="/add">
-                      <p>Add cert</p>
-                    </NavLink>
-                  </div>
+
+                  <NavLink className="navbar-link" to="/">
+                    <p>Certification tasks</p>
+                  </NavLink>
+                  <span className="vl"></span>
+
+                  <NavLink className="navbar-link" to="/articles">
+                    <p>Certified articles</p>
+                  </NavLink>
+                  <span className="vl"></span>
+
+                  <NavLink exact to="/add">
+                    <p>Add cert</p>
+                  </NavLink>
                 </div>
               </div>
             </div>
@@ -158,13 +162,19 @@ class Main extends Component {
               path="/"
               render={() => (
                 <>
-                  <List
+                  <CertificationList
                     tasks={this.state.filteredTasks}
-                    products={this.state.filteredProducts}
                     updated={this.state.updated}
                   />
                   <StageShortNames />
                 </>
+              )}
+            />
+            <Route
+              exact
+              path="/articles"
+              render={() => (
+                <ArticleList products={this.state.filteredProducts} />
               )}
             />
             <Route

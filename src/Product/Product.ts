@@ -50,3 +50,4 @@ function Products(tasks: any[]) {
 }
 
 export { Products };
+export type { ProductType };

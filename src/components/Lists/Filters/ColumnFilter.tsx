@@ -2,7 +2,7 @@ import * as React from 'react';
 
 interface IColumnFilterProps {
   dataToFilter: any; // tasks or products
-  requiredStage: string;
+  typeOfFilteringData: 'tasks' | 'products';
   update: any;
 }
 
@@ -14,7 +14,7 @@ interface IColumnFilterState {
 const searchOptions: {
   [key: string]: any;
 } = {
-  default: {
+  tasks: {
     title: 'Task',
     testReport: 'Test report',
     certificate: 'Certificate',
@@ -32,7 +32,7 @@ function filter(
   value: string,
   searchByColumn: string,
   dataToFilter: any,
-  requiredStage: string
+  typeOfFilteringData: string
 ) {
   const valueLowered = value.toLowerCase();
 
@@ -56,7 +56,7 @@ function filter(
       ? task[searchByColumn].toLowerCase().includes(valueLowered)
       : task.state[searchByColumn].toLowerCase().includes(valueLowered);
 
-  return requiredStage === 'products'
+  return typeOfFilteringData === 'products'
     ? dataToFilter.filter(filterProducts)
     : dataToFilter.filter(filterTasks);
 }
@@ -68,7 +68,7 @@ class ColumnFilter extends React.Component<
   constructor(props: IColumnFilterProps) {
     super(props);
     const searchByColumn =
-      props.requiredStage === 'products' ? 'article' : 'title';
+      props.typeOfFilteringData === 'products' ? 'article' : 'title';
 
     this.state = {
       searchByColumn,
@@ -76,18 +76,17 @@ class ColumnFilter extends React.Component<
     };
   }
 
-  componentDidUpdate(prevProps: IColumnFilterProps) {
-    if (
-      prevProps.requiredStage !== 'products' &&
-      this.props.requiredStage === 'products'
-    ) {
-      this.setState({ searchByColumn: 'article' });
-    }
-  }
+  // componentDidUpdate(prevProps: IColumnFilterProps) {
+  //   if (
+  //     prevProps.requiredStage !== 'products' &&
+  //     this.props.requiredStage === 'products'
+  //   ) {
+  //     this.setState({ searchByColumn: 'article' });
+  //   }
+  // }
 
   render = () => {
-    const prop =
-      this.props.requiredStage === 'products' ? 'products' : 'default';
+    const prop = this.props.typeOfFilteringData;
     return (
       <div className="mr-1 input-group">
         <input
@@ -101,17 +100,15 @@ class ColumnFilter extends React.Component<
               value,
               this.state.searchByColumn,
               this.props.dataToFilter,
-              this.props.requiredStage
+              this.props.typeOfFilteringData
             );
 
             this.setState({ value });
 
             this.props.update({
               visibleData,
-              stage:
-                this.props.requiredStage === 'products' ? 'products' : 'all',
-              startDate: undefined,
-              endDate: undefined,
+              // startDate: undefined,
+              // endDate: undefined,
             });
           }}
         />

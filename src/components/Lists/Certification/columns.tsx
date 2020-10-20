@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { Icon } from 'tabler-react';
-import { dateConverter, printStage } from '../../helpers';
+import { dateConverter, printStage } from '../../../helpers';
 import type { CellInfo } from 'react-table';
 
 function sortDates(a: string | undefined, b: string | undefined): number {
@@ -414,47 +414,6 @@ function getColumns(totalPrice: number, stage?: string) {
         <span style={{ float: 'right' }}>{formatPrice(props.value)}</span>
       ),
     },
-    {
-      // 32
-      Header: 'Article',
-      id: 'article',
-      accessor: 'article',
-      width: 150,
-    },
-    {
-      // 33
-      Header: 'Standards',
-      id: 'standards',
-      accessor: 'standards',
-      width: 450,
-      Cell: ({ value }: any) => value.join(', '),
-    },
-    {
-      // 34
-      Header: 'Certifications',
-      id: 'tasks',
-      accessor: 'tasks',
-      Cell: ({ value }: any) =>
-        value.map((t: any) => (
-          <span key={t.id}>
-            &nbsp;
-            <a
-              href={`https://xmtextiles.bitrix24.ru/company/personal/user/460/tasks/task/view/${t.id}/`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {t.title}
-            </a>
-          </span>
-        )),
-    },
-    {
-      // 35
-      Header: 'Brand',
-      id: 'brand',
-      accessor: 'brand',
-      width: 50,
-    },
   ].map((column) => ({ ...column, style: { whiteSpace: 'unset' } }));
 
   const takeColumns = (columnPositions: number[]) => {
@@ -498,8 +457,6 @@ function getColumns(totalPrice: number, stage?: string) {
       ]);
     case 'all':
       return takeColumns([1, 2, 3, 4, 5, 9, 18, 20, 23, 24, 25, 28, 31]);
-    case 'products':
-      return takeColumns([32, 35, 33, 34]);
     case 'overdue':
       return takeColumns([1, 2, 3, 4, 5, 6, 9, 19, 21, 22, 24, 25, 27, 31]);
     default:

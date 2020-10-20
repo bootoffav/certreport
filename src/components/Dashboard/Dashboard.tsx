@@ -10,7 +10,7 @@ import { doughnutOptions } from './configs';
 import { byStages, byProducts } from './dataprocessing';
 import { AmountOfCertifications, CompletedCertifications } from './StatCards';
 
-import { getColumns } from '../List/columns';
+import { getColumns } from '../Lists/Certification/columns';
 import { countTotalPrice } from '../../helpers';
 
 interface IDashboard {
