@@ -16,7 +16,6 @@ interface IListState {
   stage: string;
   startDate?: Date;
   endDate?: Date;
-  columnFilterValue: string;
 }
 
 export default class List extends React.Component<{
@@ -26,7 +25,6 @@ export default class List extends React.Component<{
 }> {
   state: IListState = {
     visibleData: [],
-    columnFilterValue: '',
 
     //used for Task PDF list (ejected out of react-table ref)
     sortedData: undefined,
@@ -99,9 +97,11 @@ export default class List extends React.Component<{
             />
           </div>
           <ColumnFilter
-            value={this.state.columnFilterValue}
-            tasks={this.props.tasks}
-            allProducts={this.props.products}
+            dataToFilter={
+              this.state.stage === 'products'
+                ? this.props.products
+                : this.props.tasks
+            }
             requiredStage={this.state.stage}
             update={this.setState.bind(this)}
           />

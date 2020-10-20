@@ -1,72 +1,81 @@
 import * as React from 'react';
 
 interface IColumnFilterProps {
-  tasks: any;
-  requiredStage?: string;
+  dataToFilter: any; // tasks or products
+  requiredStage: string;
   update: any;
-  allProducts: any;
+}
+
+interface IColumnFilterState {
+  searchByColumn: string;
   value: string;
 }
 
-class ColumnFilter extends React.Component<IColumnFilterProps> {
-  static getDerivedStateFromProps(props: IColumnFilterProps) {
-    return props.requiredStage === 'products'
-      ? {
-          searchingColumn: 'article',
-        }
-      : null;
-  }
+const searchOptions: {
+  [key: string]: any;
+} = {
+  default: {
+    title: 'Task',
+    testReport: 'Test report',
+    certificate: 'Certificate',
+    standards: 'Standards',
+    article: 'Article',
+  },
+  products: {
+    article: 'Article',
+    standards: 'Standards',
+  },
+};
 
-  state = {
-    searchingColumn: 'title',
+function filter(
+  value: string,
+  searchByColumn: string,
+  dataToFilter: any,
+  requiredStage: string
+) {
+  const valueLowered = value.toLowerCase();
+
+  const filterProducts = (product: any) => {
+    return searchByColumn === 'article'
+      ? product.article.toLowerCase().includes(valueLowered)
+      : product[searchByColumn].join(', ').toLowerCase().includes(valueLowered);
   };
 
-  filter({ currentTarget }: React.SyntheticEvent) {
-    let visibleData;
-    const { value } = currentTarget as HTMLInputElement;
-    const { searchingColumn } = this.state;
-    const valueLowered = value.toLowerCase();
+  const filterTasks = (task: any) =>
+    searchByColumn === 'title'
+      ? task[searchByColumn].toLowerCase().includes(valueLowered)
+      : task.state[searchByColumn].toLowerCase().includes(valueLowered);
 
-    if (this.props.requiredStage === 'products') {
-      visibleData = this.props.allProducts.filter((product: any) =>
-        searchingColumn === 'article'
-          ? product.article.toLowerCase().includes(valueLowered)
-          : product[searchingColumn]
-              .join(', ')
-              .toLowerCase()
-              .includes(valueLowered)
-      );
-    } else {
-      visibleData = this.props.tasks.filter((task: any) =>
-        searchingColumn === 'title'
-          ? task[searchingColumn].toLowerCase().includes(valueLowered)
-          : task.state[searchingColumn].toLowerCase().includes(valueLowered)
-      );
+  return requiredStage === 'products'
+    ? dataToFilter.filter(filterProducts)
+    : dataToFilter.filter(filterTasks);
+}
+
+class ColumnFilter extends React.Component<
+  IColumnFilterProps,
+  IColumnFilterState
+> {
+  constructor(props: IColumnFilterProps) {
+    super(props);
+    const searchByColumn =
+      props.requiredStage === 'products' ? 'article' : 'title';
+
+    this.state = {
+      searchByColumn,
+      value: '',
+    };
+  }
+
+  componentDidUpdate(prevProps: IColumnFilterProps) {
+    if (
+      prevProps.requiredStage !== 'products' &&
+      this.props.requiredStage === 'products'
+    ) {
+      this.setState({ searchByColumn: 'article' });
     }
-
-    this.props.update({
-      visibleData,
-      columnFilterValue: value,
-      stage: this.props.requiredStage === 'products' ? 'products' : 'all',
-      startDate: undefined,
-      endDate: undefined,
-    });
   }
 
   render = () => {
-    const searchOptions: { [key: string]: any } = {
-      default: {
-        title: 'Task',
-        testReport: 'Test report',
-        certificate: 'Certificate',
-        standards: 'Standards',
-        article: 'Article',
-      },
-      products: {
-        article: 'Article',
-        // standards: 'Standards',
-      },
-    };
     const prop =
       this.props.requiredStage === 'products' ? 'products' : 'default';
     return (
@@ -75,17 +84,34 @@ class ColumnFilter extends React.Component<IColumnFilterProps> {
           type="text"
           className="form-control"
           placeholder="search"
-          onChange={this.filter.bind(this)}
-          value={this.props.value}
+          value={this.state.value}
+          onChange={({ currentTarget }: React.SyntheticEvent) => {
+            const value = (currentTarget as HTMLInputElement).value;
+            const visibleData = filter(
+              value,
+              this.state.searchByColumn,
+              this.props.dataToFilter,
+              this.props.requiredStage
+            );
+
+            this.setState({ value });
+
+            this.props.update({
+              visibleData,
+              stage:
+                this.props.requiredStage === 'products' ? 'products' : 'all',
+              startDate: undefined,
+              endDate: undefined,
+            });
+          }}
         />
         <div className="input-group-append">
           <button
             className="btn btn-outline-success dropdown-toggle"
             id="columnSearch"
             data-toggle="dropdown"
-            /* TODO: change this weird ?? ASAP */
           >
-            {searchOptions[prop][this.state.searchingColumn] ?? 'Article'}
+            {searchOptions[prop][this.state.searchByColumn]}
           </button>
           <div className="dropdown-menu">
             {Object.entries(searchOptions[prop]).map(([key, value]: any) => (
@@ -93,11 +119,12 @@ class ColumnFilter extends React.Component<IColumnFilterProps> {
                 key={key}
                 className="dropdown-item"
                 data-columnsearch={key}
-                onClick={(e) =>
+                onClick={(e) => {
                   this.setState({
-                    searchingColumn: e.currentTarget.dataset.columnsearch,
-                  })
-                }
+                    searchByColumn: e.currentTarget.dataset.columnsearch || '',
+                    value: '',
+                  });
+                }}
               >
                 {value}
               </button>
