@@ -108,25 +108,23 @@ class ColumnFilter extends React.Component<
         <div className="input-group-append">
           <button
             className="btn btn-outline-success dropdown-toggle"
-            id="columnSearch"
             data-toggle="dropdown"
           >
             {searchOptions[prop][this.state.searchByColumn]}
           </button>
           <div className="dropdown-menu">
-            {Object.entries(searchOptions[prop]).map(([key, value]: any) => (
+            {Object.entries(searchOptions[prop]).map(([key, label]: any) => (
               <button
                 key={key}
                 className="dropdown-item"
-                data-columnsearch={key}
                 onClick={(e) => {
                   this.setState({
-                    searchByColumn: e.currentTarget.dataset.columnsearch || '',
+                    searchByColumn: key,
                     value: '',
                   });
                 }}
               >
-                {value}
+                {label}
               </button>
             ))}
           </div>
