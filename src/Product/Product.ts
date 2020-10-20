@@ -1,3 +1,5 @@
+import { shortenTitle } from '../helpers';
+
 type ProductType = {
   article: string;
   standards: string[];
@@ -23,7 +25,7 @@ function Products(tasks: any[]) {
       );
       const convertedTitle = {
         ...t,
-        title: t.title.substring(0, t.title.indexOf(' ')),
+        title: shortenTitle(t.title),
       };
 
       if (indexOfProduct > 0) {

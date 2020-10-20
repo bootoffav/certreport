@@ -49,7 +49,7 @@ function getColumns(totalPrice: number, stage?: string) {
       id: 'createdDate',
       accessor: 'CREATED_DATE',
       width: 80,
-      Cell: ({ value }: any) => dayjs(value).format('DD.MM.YYYY'),
+      Cell: ({ value }: CellInfo) => dayjs(value).format('DD.MM.YYYY'),
     },
     {
       // 3
@@ -103,7 +103,7 @@ function getColumns(totalPrice: number, stage?: string) {
       accessor: 'title',
       id: 'taskName',
       minWidth: 550,
-      Cell: ({ original, value }: any) => (
+      Cell: ({ original, value }: CellInfo) => (
         <Link
           to={`/edit/${original.id}`}
           target="_blank"

@@ -89,4 +89,8 @@ function printStage(stage: string, place: 'table' | 'select' | 'dropdown') {
   }
 }
 
-export { countTotalPrice, printStage };
+function shortenTitle(title: string) {
+  return title.substring(0, title.indexOf(' '));
+}
+
+export { countTotalPrice, printStage, shortenTitle };
