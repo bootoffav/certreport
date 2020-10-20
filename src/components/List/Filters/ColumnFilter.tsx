@@ -24,6 +24,7 @@ const searchOptions: {
   products: {
     article: 'Article',
     standards: 'Standards',
+    tasks: 'Certifications',
   },
 };
 
@@ -36,9 +37,18 @@ function filter(
   const valueLowered = value.toLowerCase();
 
   const filterProducts = (product: any) => {
-    return searchByColumn === 'article'
-      ? product.article.toLowerCase().includes(valueLowered)
-      : product[searchByColumn].join(', ').toLowerCase().includes(valueLowered);
+    switch (searchByColumn) {
+      case 'article':
+        return product.article.toLowerCase().includes(valueLowered);
+      case 'standards':
+        return product.standards
+          .join(', ')
+          .toLowerCase()
+          .includes(valueLowered);
+      case 'tasks':
+        const titles = product.tasks.map((task: any) => task.title);
+        return titles.join(', ').toLowerCase().includes(valueLowered);
+    }
   };
 
   const filterTasks = (task: any) =>

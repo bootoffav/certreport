@@ -32,11 +32,6 @@ class QSpending extends Component<{
     quarters = this.countQuarterSpendings(quarters);
 
     const { start, end } = this.getFirstLastTotalSpendingsMonths(quarters);
-    // this.props.updateTotalSpending({
-    //   start,
-    //   end,
-    //   amount: this.countTotalSpendings(quarters),
-    // });
 
     this.state = {
       quarters,
@@ -137,12 +132,6 @@ class QSpending extends Component<{
       quarters = this.countQuarterSpendings(quarters);
       const { start, end } = this.getFirstLastTotalSpendingsMonths(quarters);
 
-      // this.props.updateTotalSpending({
-      //   start,
-      //   end,
-      //   amount: this.countTotalSpendings(quarters),
-      // });
-
       this.setState({
         quarters,
         startDate,
@@ -195,7 +184,7 @@ class QSpending extends Component<{
       );
     });
     const total = (
-      <Grid.Col width={3}>
+      <Grid.Col width={3} key="total">
         <Card>
           <Card.Header>
             <div className="mx-auto quarterHeader">
