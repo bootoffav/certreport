@@ -1,14 +1,9 @@
-import * as React from 'react';
+import { useState } from 'react';
 
 interface IColumnFilterProps {
   dataToFilter: any; // tasks or products
-  typeOfFilteringData: 'tasks' | 'products';
+  filteringDataType: 'tasks' | 'products';
   update: any;
-}
-
-interface IColumnFilterState {
-  searchByColumn: string;
-  value: string;
 }
 
 const searchOptions: {
@@ -61,74 +56,57 @@ function filter(
     : dataToFilter.filter(filterTasks);
 }
 
-class ColumnFilter extends React.Component<
-  IColumnFilterProps,
-  IColumnFilterState
-> {
-  constructor(props: IColumnFilterProps) {
-    super(props);
-    const searchByColumn =
-      props.typeOfFilteringData === 'products' ? 'article' : 'title';
+const ColumnFilter = (props: IColumnFilterProps) => {
+  const [value, setValue] = useState('');
+  const [searchByColumn, setSearchByColumn] = useState(
+    props.filteringDataType === 'products' ? 'article' : 'title'
+  );
 
-    this.state = {
-      searchByColumn,
-      value: '',
-    };
-  }
-
-  render = () => {
-    const prop = this.props.typeOfFilteringData;
-    return (
-      <div className="mr-1 input-group">
-        <input
-          type="text"
-          className="form-control"
-          placeholder="search"
-          value={this.state.value}
-          onChange={({ currentTarget }: React.SyntheticEvent) => {
-            const value = (currentTarget as HTMLInputElement).value;
-            const visibleData = filter(
-              value,
-              this.state.searchByColumn,
-              this.props.dataToFilter,
-              this.props.typeOfFilteringData
-            );
-
-            this.setState({ value });
-            this.props.update(
-              visibleData
-              // startDate: undefined,
-              // endDate: undefined,
-            );
-          }}
-        />
-        <div className="input-group-append">
-          <button
-            className="btn btn-outline-success dropdown-toggle"
-            data-toggle="dropdown"
-          >
-            {searchOptions[prop][this.state.searchByColumn]}
-          </button>
-          <div className="dropdown-menu">
-            {Object.entries(searchOptions[prop]).map(([key, label]: any) => (
-              <button
-                key={key}
-                className="dropdown-item"
-                onClick={(e) => {
-                  this.setState({
-                    searchByColumn: key,
-                    value: '',
-                  });
-                }}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
+  const prop = props.filteringDataType;
+  return (
+    <div className="mr-1 input-group">
+      <input
+        type="text"
+        className="form-control"
+        placeholder="search"
+        value={value}
+        onChange={({ currentTarget }: React.SyntheticEvent) => {
+          const value = (currentTarget as HTMLInputElement).value;
+          const visibleData = filter(
+            value,
+            searchByColumn,
+            props.dataToFilter,
+            props.filteringDataType
+          );
+          setValue(value);
+          props.update(visibleData);
+        }}
+      />
+      <div className="input-group-append">
+        <button
+          className="btn btn-outline-success dropdown-toggle"
+          data-toggle="dropdown"
+        >
+          {searchOptions[prop][searchByColumn]}
+        </button>
+        <div className="dropdown-menu">
+          {Object.entries(searchOptions[prop]).map(([key, label]: any) => (
+            <button
+              key={key}
+              className="dropdown-item"
+              onClick={() => {
+                setValue('');
+                setSearchByColumn(key);
+                props.update(props.dataToFilter);
+              }}
+            >
+              {label}
+            </button>
+          ))}
         </div>
       </div>
-    );
-  };
-}
+    </div>
+  );
+};
 
 export { ColumnFilter };

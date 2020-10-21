@@ -18,6 +18,17 @@ interface IListState {
   endDate?: Date;
 }
 
+const State = ({ status }: { status: boolean }) =>
+  status ? (
+    <div className="alert alert-success loadingBox" role="alert">
+      Updated
+    </div>
+  ) : (
+    <Button loading color="orange" size="sm">
+      updated_updated
+    </Button>
+  );
+
 class CertificationList extends React.Component<{
   tasks: any;
   updated: boolean;
@@ -35,19 +46,6 @@ class CertificationList extends React.Component<{
   get columns() {
     return getColumns(this.state.totalPrice, this.state.stage);
   }
-
-  static State: React.FunctionComponent<{
-    status: boolean;
-  }> = ({ status }) =>
-    status ? (
-      <div className="alert alert-success loadingBox" role="alert">
-        Updated
-      </div>
-    ) : (
-      <Button loading color="orange" size="sm">
-        updated_updated
-      </Button>
-    );
 
   async componentDidMount() {
     this.updateState();
@@ -95,7 +93,7 @@ class CertificationList extends React.Component<{
           </div>
           <ColumnFilter
             dataToFilter={this.props.tasks}
-            typeOfFilteringData="tasks"
+            filteringDataType="tasks"
             update={(visibleData: any) => {
               this.setState({
                 visibleData,
@@ -111,7 +109,7 @@ class CertificationList extends React.Component<{
                     startDate={this.state.startDate}
                     endDate={this.state.endDate}
                     /> */}
-          <CertificationList.State status={this.props.updated} />
+          <State status={this.props.updated} />
         </div>
       </div>
       <ReactTable

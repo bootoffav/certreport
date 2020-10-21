@@ -71,7 +71,7 @@ const ArticleList = ({ products }: ArticleListProps) => {
         <ColumnFilter
           dataToFilter={products}
           update={setVisibleData}
-          typeOfFilteringData="products"
+          filteringDataType="products"
         />
         <ReactTable
           data={visibleData}
