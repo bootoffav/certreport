@@ -96,7 +96,11 @@ class CertificationList extends React.Component<{
           <ColumnFilter
             dataToFilter={this.props.tasks}
             typeOfFilteringData="tasks"
-            update={this.setState.bind(this)}
+            update={(visibleData: any) => {
+              this.setState({
+                visibleData,
+              });
+            }}
           />
         </div>
         <div className="d-flex">

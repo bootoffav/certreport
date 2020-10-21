@@ -76,15 +76,6 @@ class ColumnFilter extends React.Component<
     };
   }
 
-  // componentDidUpdate(prevProps: IColumnFilterProps) {
-  //   if (
-  //     prevProps.requiredStage !== 'products' &&
-  //     this.props.requiredStage === 'products'
-  //   ) {
-  //     this.setState({ searchByColumn: 'article' });
-  //   }
-  // }
-
   render = () => {
     const prop = this.props.typeOfFilteringData;
     return (
@@ -104,12 +95,11 @@ class ColumnFilter extends React.Component<
             );
 
             this.setState({ value });
-
-            this.props.update({
-              visibleData,
+            this.props.update(
+              visibleData
               // startDate: undefined,
               // endDate: undefined,
-            });
+            );
           }}
         />
         <div className="input-group-append">

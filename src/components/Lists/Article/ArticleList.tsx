@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useEffect, useState } from 'react';
 import ReactTable from 'react-table';
 import { ColumnFilter } from '../Filters/ColumnFilter';
 import type { ProductType } from '../../../Product/Product';
@@ -56,46 +56,38 @@ const columns = [
   },
 ];
 
-interface Props {
+interface ArticleListProps {
   products: ProductType[];
 }
 
-class ArticleList extends Component<Props, { visibleData: ProductType[] }> {
-  state = {
-    visibleData: this.props.products,
-  };
+const ArticleList = ({ products }: ArticleListProps) => {
+  const [visibleData, setVisibleData] = useState(products);
 
-  componentDidUpdate(prevProps: Props) {
-    if (prevProps.products !== this.props.products) {
-      this.setState({ visibleData: this.props.products });
-    }
-  }
+  useEffect(() => setVisibleData(products), [products]);
 
-  render() {
-    return (
-      <Grid.Row>
-        <Grid.Col width="8" offset="2">
-          <ColumnFilter
-            dataToFilter={this.props.products}
-            update={this.setState.bind(this)}
-            typeOfFilteringData="products"
-          />
-          <ReactTable
-            data={this.state.visibleData}
-            columns={columns}
-            resolveData={(data: any, i = 1) =>
-              data.map((row: any) => {
-                row.position = i++;
-                return row;
-              })
-            }
-            className="-highlight table"
-            defaultPageSize={20}
-          />
-        </Grid.Col>
-      </Grid.Row>
-    );
-  }
-}
+  return (
+    <Grid.Row>
+      <Grid.Col width="8" offset="2">
+        <ColumnFilter
+          dataToFilter={products}
+          update={setVisibleData}
+          typeOfFilteringData="products"
+        />
+        <ReactTable
+          data={visibleData}
+          columns={columns}
+          resolveData={(data: ProductType[], i = 1) => {
+            return data.map((row: any) => {
+              row.position = i++;
+              return row;
+            });
+          }}
+          className="-highlight table"
+          defaultPageSize={20}
+        />
+      </Grid.Col>
+    </Grid.Row>
+  );
+};
 
 export { ArticleList };
