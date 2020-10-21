@@ -17,6 +17,46 @@ enum Stage {
   '9. Ended',
 }
 
+const taskPropMap: {
+  [k: string]: any;
+} = {
+  'Applicant name': 'applicantName',
+  Product: 'product',
+  Code: 'code',
+  Article: 'article',
+  Colour: 'colour',
+  'Serial number': 'serialNumber',
+  'Length of sample, meters': 'length',
+  'Width of sample, meters': 'width',
+  'Part number': 'partNumber',
+  'Roll number': 'rollNumber',
+  Standard: 'standards',
+  'Test report': 'testReport',
+  Certificate: 'certificate',
+  Price: 'price',
+  'Payment date': 'paymentDate',
+  Proforma: 'proforma',
+  'Testing company': 'testingCompany',
+  'Material needed': 'materialNeeded',
+  'Testing time, days': 'testingTime',
+  'Pre-treatment 1': 'pretreatment1',
+  'Pre-treatment 2': 'pretreatment2',
+  'Pre-treatment 3': 'pretreatment3',
+  'Paused Until': 'pausedUntil',
+  'Sample ready on': 'readyOn',
+  'to be sent on': 'sentOn',
+  'to be received on': 'receivedOn',
+  'tests to be started on': 'startedOn',
+  'tests to be finished on': 'testFinishedOn',
+  'results to be received on': 'certReceivedOn',
+  Resume: 'resume',
+  Stage: 'stage',
+  News: 'news',
+  Comments: 'comments',
+  Edit: 'link',
+  'Second payment': 'secondPayment',
+};
+
 class Task {
   state: any;
   position?: number;
@@ -60,46 +100,6 @@ class Task {
       [k: string]: any;
     } = { ...emptyState };
 
-    const prop_map: {
-      [k: string]: any;
-    } = {
-      'Applicant name': 'applicantName',
-      Product: 'product',
-      Code: 'code',
-      Article: 'article',
-      Colour: 'colour',
-      'Serial number': 'serialNumber',
-      'Length of sample, meters': 'length',
-      'Width of sample, meters': 'width',
-      'Part number': 'partNumber',
-      'Roll number': 'rollNumber',
-      Standard: 'standards',
-      'Test report': 'testReport',
-      Certificate: 'certificate',
-      Price: 'price',
-      'Payment date': 'paymentDate',
-      Proforma: 'proforma',
-      'Testing company': 'testingCompany',
-      'Material needed': 'materialNeeded',
-      'Testing time, days': 'testingTime',
-      'Pre-treatment 1': 'pretreatment1',
-      'Pre-treatment 2': 'pretreatment2',
-      'Pre-treatment 3': 'pretreatment3',
-      'Paused Until': 'pausedUntil',
-      'Sample ready on': 'readyOn',
-      'to be sent on': 'sentOn',
-      'to be received on': 'receivedOn',
-      'tests to be started on': 'startedOn',
-      'tests to be finished on': 'testFinishedOn',
-      'results to be received on': 'certReceivedOn',
-      Resume: 'resume',
-      Stage: 'stage',
-      News: 'news',
-      Comments: 'comments',
-      Edit: 'link',
-      'Second payment': 'secondPayment',
-    };
-
     unParsedTaskState = unParsedTaskState.replace(/:/g, '');
 
     let matched: string[] = unParsedTaskState.match(/\[B\].+\[\/B\]/gm) || [];
@@ -111,7 +111,7 @@ class Task {
       .slice(1);
 
     for (let i = 0; i < props.length; i++)
-      parsedState[prop_map[props[i]]] = vals[i];
+      parsedState[taskPropMap[props[i]]] = vals[i];
 
     if (parsedState.standards) {
       [
@@ -359,4 +359,4 @@ class Task {
   }
 }
 
-export { dataSeparator, Task as default, Stage };
+export { dataSeparator, Task, Stage, taskPropMap };

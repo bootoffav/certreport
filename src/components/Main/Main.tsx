@@ -8,13 +8,15 @@ import {
 import { Error404Page } from 'tabler-react';
 import CacheManager from '../../CacheManager';
 import { CertificationList } from '../Lists/Certification/CertificationList';
-import { ArticleList } from '../Lists/Article/ArticleList';
+import { ArticleList } from '../Lists/ArticleList/ArticleList';
 import Form from '../Form/Form';
 import Dashboard from '../Dashboard/Dashboard';
 import ErrorBoundary from '../../ErrorBoundary';
 import { BrandFilter } from '../Filters/BrandFilter';
 import DateFilter from '../Filters/DateFilter';
 import { StageShortNames } from '../StageShortNames/StageShortNames';
+import { ArticleInCertifications } from '../ArticleInCertifications/ArticleInCertifications';
+import { isMainHeaderAllowed } from '../../helpers';
 
 class Main extends Component {
   cache = new CacheManager();
@@ -28,10 +30,9 @@ class Main extends Component {
     endDate: undefined,
     activeBrands: ['XMT', 'XMS', 'XMF'],
   };
-  locations = ['/', '/dashboard', '/articles'];
 
   async componentDidMount() {
-    if (this.locations.includes(window.location.pathname)) {
+    if (isMainHeaderAllowed(window.location.pathname)) {
       const applyUpdate = async ({ tasks, products }: any) => {
         return await this.setState({
           allTasks: tasks,
@@ -107,7 +108,7 @@ class Main extends Component {
     return (
       <Router>
         <div className="container-fluid">
-          {this.locations.includes(window.location.pathname) && (
+          {isMainHeaderAllowed(window.location.pathname) && (
             <div className="pl-1 mb-1 rounded-bottom navbar-light d-flex justify-content-start">
               <BrandFilter
                 tasks={this.state.allTasks}
@@ -134,7 +135,7 @@ class Main extends Component {
                   <span className="vl"></span>
 
                   <NavLink className="navbar-link" to="/articles">
-                    <p>Certified articles</p>
+                    <p>Items</p>
                   </NavLink>
                   <span className="vl"></span>
 
@@ -176,6 +177,13 @@ class Main extends Component {
               render={() => (
                 <ArticleList products={this.state.filteredProducts} />
               )}
+            />
+            <Route
+              exact
+              path="/article/:article"
+              render={({ match }) => {
+                return <ArticleInCertifications {...match.params} />;
+              }}
             />
             <Route
               exact

@@ -8,11 +8,11 @@ type ProductType = {
     id: string;
     title: string;
   }[];
-}[];
+};
 
 function Products(tasks: any[]) {
   // get unique products
-  var products: ProductType = [];
+  var products: ProductType[] = [];
 
   tasks.forEach((t) => {
     if (t.state && t.state.article !== '') {

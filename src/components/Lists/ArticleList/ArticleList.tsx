@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import ReactTable from 'react-table';
+import ReactTable, { CellInfo } from 'react-table';
 import { ColumnFilter } from '../Filters/ColumnFilter';
 import type { ProductType } from '../../../Product/Product';
 import { Grid, Tooltip } from 'tabler-react';
@@ -14,9 +14,14 @@ const columns = [
   },
   {
     // 1
-    Header: 'Article',
+    Header: 'Item',
     id: 'article',
     accessor: 'article',
+    Cell: ({ original }: CellInfo) => (
+      <Tooltip content="Article's relevant certs" placement="right">
+        <a href={`/article/${original.article}/`}>{original.article}</a>
+      </Tooltip>
+    ),
     width: 150,
   },
   {
@@ -39,27 +44,25 @@ const columns = [
     Header: 'Certifications',
     id: 'tasks',
     accessor: 'tasks',
-    Cell: ({ value }: any) => {
-      return (
-        <Tooltip content="links to B24 tasks" placement="left">
-          <div>
-            {value.map(({ id, title }: any, index: number) => (
-              <span key={id}>
-                &nbsp;
-                <a
-                  href={`https://xmtextiles.bitrix24.ru/company/personal/user/460/tasks/task/view/${id}/`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {title}
-                  {value.length !== index + 1 && ','}
-                </a>
-              </span>
-            ))}
-          </div>
-        </Tooltip>
-      );
-    },
+    Cell: ({ value }: any) => (
+      <Tooltip content="links to B24 tasks" placement="left">
+        <div>
+          {value.map(({ id, title }: any, index: number) => (
+            <span key={id}>
+              &nbsp;
+              <a
+                href={`https://xmtextiles.bitrix24.ru/company/personal/user/460/tasks/task/view/${id}/`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {title}
+                {value.length !== index + 1 && ','}
+              </a>
+            </span>
+          ))}
+        </div>
+      </Tooltip>
+    ),
   },
 ];
 

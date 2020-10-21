@@ -1,5 +1,5 @@
 import qs from 'qs';
-import Task from '../Task/Task';
+import { Task } from '../Task/Task';
 
 const creator_id = process.env.REACT_APP_B24_USER_ID;
 const tag = process.env.REACT_APP_TAG;

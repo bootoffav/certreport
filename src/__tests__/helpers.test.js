@@ -1,4 +1,9 @@
-import { dateConverter, printStage } from '../helpers';
+import {
+  dateConverter,
+  printStage,
+  isMainHeaderAllowed,
+  shortenTitle,
+} from '../helpers';
 
 it('correctly converts dates', () => {
   expect(dateConverter('05Mar2019')).toBe('2019-03-05');
@@ -69,4 +74,26 @@ it('checks printStage output', () => {
     '8.CR - Certificate ready'
   );
   expect(printStage('9. Ended', 'dropdown')).toBe('9.End - Ended');
+});
+
+it('check if pathname allowed', () => {
+  expect(isMainHeaderAllowed('/')).toBe(true);
+  expect(isMainHeaderAllowed('/articles')).toBe(true);
+  expect(isMainHeaderAllowed('/article')).toBe(true);
+  expect(isMainHeaderAllowed('/edit')).toBe(true);
+  expect(isMainHeaderAllowed('/add')).toBe(true);
+});
+
+it('checks shortenTitle', () => {
+  expect(
+    shortenTitle(
+      '038_Aitex (China) - EN 469 (5x60C, ISO 6330) - XM-7104/10, Yellow HighViz (send 15May2015 - plan ) = € | 150723 EN 469 Tape Liso-10 Certificate 2015CN0120 - XM.pdf'
+    )
+  ).toBe('038_Aitex');
+
+  expect(
+    shortenTitle(
+      '092_Aitex (China) - EN 20471 (25x60C, ISO 6330) - XM-6002, Silver (send 22Feb2017 - plan 04Apr2017) = 1 602,43 € | 170428 EN 20471 Tape XM-6002 Certificate 2017CN0095 - XM.pdf'
+    )
+  ).toBe('092_Aitex');
 });

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Task from '../../../Task/Task';
+import { Task } from '../../../Task/Task';
 import { Dropdown } from 'tabler-react';
 import { countTotalPrice } from '../../../helpers';
 

@@ -1,7 +1,8 @@
+// @ts-nocheck
+
 /* eslint-disable import/no-webpack-loader-syntax */
-// @ts-ignore
 import dataFetcher from 'workerize-loader!../workers/dataFetcher';
-import { Products } from '../Product/Product';
+import { Products, ProductType } from '../Product/Product';
 
 const worker = dataFetcher();
 
@@ -66,12 +67,31 @@ class ClientStorage {
     });
   }
 
+  static getSpecificProduct = (
+    key: string,
+    storageType = 'tasks'
+  ): Promise<ProductType> => {
+    return new Promise((res, rej) => {
+      const db = window.indexedDB.open('default', 2);
+
+      db.onsuccess = ({ target }) => {
+        const db = target.result;
+
+        db
+          .transaction(storageType)
+          .objectStore(storageType)
+          .get(key).onsuccess = ({ target }: any) => {
+          res(target.result);
+        };
+      };
+    });
+  };
+
   static getData = () =>
     new Promise<{ tasks: any; products: any }>((res) => {
       const db = window.indexedDB.open('default', 2);
 
       db.onsuccess = ({ target }) => {
-        // @ts-ignore
         const db = target.result;
 
         db

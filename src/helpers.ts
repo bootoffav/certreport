@@ -93,4 +93,16 @@ function shortenTitle(title: string) {
   return title.substring(0, title.indexOf(' '));
 }
 
-export { countTotalPrice, printStage, shortenTitle };
+function isMainHeaderAllowed(pathname: string): boolean {
+  const locations = ['/', '/dashboard', '/articles', '/article'];
+
+  for (const location of locations) {
+    if (pathname.includes(location)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+export { countTotalPrice, printStage, shortenTitle, isMainHeaderAllowed };
