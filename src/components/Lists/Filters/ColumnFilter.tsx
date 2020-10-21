@@ -26,8 +26,8 @@ const searchOptions: {
 function filter(
   value: string,
   searchByColumn: string,
-  dataToFilter: any,
-  typeOfFilteringData: string
+  dataToFilter: any[],
+  typeOfFilteringData: 'tasks' | 'products'
 ) {
   const valueLowered = value.toLowerCase();
 
@@ -56,13 +56,16 @@ function filter(
     : dataToFilter.filter(filterTasks);
 }
 
-const ColumnFilter = (props: IColumnFilterProps) => {
+const ColumnFilter = ({
+  filteringDataType,
+  dataToFilter,
+  update,
+}: IColumnFilterProps) => {
   const [value, setValue] = useState('');
   const [searchByColumn, setSearchByColumn] = useState(
-    props.filteringDataType === 'products' ? 'article' : 'title'
+    filteringDataType === 'products' ? 'article' : 'title'
   );
 
-  const prop = props.filteringDataType;
   return (
     <div className="mr-1 input-group">
       <input
@@ -75,11 +78,11 @@ const ColumnFilter = (props: IColumnFilterProps) => {
           const visibleData = filter(
             value,
             searchByColumn,
-            props.dataToFilter,
-            props.filteringDataType
+            dataToFilter,
+            filteringDataType
           );
           setValue(value);
-          props.update(visibleData);
+          update(visibleData);
         }}
       />
       <div className="input-group-append">
@@ -87,22 +90,24 @@ const ColumnFilter = (props: IColumnFilterProps) => {
           className="btn btn-outline-success dropdown-toggle"
           data-toggle="dropdown"
         >
-          {searchOptions[prop][searchByColumn]}
+          {searchOptions[filteringDataType][searchByColumn]}
         </button>
         <div className="dropdown-menu">
-          {Object.entries(searchOptions[prop]).map(([key, label]: any) => (
-            <button
-              key={key}
-              className="dropdown-item"
-              onClick={() => {
-                setValue('');
-                setSearchByColumn(key);
-                props.update(props.dataToFilter);
-              }}
-            >
-              {label}
-            </button>
-          ))}
+          {Object.entries(searchOptions[filteringDataType]).map(
+            ([key, label]: any) => (
+              <button
+                key={key}
+                className="dropdown-item"
+                onClick={() => {
+                  setValue('');
+                  setSearchByColumn(key);
+                  update(dataToFilter);
+                }}
+              >
+                {label}
+              </button>
+            )
+          )}
         </div>
       </div>
     </div>
