@@ -1,10 +1,5 @@
 import { Component } from 'react';
-import {
-  BrowserRouter as Router,
-  Route,
-  NavLink,
-  Switch,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Error404Page } from 'tabler-react';
 import CacheManager from '../../CacheManager';
 import { CertificationList } from '../Lists/Certification/CertificationList';
@@ -12,8 +7,7 @@ import { ArticleList } from '../Lists/ArticleList/ArticleList';
 import Form from '../Form/Form';
 import Dashboard from '../Dashboard/Dashboard';
 import ErrorBoundary from '../../ErrorBoundary';
-import { BrandFilter } from '../Filters/BrandFilter';
-import DateFilter from '../Filters/DateFilter';
+import { NavBar } from './NavBar';
 import { StageShortNames } from '../StageShortNames/StageShortNames';
 import { ArticleInCertifications } from '../ArticleInCertifications/ArticleInCertifications';
 import { isMainHeaderAllowed } from '../../helpers';
@@ -108,44 +102,12 @@ class Main extends Component {
     return (
       <Router>
         <div className="container-fluid">
-          {isMainHeaderAllowed(window.location.pathname) && (
-            <div className="pl-1 mb-1 rounded-bottom navbar-light d-flex justify-content-start">
-              <BrandFilter
-                tasks={this.state.allTasks}
-                update={this.setState.bind(this)}
-              />
-              <DateFilter
-                startDate={this.state.startDate}
-                endDate={this.state.endDate}
-                update={this.setState.bind(this)}
-              />
-              <div className="container">
-                <div
-                  className="d-flex h-100 justify-content-end align-items-center"
-                  style={{ fontSize: '16px' }}
-                >
-                  <NavLink className="navbar-link" exact to="/dashboard">
-                    <p>Dashboard</p>
-                  </NavLink>
-                  <span className="vl"></span>
-
-                  <NavLink className="navbar-link" to="/">
-                    <p>Certification tasks</p>
-                  </NavLink>
-                  <span className="vl"></span>
-
-                  <NavLink className="navbar-link" to="/articles">
-                    <p>Items</p>
-                  </NavLink>
-                  <span className="vl"></span>
-
-                  <NavLink exact to="/add">
-                    <p>Add cert</p>
-                  </NavLink>
-                </div>
-              </div>
-            </div>
-          )}
+          <NavBar
+            startDate={this.state.startDate}
+            endDate={this.state.endDate}
+            tasks={this.state.allTasks}
+            update={this.setState.bind(this)}
+          />
           <Switch>
             <Route
               exact

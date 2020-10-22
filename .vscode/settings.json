@@ -1,0 +1,9 @@
+{
+  "jest.pathToJest": "yarn test",
+  "jest.rootPath": "src/",
+  "jest.debugCodeLens.showWhenTestStateIn": [
+    "fail",
+    "unknown"
+  ],
+  "jest.enableInlineErrorMessages": true
+}
