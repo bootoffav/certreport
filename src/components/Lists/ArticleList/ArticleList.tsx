@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import ReactTable, { CellInfo } from 'react-table';
 import { ColumnFilter } from '../Filters/ColumnFilter';
-import type { ProductType } from '../../../Product/Product';
+import type { ProductType, taskOfProduct } from '../../../Product/Product';
 import { Grid, Tooltip } from 'tabler-react';
 
 const columns = [
@@ -37,17 +37,17 @@ const columns = [
     id: 'standards',
     accessor: 'standards',
     width: 450,
-    Cell: ({ value }: any) => value.join(', '),
+    Cell: ({ value }: CellInfo) => value.join(', '),
   },
   {
     // 4
     Header: 'Certifications',
     id: 'tasks',
     accessor: 'tasks',
-    Cell: ({ value }: any) => (
+    Cell: ({ value: taskList }: CellInfo) => (
       <Tooltip content="links to B24 tasks" placement="left">
         <div>
-          {value.map(({ id, title }: any, index: number) => (
+          {taskList.map(({ id, title }: taskOfProduct, index: number) => (
             <span key={id}>
               &nbsp;
               <a
@@ -56,7 +56,7 @@ const columns = [
                 rel="noopener noreferrer"
               >
                 {title}
-                {value.length !== index + 1 && ','}
+                {taskList.length !== index + 1 && ','}
               </a>
             </span>
           ))}
@@ -71,9 +71,11 @@ interface ArticleListProps {
 }
 
 const ArticleList = ({ products }: ArticleListProps) => {
-  const [visibleData, setVisibleData] = useState(products);
+  const [visibleData, setVisibleData] = useState<ProductType[]>();
 
-  useEffect(() => setVisibleData(products), [products]);
+  useEffect(() => {
+    setVisibleData(products);
+  }, [products]);
 
   return (
     <Grid.Row>
@@ -86,12 +88,9 @@ const ArticleList = ({ products }: ArticleListProps) => {
         <ReactTable
           data={visibleData}
           columns={columns}
-          resolveData={(data: ProductType[], i = 1) => {
-            return data.map((row: any) => {
-              row.position = i++;
-              return row;
-            });
-          }}
+          resolveData={(data: ProductType[], i = 1) =>
+            data.map((row: ProductType) => ({ ...row, position: i++ }))
+          }
           className="-highlight table"
           defaultPageSize={20}
         />

@@ -1,13 +1,15 @@
 import { shortenTitle } from '../helpers';
 
+type taskOfProduct = {
+  id: string;
+  title: string;
+};
+
 type ProductType = {
   article: string;
   standards: string[];
   brand: string;
-  tasks: {
-    id: string;
-    title: string;
-  }[];
+  tasks: taskOfProduct[];
 };
 
 function Products(tasks: any[]) {
@@ -15,7 +17,7 @@ function Products(tasks: any[]) {
   var products: ProductType[] = [];
 
   tasks.forEach((t) => {
-    if (t.state && t.state.article !== '') {
+    if (t.state && t.state.article) {
       let { article, standards, brand } = t.state;
       standards = standards.split(', ');
 
@@ -23,7 +25,7 @@ function Products(tasks: any[]) {
       const indexOfProduct = products.findIndex(
         (product) => product.article === article
       );
-      const convertedTitle = {
+      const taskWithConvertedTitle = {
         ...t,
         title: shortenTitle(t.title),
       };
@@ -33,14 +35,14 @@ function Products(tasks: any[]) {
         products[indexOfProduct].standards = Array.from(
           new Set([...products[indexOfProduct].standards, ...standards])
         );
-        products[indexOfProduct].tasks.push(convertedTitle);
+        products[indexOfProduct].tasks.push(taskWithConvertedTitle);
       } else {
         // not exist
         products.push({
           article,
           standards,
           brand,
-          tasks: [convertedTitle],
+          tasks: [taskWithConvertedTitle],
         });
       }
     }
@@ -50,4 +52,4 @@ function Products(tasks: any[]) {
 }
 
 export { Products };
-export type { ProductType };
+export type { ProductType, taskOfProduct };
