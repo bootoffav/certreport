@@ -3,22 +3,22 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Error404Page } from 'tabler-react';
 import CacheManager from '../../CacheManager';
 import { CertificationList } from '../Lists/Certification/CertificationList';
-import { ArticleList } from '../Lists/ArticleList/ArticleList';
+import { ItemList } from '../Lists/ItemList/ItemList';
 import Form from '../Form/Form';
 import Dashboard from '../Dashboard/Dashboard';
 import ErrorBoundary from '../../ErrorBoundary';
 import { NavBar } from './NavBar';
 import { StageShortNames } from '../StageShortNames/StageShortNames';
-import { ArticleInCertifications } from '../ArticleInCertifications/ArticleInCertifications';
+import { ItemInCertifications } from '../ItemInCertifications/ItemInCertifications';
 import { isMainHeaderAllowed } from '../../helpers';
 
 class Main extends Component {
   cache = new CacheManager();
   state = {
     allTasks: [],
-    allProducts: [],
+    allItems: [],
     filteredTasks: [],
-    filteredProducts: [],
+    filteredItems: [],
     updated: false,
     startDate: undefined,
     endDate: undefined,
@@ -27,12 +27,12 @@ class Main extends Component {
 
   async componentDidMount() {
     if (isMainHeaderAllowed(window.location.pathname)) {
-      const applyUpdate = async ({ tasks, products }: any) => {
+      const applyUpdate = async ({ tasks, items }: any) => {
         return await this.setState({
           allTasks: tasks,
           filteredTasks: tasks,
-          allProducts: products,
-          filteredProducts: products,
+          allItems: items,
+          filteredItems: items,
         });
       };
 
@@ -59,13 +59,7 @@ class Main extends Component {
   }
 
   filter() {
-    let {
-      allTasks,
-      allProducts,
-      activeBrands,
-      startDate,
-      endDate,
-    } = this.state;
+    let { allTasks, allItems, activeBrands, startDate, endDate } = this.state;
 
     // brandfiltering for Tasks
     let filteredTasks = allTasks.filter((task: any) => {
@@ -76,11 +70,11 @@ class Main extends Component {
     });
 
     // brandfiltering for Products
-    let filteredProducts = allProducts.filter((product: any) => {
-      if (product.brand === '') {
+    let filteredItems = allItems.filter((item: any) => {
+      if (item.brand === '') {
         if (activeBrands.includes('No brand')) return true;
       }
-      return activeBrands.includes(product.brand);
+      return activeBrands.includes(item.brand);
     });
 
     // datefiltering
@@ -94,7 +88,7 @@ class Main extends Component {
 
     this.setState({
       filteredTasks,
-      filteredProducts,
+      filteredItems,
     });
   }
 
@@ -135,16 +129,14 @@ class Main extends Component {
             />
             <Route
               exact
-              path="/articles"
-              render={() => (
-                <ArticleList products={this.state.filteredProducts} />
-              )}
+              path="/items"
+              render={() => <ItemList items={this.state.filteredItems} />}
             />
             <Route
               exact
-              path="/article/:article"
+              path="/item/:item"
               render={({ match }) => {
-                return <ArticleInCertifications {...match.params} />;
+                return <ItemInCertifications {...match.params} />;
               }}
             />
             <Route

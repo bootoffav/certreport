@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
 interface IColumnFilterProps {
-  dataToFilter: any; // tasks or products
-  filteringDataType: 'tasks' | 'products';
+  dataToFilter: any; // tasks or items
+  filteringDataType: 'tasks' | 'items';
   update: any;
 }
 
@@ -16,7 +16,7 @@ const searchOptions: {
     standards: 'Standards',
     article: 'Article',
   },
-  products: {
+  items: {
     article: 'Article',
     standards: 'Standards',
     tasks: 'Certifications',
@@ -27,21 +27,18 @@ function filter(
   value: string,
   searchByColumn: string,
   dataToFilter: any[],
-  typeOfFilteringData: 'tasks' | 'products'
+  typeOfFilteringData: 'tasks' | 'items'
 ) {
   const valueLowered = value.toLowerCase();
 
-  const filterProducts = (product: any) => {
+  const filterItems = (item: any) => {
     switch (searchByColumn) {
       case 'article':
-        return product.article.toLowerCase().includes(valueLowered);
+        return item.article.toLowerCase().includes(valueLowered);
       case 'standards':
-        return product.standards
-          .join(', ')
-          .toLowerCase()
-          .includes(valueLowered);
+        return item.standards.join(', ').toLowerCase().includes(valueLowered);
       case 'tasks':
-        const titles = product.tasks.map((task: any) => task.title);
+        const titles = item.tasks.map((task: any) => task.title);
         return titles.join(', ').toLowerCase().includes(valueLowered);
     }
   };
@@ -51,8 +48,8 @@ function filter(
       ? task[searchByColumn].toLowerCase().includes(valueLowered)
       : task.state[searchByColumn].toLowerCase().includes(valueLowered);
 
-  return typeOfFilteringData === 'products'
-    ? dataToFilter.filter(filterProducts)
+  return typeOfFilteringData === 'items'
+    ? dataToFilter.filter(filterItems)
     : dataToFilter.filter(filterTasks);
 }
 
@@ -63,7 +60,7 @@ const ColumnFilter = ({
 }: IColumnFilterProps) => {
   const [value, setValue] = useState('');
   const [searchByColumn, setSearchByColumn] = useState(
-    filteringDataType === 'products' ? 'article' : 'title'
+    filteringDataType === 'items' ? 'article' : 'title'
   );
 
   return (

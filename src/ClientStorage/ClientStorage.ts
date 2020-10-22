@@ -2,7 +2,7 @@
 
 /* eslint-disable import/no-webpack-loader-syntax */
 import dataFetcher from 'workerize-loader!../workers/dataFetcher';
-import { Products, ProductType } from '../Product/Product';
+import { Items, ItemType } from '../Item/Item';
 
 const worker = dataFetcher();
 
@@ -18,10 +18,10 @@ class ClientStorage {
       worker.getTasks();
     });
 
-  static updateProducts(tasks: any[]) {
-    const { products } = Products(tasks);
+  static updateItems(tasks: any[]) {
+    const { items } = Items(tasks);
     return new Promise(async (res) => {
-      await ClientStorage.writeData(products, 'products');
+      await ClientStorage.writeData(items, 'products');
       res();
     });
   }
@@ -67,10 +67,10 @@ class ClientStorage {
     });
   }
 
-  static getSpecificProduct = (
+  static getSpecificItem = (
     key: string,
     storageType = 'tasks'
-  ): Promise<ProductType> => {
+  ): Promise<ItemType> => {
     return new Promise((res, rej) => {
       const db = window.indexedDB.open('default', 2);
 
@@ -88,7 +88,7 @@ class ClientStorage {
   };
 
   static getData = () =>
-    new Promise<{ tasks: any; products: any }>((res) => {
+    new Promise<{ tasks: any; items: any }>((res) => {
       const db = window.indexedDB.open('default', 2);
 
       db.onsuccess = ({ target }) => {
@@ -98,12 +98,12 @@ class ClientStorage {
           .transaction('products')
           .objectStore('products')
           .getAll().onsuccess = ({ target }: any) => {
-          const products = target.result;
+          const items = target.result;
           db.transaction('tasks').objectStore('tasks').getAll().onsuccess = ({
             target,
           }: any) => {
             const tasks = target.result;
-            res({ tasks, products });
+            res({ tasks, items });
           };
         };
       };

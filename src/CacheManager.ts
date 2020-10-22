@@ -6,7 +6,7 @@ class CacheManager {
     if (sessionStorage.getItem('updated') === null) {
       await ClientStorage.updateTasks();
       const { tasks } = await this.getCache();
-      await ClientStorage.updateProducts(tasks);
+      await ClientStorage.updateItems(tasks);
       sessionStorage.setItem('updated', '1');
     }
   };

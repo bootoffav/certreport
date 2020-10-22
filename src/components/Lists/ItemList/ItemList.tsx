@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import ReactTable, { CellInfo } from 'react-table';
 import { ColumnFilter } from '../Filters/ColumnFilter';
-import type { ProductType, taskOfProduct } from '../../../Product/Product';
+import type { ItemType, taskOfItem } from '../../../Item/Item';
 import { Grid, Tooltip } from 'tabler-react';
 
 const columns = [
@@ -15,11 +15,12 @@ const columns = [
   {
     // 1
     Header: 'Item',
-    id: 'article',
-    accessor: 'article',
+    id: 'item',
     Cell: ({ original }: CellInfo) => (
-      <Tooltip content="Article's relevant certs" placement="right">
-        <a href={`/article/${original.article}/`}>{original.article}</a>
+      <Tooltip content="Item's relevant certs" placement="right">
+        <a href={`/item/${encodeURIComponent(original.article)}/`}>
+          {original.article}
+        </a>
       </Tooltip>
     ),
     width: 150,
@@ -47,7 +48,7 @@ const columns = [
     Cell: ({ value: taskList }: CellInfo) => (
       <Tooltip content="links to B24 tasks" placement="left">
         <div>
-          {taskList.map(({ id, title }: taskOfProduct, index: number) => (
+          {taskList.map(({ id, title }: taskOfItem, index: number) => (
             <span key={id}>
               &nbsp;
               <a
@@ -66,30 +67,30 @@ const columns = [
   },
 ];
 
-interface ArticleListProps {
-  products: ProductType[];
+interface ItemListProps {
+  items: ItemType[];
 }
 
-const ArticleList = ({ products }: ArticleListProps) => {
-  const [visibleData, setVisibleData] = useState<ProductType[]>();
+const ItemList = ({ items }: ItemListProps) => {
+  const [visibleData, setVisibleData] = useState<ItemType[]>();
 
   useEffect(() => {
-    setVisibleData(products);
-  }, [products]);
+    setVisibleData(items);
+  }, [items]);
 
   return (
     <Grid.Row>
       <Grid.Col width="8" offset="2">
         <ColumnFilter
-          dataToFilter={products}
+          dataToFilter={items}
           update={setVisibleData}
-          filteringDataType="products"
+          filteringDataType="items"
         />
         <ReactTable
           data={visibleData}
           columns={columns}
-          resolveData={(data: ProductType[], i = 1) =>
-            data.map((row: ProductType) => ({ ...row, position: i++ }))
+          resolveData={(data: ItemType[], i = 1) =>
+            data.map((row) => ({ ...row, position: i++ }))
           }
           className="-highlight table"
           defaultPageSize={20}
@@ -99,4 +100,4 @@ const ArticleList = ({ products }: ArticleListProps) => {
   );
 };
 
-export { ArticleList };
+export { ItemList };

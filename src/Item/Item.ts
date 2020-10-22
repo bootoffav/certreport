@@ -1,20 +1,20 @@
 import { shortenTitle } from '../helpers';
 
-type taskOfProduct = {
+type taskOfItem = {
   id: string;
   title: string;
 };
 
-type ProductType = {
+type ItemType = {
   article: string;
   standards: string[];
   brand: string;
-  tasks: taskOfProduct[];
+  tasks: taskOfItem[];
 };
 
-function Products(tasks: any[]) {
+function Items(tasks: any[]) {
   // get unique products
-  var products: ProductType[] = [];
+  var items: ItemType[] = [];
 
   tasks.forEach((t) => {
     if (t.state && t.state.article) {
@@ -22,23 +22,21 @@ function Products(tasks: any[]) {
       standards = standards.split(', ');
 
       // check for existence
-      const indexOfProduct = products.findIndex(
-        (product) => product.article === article
-      );
+      const indexOfItem = items.findIndex((item) => item.article === article);
       const taskWithConvertedTitle = {
         ...t,
         title: shortenTitle(t.title),
       };
 
-      if (indexOfProduct > 0) {
+      if (indexOfItem > 0) {
         // exists
-        products[indexOfProduct].standards = Array.from(
-          new Set([...products[indexOfProduct].standards, ...standards])
+        items[indexOfItem].standards = Array.from(
+          new Set([...items[indexOfItem].standards, ...standards])
         );
-        products[indexOfProduct].tasks.push(taskWithConvertedTitle);
+        items[indexOfItem].tasks.push(taskWithConvertedTitle);
       } else {
         // not exist
-        products.push({
+        items.push({
           article,
           standards,
           brand,
@@ -48,8 +46,8 @@ function Products(tasks: any[]) {
     }
   });
 
-  return { tasks, products };
+  return { tasks, items };
 }
 
-export { Products };
-export type { ProductType, taskOfProduct };
+export { Items };
+export type { ItemType, taskOfItem };

@@ -1,0 +1,13 @@
+p,
+td {
+  font-size: larger;
+}
+
+.itemsCommonParameters {
+  padding-left: 1rem;
+  font-size: 1rem;
+}
+
+.item-name {
+  font-size: x-large;
+}

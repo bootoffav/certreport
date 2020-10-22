@@ -29,7 +29,7 @@ function NavBar({ tasks, startDate, endDate, update }: INavBarProps) {
           </NavLink>
           <span className="vl"></span>
 
-          <NavLink className="navbar-link" to="/articles">
+          <NavLink className="navbar-link" to="/items">
             <p>Items</p>
           </NavLink>
           <span className="vl"></span>
