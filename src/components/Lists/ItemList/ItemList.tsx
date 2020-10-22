@@ -80,7 +80,7 @@ const ItemList = ({ items }: ItemListProps) => {
 
   return (
     <Grid.Row>
-      <Grid.Col width="8" offset="2">
+      <Grid.Col>
         <ColumnFilter
           dataToFilter={items}
           update={setVisibleData}
