@@ -104,11 +104,7 @@ function getColumns(totalPrice: number, stage?: string) {
       id: 'taskName',
       minWidth: 550,
       Cell: ({ original, value }: CellInfo) => (
-        <Link
-          to={`/edit/${original.id}`}
-          target="_blank"
-          style={{ textDecoration: 'none' }}
-        >
+        <Link to={`/edit/${original.id}`} style={{ textDecoration: 'none' }}>
           {value}
         </Link>
       ),

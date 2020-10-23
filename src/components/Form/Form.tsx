@@ -16,6 +16,7 @@ import { DB } from '../../DBManager';
 import { removeEmptyProps } from '../../helpers';
 import { TabbedCard, Tab, Dimmer, Icon, Button } from 'tabler-react';
 import CacheManager from '../../CacheManager';
+import { GoBackOrHomeButton } from '../NaviButton';
 
 interface IFormState extends IState {
   requestStatus: Status;
@@ -753,14 +754,7 @@ class Form extends React.Component<IFormProps> {
           <button type="submit" className="col-2 btn btn-primary">
             Save changes
           </button>
-          <Button
-            color="gray"
-            onClick={(e: any) => {
-              window.close();
-            }}
-          >
-            Close
-          </Button>
+          <GoBackOrHomeButton />
         </div>
       </form>
     </div>

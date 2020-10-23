@@ -1,22 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Grid, Table, Icon, Button } from 'tabler-react';
+import { Grid, Table, Icon } from 'tabler-react';
 import { ClientStorage } from '../../ClientStorage/ClientStorage';
 import { taskPropMap } from '../../Task/Task';
 import './ItemInCertifications.css';
-import { useHistory } from 'react-router-dom';
-
-const BackButton = () => {
-  const history = useHistory();
-  return (
-    <Button
-      onClick={() => history.goBack()}
-      color="azure"
-      icon="fe fe-arrow-left"
-    >
-      Back
-    </Button>
-  );
-};
+import { GoBackOrHomeButton } from '../NaviButton';
 
 interface IItemProps {
   item: string;
@@ -112,7 +99,7 @@ function ItemInCertifications({ item }: IItemProps) {
       </Grid.Col>
       <Grid.Col width="8" offset="2">
         <div className="d-flex justify-content-center mt-3">
-          <BackButton />
+          <GoBackOrHomeButton />
         </div>
       </Grid.Col>
     </>
