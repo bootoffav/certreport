@@ -734,18 +734,20 @@ class Form extends React.Component<IFormProps> {
               </div>
             </Dimmer>
           </Tab>
-          <Tab title="Files">
-            <Dimmer
-              active={this.state.requestStatus !== Status.FillingForm}
-              loader
-            >
-              <FileUploads
-                taskId={this.task_id}
-                attachedFiles={this.state.attachedFiles}
-                updateAttachedFiles={() => this.updateAttachedFiles()}
-              />
-            </Dimmer>
-          </Tab>
+          {this.task_id && (
+            <Tab title="Files">
+              <Dimmer
+                active={this.state.requestStatus !== Status.FillingForm}
+                loader
+              >
+                <FileUploads
+                  taskId={this.task_id}
+                  attachedFiles={this.state.attachedFiles}
+                  updateAttachedFiles={() => this.updateAttachedFiles()}
+                />
+              </Dimmer>
+            </Tab>
+          )}
         </TabbedCard>
         <div className="d-flex justify-content-around">
           <button type="submit" className="col-2 btn btn-primary">
