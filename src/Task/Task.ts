@@ -16,6 +16,18 @@ enum Stage {
   '8. Certificate ready',
   '9. Ended',
 }
+const taskPropMapAliases: {
+  [key: string]: string;
+} = {
+  pretreatment1: 'Wash_1',
+};
+
+function getTaskParamLabel(param: string) {
+  return (
+    taskPropMapAliases[param] ??
+    Object.keys(taskPropMap).find((key) => taskPropMap[key] === param)
+  );
+}
 
 const taskPropMap: {
   [k: string]: any;
@@ -359,4 +371,4 @@ class Task {
   }
 }
 
-export { dataSeparator, Task, Stage, taskPropMap };
+export { dataSeparator, Task, Stage, taskPropMap, getTaskParamLabel };

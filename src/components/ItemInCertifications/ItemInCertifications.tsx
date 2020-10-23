@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Grid, Table, Icon } from 'tabler-react';
 import { ClientStorage } from '../../ClientStorage/ClientStorage';
-import { taskPropMap } from '../../Task/Task';
+import { getTaskParamLabel } from '../../Task/Task';
 import './ItemInCertifications.css';
 import { GoBackOrHomeButton } from '../NaviButton';
 
@@ -57,7 +57,7 @@ function ItemInCertifications({ item }: IItemProps) {
           {tasks.length ? tasks[0].state.code : ''}
         </span>
       </Grid.Col>
-      <Grid.Col width="10" offset="1" className="mt-2">
+      <Grid.Col className="mt-2">
         <Table highlightRowOnHover className="itemInCertificationsTable">
           <Table.Header>
             <Table.Row>
@@ -65,20 +65,14 @@ function ItemInCertifications({ item }: IItemProps) {
               {tasks.map((task: any, index: number) => (
                 <Table.ColHeader key={index}>
                   <div className="d-flex justify-content-start">
-                    <a
-                      href={`/edit/${task.id}`}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {task.title}{' '}
-                    </a>
+                    <a href={`/edit/${task.id}`}>{task.title} </a>
                     &nbsp;|&nbsp;
                     <a
                       href={`https://xmtextiles.bitrix24.ru/company/personal/user/460/tasks/task/view/${task.id}/`}
                       target="_blank"
                       rel="noreferrer"
                     >
-                      B24 task
+                      B24
                     </a>
                   </div>
                 </Table.ColHeader>
@@ -88,7 +82,7 @@ function ItemInCertifications({ item }: IItemProps) {
           <Table.Body>
             {parameters.map((param) => (
               <Table.Row key={param}>
-                <Table.Col>{getLabelForParam(param)}</Table.Col>
+                <Table.Col>{getTaskParamLabel(param)}</Table.Col>
                 {tasks.map((task: any, index: number) => (
                   <Table.Col key={index}>{formatColumn(task, param)}</Table.Col>
                 ))}
@@ -104,13 +98,6 @@ function ItemInCertifications({ item }: IItemProps) {
       </Grid.Col>
     </>
   );
-}
-
-function getLabelForParam(param: string) {
-  const key = Object.keys(taskPropMap).find(
-    (key) => taskPropMap[key] === param
-  );
-  return <h5>{key}</h5>;
 }
 
 function formatColumn(task: any, param: string): JSX.Element | string {

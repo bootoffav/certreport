@@ -9,6 +9,7 @@ import Notification, { Status } from '../Notification/Notification';
 import SerialNumber from '../SerialNumber/SerialNumber';
 import { selectOptions } from '../../defaults';
 import { IState, emptyState } from '../../Task/emptyState';
+import { getTaskParamLabel } from '../../Task/Task';
 import Standards from '../Standards/Standards';
 import FileUploads from '../FileUploads/FileUploads';
 import { FabricApplicationForm } from './FabricApplicationForm';
@@ -385,7 +386,7 @@ class Form extends React.Component<IFormProps> {
       </div>
       <div className="d-flex">
         <div className="w-50 mr-2">
-          Pre-treatment 1
+          {getTaskParamLabel('pretreatment1')}
           <div className="input-group">
             <input
               type="text"
