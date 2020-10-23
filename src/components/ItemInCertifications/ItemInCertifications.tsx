@@ -85,6 +85,14 @@ function ItemInCertifications({ item }: IItemProps) {
                     >
                       {task.title}{' '}
                     </a>
+                    &nbsp;|&nbsp;
+                    <a
+                      href={`https://xmtextiles.bitrix24.ru/company/personal/user/460/tasks/task/view/${task.id}/`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      B24 task
+                    </a>
                   </div>
                 </Table.ColHeader>
               ))}
