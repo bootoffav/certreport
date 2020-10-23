@@ -11,3 +11,7 @@ td {
 .item-name {
   font-size: x-large;
 }
+
+.itemInCertificationsTable td:first-child {
+  width: 10%;
+}

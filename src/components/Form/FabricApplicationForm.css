@@ -1,4 +1,5 @@
-td:first-child {
+#testRequirement td:first-child,
+#washPreTreatment td:first-child {
   width: 20%;
 }
 

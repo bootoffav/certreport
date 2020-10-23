@@ -34,13 +34,12 @@ const resume: {
 
 function ItemInCertifications({ item }: IItemProps) {
   item = decodeURIComponent(item);
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState<any>([]);
 
   useEffect(() => {
-    ClientStorage.getSpecificItem(item, 'products').then(({ tasks }) =>
-      // @ts-ignore
-      setTasks(tasks)
-    );
+    ClientStorage.getSpecificItem(item, 'products').then(({ tasks }: any) => {
+      setTasks(tasks);
+    });
   }, [item]);
 
   const parameters = [
@@ -62,53 +61,41 @@ function ItemInCertifications({ item }: IItemProps) {
       <Grid.Col width="8" offset="2" className="mb-2">
         <span className="itemsCommonParameters">
           <span className="font-weight-bold">Product: </span>
-          {
-            // @ts-expect-error
-            tasks.length ? tasks[0].state.product : ''
-          }
+          {tasks.length ? tasks[0].state.product : ''}
         </span>
       </Grid.Col>
       <Grid.Col width="8" offset="2" className="mb-4">
         <span className="itemsCommonParameters">
           <span className="font-weight-bold">Code:</span>{' '}
-          {
-            // @ts-expect-error
-            tasks.length ? tasks[0].state.code : ''
-          }
+          {tasks.length ? tasks[0].state.code : ''}
         </span>
       </Grid.Col>
-      <Grid.Col className="mt-2" offset="2" width="8">
-        <Table hasOutline responsive highlightRowOnHover>
+      <Grid.Col width="10" offset="1" className="mt-2">
+        <Table highlightRowOnHover className="itemInCertificationsTable">
           <Table.Header>
-            <Table.ColHeader>
-              <h5>Parameter</h5>
-            </Table.ColHeader>
-            {tasks.map((task: any, index: number) => (
-              <Table.ColHeader key={index}>
-                <div className="d-flex justify-content-around">
-                  <a href={`/edit/${task.id}`} target="_blank" rel="noreferrer">
-                    {task.title}{' '}
-                  </a>
-                  |&nbsp;
-                  <a
-                    href={`https://xmtextiles.bitrix24.ru/company/personal/user/460/tasks/task/view/${task.id}/`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    <span className="text-capitalize">B24 task</span>
-                  </a>
-                </div>
-              </Table.ColHeader>
-            ))}
+            <Table.Row>
+              <Table.ColHeader>Parameter</Table.ColHeader>
+              {tasks.map((task: any, index: number) => (
+                <Table.ColHeader key={index}>
+                  <div className="d-flex justify-content-start">
+                    <a
+                      href={`/edit/${task.id}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {task.title}{' '}
+                    </a>
+                  </div>
+                </Table.ColHeader>
+              ))}
+            </Table.Row>
           </Table.Header>
           <Table.Body>
             {parameters.map((param) => (
               <Table.Row key={param}>
                 <Table.Col>{getLabelForParam(param)}</Table.Col>
-                {tasks.map((task: any, index) => (
-                  <Table.Col key={index} alignContent="center">
-                    {formatColumn(task, param)}
-                  </Table.Col>
+                {tasks.map((task: any, index: number) => (
+                  <Table.Col key={index}>{formatColumn(task, param)}</Table.Col>
                 ))}
               </Table.Row>
             ))}
