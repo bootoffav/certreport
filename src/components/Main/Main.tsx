@@ -101,6 +101,7 @@ class Main extends Component {
             endDate={this.state.endDate}
             tasks={this.state.allTasks}
             update={this.setState.bind(this)}
+            updated={this.state.updated}
           />
           <Switch>
             <Route
@@ -121,7 +122,7 @@ class Main extends Component {
                 <>
                   <CertificationList
                     tasks={this.state.filteredTasks}
-                    updated={this.state.updated}
+                    // updated={this.state.updated}
                   />
                   <StageShortNames />
                 </>

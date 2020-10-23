@@ -1,6 +1,5 @@
 import * as React from 'react';
 import ReactTable from 'react-table';
-import { Button } from 'tabler-react';
 import { Task } from '../../../Task/Task';
 import { getColumns } from './columns';
 import StageFilter from '../Filters/StageFilter';
@@ -18,20 +17,8 @@ interface IListState {
   endDate?: Date;
 }
 
-const State = ({ status }: { status: boolean }) =>
-  status ? (
-    <div className="alert alert-success loadingBox" role="alert">
-      Updated
-    </div>
-  ) : (
-    <Button loading color="orange" size="sm">
-      updated_updated
-    </Button>
-  );
-
 class CertificationList extends React.Component<{
   tasks: any;
-  updated: boolean;
 }> {
   state: IListState = {
     visibleData: [],
@@ -109,7 +96,6 @@ class CertificationList extends React.Component<{
                     startDate={this.state.startDate}
                     endDate={this.state.endDate}
                     /> */}
-          <State status={this.props.updated} />
         </div>
       </div>
       <ReactTable

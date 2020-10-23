@@ -1,17 +1,20 @@
 import { NavLink } from 'react-router-dom';
 import { BrandFilter } from '../Filters/BrandFilter';
 import DateFilter from '../Filters/DateFilter';
+import { State } from './State';
 
 interface INavBarProps {
   update: any;
   tasks: any[];
   startDate: Date | undefined;
   endDate: Date | undefined;
+  updated: boolean;
 }
 
-function NavBar({ tasks, startDate, endDate, update }: INavBarProps) {
+function NavBar({ tasks, startDate, endDate, update, updated }: INavBarProps) {
   return (
     <div className="pl-1 mb-1 rounded-bottom navbar-light d-flex justify-content-start">
+      <State updated={updated} />
       <BrandFilter tasks={tasks} update={update} />
       <DateFilter startDate={startDate} endDate={endDate} update={update} />
       <div className="container">
