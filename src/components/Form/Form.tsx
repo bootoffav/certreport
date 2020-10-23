@@ -11,7 +11,7 @@ import { selectOptions } from '../../defaults';
 import { IState, emptyState } from '../../Task/emptyState';
 import { getTaskParamLabel } from '../../Task/Task';
 import Standards from '../Standards/Standards';
-import FileUploads from '../FileUploads/FileUploads';
+import { FileManagement } from '../FileManagement/FileManagement';
 import { FabricApplicationForm } from './FabricApplicationForm';
 import { DB } from '../../DBManager';
 import { removeEmptyProps } from '../../helpers';
@@ -742,7 +742,7 @@ class Form extends React.Component<IFormProps> {
                 active={this.state.requestStatus !== Status.FillingForm}
                 loader
               >
-                <FileUploads
+                <FileManagement
                   taskId={this.task_id}
                   attachedFiles={this.state.attachedFiles}
                   updateAttachedFiles={() => this.updateAttachedFiles()}
