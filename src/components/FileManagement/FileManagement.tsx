@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import * as B24 from '../../B24/B24';
 import { UploadedFilesList } from './UploadedFilesList';
 import { UploadFile } from './UploadFile';
+import type { AttachedFile } from '../../Task/types';
 
 const creator_id = process.env.REACT_APP_B24_USER_ID;
 const webhook_key = process.env.REACT_APP_B24_WEBHOOK_KEY;
@@ -11,7 +12,7 @@ const main_url = process.env.REACT_APP_B24_MAIN_URL;
 
 function FileManagement(props: {
   taskId: string | undefined;
-  attachedFiles: any;
+  attachedFiles: AttachedFile[];
   updateAttachedFiles: () => void;
 }) {
   const [uploading, setUploading] = useState(false);
@@ -33,7 +34,7 @@ function FileManagement(props: {
     }
   };
 
-  const deleteFile = (file: any) => {
+  const deleteFile = (file: AttachedFile) => {
     setUploading(true);
     Promise.all([
       fetch(
