@@ -27,7 +27,6 @@ function getSpecificFile(
   { attachedFiles, deleteFile }: IUploadedFilesList,
   fileType: 'Test report' | 'Certificate'
 ) {
-  console.log(attachedFiles);
   let file;
   if (
     attachedFiles.length > 0 &&

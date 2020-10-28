@@ -125,6 +125,7 @@ const brand = [
   { value: 'C_10035', label: 'XMF' },
   { value: 'C_10037', label: 'XMS' },
   { value: 'C_10041', label: 'XMG' },
+  { value: '', label: 'No brand' },
 ];
 
 export { emptyState, brand };
