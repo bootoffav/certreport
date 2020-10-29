@@ -259,12 +259,13 @@ async function getTask(id: string | undefined) {
           'DESCRIPTION',
           'UF_CRM_TASK',
           'UF_TASK_WEBDAV_FILES',
+          'CREATED_DATE',
         ],
       })
   )
     .then((rsp) => rsp.json())
     .then(async ({ result }: any) => {
-      const { description, ufCrmTask, id, title } = result.task;
+      const { description, ufCrmTask, id, title, createdDate } = result.task;
       return {
         ...new Task({
           description,
@@ -272,6 +273,7 @@ async function getTask(id: string | undefined) {
         }),
         id,
         title,
+        createdDate,
         ufTaskWebdavFiles: await getAttachedFiles(id),
       };
     });

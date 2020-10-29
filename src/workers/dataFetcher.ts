@@ -28,6 +28,7 @@ export async function getTasks() {
     title: string;
     description: string;
     ufCrmTask: [];
+    createdDate: string;
   }[] = [];
   const tasks: any = [];
   do {
@@ -37,7 +38,13 @@ export async function getTasks() {
           qs.stringify({
             order: { ID: 'desc' },
             filter: { TAG: tag },
-            select: ['ID', 'TITLE', 'DESCRIPTION', 'UF_CRM_TASK'],
+            select: [
+              'ID',
+              'TITLE',
+              'DESCRIPTION',
+              'UF_CRM_TASK',
+              'CREATED_DATE',
+            ],
             start,
           })
       )
@@ -54,6 +61,7 @@ export async function getTasks() {
       }),
       id: rawTasks[i].id,
       title: rawTasks[i].title,
+      createdDate: rawTasks[i].createdDate,
       ufTaskWebdavFiles: [],
     };
 

@@ -47,7 +47,7 @@ function getColumns(totalPrice: number, stage?: string) {
       // 2
       Header: 'Created',
       id: 'createdDate',
-      accessor: 'CREATED_DATE',
+      accessor: 'createdDate',
       width: 80,
       Cell: ({ value }: CellInfo) => dayjs(value).format('DD.MM.YYYY'),
     },
