@@ -3,6 +3,7 @@ import { Component } from 'react';
 import dayjs from 'dayjs';
 import quarterOfYear from 'dayjs/plugin/quarterOfYear';
 import './QSpending.css';
+import React from 'react';
 
 dayjs.extend(quarterOfYear);
 

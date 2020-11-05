@@ -2,6 +2,7 @@ import { Component } from 'react';
 import pdfMake from 'pdfmake/build/pdfmake';
 import dayjs from 'dayjs';
 import { vfs } from './vfs_fonts.js';
+import React from 'react';
 
 import { tableLayout, fonts } from './settings';
 

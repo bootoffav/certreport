@@ -1,3 +1,4 @@
+import React from 'react';
 import { printStage } from '../../helpers';
 import { Stage } from '../../Task/Task';
 

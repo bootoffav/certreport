@@ -1,3 +1,4 @@
+import React from 'react';
 import Loader from 'react-loader-spinner';
 
 const State = ({ updated }: { updated: boolean }) =>

@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState, useEffect } from 'react';
 import { Grid, Table, Icon } from 'tabler-react';
 import { ClientStorage } from '../../ClientStorage/ClientStorage';

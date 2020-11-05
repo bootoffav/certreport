@@ -2,13 +2,9 @@
   border: 1px solid rgba(166, 188, 212, 0.5);
   padding: 1em;
   margin-bottom: 0.5em;
-  font-size: 1.2em;
   width: 100%;
-}
-
-.uploadedFiles {
-  display: inline-block;
   font-size: 0.9em;
+  display: inline-block;
 }
 
 .trashFile {

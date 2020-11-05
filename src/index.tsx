@@ -1,3 +1,4 @@
+import React from 'react';
 import 'tabler-react/dist/Tabler.css';
 import 'react-table/react-table.css';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';

@@ -133,7 +133,6 @@ class Form extends React.Component<IFormProps> {
 
       // update in indexedDB
       await CacheManager.updateTask(taskId);
-      window.opener.location.reload();
 
       // update in FaunaDB
       this.state.existsInDB

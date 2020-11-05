@@ -26,3 +26,7 @@ a.nav-item {
 p {
   padding-top: 1em;
 }
+
+.formLabels {
+  font-size: inherit;
+}

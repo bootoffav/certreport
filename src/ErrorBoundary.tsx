@@ -1,3 +1,4 @@
+import React from 'react';
 import { Component } from 'react';
 import { Error400Page } from 'tabler-react';
 
@@ -5,7 +6,8 @@ class ErrorBoundary extends Component {
   subtitles: {
     [k: string]: string;
   } = {
-    'Task not found': 'Приложение не смогло отпарсить задачу по указанному ID',
+    'Task not found':
+      'Приложение не смогло отпарсить задачу по указанному task',
   };
 
   state = {

@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import React from 'react';
 
 class BrandFilter extends Component<{
   tasks: any;

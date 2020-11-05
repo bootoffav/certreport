@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { StatsCard } from 'tabler-react';
 import { tasksInRange, StatCardsContext } from './Dashboard';
+import React from 'react';
 
 const CompletedCertifications = () => {
   const { tasks, startDate, endDate }: any = useContext(StatCardsContext);
