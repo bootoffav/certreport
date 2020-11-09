@@ -39,6 +39,16 @@ function FileManagement(props: {
     }
   };
 
+  const renameFile = (id: string, newName: string) => {
+    fetch(
+      `${main_url}/${creator_id}/${webhook_key}/disk.file.rename?` +
+        qs.stringify({
+          id,
+          newName,
+        })
+    ).then(props.updateAttachedFiles);
+  };
+
   const deleteFile = (file: AttachedFile) => {
     setUploading(true);
     Promise.all([
@@ -87,7 +97,11 @@ function FileManagement(props: {
         upload={upload}
         files={pullSpecificFiles('Certificate')}
       />
-      <OtherFilesList attachedFiles={files} deleteFile={deleteFile} />
+      <OtherFilesList
+        attachedFiles={files}
+        deleteFile={deleteFile}
+        renameFile={renameFile}
+      />
       <UploadFile upload={upload} />
     </>
   );

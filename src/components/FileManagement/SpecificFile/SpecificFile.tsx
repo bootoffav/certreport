@@ -1,7 +1,7 @@
 import { Form, Grid } from 'tabler-react';
 import React from 'react';
 import type { AttachedFile } from '../../../Task/types';
-import { FileView } from '../OtherFilesList';
+import { FileView } from '../FileView';
 
 interface Props {
   type: 'Test Report' | 'Certificate';
