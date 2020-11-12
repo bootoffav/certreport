@@ -4,13 +4,12 @@ import { Button } from 'tabler-react';
 
 const GoBackOrHomeButton = () => {
   const history = useHistory();
-  const label = history.length > 1 ? 'Back' : 'Main Page';
-
+  const label = history.length === 2 ? 'Main Page' : 'Back';
   return (
     <Button
       onClick={(e: any) => {
         e.preventDefault();
-        history.length > 1 ? history.goBack() : history.push('/');
+        history.length === 2 ? history.push('/') : history.goBack();
       }}
       color="azure"
       icon={label === 'Back' ? 'fe fe-arrow-left' : ''}
