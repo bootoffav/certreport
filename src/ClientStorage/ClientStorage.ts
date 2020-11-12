@@ -9,10 +9,11 @@ const worker = dataFetcher();
 class ClientStorage {
   static updateTasks = () =>
     new Promise((resolve) => {
-      worker.onmessage = async ({ data }: MessageEvent) => {
+      worker.onmessage = ({ data }: MessageEvent) => {
         if (Array.isArray(data)) {
-          await ClientStorage.removeData();
-          ClientStorage.writeData(data).then(resolve);
+          ClientStorage.removeData('tasks')
+            .then(ClientStorage.writeData(data))
+            .then(resolve);
         }
       };
       worker.getTasks();
@@ -20,10 +21,11 @@ class ClientStorage {
 
   static updateItems(tasks: any[]) {
     const { items } = Items(tasks);
-    return new Promise(async (res) => {
-      await ClientStorage.writeData(items, 'products');
-      res();
-    });
+    return new Promise((resolve) =>
+      ClientStorage.removeData('products')
+        .then(ClientStorage.writeData(items, 'products'))
+        .then(resolve)
+    );
   }
 
   static writeData(data: any, storeType = 'tasks') {
@@ -44,12 +46,12 @@ class ClientStorage {
     });
   }
 
-  static removeData = () =>
+  static removeData = (type: 'products' | 'tasks') =>
     new Promise((res) => {
       window.indexedDB.open('default').onsuccess = ({ target }: any) => {
-        const tran = target.result.transaction(['tasks'], 'readwrite');
+        const tran = target.result.transaction([type], 'readwrite');
         tran.oncomplete = () => res();
-        tran.objectStore('tasks').clear();
+        tran.objectStore(type).clear();
       };
     });
 

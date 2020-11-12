@@ -65,13 +65,13 @@ export async function getTasks() {
       ufTaskWebdavFiles: [],
     };
 
-    if (
-      ['7. Test-report ready', '8. Certificate ready', '9. Ended'].includes(
-        task.state.stage
-      )
-    ) {
-      task.ufTaskWebdavFiles = await getAttachedFiles(rawTasks[i].id);
-    }
+    // if (
+    //   ['7. Test-report ready', '8. Certificate ready', '9. Ended'].includes(
+    //     task.state.stage
+    //   )
+    // ) {
+    task.ufTaskWebdavFiles = await getAttachedFiles(rawTasks[i].id);
+    // }
 
     tasks.push(task);
   }

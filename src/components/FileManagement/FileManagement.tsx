@@ -12,12 +12,32 @@ const creator_id = process.env.REACT_APP_B24_USER_ID;
 const webhook_key = process.env.REACT_APP_B24_WEBHOOK_KEY;
 const main_url = process.env.REACT_APP_B24_MAIN_URL;
 
+const pullSpecificFiles = (
+  files: AttachedFile[],
+  type: 'Test Report' | 'Certificate'
+) => {
+  const specificFiles: AttachedFile[] = [];
+  files = files.filter((file: AttachedFile) => {
+    if (file.NAME.startsWith(type + '_')) {
+      specificFiles.push(file);
+      return false;
+    }
+
+    return true;
+  });
+
+  return [files, specificFiles];
+};
+
 function FileManagement(props: {
   taskId: string | undefined;
   attachedFiles: AttachedFile[];
   updateAttachedFiles: () => void;
 }) {
   let files = props.attachedFiles;
+  let testReportFiles;
+  let certificateFiles;
+
   const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
@@ -66,19 +86,8 @@ function FileManagement(props: {
     ]).then(props.updateAttachedFiles);
   };
 
-  const pullSpecificFiles = (type: 'Test Report' | 'Certificate') => {
-    const specificFiles: AttachedFile[] = [];
-    files = files.filter((file) => {
-      if (file.NAME.startsWith(type + '_')) {
-        specificFiles.push(file);
-        return false;
-      }
-
-      return true;
-    });
-
-    return specificFiles;
-  };
+  [files, testReportFiles] = pullSpecificFiles(files, 'Test Report');
+  [files, certificateFiles] = pullSpecificFiles(files, 'Certificate');
 
   return uploading ? (
     <Dimmer active loader></Dimmer>
@@ -88,14 +97,14 @@ function FileManagement(props: {
         type="Test Report"
         deleteFile={deleteFile}
         upload={upload}
-        files={pullSpecificFiles('Test Report')}
+        files={testReportFiles}
       />
 
       <SpecificFile
         type="Certificate"
         deleteFile={deleteFile}
         upload={upload}
-        files={pullSpecificFiles('Certificate')}
+        files={certificateFiles}
       />
       <OtherFilesList
         attachedFiles={files}
@@ -107,4 +116,4 @@ function FileManagement(props: {
   );
 }
 
-export { FileManagement };
+export { FileManagement, pullSpecificFiles };

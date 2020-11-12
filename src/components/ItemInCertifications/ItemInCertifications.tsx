@@ -5,6 +5,7 @@ import { ClientStorage } from '../../ClientStorage/ClientStorage';
 import { getTaskParamLabel } from '../../Task/Task';
 import './ItemInCertifications.css';
 import { GoBackOrHomeButton } from '../NaviButton';
+import { pullSpecificFiles } from '../FileManagement/FileManagement';
 
 interface IItemProps {
   item: string;
@@ -37,6 +38,8 @@ function ItemInCertifications({ item }: IItemProps) {
     'stage',
     'partNumber',
     'resume',
+    'certificate',
+    'testReport',
   ];
 
   return (
@@ -105,6 +108,40 @@ function formatColumn(task: any, param: string): JSX.Element | string {
   switch (param) {
     case 'resume':
       return resume[task.state[param]];
+
+    case 'testReport':
+      const [, testReportFiles] = pullSpecificFiles(
+        task.ufTaskWebdavFiles,
+        'Test Report'
+      );
+      return (
+        <>
+          {testReportFiles.map((file) => (
+            <div key={file.ATTACHMENT_ID}>
+              <a href={'https://xmtextiles.bitrix24.ru' + file.DOWNLOAD_URL}>
+                {file.NAME}
+              </a>
+            </div>
+          ))}
+        </>
+      );
+    case 'certificate':
+      const [, certificateFiles] = pullSpecificFiles(
+        task.ufTaskWebdavFiles,
+        'Certificate'
+      );
+      return (
+        <>
+          {certificateFiles.map((file) => (
+            <div>
+              <a href={'https://xmtextiles.bitrix24.ru' + file.DOWNLOAD_URL}>
+                {file.NAME}
+              </a>
+            </div>
+          ))}
+        </>
+      );
+
     case 'price':
       return (+task.state.price || 0 + +task.state.price2 || 0).toLocaleString(
         'ru-RU',
