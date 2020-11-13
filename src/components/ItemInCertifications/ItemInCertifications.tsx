@@ -38,8 +38,8 @@ function ItemInCertifications({ item }: IItemProps) {
     'stage',
     'partNumber',
     'resume',
-    'certificate',
     'testReport',
+    'certificate',
   ];
 
   return (
