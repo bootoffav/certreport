@@ -28,13 +28,7 @@ function Items(tasks: any[]) {
         title: shortenTitle(t.title),
       };
 
-      if (indexOfItem > 0) {
-        // exists
-        items[indexOfItem].standards = Array.from(
-          new Set([...items[indexOfItem].standards, ...standards])
-        );
-        items[indexOfItem].tasks.push(taskWithConvertedTitle);
-      } else {
+      if (indexOfItem === -1) {
         // not exist
         items.push({
           article,
@@ -42,6 +36,12 @@ function Items(tasks: any[]) {
           brand,
           tasks: [taskWithConvertedTitle],
         });
+      } else {
+        // exists
+        items[indexOfItem].standards = Array.from(
+          new Set([...items[indexOfItem].standards, ...standards])
+        );
+        items[indexOfItem].tasks.push(taskWithConvertedTitle);
       }
     }
   });
