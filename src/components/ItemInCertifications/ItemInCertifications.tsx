@@ -6,6 +6,7 @@ import { getTaskParamLabel } from '../../Task/Task';
 import './ItemInCertifications.css';
 import { GoBackOrHomeButton } from '../NaviButton';
 import { pullSpecificFiles } from '../FileManagement/FileManagement';
+import CacheManager from '../../CacheManager';
 
 interface IItemProps {
   item: string;
@@ -26,9 +27,15 @@ function ItemInCertifications({ item }: IItemProps) {
   const [tasks, setTasks] = useState<any>([]);
 
   useEffect(() => {
-    ClientStorage.getSpecificItem(item, 'products').then(({ tasks }: any) => {
-      setTasks(tasks);
-    });
+    ClientStorage.getSpecificItem(item, 'products')
+      .then(({ tasks }: any) => {
+        setTasks(tasks);
+        return tasks;
+      })
+      .then((tasks) => CacheManager.updateItem(item, tasks))
+      .then(({ tasks }: any) => {
+        setTasks(tasks);
+      });
   }, [item]);
 
   const parameters = [
@@ -133,7 +140,7 @@ function formatColumn(task: any, param: string): JSX.Element | string {
       return (
         <>
           {certificateFiles.map((file) => (
-            <div>
+            <div key={file.ATTACHMENT_ID}>
               <a href={'https://xmtextiles.bitrix24.ru' + file.DOWNLOAD_URL}>
                 {file.NAME}
               </a>

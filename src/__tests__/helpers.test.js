@@ -96,4 +96,6 @@ it('checks shortenTitle', () => {
       '092_Aitex (China) - EN 20471 (25x60C, ISO 6330) - XM-6002, Silver (send 22Feb2017 - plan 04Apr2017) = 1 602,43 € | 170428 EN 20471 Tape XM-6002 Certificate 2017CN0095 - XM.pdf'
     )
   ).toBe('092_Aitex');
+
+  expect(shortenTitle('092_Aitex')).toBe('092_Aitex');
 });

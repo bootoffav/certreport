@@ -90,7 +90,8 @@ function printStage(stage: string, place: 'table' | 'select' | 'dropdown') {
 }
 
 function shortenTitle(title: string) {
-  return title.substring(0, title.indexOf(' '));
+  const index = title.indexOf(' ');
+  return index === -1 ? title : title.substring(0, index);
 }
 
 function isMainHeaderAllowed(pathname: string): boolean {
