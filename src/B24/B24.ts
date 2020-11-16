@@ -21,7 +21,6 @@ const auditors: string[] = process.env.REACT_APP_B24_AUDITORS
 
 const defaultParams = {
   CREATED_BY: creatorId,
-  TAGS: [tag],
   GROUP_ID: 21,
 };
 
@@ -60,6 +59,7 @@ function formTaskFields(state: any) {
   let stAd = new StateAdapter(state);
   const taskFields: any = {
     ...defaultParams,
+    TAGS: [tag, state.article],
     UF_CRM_TASK: makeUfCrmTaskField(state),
     TITLE:
       `${state.serialNumber}_${state.testingCompany} - ${state.standards} (${state.pretreatment1}) - ${state.article}, ${state.colour} ` +
