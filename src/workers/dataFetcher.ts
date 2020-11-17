@@ -13,15 +13,6 @@ const step = (json: any) => {
   return json.result;
 };
 
-const getAttachedFiles = (id: string) =>
-  fetch(
-    `${main_url}/${creator_id}/${webhook_key}/task.item.getfiles?` +
-      qs.stringify({ TASKID: id })
-  )
-    .then((res) => res.json())
-    .then(({ result }: any) => result)
-    .catch((e) => []);
-
 export async function getTasks() {
   let rawTasks: {
     id: string;
@@ -64,14 +55,6 @@ export async function getTasks() {
       createdDate: rawTasks[i].createdDate,
       ufTaskWebdavFiles: [],
     };
-
-    // if (
-    //   ['7. Test-report ready', '8. Certificate ready', '9. Ended'].includes(
-    //     task.state.stage
-    //   )
-    // ) {
-    task.ufTaskWebdavFiles = await getAttachedFiles(rawTasks[i].id);
-    // }
 
     tasks.push(task);
   }

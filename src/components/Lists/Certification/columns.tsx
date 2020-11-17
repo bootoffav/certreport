@@ -214,30 +214,6 @@ function getColumns(totalPrice: number, stage?: string) {
     },
     {
       // 23
-      Header: 'Certificate',
-      id: 'certificate',
-      accessor: ({ ufTaskWebdavFiles: files, state }: any) => {
-        const stages = [
-          '7. Test-report ready',
-          '8. Certificate ready',
-          '9. Ended',
-        ];
-        if (stages.includes(state.stage)) {
-          return files.map((file: any, key: number) => (
-            <div key={key}>
-              <a href={`https://xmtextiles.bitrix24.ru${file.DOWNLOAD_URL}`}>
-                {file.NAME}
-              </a>
-            </div>
-          ));
-        }
-
-        return state.certificate;
-      },
-      minWidth: 300,
-    },
-    {
-      // 24
       Header: 'Certificate really received on',
       id: 'certReceivedOnRealDate',
       accessor: 'state.certReceivedOnRealDate',
@@ -245,7 +221,7 @@ function getColumns(totalPrice: number, stage?: string) {
       sortMethod: sortDates,
     },
     {
-      // 25
+      // 24
       Header: 'Standards',
       id: 'standards',
       accessor: 'state.standards',
@@ -292,7 +268,7 @@ function getColumns(totalPrice: number, stage?: string) {
           }),
     },
     {
-      // 26
+      // 25
       Header: 'Result',
       id: 'result',
       accessor: 'state.resume',
@@ -334,7 +310,7 @@ function getColumns(totalPrice: number, stage?: string) {
       },
     },
     {
-      // 27
+      // 26
       Header: 'Pre-treatment Result',
       id: 'pretreatment1',
       accessor: 'state.pretreatment1Result',
@@ -364,7 +340,7 @@ function getColumns(totalPrice: number, stage?: string) {
       },
     },
     {
-      // 28
+      // 27
       Header: 'News',
       id: 'news',
       accessor: 'state.news',
@@ -384,19 +360,19 @@ function getColumns(totalPrice: number, stage?: string) {
         ),
     },
     {
-      // 29
+      // 28
       Header: 'Part #',
       id: 'partNumber',
       accessor: 'state.partNumber',
     },
     {
-      // 30
+      // 29
       Header: 'Wash',
       id: 'wash',
       accessor: 'state.pretreatment1',
     },
     {
-      // 31
+      // 30
       Header: 'Price, €',
       Footer: (
         <>
@@ -419,45 +395,29 @@ function getColumns(totalPrice: number, stage?: string) {
 
   switch (stage) {
     case '00. Paused':
-      return takeColumns([1, 2, 3, 9, 10, 18, 20, 27, 31]);
+      return takeColumns([1, 2, 3, 9, 10, 18, 20, 26, 30]);
     case '0. Sample to be prepared':
-      return takeColumns([1, 2, 3, 9, 10, 18, 30, 31]);
+      return takeColumns([1, 2, 3, 9, 10, 18, 29, 30]);
     case '1. Sample Sent':
-      return takeColumns([1, 2, 3, 9, 10, 11, 18, 20, 23, 31]);
+      return takeColumns([1, 2, 3, 9, 10, 11, 18, 20, 30]);
     case '2. Sample Arrived':
-      return takeColumns([1, 2, 3, 9, 11, 12, 18, 20, 23, 31]);
+      return takeColumns([1, 2, 3, 9, 11, 12, 18, 20, 30]);
     case '3. PI Issued':
-      return takeColumns([1, 2, 3, 9, 14, 15, 17, 19, 22, 26, 31]);
+      return takeColumns([1, 2, 3, 9, 14, 15, 17, 19, 22, 25, 30]);
     case '4. Payment Done':
-      return takeColumns([1, 2, 3, 9, 14, 15, 16, 17, 22, 25, 31]);
+      return takeColumns([1, 2, 3, 9, 14, 15, 16, 17, 22, 24, 30]);
     case '5. Testing is started':
-      return takeColumns([1, 2, 3, 9, 17, 18, 19, 20, 22, 25, 31]);
+      return takeColumns([1, 2, 3, 9, 17, 18, 19, 20, 22, 24, 30]);
     case '7. Test-report ready':
-      return takeColumns([1, 2, 3, 8, 9, 19, 21, 22, 23, 25, 26, 27, 29, 31]);
+      return takeColumns([1, 2, 3, 8, 9, 19, 21, 22, 24, 25, 26, 28, 30]);
     case '8. Certificate ready':
-      return takeColumns([
-        1,
-        2,
-        3,
-        7,
-        9,
-        13,
-        17,
-        19,
-        22,
-        23,
-        24,
-        25,
-        26,
-        27,
-        31,
-      ]);
+      return takeColumns([1, 2, 3, 7, 9, 13, 17, 19, 22, 23, 24, 25, 26, 30]);
     case 'all':
-      return takeColumns([1, 2, 3, 4, 5, 9, 18, 20, 23, 24, 25, 28, 31]);
+      return takeColumns([1, 2, 3, 4, 5, 9, 18, 20, 23, 24, 27, 30]);
     case 'overdue':
-      return takeColumns([1, 2, 3, 4, 5, 6, 9, 19, 21, 22, 24, 25, 27, 31]);
+      return takeColumns([1, 2, 3, 4, 5, 6, 9, 19, 21, 22, 23, 24, 26, 30]);
     default:
-      return takeColumns([1, 2, 3, 4, 9, 18, 20, 24, 26, 31]);
+      return takeColumns([1, 2, 3, 4, 9, 18, 20, 23, 25, 30]);
   }
 }
 
@@ -472,3 +432,28 @@ function formatPrice(price: number) {
 }
 
 export { getColumns };
+
+// {
+// 23
+// Header: 'Certificate',
+// id: 'certificate',
+// accessor: 'state.certificate',
+//   accessor: ({ ufTaskWebdavFiles: files, state }: any) => {
+//     const stages = [
+//       '7. Test-report ready',
+//       '8. Certificate ready',
+//       '9. Ended',
+//     ];
+//     if (stages.includes(state.stage)) {
+//       return files.map((file: any, key: number) => (
+//         <div key={key}>
+//           <a href={`https://xmtextiles.bitrix24.ru${file.DOWNLOAD_URL}`}>
+//             {file.NAME}
+//           </a>
+//         </div>
+//       ));
+//     }
+//     return state.certificate;
+//   },
+//   minWidth: 300,
+// },
