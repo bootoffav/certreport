@@ -1,12 +1,14 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
+import Loader from 'react-loader-spinner';
 import { Grid, Table, Icon } from 'tabler-react';
-import { ClientStorage } from '../../ClientStorage/ClientStorage';
+import { getItemAssociatedTasks } from '../../B24/B24';
 import { getTaskParamLabel } from '../../Task/Task';
 import './ItemInCertifications.css';
 import { GoBackOrHomeButton } from '../NaviButton';
 import { pullSpecificFiles } from '../FileManagement/FileManagement';
 import CacheManager from '../../CacheManager';
+import { Items } from '../../Item/Item';
 
 interface IItemProps {
   item: string;
@@ -25,17 +27,15 @@ const resume: {
 function ItemInCertifications({ item }: IItemProps) {
   item = decodeURIComponent(item);
   const [tasks, setTasks] = useState<any>([]);
+  const [isUpdated, setIsUpdated] = useState(false);
 
   useEffect(() => {
-    ClientStorage.getSpecificItem(item, 'products')
-      .then(({ tasks }: any) => {
-        setTasks(tasks);
-        return tasks;
-      })
-      .then((tasks) => CacheManager.updateItem(item, tasks))
-      .then(({ tasks }: any) => {
-        setTasks(tasks);
-      });
+    getItemAssociatedTasks(item).then((tasks) => {
+      const { items } = Items(tasks);
+      setTasks(items[0].tasks);
+      setIsUpdated(true);
+      CacheManager.updateItem(items);
+    });
   }, [item]);
 
   const parameters = [
@@ -52,9 +52,12 @@ function ItemInCertifications({ item }: IItemProps) {
   return (
     <>
       <Grid.Col width="8" offset="2" className="my-4">
-        <p className="text-center text-uppercase item-name">
-          {item} in certifications
-        </p>
+        <div className="d-flex justify-content-center">
+          <p className="text-center text-uppercase item-name mr-2">
+            {item} in certifications
+          </p>
+          {isUpdated ? '' : <Loader type="Oval" color="#5B7BE7" width={20} />}
+        </div>
       </Grid.Col>
       <Grid.Col width="8" offset="2" className="mb-2">
         <span className="itemsCommonParameters">

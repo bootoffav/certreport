@@ -9,6 +9,7 @@ import {
   getAttachedFiles,
   removeFileFromDisk,
 } from './DiskMethods';
+import { rawTaskProcessor } from '../workers/dataFetcher';
 export const creatorId = process.env.REACT_APP_B24_USER_ID;
 export const tag = process.env.REACT_APP_TAG;
 export const responsibleId = process.env.REACT_APP_B24_RESPONSIBLE_ID;
@@ -249,7 +250,7 @@ async function getTask(id: string | undefined) {
     throw new Error('id is undefined');
   }
 
-  const test = await fetch(
+  const task = await fetch(
     `${mainUrl}/${creatorId}/${webhookKey}/tasks.task.get?` +
       qs.stringify({
         taskId: id,
@@ -278,7 +279,22 @@ async function getTask(id: string | undefined) {
       };
     });
 
-  return test;
+  return task;
+}
+
+async function getItemAssociatedTasks(item: string) {
+  const { result } = await fetch(
+    `${mainUrl}/${creatorId}/${webhookKey}/tasks.task.list?` +
+      qs.stringify({
+        order: { ID: 'desc' },
+        filter: { TAG: item },
+        select: ['ID', 'TITLE', 'DESCRIPTION', 'UF_CRM_TASK', 'CREATED_DATE'],
+      })
+  )
+    .then((res) => res.json())
+    .then(step);
+
+  return rawTaskProcessor(result.tasks);
 }
 
 async function get_standards() {
@@ -376,6 +392,7 @@ export {
   get_products,
   createTask,
   getTask,
+  getItemAssociatedTasks,
   fileUpload,
   updateTask,
   detachFileFromTask,

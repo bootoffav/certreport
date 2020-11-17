@@ -13,6 +13,27 @@ const step = (json: any) => {
   return json.result;
 };
 
+function rawTaskProcessor(rawTasks: any) {
+  const tasks: any = [];
+
+  for (let i = 0; i < rawTasks.length; i++) {
+    const task = {
+      ...new Task({
+        description: rawTasks[i].description,
+        ufCrmTask: rawTasks[i].ufCrmTask,
+      }),
+      id: rawTasks[i].id,
+      title: rawTasks[i].title,
+      createdDate: rawTasks[i].createdDate,
+      ufTaskWebdavFiles: [],
+    };
+
+    tasks.push(task);
+  }
+
+  return tasks;
+}
+
 export async function getTasks() {
   let rawTasks: {
     id: string;
@@ -21,7 +42,7 @@ export async function getTasks() {
     ufCrmTask: [];
     createdDate: string;
   }[] = [];
-  const tasks: any = [];
+
   do {
     rawTasks = rawTasks.concat(
       await fetch(
@@ -44,20 +65,8 @@ export async function getTasks() {
     );
   } while (start !== undefined);
 
-  for (let i = 0; i < rawTasks.length; i++) {
-    const task = {
-      ...new Task({
-        description: rawTasks[i].description,
-        ufCrmTask: rawTasks[i].ufCrmTask,
-      }),
-      id: rawTasks[i].id,
-      title: rawTasks[i].title,
-      createdDate: rawTasks[i].createdDate,
-      ufTaskWebdavFiles: [],
-    };
-
-    tasks.push(task);
-  }
-
+  const tasks = rawTaskProcessor(rawTasks);
   postMessage(tasks);
 }
+
+export { rawTaskProcessor };
