@@ -250,7 +250,7 @@ async function getTask(id: string | undefined) {
     throw new Error('id is undefined');
   }
 
-  const task = await fetch(
+  return await fetch(
     `${mainUrl}/${creatorId}/${webhookKey}/tasks.task.get?` +
       qs.stringify({
         taskId: id,
@@ -266,20 +266,10 @@ async function getTask(id: string | undefined) {
   )
     .then((rsp) => rsp.json())
     .then(async ({ result }: any) => {
-      const { description, ufCrmTask, id, title, createdDate } = result.task;
-      return {
-        ...new Task({
-          description,
-          ufCrmTask,
-        }),
-        id,
-        title,
-        createdDate,
-        ufTaskWebdavFiles: await getAttachedFiles(id),
-      };
+      const [task] = rawTaskProcessor([result.task]);
+      task.ufTaskWebdavFiles = await getAttachedFiles(task.id);
+      return task;
     });
-
-  return task;
 }
 
 async function getItemAssociatedTasks(item: string) {
@@ -294,7 +284,12 @@ async function getItemAssociatedTasks(item: string) {
     .then((res) => res.json())
     .then(step);
 
-  return rawTaskProcessor(result.tasks);
+  const tasks = rawTaskProcessor(result.tasks);
+  for (let i = 0; i < tasks.length; i++) {
+    tasks[i].ufTaskWebdavFiles = await getAttachedFiles(tasks[i].id);
+  }
+
+  return tasks;
 }
 
 async function get_standards() {
