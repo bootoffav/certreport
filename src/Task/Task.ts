@@ -5,6 +5,8 @@ const dataSeparator = '-------------------------------------------------';
 
 enum Stage {
   '00. Paused',
+  '01. Canceled',
+  '02. Estimate',
   '0. Sample to be prepared',
   '1. Sample Sent',
   '2. Sample Arrived',
@@ -282,9 +284,6 @@ class Task {
 
   getNextActionDate() {
     switch (this.state.stage) {
-      case '00. Paused':
-      case '6. Pre-treatment done':
-        break;
       case '0. Sample to be prepared':
         return this.state['sentOn'] || 'No date';
       case '1. Sample Sent':
@@ -301,8 +300,6 @@ class Task {
         return this.state['certReceivedOnPlanDate'] || 'No date';
       case '8. Certificate ready':
         return '-' || 'No date';
-      case '9. Ended':
-        break;
     }
 
     return 'No Date';

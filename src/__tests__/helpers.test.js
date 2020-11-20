@@ -52,6 +52,8 @@ it('checks printStage output', () => {
 
   // dropdown case
   expect(printStage('00. Paused', 'dropdown')).toBe('00.P - Paused');
+  expect(printStage('01. Canceled', 'dropdown')).toBe('01.C - Canceled');
+  expect(printStage('02. Estimate', 'dropdown')).toBe('02.E - Estimate');
   expect(printStage('0. Sample to be prepared', 'dropdown')).toBe(
     '0.STP - Sample to be prepared'
   );

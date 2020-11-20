@@ -31,6 +31,8 @@ const StageFilter: React.FunctionComponent<{
 
   const stages = [
     '00. Paused',
+    '01. Canceled',
+    '02. Estimate',
     '0. Sample to be prepared',
     '1. Sample Sent',
     '2. Sample Arrived',

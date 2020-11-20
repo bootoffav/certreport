@@ -395,6 +395,8 @@ function getColumns(totalPrice: number, stage?: string) {
 
   switch (stage) {
     case '00. Paused':
+    case '01. Canceled':
+    case '02. Estimate':
       return takeColumns([1, 2, 3, 9, 10, 18, 20, 26, 30]);
     case '0. Sample to be prepared':
       return takeColumns([1, 2, 3, 9, 10, 18, 29, 30]);

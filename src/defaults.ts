@@ -26,6 +26,8 @@ let selectOptions: {
   ],
   stages: [
     { value: '00. Paused', label: '00. Paused' },
+    { value: '01. Canceled', label: '01. Canceled' },
+    { value: '02. Estimate', label: '02. Estimate' },
     { value: '0. Sample to be prepared', label: '0. Sample to be prepared' },
     { value: '1. Sample Sent', label: '1. Sample Sent' },
     { value: '2. Sample Arrived', label: '2. Sample Arrived' },

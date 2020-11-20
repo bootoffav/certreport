@@ -64,6 +64,8 @@ const StageShortNames: {
   [key: string]: string;
 } = {
   '00. Paused': '00.P',
+  '01. Canceled': '01.C',
+  '02. Estimate': '02.E',
   '0. Sample to be prepared': '0.STP',
   '1. Sample Sent': '1.SS',
   '2. Sample Arrived': '2.SA',

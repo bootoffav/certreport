@@ -22,6 +22,8 @@ class StateAdapter {
       '5. Testing is started': 'testFinishedOnPlanDate',
       '7. Test-report ready': 'certReceivedOnPlanDate',
       '00. Paused': '',
+      '01. Canceled': '',
+      '02. Estimate': '',
       '6. Pre-treatment done': '',
       '8. Certificate ready': '',
     };
