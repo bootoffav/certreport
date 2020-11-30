@@ -1,3 +1,4 @@
+import React from 'react';
 import { Icon } from 'tabler-react';
 import { DB } from '../../DBManager';
 import { useState, useEffect } from 'react';
