@@ -51,21 +51,25 @@ function ItemInCertifications({ item }: IItemProps) {
 
   return (
     <>
-      <Grid.Col width="8" offset="2" className="my-4">
+      <Grid.Col width="8" offset="2">
         <div className="d-flex justify-content-center">
-          <p className="text-center text-uppercase item-name mr-2">
+          <span className="text-center text-uppercase item-name mr-2">
             {item} in certifications
-          </p>
-          {isUpdated ? '' : <Loader type="Oval" color="#5B7BE7" width={20} />}
+          </span>
+          {isUpdated ? (
+            ''
+          ) : (
+            <Loader type="Oval" color="#5B7BE7" height={35} width={20} />
+          )}
         </div>
       </Grid.Col>
-      <Grid.Col width="8" offset="2" className="mb-2">
+      <Grid.Col width="8">
         <span className="itemsCommonParameters">
           <span className="font-weight-bold">Product: </span>
           {tasks.length ? tasks[0].state.product : ''}
         </span>
       </Grid.Col>
-      <Grid.Col width="8" offset="2" className="mb-4">
+      <Grid.Col width="8" className="mb-1">
         <span className="itemsCommonParameters">
           <span className="font-weight-bold">Code:</span>{' '}
           {tasks.length ? tasks[0].state.code : ''}
