@@ -1,119 +1,34 @@
 import * as React from 'react';
-import { Icon } from 'tabler-react';
+import { StandardResult } from './StandardResult';
+import { Price } from '../Form/FormFields';
+import { useState, useEffect } from 'react';
+import { DB } from '../../DBManager';
+import { EN11612Detail } from './EN11612Detail';
 import './Standards.css';
 
-type IEN11612Detail = {
-  A1?: 'pass' | 'fail';
-  A2?: 'pass' | 'fail';
-  B?: 'pass' | 'fail';
-  C?: 'pass' | 'fail';
-  D?: 'pass' | 'fail';
-  E?: 'pass' | 'fail';
-  F?: 'pass' | 'fail';
-  [key: string]: any;
-};
-
-class EN11612Detail extends React.Component<{
-  updateParent: (state: IEN11612Detail) => void;
-}> {
-  blocks = ['A1', 'A2', 'B', 'C', 'D', 'E', 'F'];
-
-  onChange = ({ currentTarget: { name, dataset } }: any) => {
-    const { updateParent, ...noUpdateParent } = this.props;
-    this.props.updateParent({
-      ...noUpdateParent,
-      [name]: dataset['result'],
-    });
-  };
-
-  render() {
-    return (
-      <div className="d-flex justify-content-between">
-        {this.blocks.map((name) => {
-          return (
-            <div key={name} className="flex-fill d-flex flex-column">
-              <p className="text-center">
-                <span className="m-1">{name}</span>
-              </p>
-              <div className="d-flex justify-content-center">
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name={name}
-                    data-result="fail"
-                    // @ts-ignore
-                    checked={this.props[name] === 'fail'}
-                    onChange={this.onChange}
-                  />
-                  <label className="form-check-label">
-                    <Icon
-                      prefix="fe"
-                      width="60"
-                      className="redIcon"
-                      name="thumbs-down"
-                    />
-                  </label>
-                </div>
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name={name}
-                    data-result="pass"
-                    // @ts-ignore
-                    checked={this.props[name] === 'pass'}
-                    onChange={this.onChange}
-                  />
-                  <label className="form-check-label">
-                    <Icon
-                      prefix="fe"
-                      width="60"
-                      className="greenIcon"
-                      name="thumbs-up"
-                    />
-                  </label>
-                </div>
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name={name}
-                    data-result="partly"
-                    // @ts-ignore
-                    checked={this.props[name] === 'partly'}
-                    onChange={this.onChange}
-                  />
-                  <label className="form-check-label">
-                    <Icon
-                      prefix="fe"
-                      width="60"
-                      className="yellowIcon"
-                      name="alert-circle"
-                    />
-                  </label>
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    );
-  }
-}
-
 type StandardsProps = {
-  updateParent: (state: IEN11612Detail) => void;
-  standards: string;
-  standardsResult: {
-    [key: string]: string;
-  };
-  resultChange: (el: React.SyntheticEvent) => void;
-  EN11612Detail?: any;
+  initStandards: string[];
+  taskId: string;
+  setState: any;
 };
 
 function Standards(props: StandardsProps) {
-  if (props.standards === '') {
+  let standards: any;
+  let setStandards: any;
+  const initSt: any = {};
+  for (let st of props.initStandards) {
+    initSt[st] = {};
+  }
+  [standards, setStandards] = useState(initSt);
+
+  useEffect(() => {
+    props.taskId &&
+      DB.getStandards(props.taskId).then((newSt) => {
+        setStandards((state: any) => ({ ...state, ...newSt }));
+      });
+  }, [props.taskId, setStandards]);
+
+  if (standards === '') {
     return (
       <div className="d-flex justify-content-center align-items-center h-100">
         <h5 className="text-uppercase">No standard chosen</h5>
@@ -121,7 +36,48 @@ function Standards(props: StandardsProps) {
     );
   }
 
-  const standards = props.standards.split(', ');
+  const updateStandardPrice = ({ standard, price }: any) => {
+    DB.updateInstance(props.taskId, {
+      standards: {
+        [standard]: {
+          price,
+        },
+      },
+    });
+
+    // update locally
+    setStandards((state: any) => {
+      const newState = { ...state };
+      newState[standard].price = price;
+      return newState;
+    });
+  };
+
+  const updateStandardResult = ({ standard, result, reset }: any) => {
+    // update in DB
+    DB.updateInstance(props.taskId, {
+      standards: {
+        [standard]: {
+          result: reset ? null : result,
+        },
+      },
+    });
+
+    // update locally
+    setStandards((state: any) => {
+      const newState = {
+        ...state,
+        [standard]: {
+          ...state[standard],
+        },
+      };
+      reset
+        ? delete newState[standard].result
+        : (newState[standard].result = result);
+
+      return newState;
+    });
+  };
 
   /**
    * Return JSX element for standard in form of accordion
@@ -130,94 +86,46 @@ function Standards(props: StandardsProps) {
    * @returns {JSX}
    */
   function renderStandard(standard: string, i: any) {
-    const EN11612 = standard === 'EN 11612' ? props.EN11612Detail : {};
     const id = standard.replace(/\s/g, '');
     return (
       <div key={i}>
         <div className="card">
           <div className="card-header" id={`heading_${id}`}>
-            <div className="d-flex">
-              <button
-                className="btn btn-link"
-                onClick={(e) => e.preventDefault()}
-                data-toggle="collapse"
-                data-target={`#collapse_${id}`}
-                aria-expanded="true"
-                aria-controls={`collapse_${id}`}
-              >
-                {standard}
-              </button>
-              <div className="ml-auto form-check form-check-inline">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  checked={props.standardsResult[standard] === 'fail'}
-                  onChange={props.resultChange}
-                  name={`radioOptions${id}`}
-                  data-standard={standard}
-                  id={`radioFail${id}`}
-                  value="fail"
+            <div className="container-fluid row align-items-center">
+              <div className="col-6">
+                <button
+                  className="btn btn-link"
+                  onClick={(e) => e.preventDefault()}
+                  data-toggle="collapse"
+                  data-target={`#collapse_${id}`}
+                  aria-expanded="true"
+                  aria-controls={`collapse_${id}`}
+                >
+                  {standard}
+                </button>
+                <StandardResult
+                  result={standards[standard].result}
+                  standard={standard}
+                  reset={() => updateStandardResult({ standard, reset: true })}
+                  updateResult={(result: string) =>
+                    updateStandardResult({
+                      standard,
+                      result,
+                    })
+                  }
+                  id={id}
                 />
-                <label className="form-check-label">
-                  <Icon
-                    prefix="fe"
-                    width="60"
-                    className="redIcon"
-                    name="thumbs-down"
-                  />
-                </label>
               </div>
-              <div className="form-check form-check-inline">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  checked={props.standardsResult[standard] === 'pass'}
-                  onChange={props.resultChange}
-                  name={`radioOptions${id}`}
-                  data-standard={standard}
-                  id={`radioPass${id}`}
-                  value="pass"
+              <div className="col-3">
+                <Price
+                  value={standards[standard].price}
+                  id="price"
+                  label="Price"
+                  handleChange={(e: any) => {
+                    updateStandardPrice({ standard, price: +e.target.value });
+                  }}
                 />
-                <label className="form-check-label">
-                  <Icon
-                    prefix="fe"
-                    width="60"
-                    className="greenIcon"
-                    name="thumbs-up"
-                  />
-                </label>
               </div>
-              <div className="form-check form-check-inline">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  checked={props.standardsResult[standard] === 'partly'}
-                  onChange={props.resultChange}
-                  name={`radioOptions${id}`}
-                  data-standard={standard}
-                  id={`radioPartly${id}`}
-                  value="partly"
-                />
-                <label className="form-check-label">
-                  <Icon
-                    prefix="fe"
-                    width="60"
-                    className="yellowIcon"
-                    name="alert-circle"
-                  />
-                </label>
-              </div>
-              <button
-                type="button"
-                className="btn btn-sm btn-link btn-reset"
-                data-standard={standard}
-                onClick={(e) => {
-                  props.resultChange(e);
-                  for (let p in EN11612) EN11612[p] = null;
-                }}
-              >
-                Reset
-              </button>
             </div>
           </div>
           <div
@@ -228,7 +136,7 @@ function Standards(props: StandardsProps) {
           >
             <div className="card-body">
               {standard === 'EN 11612' && (
-                <EN11612Detail {...EN11612} updateParent={props.updateParent} />
+                <EN11612Detail taskId={props.taskId} />
               )}
             </div>
           </div>
@@ -239,7 +147,7 @@ function Standards(props: StandardsProps) {
 
   return (
     <div className="accordion" id="accordionStandards">
-      {standards.map(renderStandard)}
+      {Object.keys(standards).map(renderStandard)}
     </div>
   );
 }

@@ -49,28 +49,35 @@ const BaseInput = (props: {
   </div>
 );
 
-const Price: React.FunctionComponent<{
+interface IPriceProps {
   id: string;
   value: string;
   label: string;
   handleChange: (e: any) => void;
-}> = (props) => (
-  <div className="form-group">
-    {props.label}
-    <div className="input-group">
-      <div className="input-group-prepend">
-        <span className="input-group-text">€</span>
+}
+
+function Price(props: IPriceProps) {
+  return (
+    <div className="form-group">
+      {props.label}
+      <div className="input-group">
+        <div className="input-group-prepend">
+          <span className="input-group-text">€</span>
+        </div>
+        <input
+          type="number"
+          className="form-control"
+          id={props.id}
+          value={props.value}
+          onChange={(e) => {
+            e.target.value.replace(',', '.');
+            props.handleChange(e);
+          }}
+        />
       </div>
-      <input
-        type="number"
-        className="form-control"
-        id={props.id}
-        value={props.value}
-        onChange={props.handleChange}
-      />
     </div>
-  </div>
-);
+  );
+}
 
 const Paid = (props: any) => (
   <div className="form-group mx-2">

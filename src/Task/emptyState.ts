@@ -4,7 +4,6 @@ export interface IState {
   };
   attachedFiles: any;
   DBState: any;
-  EN11612Detail?: any;
   link: string;
   news: string;
   testingTime: string;
@@ -68,7 +67,6 @@ const emptyState: IState = {
     otherStandard2: 'According to Standard Mandotory Test Requirement',
   },
   attachedFiles: [],
-  EN11612Detail: {},
   resume: undefined,
   link: '',
   paid: false,

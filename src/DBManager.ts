@@ -15,17 +15,41 @@ class DB {
     });
   }
 
+  static getStandards(taskId: string) {
+    return DB.client()
+      .query(
+        q.Select(
+          ['data', 'standards'],
+          q.Get(q.Ref(q.Collection(this.fdbCollection), taskId))
+        )
+      )
+      .catch((e) => ({}));
+  }
+
+  static getStandardDetail(taskId: string, standard: string) {
+    return DB.client().query(
+      q.Select(
+        ['data', `${standard}Detail`],
+        q.Get(q.Ref(q.Collection(this.fdbCollection), taskId))
+      )
+    );
+  }
+
   static async getData(taskId: string) {
     const data = await DB.client()
-      .query(q.Get(q.Ref(q.Collection(this.fdbCollection), taskId)))
+      .query(
+        q.Select(
+          ['data'],
+          q.Get(q.Ref(q.Collection(this.fdbCollection), taskId))
+        )
+      )
       .then((res: any) => ({
-        ...res.data,
+        ...res,
         exists: true,
       }))
       .catch(async (error) => {
         return {
           ...emptyState.DBState,
-          EN11612Detail: emptyState.EN11612Detail,
           exists: false,
         };
       });
@@ -48,7 +72,6 @@ class DB {
         },
       })
     );
-    // return taskId;
   }
 
   static updateInstance(taskId: string, state: any) {
@@ -57,7 +80,6 @@ class DB {
         data: { ...state },
       })
     );
-    // return taskId;
   }
 }
 

@@ -93,9 +93,11 @@ class StateAdapter {
   get standardsWithResults(): string {
     let standards: string = '';
 
+    // add standards with results
     for (const [st, res] of Object.entries(this.standardsResult)) {
       standards += `${st} (${res}), `;
     }
+    // add standards without results
     for (let st of this.standards.split(', ')) {
       if (!Object.keys(this.standardsResult).includes(st)) {
         standards += `${st}, `;

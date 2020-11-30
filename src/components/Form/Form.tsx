@@ -14,14 +14,12 @@ import Standards from '../Standards/Standards';
 import { FileManagement } from '../FileManagement/FileManagement';
 import { FabricApplicationForm } from './FabricApplicationForm';
 import { DB } from '../../DBManager';
-import { removeEmptyProps } from '../../helpers';
 import { TabbedCard, Tab, Dimmer, Icon, Button } from 'tabler-react';
 import CacheManager from '../../CacheManager';
 import { GoBackOrHomeButton } from '../NaviButton';
 
 interface IFormState extends IState {
   requestStatus: Status;
-  EN11612Detail?: any;
   hasError?: boolean;
   existsInDB?: boolean;
 }
@@ -57,8 +55,7 @@ class Form extends React.Component<IFormProps> {
     if (this.task_id) {
       this.setState({ requestStatus: Status.Loading });
       const dataFromDB = await DB.getData(this.task_id).then(
-        ({ EN11612Detail, exists, ...DBState }: any) => ({
-          EN11612Detail,
+        ({ exists, ...DBState }: any) => ({
           DBState,
           exists,
         })
@@ -71,7 +68,6 @@ class Form extends React.Component<IFormProps> {
             attachedFiles: r.ufTaskWebdavFiles,
             link: `[URL=certreport.xmtextiles.com/edit/${this.task_id}/]this task[/URL]`,
             DBState: dataFromDB.DBState,
-            EN11612Detail: dataFromDB.EN11612Detail,
             existsInDB: dataFromDB.exists,
             requestStatus: Status.FillingForm,
           });
@@ -109,10 +105,7 @@ class Form extends React.Component<IFormProps> {
     });
   };
 
-  handleChange = (e: any) =>
-    ['price', 'price2'].includes(e.target.id)
-      ? this.setState({ [e.target.id]: e.target.value.replace(',', '.') })
-      : this.setState({ [e.target.id]: e.target.value });
+  handleChange = (e: any) => this.setState({ [e.target.id]: e.target.value });
 
   async handleCert(e: any) {
     e.preventDefault();
@@ -138,7 +131,6 @@ class Form extends React.Component<IFormProps> {
       this.state.existsInDB
         ? DB.updateInstance(taskId, {
             ...this.state.DBState,
-            EN11612Detail: this.state.EN11612Detail,
           })
             .then(this.successfullySubmitted)
             .catch(this.unsuccessfullySubmitted)
@@ -661,18 +653,9 @@ class Form extends React.Component<IFormProps> {
   renderStandards = () => (
     <Dimmer active={this.state.requestStatus !== Status.FillingForm} loader>
       <Standards
-        standards={this.state.standards}
-        standardsResult={this.state.standardsResult}
-        EN11612Detail={this.state.EN11612Detail}
-        updateParent={(state: any) => this.setState({ EN11612Detail: state })}
-        resultChange={({ currentTarget }: any) => {
-          const standardsResult = {
-            ...this.state.standardsResult,
-            [currentTarget.dataset.standard]: currentTarget.value,
-          };
-          removeEmptyProps(standardsResult);
-          this.setState({ standardsResult });
-        }}
+        initStandards={this.state.standards.split(', ')}
+        taskId={this.task_id || ''}
+        setState={this.setState.bind(this)}
       />
     </Dimmer>
   );
