@@ -120,7 +120,7 @@ function Standards(props: StandardsProps) {
                 <Price
                   value={standards[standard].price}
                   id="price"
-                  label="Price"
+                  label=""
                   handleChange={(e: any) => {
                     updateStandardPrice({ standard, price: +e.target.value });
                   }}

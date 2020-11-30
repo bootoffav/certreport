@@ -9,12 +9,12 @@ import Notification, { Status } from '../Notification/Notification';
 import SerialNumber from '../SerialNumber/SerialNumber';
 import { selectOptions } from '../../defaults';
 import { IState, emptyState } from '../../Task/emptyState';
-import { getTaskParamLabel } from '../../Task/Task';
 import Standards from '../Standards/Standards';
 import { FileManagement } from '../FileManagement/FileManagement';
 import { FabricApplicationForm } from './FabricApplicationForm';
 import { DB } from '../../DBManager';
-import { TabbedCard, Tab, Dimmer, Icon, Button } from 'tabler-react';
+import { TabbedCard, Tab, Dimmer, Button } from 'tabler-react';
+import { PreTreatment1 } from './PreTreatment1';
 import CacheManager from '../../CacheManager';
 import { GoBackOrHomeButton } from '../NaviButton';
 
@@ -106,6 +106,9 @@ class Form extends React.Component<IFormProps> {
   };
 
   handleChange = (e: any) => this.setState({ [e.target.id]: e.target.value });
+
+  handlePreTreatment1Change = (value: string) =>
+    this.setState({ pretreatment1Result: value });
 
   async handleCert(e: any) {
     e.preventDefault();
@@ -377,76 +380,12 @@ class Form extends React.Component<IFormProps> {
       </div>
       <div className="d-flex">
         <div className="w-50 mr-2">
-          {getTaskParamLabel('pretreatment1')}
-          <div className="input-group">
-            <input
-              type="text"
-              required={true}
-              className="form-control"
-              id="pretreatment1"
-              value={this.state.pretreatment1}
-              onChange={this.handleChange}
-            />
-            <div className="input-group-append">
-              <div className="input-group-text pretreatment1Result">
-                <div className="form-check form-check-inline">
-                  <input
-                    type="radio"
-                    name="pretreatment1Result"
-                    id="pretreatment1Fail"
-                    checked={this.state.pretreatment1Result === 'fail'}
-                    onChange={() =>
-                      this.setState({
-                        pretreatment1Result: 'fail',
-                      })
-                    }
-                  />
-                  <label
-                    className="ml-2 form-check-label"
-                    htmlFor="pretreatment1Fail"
-                  >
-                    <Icon
-                      prefix="fe"
-                      width="60"
-                      className="redIcon"
-                      name="thumbs-down"
-                    />
-                  </label>
-                </div>
-                <div className="form-check form-check-inline">
-                  <input
-                    type="radio"
-                    name="pretreatment1Result"
-                    id="pretreatment1Pass"
-                    checked={this.state.pretreatment1Result === 'pass'}
-                    onChange={() =>
-                      this.setState({
-                        pretreatment1Result: 'pass',
-                      })
-                    }
-                  />
-                  <label
-                    className="form-check-label ml-2"
-                    htmlFor="pretreatment1Pass"
-                  >
-                    <Icon
-                      prefix="fe"
-                      width="60"
-                      className="greenIcon"
-                      name="thumbs-up"
-                    />
-                  </label>
-                </div>
-                <button
-                  type="button"
-                  className="btn btn-sm btn-link btn-reset"
-                  onClick={() => this.setState({ pretreatment1Result: '' })}
-                >
-                  Reset
-                </button>
-              </div>
-            </div>
-          </div>
+          <PreTreatment1
+            pretreatment1={this.state.pretreatment1}
+            result={this.state.pretreatment1Result}
+            handleChange={this.handleChange}
+            resultChange={this.handlePreTreatment1Change}
+          />
         </div>
         <BaseInput
           value={this.state.pretreatment2}
@@ -656,6 +595,12 @@ class Form extends React.Component<IFormProps> {
         initStandards={this.state.standards.split(', ')}
         taskId={this.task_id || ''}
         setState={this.setState.bind(this)}
+      />
+      <PreTreatment1
+        pretreatment1={this.state.pretreatment1}
+        result={this.state.pretreatment1Result}
+        handleChange={this.handleChange}
+        resultChange={this.handlePreTreatment1Change}
       />
     </Dimmer>
   );
