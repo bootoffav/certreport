@@ -4,6 +4,7 @@ import { Price } from '../Form/FormFields';
 import { useState, useEffect } from 'react';
 import { DB } from '../../DBManager';
 import { EN11612Detail } from './EN11612Detail';
+import { Requirements } from './Requirements';
 import './Standards.css';
 
 type StandardsProps = {
@@ -135,6 +136,7 @@ function Standards(props: StandardsProps) {
             data-parent="#accordionStandards"
           >
             <div className="card-body">
+              <Requirements standard={standard} />
               {standard === 'EN 11612' && (
                 <EN11612Detail taskId={props.taskId} />
               )}

@@ -1,5 +1,6 @@
 import faunadb, { query as q } from 'faunadb';
 import { emptyState } from './Task/emptyState';
+import type { IRequirement } from './components/Standards/Requirements';
 
 class DB {
   static fdbCollection = process.env.REACT_APP_FAUNADB_CLASS || 'aitex';
@@ -24,6 +25,21 @@ class DB {
         )
       )
       .catch((e) => ({}));
+  }
+
+  static async getRequirementsForStandard(
+    standard: string
+  ): Promise<IRequirement[]> {
+    return await DB.client().query(
+      q.Select(
+        'data',
+        q.Map(
+          q.Paginate(q.Match(q.Index('standard_name'), standard)),
+          q.Lambda('standard', q.Select('data', q.Get(q.Var('standard'))))
+        )
+      )
+    );
+    // .catch(() => []);
   }
 
   static getStandardDetail(taskId: string, standard: string) {

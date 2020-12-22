@@ -16,6 +16,7 @@ import { DB } from '../../DBManager';
 import { TabbedCard, Tab, Dimmer, Button } from 'tabler-react';
 import { PreTreatment1 } from './PreTreatment1';
 import CacheManager from '../../CacheManager';
+import { localizePrice } from '../../helpers';
 import { GoBackOrHomeButton } from '../NaviButton';
 
 interface IFormState extends IState {
@@ -579,11 +580,7 @@ class Form extends React.Component<IFormProps> {
 
       <div className="col-10 offset-1">
         <p className="text-right font-weight-bold">
-          Total:{' '}
-          {(+this.state.price + +this.state.price2).toLocaleString('ru-RU', {
-            style: 'currency',
-            currency: 'EUR',
-          })}
+          Total: {localizePrice(+this.state.price + +this.state.price2)}
         </p>
       </div>
     </Dimmer>

@@ -108,4 +108,19 @@ function isMainHeaderAllowed(pathname: string): boolean {
   return false;
 }
 
-export { countTotalPrice, printStage, shortenTitle, isMainHeaderAllowed };
+function localizePrice(number: number): string {
+  return number.toLocaleString('ru-RU', {
+    style: 'currency',
+    maximumFractionDigits: 2,
+    minimumFractionDigits: 2,
+    currency: 'EUR',
+  });
+}
+
+export {
+  countTotalPrice,
+  printStage,
+  shortenTitle,
+  isMainHeaderAllowed,
+  localizePrice,
+};
