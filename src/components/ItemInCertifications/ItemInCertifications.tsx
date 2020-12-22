@@ -47,6 +47,7 @@ function ItemInCertifications({ item }: IItemProps) {
     'resume',
     'testReport',
     'certificate',
+    'rem',
   ];
 
   return (

@@ -56,8 +56,9 @@ class Form extends React.Component<IFormProps> {
     if (this.task_id) {
       this.setState({ requestStatus: Status.Loading });
       const dataFromDB = await DB.getData(this.task_id).then(
-        ({ exists, ...DBState }: any) => ({
+        ({ exists, rem, ...DBState }: any) => ({
           DBState,
+          rem,
           exists,
         })
       );
@@ -70,6 +71,7 @@ class Form extends React.Component<IFormProps> {
             link: `[URL=certreport.xmtextiles.com/edit/${this.task_id}/]this task[/URL]`,
             DBState: dataFromDB.DBState,
             existsInDB: dataFromDB.exists,
+            rem: dataFromDB.rem,
             requestStatus: Status.FillingForm,
           });
         })
@@ -134,6 +136,7 @@ class Form extends React.Component<IFormProps> {
       // update in FaunaDB
       this.state.existsInDB
         ? DB.updateInstance(taskId, {
+            rem: this.state.rem,
             ...this.state.DBState,
           })
             .then(this.successfullySubmitted)
@@ -421,6 +424,14 @@ class Form extends React.Component<IFormProps> {
           handleChange={this.handleChange}
         />
       </div>
+      <BaseInput
+        value={this.state.rem}
+        className="w-100"
+        id="rem"
+        required={false}
+        label="REM"
+        handleChange={this.handleChange}
+      />
     </Dimmer>
   );
 

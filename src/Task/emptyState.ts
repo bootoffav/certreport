@@ -53,6 +53,7 @@ export interface IState {
   comments: string;
   otherTextInDescription: string | null;
   resume: undefined | 'fail' | 'pass' | 'no sample' | 'partly';
+  rem?: string;
 }
 
 const emptyState: IState = {

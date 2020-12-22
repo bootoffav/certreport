@@ -387,6 +387,13 @@ function getColumns(totalPrice: number, stage?: string) {
         <span style={{ float: 'right' }}>{formatPrice(props.value)}</span>
       ),
     },
+    {
+      // 31
+      Header: 'REM',
+      id: 'rem',
+      accessor: 'state.rem',
+      minWidth: 90,
+    },
   ].map((column) => ({ ...column, style: { whiteSpace: 'unset' } }));
 
   const takeColumns = (columnPositions: number[]) => {
@@ -415,7 +422,7 @@ function getColumns(totalPrice: number, stage?: string) {
     case '8. Certificate ready':
       return takeColumns([1, 2, 3, 7, 9, 13, 17, 19, 22, 23, 24, 25, 26, 30]);
     case 'all':
-      return takeColumns([1, 2, 3, 4, 5, 9, 18, 20, 23, 24, 27, 30]);
+      return takeColumns([1, 2, 3, 4, 5, 9, 18, 20, 23, 24, 30, 31]);
     case 'overdue':
       return takeColumns([1, 2, 3, 4, 5, 6, 9, 19, 21, 22, 23, 24, 26, 30]);
     default:

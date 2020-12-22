@@ -30,7 +30,7 @@ const BaseInput = (props: {
   type?: string;
   placeholder?: string;
   id: string;
-  value: string;
+  value?: string;
   handleChange: (e: React.SyntheticEvent) => void;
 }) => (
   <div className={`${props.className ? props.className : ''}`}>

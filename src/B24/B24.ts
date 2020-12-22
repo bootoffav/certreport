@@ -146,6 +146,7 @@ function formTaskFields(state: any) {
       }` +
       `${state.stage && `[B]Stage:[/B] ${state.stage}\n`}` +
       `${state.news && `[B]News:[/B] ${state.news}\n`}` +
+      `${state.rem && `[B]REM:[/B] ${state.rem}\n`}` +
       `${
         state.resume === undefined ? '' : `[B]Resume:[/B] ${state.resume}\n`
       }` +
