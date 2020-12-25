@@ -71,7 +71,7 @@ class Form extends React.Component<IFormProps> {
             link: `[URL=certreport.xmtextiles.com/edit/${this.task_id}/]this task[/URL]`,
             DBState: dataFromDB.DBState,
             existsInDB: dataFromDB.exists,
-            rem: dataFromDB.rem,
+            rem: dataFromDB.rem || emptyState.rem,
             requestStatus: Status.FillingForm,
           });
         })

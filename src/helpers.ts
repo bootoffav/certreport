@@ -108,7 +108,7 @@ function isMainHeaderAllowed(pathname: string): boolean {
   return false;
 }
 
-function localizePrice(number: number): string {
+function localizePrice(number: number | ''): string {
   return number.toLocaleString('ru-RU', {
     style: 'currency',
     maximumFractionDigits: 2,

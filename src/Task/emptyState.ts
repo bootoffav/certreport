@@ -117,6 +117,7 @@ const emptyState: IState = {
   pretreatment2: '',
   pretreatment3: '',
   otherTextInDescription: '',
+  rem: '',
 };
 
 const brand = [
