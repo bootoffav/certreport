@@ -141,7 +141,10 @@ function Standards(props: StandardsProps) {
           >
             <div className="card-body">
               {standard === 'EN 11612' && (
-                <EN11612Detail taskId={props.taskId} />
+                <>
+                  <EN11612Detail taskId={props.taskId} />
+                  <hr />
+                </>
               )}
               <Requirements standard={standard} />
             </div>
