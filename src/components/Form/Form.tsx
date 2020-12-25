@@ -9,7 +9,7 @@ import Notification, { Status } from '../Notification/Notification';
 import SerialNumber from '../SerialNumber/SerialNumber';
 import { selectOptions } from '../../defaults';
 import { IState, emptyState } from '../../Task/emptyState';
-import Standards from '../Standards/Standards';
+import { Standards } from '../Standards/Standards';
 import { FileManagement } from '../FileManagement/FileManagement';
 import { FabricApplicationForm } from './FabricApplicationForm';
 import { DB } from '../../DBManager';

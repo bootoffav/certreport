@@ -6,12 +6,15 @@ import { DB } from '../../DBManager';
 import { EN11612Detail } from './EN11612Detail';
 import { Requirements } from './Requirements';
 import './Standards.css';
+import { localizePrice } from '../../helpers';
 
 type StandardsProps = {
   initStandards: string[];
   taskId: string;
   setState: any;
 };
+
+const StandardContext = React.createContext({} as any);
 
 function Standards(props: StandardsProps) {
   let standards: any;
@@ -21,6 +24,7 @@ function Standards(props: StandardsProps) {
     initSt[st] = {};
   }
   [standards, setStandards] = useState(initSt);
+  const [totalPrice, setTotalPrice] = useState<number | ''>('');
 
   useEffect(() => {
     props.taskId &&
@@ -136,10 +140,10 @@ function Standards(props: StandardsProps) {
             data-parent="#accordionStandards"
           >
             <div className="card-body">
-              <Requirements standard={standard} />
               {standard === 'EN 11612' && (
                 <EN11612Detail taskId={props.taskId} />
               )}
+              <Requirements standard={standard} />
             </div>
           </div>
         </div>
@@ -147,11 +151,31 @@ function Standards(props: StandardsProps) {
     );
   }
 
+  const context = {
+    setTotalPrice: () => {
+      const total = Array.from(document.querySelectorAll('.subTotal')).reduce(
+        (acc: number, el: any) =>
+          acc +
+          +el
+            .innerHTML!.replaceAll('&nbsp;', '')
+            .replaceAll(',', '.')
+            .slice(0, -1),
+        0
+      );
+      setTotalPrice(total);
+    },
+  };
+
   return (
-    <div className="accordion" id="accordionStandards">
-      {Object.keys(standards).map(renderStandard)}
-    </div>
+    <StandardContext.Provider value={context}>
+      <div className="float-right font-weight-bold">
+        Total price (all selected tests): {localizePrice(totalPrice)}
+      </div>
+      <div className="accordion" id="accordionStandards">
+        {Object.keys(standards).map(renderStandard)}
+      </div>
+    </StandardContext.Provider>
   );
 }
 
-export default Standards;
+export { StandardContext, Standards };

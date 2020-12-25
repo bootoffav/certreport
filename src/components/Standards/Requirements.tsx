@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { localizePrice } from '../../helpers';
 import { DB } from '../../DBManager';
+import { StandardContext } from './Standards';
 
 interface RequirementsProps {
   standard: string;
@@ -17,8 +18,12 @@ interface IRequirement {
 function Requirements(props: RequirementsProps) {
   const [requirements, setRequirements] = useState<IRequirement[]>([]);
   const [subTotal, setSubTotal] = useState(0);
+  const { setTotalPrice } = useContext(StandardContext);
   let jsx = <></>;
 
+  /**
+   * initial price request and setUp
+   */
   useEffect(() => {
     (async function () {
       DB.getRequirementsForStandard(props.standard).then((r) => {
@@ -29,6 +34,11 @@ function Requirements(props: RequirementsProps) {
       });
     })();
   }, [props.standard]);
+
+  /**
+   * performs updates on Total price
+   */
+  useEffect(setTotalPrice, [subTotal, setTotalPrice]);
 
   if (requirements.length) {
     jsx = (
@@ -46,7 +56,7 @@ function Requirements(props: RequirementsProps) {
         <tbody>
           {requirements.map((r) => {
             return (
-              <tr>
+              <tr key={r.requirement}>
                 <td>{r.requirement}</td>
                 <td>
                   <div className="form-check">
@@ -81,7 +91,7 @@ function Requirements(props: RequirementsProps) {
           })}
           <tr className="font-weight-bold">
             <td colSpan={5}>Subtotal</td>
-            <td>{localizePrice(subTotal)}</td>
+            <td className="subTotal">{localizePrice(subTotal)}</td>
           </tr>
         </tbody>
       </table>
@@ -103,16 +113,20 @@ function appleCheckboxChange(
   requirements: IRequirement[]
 ) {
   const tr = currentTarget.parentNode!.parentElement!.parentElement;
+  const index = requirements.findIndex(
+    (el) => el.requirement === (currentTarget as HTMLInputElement).value
+  );
+
   if ((currentTarget as HTMLInputElement).checked) {
     tr!.style.textDecoration = '';
     tr!.style.color = '';
+    requirements[index].exclude = false;
   } else {
     tr!.style.textDecoration = 'line-through';
     tr!.style.color = 'grey';
+    requirements[index].exclude = true;
   }
-  const requirement = (currentTarget as HTMLInputElement).value;
-  const index = requirements.findIndex((el) => el.requirement === requirement);
-  requirements[index].exclude = !requirements[index].exclude;
+
   return requirements;
 }
 
