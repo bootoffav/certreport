@@ -2,17 +2,21 @@ import { useState, useEffect, useContext } from 'react';
 import { localizePrice } from '../../helpers';
 import { DB } from '../../DBManager';
 import { StandardContext } from './Standards';
+import { CostChanger } from './CostChanger';
 
 interface RequirementsProps {
   standard: string;
 }
 
 interface IRequirement {
-  requirement: string;
-  testMethod: string;
-  cost: string;
-  standard: string;
-  exclude: boolean; // exclude by checkbox from subTotal
+  data: {
+    requirement: string;
+    testMethod: string;
+    cost: string;
+    standard: string;
+    exclude: boolean; // exclude by checkbox from subTotal
+  };
+  ref: any;
 }
 
 function Requirements(props: RequirementsProps) {
@@ -27,7 +31,7 @@ function Requirements(props: RequirementsProps) {
   useEffect(() => {
     (async function () {
       DB.getRequirementsForStandard(props.standard).then((r) => {
-        r.forEach((el) => (el.exclude = false));
+        r.forEach((el) => (el.data.exclude = false));
         setRequirements(r);
         const subTotal = countsubTotalWithDiscounts(r);
         setSubTotal(subTotal);
@@ -56,15 +60,15 @@ function Requirements(props: RequirementsProps) {
         <tbody>
           {requirements.map((r) => {
             return (
-              <tr key={r.requirement}>
-                <td>{r.requirement}</td>
+              <tr key={r.data.requirement}>
+                <td width={'45%'}>{r.data.requirement}</td>
                 <td>
                   <div className="form-check">
                     <input
                       className="form-check-input position-static"
                       type="checkbox"
                       defaultChecked
-                      value={r.requirement}
+                      value={r.data.requirement}
                       onChange={(e) => {
                         const r = appleCheckboxChange(e, requirements);
                         setRequirements(r);
@@ -74,18 +78,19 @@ function Requirements(props: RequirementsProps) {
                     />
                   </div>
                 </td>
-                <td>{r.testMethod}</td>
-                <td>{localizePrice(Number(r.cost))}</td>
-                <td>
+                <td width={'30%'}>{r.data.testMethod}</td>
+                <td width={'20%'}>
+                  <CostChanger cost={r.data.cost} refInDb={r.ref.value.id} />
+                </td>
+                <td width={'10%'}>
                   <input
                     disabled
                     type="number"
                     value={20}
-                    width={8}
                     onChange={(e) => console.log(e.target.value)}
                   />
                 </td>
-                <td>{localizePrice(countCostWithDiscount(r.cost, 20))}</td>
+                <td>{localizePrice(countCostWithDiscount(r.data.cost, 20))}</td>
               </tr>
             );
           })}
@@ -103,8 +108,8 @@ function Requirements(props: RequirementsProps) {
 
 function countsubTotalWithDiscounts(r: IRequirement[]): any {
   return r
-    .filter((el) => !el.exclude)
-    .map((el) => countCostWithDiscount(el.cost, 20))
+    .filter((el) => !el.data.exclude)
+    .map((el) => countCostWithDiscount(el.data.cost, 20))
     .reduce((cost: number, nextValue: number) => cost + nextValue, 0);
 }
 
@@ -114,17 +119,17 @@ function appleCheckboxChange(
 ) {
   const tr = currentTarget.parentNode!.parentElement!.parentElement;
   const index = requirements.findIndex(
-    (el) => el.requirement === (currentTarget as HTMLInputElement).value
+    (el) => el.data.requirement === (currentTarget as HTMLInputElement).value
   );
 
   if ((currentTarget as HTMLInputElement).checked) {
     tr!.style.textDecoration = '';
     tr!.style.color = '';
-    requirements[index].exclude = false;
+    requirements[index].data.exclude = false;
   } else {
     tr!.style.textDecoration = 'line-through';
     tr!.style.color = 'grey';
-    requirements[index].exclude = true;
+    requirements[index].data.exclude = true;
   }
 
   return requirements;

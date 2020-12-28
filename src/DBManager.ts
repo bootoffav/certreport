@@ -35,7 +35,7 @@ class DB {
         'data',
         q.Map(
           q.Paginate(q.Match(q.Index('standard_name'), standard)),
-          q.Lambda('standard', q.Select('data', q.Get(q.Var('standard'))))
+          q.Lambda('standard', q.Get(q.Var('standard')))
         )
       )
     );
@@ -90,9 +90,9 @@ class DB {
     );
   }
 
-  static updateInstance(taskId: string, state: any) {
+  static updateInstance(ref: string, state: any, fdbCollection = 'aitex') {
     return DB.client().query(
-      q.Update(q.Ref(q.Collection(this.fdbCollection), taskId), {
+      q.Update(q.Ref(q.Collection(fdbCollection), ref), {
         data: { ...state },
       })
     );

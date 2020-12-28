@@ -30,3 +30,8 @@ p {
 .formLabels {
   font-size: inherit;
 }
+
+.fe-settings:hover {
+  color: initial;
+  cursor: pointer;
+}
