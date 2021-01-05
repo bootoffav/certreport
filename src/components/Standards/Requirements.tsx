@@ -58,7 +58,7 @@ function Requirements(props: RequirementsProps) {
           </tr>
         </thead>
         <tbody>
-          {requirements.map((r) => {
+          {requirements.map((r, ind) => {
             return (
               <tr key={r.data.requirement}>
                 <td width={'45%'}>{r.data.requirement}</td>
@@ -70,9 +70,10 @@ function Requirements(props: RequirementsProps) {
                       defaultChecked
                       value={r.data.requirement}
                       onChange={(e) => {
-                        const r = appleCheckboxChange(e, requirements);
-                        setRequirements(r);
-                        const subTotal = countsubTotalWithDiscounts(r);
+                        applyUIChange(e);
+                        const reqs = toggleRequirementExclude(e, requirements);
+                        setRequirements(reqs);
+                        const subTotal = countsubTotalWithDiscounts(reqs);
                         setSubTotal(subTotal);
                       }}
                     />
@@ -80,7 +81,16 @@ function Requirements(props: RequirementsProps) {
                 </td>
                 <td width={'30%'}>{r.data.testMethod}</td>
                 <td width={'20%'}>
-                  <CostChanger cost={r.data.cost} refInDb={r.ref.value.id} />
+                  <CostChanger
+                    cost={r.data.cost}
+                    refInDb={r.ref.value.id}
+                    updater={(cost) => {
+                      requirements[ind].data.cost = cost;
+                      setRequirements(requirements);
+                      const subTotal = countsubTotalWithDiscounts(requirements);
+                      setSubTotal(subTotal);
+                    }}
+                  />
                 </td>
                 <td width={'10%'}>
                   <input
@@ -113,24 +123,24 @@ function countsubTotalWithDiscounts(r: IRequirement[]): any {
     .reduce((cost: number, nextValue: number) => cost + nextValue, 0);
 }
 
-function appleCheckboxChange(
-  { currentTarget }: React.SyntheticEvent,
-  requirements: IRequirement[]
-) {
+function applyUIChange({ currentTarget }: React.SyntheticEvent) {
   const tr = currentTarget.parentNode!.parentElement!.parentElement;
-  const index = requirements.findIndex(
-    (el) => el.data.requirement === (currentTarget as HTMLInputElement).value
-  );
-
   if ((currentTarget as HTMLInputElement).checked) {
     tr!.style.textDecoration = '';
     tr!.style.color = '';
-    requirements[index].data.exclude = false;
   } else {
     tr!.style.textDecoration = 'line-through';
     tr!.style.color = 'grey';
-    requirements[index].data.exclude = true;
   }
+}
+
+function toggleRequirementExclude(
+  { currentTarget }: React.SyntheticEvent,
+  requirements: IRequirement[]
+) {
+  const { value, checked } = currentTarget as HTMLInputElement;
+  const index = requirements.findIndex((el) => el.data.requirement === value);
+  requirements[index].data.exclude = !checked;
 
   return requirements;
 }

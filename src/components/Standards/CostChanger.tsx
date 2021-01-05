@@ -6,6 +6,7 @@ import { DB } from '../../DBManager';
 interface PriceChangerProps {
   cost: string;
   refInDb: string;
+  updater: (cost: any) => void;
 }
 
 function CostChanger(props: PriceChangerProps) {
@@ -30,6 +31,7 @@ function CostChanger(props: PriceChangerProps) {
             onClick={() => {
               setIsChanging(false);
               DB.updateInstance(props.refInDb, { cost }, 'standards');
+              props.updater(cost);
             }}
           >
             <Icon prefix="fe" width="60" name="check-square" />
