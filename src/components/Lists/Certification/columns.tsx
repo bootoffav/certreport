@@ -394,7 +394,13 @@ function getColumns(totalPrice: number, stage?: string) {
       accessor: 'state.rem',
       minWidth: 90,
     },
-  ].map((column) => ({ ...column, style: { whiteSpace: 'unset' } }));
+  ].map((column) => ({
+    ...column,
+    style: {
+      whiteSpace: 'unset',
+      maxHeight: '60px',
+    },
+  }));
 
   const takeColumns = (columnPositions: number[]) => {
     return [0, ...columnPositions].map((num: number) => allColumns[num]);
@@ -441,28 +447,3 @@ function formatPrice(price: number) {
 }
 
 export { getColumns };
-
-// {
-// 23
-// Header: 'Certificate',
-// id: 'certificate',
-// accessor: 'state.certificate',
-//   accessor: ({ ufTaskWebdavFiles: files, state }: any) => {
-//     const stages = [
-//       '7. Test-report ready',
-//       '8. Certificate ready',
-//       '9. Ended',
-//     ];
-//     if (stages.includes(state.stage)) {
-//       return files.map((file: any, key: number) => (
-//         <div key={key}>
-//           <a href={`https://xmtextiles.bitrix24.ru${file.DOWNLOAD_URL}`}>
-//             {file.NAME}
-//           </a>
-//         </div>
-//       ));
-//     }
-//     return state.certificate;
-//   },
-//   minWidth: 300,
-// },
