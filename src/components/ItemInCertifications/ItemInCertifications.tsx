@@ -103,7 +103,9 @@ function ItemInCertifications({ item }: IItemProps) {
               <Table.Row key={param}>
                 <Table.Col>{getTaskParamLabel(param)}</Table.Col>
                 {tasks.map((task: any, index: number) => (
-                  <Table.Col key={index}>{formatColumn(task, param)}</Table.Col>
+                  <Table.Col key={index}>
+                    <div className="TD3Lines">{formatColumn(task, param)}</div>
+                  </Table.Col>
                 ))}
               </Table.Row>
             ))}
@@ -119,43 +121,35 @@ function ItemInCertifications({ item }: IItemProps) {
   );
 }
 
-function formatColumn(task: any, param: string): JSX.Element | string {
+function formatColumn(task: any, param: string): any[] | string {
   switch (param) {
     case 'resume':
       return resume[task.state[param]];
-
     case 'testReport':
       const [, testReportFiles] = pullSpecificFiles(
         task.ufTaskWebdavFiles,
         'Test Report'
       );
-      return (
-        <>
-          {testReportFiles.map((file) => (
-            <div key={file.ATTACHMENT_ID}>
-              <a href={'https://xmtextiles.bitrix24.ru' + file.DOWNLOAD_URL}>
-                {file.NAME}
-              </a>
-            </div>
-          ))}
-        </>
-      );
+      return testReportFiles.map((file) => (
+        <div key={file.ATTACHMENT_ID}>
+          <a href={'https://xmtextiles.bitrix24.ru' + file.DOWNLOAD_URL}>
+            {file.NAME}
+          </a>
+        </div>
+      ));
+
     case 'certificate':
       const [, certificateFiles] = pullSpecificFiles(
         task.ufTaskWebdavFiles,
         'Certificate'
       );
-      return (
-        <>
-          {certificateFiles.map((file) => (
-            <div key={file.ATTACHMENT_ID}>
-              <a href={'https://xmtextiles.bitrix24.ru' + file.DOWNLOAD_URL}>
-                {file.NAME}
-              </a>
-            </div>
-          ))}
-        </>
-      );
+      return certificateFiles.map((file) => (
+        <div key={file.ATTACHMENT_ID}>
+          <a href={'https://xmtextiles.bitrix24.ru' + file.DOWNLOAD_URL}>
+            {file.NAME}
+          </a>
+        </div>
+      ));
 
     case 'price':
       return (+task.state.price || 0 + +task.state.price2 || 0).toLocaleString(
