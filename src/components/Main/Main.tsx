@@ -39,10 +39,11 @@ class Main extends Component {
 
       const markUpdated = () => this.setState({ updated: true });
 
-      await this.cache
-        .getCache()
-        .then(applyUpdate)
-        .then(this.filter.bind(this));
+      // await this.cache
+      //   .getCache()
+      //   .then(applyUpdate)
+      //   .then(this.filter.bind(this));
+
       await this.cache.doUpdate();
       await this.cache.getCache().then(applyUpdate).then(markUpdated);
       this.filter();
@@ -121,10 +122,7 @@ class Main extends Component {
               path="/"
               render={() => (
                 <>
-                  <CertificationList
-                    tasks={this.state.filteredTasks}
-                    // updated={this.state.updated}
-                  />
+                  <CertificationList tasks={this.state.filteredTasks} />
                   <StageShortNames />
                 </>
               )}
