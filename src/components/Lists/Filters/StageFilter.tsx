@@ -1,15 +1,29 @@
-import * as React from 'react';
+import { useEffect, useState, useRef } from 'react';
+import 'bootstrap-select';
+import $ from 'jquery';
 import { Task } from '../../../Task/Task';
 import { Dropdown } from 'tabler-react';
 import { countTotalPrice } from '../../../helpers';
+
+import 'bootstrap-select/dist/css/bootstrap-select.min.css';
 
 const StageFilter: React.FunctionComponent<{
   update: any;
   tasks: any;
 }> = ({ tasks, update }) => {
-  function filter(stage?: string) {
+  useEffect(() => {
+    const stagesSelect = $('.stages-select');
+    stagesSelect.off('hidden.bs.select');
+    stagesSelect.on('hidden.bs.select', null, tasks, function (e: any) {
+      filter($(this).val() as string[], e.data);
+      e.stopPropagation();
+    });
+  }, [tasks]);
+
+  function filter(stages: string[] | string, tasks: any) {
     let visibleData;
-    switch (stage) {
+    let stage;
+    switch (stages[0]) {
       case 'all':
         visibleData = tasks;
         break;
@@ -17,12 +31,13 @@ const StageFilter: React.FunctionComponent<{
         visibleData = tasks.filter((t: Task) => t.overdue);
         break;
       default:
-        visibleData = tasks.filter((t: Task) => t.state.stage === stage);
+        visibleData = tasks.filter((t: Task) => stages.includes(t.state.stage));
+        stage = stages.length === 1 ? stages[0] : 'all';
     }
 
     update({
       visibleData,
-      stage,
+      stage: stage || stages[0],
       totalPrice: countTotalPrice(visibleData),
       startDate: undefined,
       endDate: undefined,
@@ -51,7 +66,7 @@ const StageFilter: React.FunctionComponent<{
     return {
       value: item,
       key: item,
-      onClick: () => filter(item),
+      onClick: () => filter([item], tasks),
     };
   };
 
@@ -63,17 +78,18 @@ const StageFilter: React.FunctionComponent<{
       role="group"
     >
       <div className="mr-2">
-        <Dropdown
-          type="button"
-          value="Stages"
-          color="indigo"
-          triggerContent={
-            <>
-              Stages<sup>*</sup>
-            </>
-          }
-          itemsObject={stages.map(DropDownItem)}
-        ></Dropdown>
+        <select
+          data-actions-box="true"
+          className="selectpicker stages-select"
+          data-style="btn-indigo"
+          data-selected-text-format="count"
+          title="Stages"
+          multiple
+        >
+          {stages.map((stage: string) => (
+            <option key={stage}>{stage}</option>
+          ))}
+        </select>
       </div>
       <Dropdown
         type="button"
@@ -87,3 +103,17 @@ const StageFilter: React.FunctionComponent<{
 };
 
 export default StageFilter;
+
+{
+  /* <Dropdown
+          type="button"
+          value="Stages"
+          color="indigo"
+          triggerContent={
+            <>
+              Stages<sup>*</sup>
+            </>
+          }
+          itemsObject={stages.map(DropDownItem)}
+        ></Dropdown> */
+}
