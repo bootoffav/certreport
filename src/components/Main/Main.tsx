@@ -40,7 +40,6 @@ class Main extends Component {
 
       const markUpdated = () => this.setState({ updated: true });
 
-
       await this.cache
         .getCache()
         .then(applyUpdate)
@@ -56,7 +55,7 @@ class Main extends Component {
     if (
       prevState.activeBrands !== this.state.activeBrands ||
       prevState.startDate !== this.state.startDate ||
-      prevState.endDate !== this.state.endDate || 
+      prevState.endDate !== this.state.endDate ||
       prevState.stages !== this.state.stages
     ) {
       this.filter();
@@ -91,20 +90,21 @@ class Main extends Component {
       });
     }
 
+    // stagefiltering
     let stage;
-    console.log(this.state.stages[0]);
     switch (this.state.stages[0]) {
       case 'all':
         break;
       case 'overdue':
-        filteredTasks = filteredItems.filter((t: any) => t.overdue);
+        filteredTasks = filteredTasks.filter((t: any) => t.overdue);
         break;
       default:
-        filteredTasks = filteredTasks.filter((t: any) => this.state.stages.includes(t.state.stage));
+        filteredTasks = filteredTasks.filter((t: any) =>
+          this.state.stages.includes(t.state.stage)
+        );
         stage = this.state.stages.length === 1 ? this.state.stages[0] : 'all';
     }
 
-    console.log(filteredTasks);
     this.setState({
       filteredTasks,
       filteredItems,

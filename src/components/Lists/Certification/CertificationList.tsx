@@ -22,11 +22,9 @@ class CertificationList extends React.Component<{
   update: any;
 }> {
   state: IListState = {
-    visibleData: [],
-
-    //used for Task PDF list (ejected out of react-table ref)
+    visibleData: this.props.tasks,
     sortedData: undefined,
-    totalPrice: 0,
+    totalPrice: countTotalPrice(this.props.tasks),
     stage: 'all',
   };
   ref: any;
@@ -35,32 +33,14 @@ class CertificationList extends React.Component<{
     return getColumns(this.state.totalPrice, this.state.stage);
   }
 
-  async componentDidMount() {
-    this.updateState();
-  }
-
-  resetFilters = () => {
-    this.setState({
-      startDate: undefined,
-      endDate: undefined,
-      // stage: 'all',
-    });
-  };
-
   componentDidUpdate(prevProps: any, prevState: any) {
     if (prevProps.tasks !== this.props.tasks) {
-      this.updateState();
-      // this.resetFilters();
+      this.setState({
+        totalPrice: countTotalPrice(this.props.tasks),
+        visibleData: this.props.tasks,
+      });
     }
   }
-
-  updateState = () => {
-    const totalPrice = countTotalPrice(this.props.tasks);
-    this.setState({
-      totalPrice,
-      visibleData: this.props.tasks,
-    });
-  };
 
   getTrProps(state: any, rowInfo: any, column: any) {
     if (rowInfo === undefined) {
@@ -74,11 +54,7 @@ class CertificationList extends React.Component<{
       <div className="d-flex mb-1">
         <div className="d-flex w-100">
           <div className="mr-2">
-            <StageFilter
-              tasks={this.props.tasks}
-              // update={this.setState.bind(this)}
-              update={this.props.update}
-            />
+            <StageFilter {...this.props} />
           </div>
           <ColumnFilter
             dataToFilter={this.props.tasks}
