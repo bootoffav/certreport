@@ -15,33 +15,13 @@ const StageFilter: React.FunctionComponent<{
     const stagesSelect = $('.stages-select');
     stagesSelect.off('hidden.bs.select');
     stagesSelect.on('hidden.bs.select', null, tasks, function (e: any) {
-      filter($(this).val() as string[], e.data);
+      filter($(this).val() as string[]);
       e.stopPropagation();
     });
   }, [tasks]);
 
-  function filter(stages: string[] | string, tasks: any) {
-    let visibleData;
-    let stage;
-    switch (stages[0]) {
-      case 'all':
-        visibleData = tasks;
-        break;
-      case 'overdue':
-        visibleData = tasks.filter((t: Task) => t.overdue);
-        break;
-      default:
-        visibleData = tasks.filter((t: Task) => stages.includes(t.state.stage));
-        stage = stages.length === 1 ? stages[0] : 'all';
-    }
-
-    update({
-      visibleData,
-      stage: stage || stages[0],
-      totalPrice: countTotalPrice(visibleData),
-      startDate: undefined,
-      endDate: undefined,
-    });
+  function filter(stages: string[] | string) {
+    update({ stages });
   }
 
   const stages = [
@@ -66,7 +46,7 @@ const StageFilter: React.FunctionComponent<{
     return {
       value: item,
       key: item,
-      onClick: () => filter([item], tasks),
+      onClick: () => update({ stages: [item] })
     };
   };
 

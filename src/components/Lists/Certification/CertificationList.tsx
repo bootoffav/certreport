@@ -19,6 +19,7 @@ interface IListState {
 
 class CertificationList extends React.Component<{
   tasks: any;
+  update: any;
 }> {
   state: IListState = {
     visibleData: [],
@@ -42,14 +43,14 @@ class CertificationList extends React.Component<{
     this.setState({
       startDate: undefined,
       endDate: undefined,
-      stage: 'all',
+      // stage: 'all',
     });
   };
 
   componentDidUpdate(prevProps: any, prevState: any) {
     if (prevProps.tasks !== this.props.tasks) {
       this.updateState();
-      this.resetFilters();
+      // this.resetFilters();
     }
   }
 
@@ -75,7 +76,8 @@ class CertificationList extends React.Component<{
           <div className="mr-2">
             <StageFilter
               tasks={this.props.tasks}
-              update={this.setState.bind(this)}
+              // update={this.setState.bind(this)}
+              update={this.props.update}
             />
           </div>
           <ColumnFilter
