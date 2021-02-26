@@ -16,6 +16,7 @@ import { isMainHeaderAllowed } from '../../helpers';
 class Main extends Component {
   cache = new CacheManager();
   state = {
+    stages: ['all'],
     allTasks: [],
     allItems: [],
     filteredTasks: [],
@@ -39,10 +40,10 @@ class Main extends Component {
 
       const markUpdated = () => this.setState({ updated: true });
 
-      // await this.cache
-      //   .getCache()
-      //   .then(applyUpdate)
-      //   .then(this.filter.bind(this));
+      await this.cache
+        .getCache()
+        .then(applyUpdate)
+        .then(this.filter.bind(this));
 
       await this.cache.doUpdate();
       await this.cache.getCache().then(applyUpdate).then(markUpdated);
@@ -54,7 +55,8 @@ class Main extends Component {
     if (
       prevState.activeBrands !== this.state.activeBrands ||
       prevState.startDate !== this.state.startDate ||
-      prevState.endDate !== this.state.endDate
+      prevState.endDate !== this.state.endDate ||
+      prevState.stages !== this.state.stages
     ) {
       this.filter();
     }
@@ -86,6 +88,21 @@ class Main extends Component {
         // @ts-ignore
         return startDate < comparingDate && endDate > comparingDate;
       });
+    }
+
+    // stagefiltering
+    let stage;
+    switch (this.state.stages[0]) {
+      case 'all':
+        break;
+      case 'overdue':
+        filteredTasks = filteredTasks.filter((t: any) => t.overdue);
+        break;
+      default:
+        filteredTasks = filteredTasks.filter((t: any) =>
+          this.state.stages.includes(t.state.stage)
+        );
+        stage = this.state.stages.length === 1 ? this.state.stages[0] : 'all';
     }
 
     this.setState({
@@ -122,7 +139,10 @@ class Main extends Component {
               path="/"
               render={() => (
                 <>
-                  <CertificationList tasks={this.state.filteredTasks} />
+                  <CertificationList
+                    tasks={this.state.filteredTasks}
+                    update={this.setState.bind(this)}
+                  />
                   <StageShortNames />
                 </>
               )}

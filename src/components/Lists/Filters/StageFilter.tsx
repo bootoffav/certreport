@@ -12,37 +12,16 @@ const StageFilter: React.FunctionComponent<{
   tasks: any;
 }> = ({ tasks, update }) => {
   useEffect(() => {
-    const stagesSelect = $('.stages-select');
-    stagesSelect.off('hidden.bs.select');
-    stagesSelect.on('hidden.bs.select', null, tasks, function (e: any) {
-      filter($(this).val() as string[], e.data);
-      e.stopPropagation();
-    });
+    $('.selectpicker').selectpicker('selectAll');
+  }, []);
+
+  useEffect(() => {
+    const selectpicker = $('.selectpicker');
+    selectpicker.off('hidden.bs.select');
+    selectpicker.on('hidden.bs.select', () =>
+      update({ stages: selectpicker.val() })
+    );
   }, [tasks]);
-
-  function filter(stages: string[] | string, tasks: any) {
-    let visibleData;
-    let stage;
-    switch (stages[0]) {
-      case 'all':
-        visibleData = tasks;
-        break;
-      case 'overdue':
-        visibleData = tasks.filter((t: Task) => t.overdue);
-        break;
-      default:
-        visibleData = tasks.filter((t: Task) => stages.includes(t.state.stage));
-        stage = stages.length === 1 ? stages[0] : 'all';
-    }
-
-    update({
-      visibleData,
-      stage: stage || stages[0],
-      totalPrice: countTotalPrice(visibleData),
-      startDate: undefined,
-      endDate: undefined,
-    });
-  }
 
   const stages = [
     '00. Paused',
@@ -62,11 +41,11 @@ const StageFilter: React.FunctionComponent<{
 
   const more = ['all', 'overdue'];
 
-  const DropDownItem = (item: any) => {
+  const DropDownItem = (stage: any) => {
     return {
-      value: item,
-      key: item,
-      onClick: () => filter([item], tasks),
+      value: stage,
+      key: stage,
+      onClick: () => update({ stages: [stage] }),
     };
   };
 
@@ -80,7 +59,7 @@ const StageFilter: React.FunctionComponent<{
       <div className="mr-2">
         <select
           data-actions-box="true"
-          className="selectpicker stages-select"
+          className="selectpicker"
           data-style="btn-indigo"
           data-selected-text-format="count"
           title="Stages"
@@ -103,17 +82,3 @@ const StageFilter: React.FunctionComponent<{
 };
 
 export default StageFilter;
-
-{
-  /* <Dropdown
-          type="button"
-          value="Stages"
-          color="indigo"
-          triggerContent={
-            <>
-              Stages<sup>*</sup>
-            </>
-          }
-          itemsObject={stages.map(DropDownItem)}
-        ></Dropdown> */
-}
