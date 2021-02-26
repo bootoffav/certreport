@@ -98,6 +98,11 @@ class Main extends Component {
       case 'overdue':
         filteredTasks = filteredTasks.filter((t: any) => t.overdue);
         break;
+      case 'ongoing':
+        filteredTasks = filteredTasks.filter(
+          (t: any) => t.state.stage.match(/^([0-8]\.)/) // all stages starting 0. - 8.
+        );
+        break;
       default:
         filteredTasks = filteredTasks.filter((t: any) =>
           this.state.stages.includes(t.state.stage)

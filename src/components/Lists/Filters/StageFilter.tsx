@@ -39,11 +39,11 @@ const StageFilter: React.FunctionComponent<{
     '9. Ended',
   ];
 
-  const more = ['all', 'overdue'];
+  const more = ['all', 'overdue', 'ongoing'];
 
   const DropDownItem = (stage: any) => {
     return {
-      value: stage,
+      value: stage.slice(0, 1).toUpperCase() + stage.slice(1),
       key: stage,
       onClick: () => update({ stages: [stage] }),
     };
