@@ -1,9 +1,7 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect } from 'react';
 import 'bootstrap-select';
 import $ from 'jquery';
-import { Task } from '../../../Task/Task';
 import { Dropdown } from 'tabler-react';
-import { countTotalPrice } from '../../../helpers';
 
 import 'bootstrap-select/dist/css/bootstrap-select.min.css';
 
@@ -21,7 +19,7 @@ const StageFilter: React.FunctionComponent<{
     selectpicker.on('hidden.bs.select', () =>
       update({ stages: selectpicker.val() })
     );
-  }, [tasks]);
+  }, [tasks, update]);
 
   const stages = [
     '00. Paused',

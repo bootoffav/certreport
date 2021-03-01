@@ -12,7 +12,6 @@ interface IListState {
   visibleData: any[];
   totalPrice: number;
   sortedData: Task[] | undefined;
-  stage: string;
   startDate?: Date;
   endDate?: Date;
 }
@@ -20,17 +19,17 @@ interface IListState {
 class CertificationList extends React.Component<{
   tasks: any;
   update: any;
+  stage: string;
 }> {
   state: IListState = {
     visibleData: this.props.tasks,
     sortedData: undefined,
     totalPrice: countTotalPrice(this.props.tasks),
-    stage: 'all',
   };
   ref: any;
 
   get columns() {
-    return getColumns(this.state.totalPrice, this.state.stage);
+    return getColumns(this.state.totalPrice, this.props.stage);
   }
 
   componentDidUpdate(prevProps: any, prevState: any) {
