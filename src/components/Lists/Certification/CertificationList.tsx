@@ -4,6 +4,7 @@ import { Task } from '../../../Task/Task';
 import { getColumns } from './columns';
 import StageFilter from '../Filters/StageFilter';
 import { ColumnFilter } from '../Filters/ColumnFilter';
+import { ListExport } from '../../Export/PDF/ListExport';
 
 import './List.css';
 import { countTotalPrice } from '../../../helpers';
@@ -67,12 +68,12 @@ class CertificationList extends React.Component<{
         </div>
         <div className="d-flex">
           {/* <ListExport
-                    tasks={this.state.visibleData}
-                    columns={this.columns}
-                    stage={this.state.stage}
-                    startDate={this.state.startDate}
-                    endDate={this.state.endDate}
-                    /> */}
+            tasks={this.state.visibleData}
+            columns={this.columns}
+            stage={this.props.stage}
+            startDate={this.state.startDate}
+            endDate={this.state.endDate}
+          /> */}
         </div>
       </div>
       <ReactTable
@@ -84,6 +85,12 @@ class CertificationList extends React.Component<{
             return row;
           })
         }
+        sorted={[
+          {
+            id: 'createdDate',
+            desc: true,
+          },
+        ]}
         onSortedChange={() =>
           this.setState({
             visibleTasks: this.ref
@@ -91,11 +98,11 @@ class CertificationList extends React.Component<{
               .sortedData.map(({ _original }: any) => _original),
           })
         }
-        noDataText="First time update takes a little while, please do not close page until it is done. See for green button at top right corner"
+        noDataText="update takes a little while, please do not close page until it is done. See for green button at top right corner"
         ref={(ref) => (this.ref = ref)}
         className="-highlight table"
         getTrProps={this.getTrProps}
-        defaultPageSize={10}
+        defaultPageSize={15}
       />
     </>
   );
