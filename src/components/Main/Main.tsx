@@ -91,7 +91,6 @@ class Main extends Component {
     }
 
     // stagefiltering
-    let stage;
     switch (this.state.stages[0]) {
       case 'all':
         break;
@@ -107,7 +106,7 @@ class Main extends Component {
         filteredTasks = filteredTasks.filter((t: any) =>
           this.state.stages.includes(t.state.stage)
         );
-        stage = this.state.stages.length === 1 ? this.state.stages[0] : 'all';
+      // stage = this.state.stages.length === 1 ? this.state.stages[0] : 'all';
     }
 
     this.setState({
@@ -147,6 +146,7 @@ class Main extends Component {
                   <CertificationList
                     tasks={this.state.filteredTasks}
                     update={this.setState.bind(this)}
+                    stage={this.state.stages[0]}
                   />
                   <StageShortNames />
                 </>
