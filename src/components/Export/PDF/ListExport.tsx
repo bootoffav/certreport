@@ -2,6 +2,7 @@ import { Component } from 'react';
 import pdfMake from 'pdfmake/build/pdfmake';
 import dayjs from 'dayjs';
 import { vfs } from './vfs_fonts.js';
+import * as tableStructures from './columns';
 
 import { tableLayout, fonts } from './settings';
 
@@ -15,66 +16,10 @@ class ListExport extends Component<{
   totalPrice = 0;
   stage: string | undefined;
 
-  generateTableStructureForResults = () => ({
-    accessors: [
-      'position',
-      'state.serialNumber',
-      'state.brand',
-      'state.stage',
-      'lastActionDate',
-      'title',
-      'state.article',
-      'state.testReport',
-      'state.certificate',
-      'state.standardsResult',
-      'state.news',
-    ],
-    headers: [
-      '#',
-      '##',
-      'Brand',
-      'Status',
-      'L. A. D.',
-      'Task title',
-      'Fabric',
-      'Test report',
-      'Certificate',
-      'Result',
-      'News',
-    ].map(this.boldText),
-    widths: [20, 40, 50, 60, 70, '*', 100, 100, 180, 100, 100],
-  });
-
   generateContent() {
-    if (this.props.stage === 'all') {
-      var {
-        accessors,
-        headers,
-        widths,
-      } = this.generateTableStructureForResults();
-    } else {
-      accessors = this.props.columns.map((col: any) => {
-        return typeof col.accessor != 'function'
-          ? col.accessor
-          : `state.${col.id}`;
-      });
-
-      headers = this.props.columns.map(({ Header }: any) =>
-        this.boldText(Header)
-      );
-      widths = this.props.columns.map(({ accessor, minWidth, width }: any) => {
-        switch (accessor) {
-          case 'title':
-            return 'auto';
-          case 'state.readyOn':
-            return 70;
-          case 'state.article':
-            return 130;
-          default:
-            return minWidth || width || '*';
-        }
-      });
-    }
+    var { accessors, headers, widths } = tableStructures.getTableStructure(
+      this.props.stage
+    );
 
     const table = {
       table: {
@@ -95,6 +40,7 @@ class ListExport extends Component<{
         ],
       },
     };
+
     for (let i = 0; i < table.table.body.length; i++) {
       if (i === 0) continue;
       table.table.body[i][0] = i;
@@ -130,8 +76,12 @@ class ListExport extends Component<{
       const row: any = [];
 
       accessors.forEach((acc: string) => {
-        console.log(acc);
         switch (acc) {
+          case 'createdDate':
+            row.push({
+              text: dayjs(tasks[i][acc]).format('DDMMMYYYY'),
+            });
+            break;
           case 'title':
             row.push({
               text: tasks[i][acc],
@@ -219,11 +169,8 @@ class ListExport extends Component<{
           'DD.MM.YYYY'
         )})`;
         break;
-      case 'all':
-        this.stage = 'All';
-        break;
       default:
-        this.stage = 'ALL';
+        this.stage = this.props.stage;
     }
 
     let docDefinition = {
@@ -251,7 +198,7 @@ class ListExport extends Component<{
       ? `Certification list for ${dayjs(this.props.startDate).format(
           'DDMMMYYYY'
         )} - ${dayjs(this.props.endDate).format('DDMMMYYYY')}.pdf`
-      : `Certification list.pdf`;
+      : `Certification list - ${this.props.stage}.pdf`;
 
   render() {
     return (
