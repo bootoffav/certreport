@@ -4,7 +4,7 @@ import { Task } from '../../../Task/Task';
 import { getColumns } from './columns';
 import StageFilter from '../Filters/StageFilter';
 import { ColumnFilter } from '../Filters/ColumnFilter';
-import { ListExport } from '../../Export/PDF/ListExport';
+// import { ListExport } from '../../Export/PDF/ListExport';
 
 import './List.css';
 import { countTotalPrice } from '../../../helpers';
@@ -91,13 +91,13 @@ class CertificationList extends React.Component<{
             desc: true,
           },
         ]}
-        onSortedChange={() =>
+        onSortedChange={() => {
           this.setState({
             visibleTasks: this.ref
               .getResolvedState()
               .sortedData.map(({ _original }: any) => _original),
-          })
-        }
+          });
+        }}
         noDataText="update takes a little while, please do not close page until it is done. See for green button at top right corner"
         ref={(ref) => (this.ref = ref)}
         className="-highlight table"
