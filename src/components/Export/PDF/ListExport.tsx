@@ -252,7 +252,7 @@ class ListExport extends Component<{
         ? `Certification results for ${dayjs(this.props.startDate).format(
             'DDMMMYYYY'
           )} - ${dayjs(this.props.endDate).format('DDMMMYYYY')}.pdf`
-        : `Certification results of all time.pdf`;
+        : `Certification results.pdf`;
     }
 
     return `${this.stage}.pdf`;
@@ -266,4 +266,4 @@ class ListExport extends Component<{
   }
 }
 
-export default ListExport;
+export { ListExport };
