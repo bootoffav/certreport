@@ -2,7 +2,6 @@ import { Component } from 'react';
 import pdfMake from 'pdfmake/build/pdfmake';
 import dayjs from 'dayjs';
 import { vfs } from './vfs_fonts.js';
-import React from 'react';
 
 import { tableLayout, fonts } from './settings';
 
@@ -131,6 +130,7 @@ class ListExport extends Component<{
       const row: any = [];
 
       accessors.forEach((acc: string) => {
+        console.log(acc);
         switch (acc) {
           case 'title':
             row.push({
@@ -195,7 +195,7 @@ class ListExport extends Component<{
               alignment: 'right',
               text:
                 tasks[i].state.price === ''
-                  ? ''
+                  ? '€ 0'
                   : `€${Math.round(tasks[i].state.price)
                       .toLocaleString()
                       .replace(/,/g, ' ')}`,
@@ -243,24 +243,20 @@ class ListExport extends Component<{
         fonts,
         vfs
       )
-      .download(this.filename);
+      .download(this.getFilename());
   };
 
-  get filename() {
-    if (this.stage === 'All') {
-      return this.props.startDate && this.props.endDate
-        ? `Certification results for ${dayjs(this.props.startDate).format(
-            'DDMMMYYYY'
-          )} - ${dayjs(this.props.endDate).format('DDMMMYYYY')}.pdf`
-        : `Certification results.pdf`;
-    }
+  getFilename = () =>
+    this.props.startDate && this.props.endDate
+      ? `Certification list for ${dayjs(this.props.startDate).format(
+          'DDMMMYYYY'
+        )} - ${dayjs(this.props.endDate).format('DDMMMYYYY')}.pdf`
+      : `Certification list.pdf`;
 
-    return `${this.stage}.pdf`;
-  }
   render() {
     return (
       <button className="btn btn-sm btn-outline-success" onClick={this.export}>
-        save to PDF
+        PDF export
       </button>
     );
   }

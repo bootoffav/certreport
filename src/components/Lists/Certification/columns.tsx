@@ -24,8 +24,10 @@ function getColumns(totalPrice: number, stage?: string) {
       // 0
       Header: '#',
       id: 'position',
-      sortable: true,
-      accessor: 'position',
+      sortable: false,
+      Cell: (row: any) => {
+        return row.viewIndex + 1;
+      },
       width: 30,
     },
     {
