@@ -17,6 +17,7 @@ enum Stage {
   '7. Test-report ready',
   '8. Certificate ready',
   '9. Ended',
+  '10. Repeat Testing is started',
 }
 const taskPropMapAliases: {
   [key: string]: string;
@@ -63,6 +64,7 @@ const taskPropMap: {
   'tests to be started on': 'startedOn',
   'tests to be finished on': 'testFinishedOn',
   'results to be received on': 'certReceivedOn',
+  'repeat testing is started': 'repeatTestingIsStarted',
   REM: 'rem',
   Resume: 'resume',
   Stage: 'stage',
@@ -205,6 +207,18 @@ class Task {
         parsedState.certReceivedOnRealDate = '',
       ] = parsedState.certReceivedOn.split(', ');
       delete parsedState.certReceivedOn;
+    }
+
+    if (parsedState.repeatTestingIsStarted) {
+      [
+        parsedState.repeatReceivedOn,
+        parsedState.repeatStartedOn,
+        parsedState.repeatTestFinishedOnPlanDate,
+        parsedState.repeatTestFinishedOnRealDate,
+        parsedState.repeatCertReceivedOnPlanDate,
+        parsedState.repeatCertReceivedOnRealDate,
+      ] = parsedState.repeatTestingIsStarted.split(', ');
+      delete parsedState.repeatTestingIsStarted;
     }
 
     parsedState.brand = ufCrmTask

@@ -35,6 +35,7 @@ const StageFilter: React.FunctionComponent<{
     '7. Test-report ready',
     '8. Certificate ready',
     '9. Ended',
+    '10. Repeat Testing is started',
   ];
 
   const more = ['all', 'overdue', 'ongoing'];

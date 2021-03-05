@@ -144,6 +144,10 @@ function formTaskFields(state: any) {
         stAd.certReceivedOn &&
         `[B]results to be received on:[/B] ${stAd.certReceivedOn}\n`
       }` +
+      `${
+        stAd.repeatTestingIsStarted &&
+        `[B]repeat testing is started:[/B] ${stAd.repeatTestingIsStarted}\n`
+      }` +
       `${state.stage && `[B]Stage:[/B] ${state.stage}\n`}` +
       `${state.news && `[B]News:[/B] ${state.news}\n`}` +
       `${state.rem && `[B]REM:[/B] ${state.rem}\n`}` +

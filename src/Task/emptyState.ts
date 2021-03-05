@@ -45,11 +45,17 @@ export interface IState {
   readyOn: string;
   sentOn: string;
   receivedOn: string;
+  repeatReceivedOn: string;
   startedOn: string;
+  repeatStartedOn: string;
   testFinishedOnPlanDate: string;
+  repeatTestFinishedOnPlanDate: string;
   testFinishedOnRealDate: string;
+  repeatTestFinishedOnRealDate: string;
   certReceivedOnPlanDate: string;
+  repeatCertReceivedOnPlanDate: string;
   certReceivedOnRealDate: string;
+  repeatCertReceivedOnRealDate: string;
   comments: string;
   otherTextInDescription: string | null;
   resume: undefined | 'fail' | 'pass' | 'no sample' | 'partly';
@@ -84,11 +90,17 @@ const emptyState: IState = {
   readyOn: '',
   sentOn: '',
   receivedOn: '',
+  repeatReceivedOn: '',
   startedOn: '',
+  repeatStartedOn: '',
   testFinishedOnPlanDate: '',
+  repeatTestFinishedOnPlanDate: '',
   testFinishedOnRealDate: '',
+  repeatTestFinishedOnRealDate: '',
   certReceivedOnPlanDate: '',
+  repeatCertReceivedOnPlanDate: '',
   certReceivedOnRealDate: '',
+  repeatCertReceivedOnRealDate: '',
   paymentDate: '',
   paymentDate2: '',
   proformaReceived: '',
