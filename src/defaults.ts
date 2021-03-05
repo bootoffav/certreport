@@ -38,6 +38,10 @@ let selectOptions: {
     { value: '7. Test-report ready', label: '7. Test-report ready' },
     { value: '8. Certificate ready', label: '8. Certificate ready' },
     { value: '9. Ended', label: '9. Ended' },
+    {
+      value: '10. Repeat Testing is started',
+      label: '10. Repeat Testing is started',
+    },
   ],
   standards: JSON.parse(localStorage.getItem('standards') || '[]'),
   articles: JSON.parse(localStorage.getItem('articles') || '[]'),

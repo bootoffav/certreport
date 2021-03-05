@@ -26,6 +26,7 @@ class StateAdapter {
       '02. Estimate': '',
       '6. Pre-treatment done': '',
       '8. Certificate ready': '',
+      '10. Repeat Testing is started': '',
     };
 
     return this[stageMap[this.stage]]
@@ -84,6 +85,9 @@ class StateAdapter {
       case '9. Ended':
         stageForTitle = this.certificate;
         break;
+      case '10. Repeat Testing is started':
+        stageForTitle = `Repeat Testing is started `;
+        break;
       default:
         stageForTitle = '';
     }
@@ -130,6 +134,31 @@ class StateAdapter {
     return (
       `${this.certReceivedOnPlanDate && this.certReceivedOnPlanDate + ', '}` +
       `${this.certReceivedOnRealDate && this.certReceivedOnRealDate + ', '}`
+    ).slice(0, -2);
+  }
+
+  get repeatTestingIsStarted() {
+    return (
+      `${this.repeatReceivedOn && this.repeatReceivedOn}` +
+      ', ' +
+      `${this.repeatStartedOn && this.repeatStartedOn}` +
+      ', ' +
+      `${
+        this.repeatTestFinishedOnPlanDate && this.repeatTestFinishedOnPlanDate
+      }` +
+      ', ' +
+      `${
+        this.repeatTestFinishedOnRealDate && this.repeatTestFinishedOnRealDate
+      }` +
+      ', ' +
+      `${
+        this.repeatCertReceivedOnPlanDate && this.repeatCertReceivedOnPlanDate
+      }` +
+      ', ' +
+      `${
+        this.repeatCertReceivedOnRealDate && this.repeatCertReceivedOnRealDate
+      }` +
+      ', '
     ).slice(0, -2);
   }
 }
