@@ -30,7 +30,7 @@ interface IFormProps {
     path: string;
     url: string;
     params: {
-      id: string;
+      id?: string;
     };
   };
 }
