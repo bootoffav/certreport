@@ -3,10 +3,17 @@ import swal from 'sweetalert';
 import 'react-datepicker/dist/react-datepicker.css';
 import Select from 'react-select';
 import dayjs from 'dayjs';
-import { PickDate, BaseInput, Article, Price, Paid, Pi } from './FormFields';
+import {
+  PickDate,
+  BaseInput,
+  SerialNumber,
+  Article,
+  Price,
+  Paid,
+  Pi,
+} from './FormFields';
 import * as B24 from '../../B24/B24';
 import Notification, { Status } from '../Notification/Notification';
-import SerialNumber from '../SerialNumber/SerialNumber';
 import { selectOptions } from '../../defaults';
 import { IState, emptyState } from '../../Task/emptyState';
 import { Standards } from '../Standards/Standards';
@@ -25,21 +32,12 @@ interface IFormState extends IState {
   existsInDB?: boolean;
 }
 
-interface IFormProps {
-  match: {
-    path: string;
-    url: string;
-    params: {
-      id?: string;
-    };
-  };
-}
-
-class Form extends React.Component<IFormProps> {
+class Form extends React.Component {
   task_id: string | undefined;
   state: IFormState;
+  props: any;
 
-  constructor(props: IFormProps) {
+  constructor(props: any) {
     super(props);
     this.task_id = props.match.params.id;
     this.state = {
@@ -158,13 +156,7 @@ class Form extends React.Component<IFormProps> {
 
   successfullySubmitted = () => {
     this.setState({ requestStatus: Status.Success });
-    setTimeout(
-      () =>
-        window.history.length === 1
-          ? window.close()
-          : window.location.assign('/'),
-      500
-    );
+    this.props.history.push('/');
   };
 
   unsuccessfullySubmitted = (error: any) => {
@@ -347,8 +339,6 @@ class Form extends React.Component<IFormProps> {
           <SerialNumber
             serialNumber={this.state.serialNumber}
             handleChange={this.handleChange}
-            handleInit={(v: any) => this.setState({ serialNumber: v })}
-            url={this.props.match.url}
           />
         </div>
       </div>
@@ -765,4 +755,4 @@ class Form extends React.Component<IFormProps> {
     });
 }
 
-export default Form;
+export { Form };

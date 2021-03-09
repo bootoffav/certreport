@@ -49,6 +49,26 @@ const BaseInput = (props: {
   </div>
 );
 
+interface SerialNumberProps {
+  serialNumber: string;
+  handleChange: any;
+}
+
+const SerialNumber = (props: SerialNumberProps) => (
+  <>
+    Serial number:
+    <input
+      required
+      className="form-control"
+      type="text"
+      id="serialNumber"
+      placeholder="Loading ..."
+      value={props.serialNumber}
+      onChange={props.handleChange}
+    />
+  </>
+);
+
 interface IPriceProps {
   id: string;
   value: string;
@@ -191,4 +211,4 @@ class Article extends React.Component<ArticleProps> {
   );
 }
 
-export { PickDate, BaseInput, Article, Price, Paid, Pi };
+export { PickDate, BaseInput, SerialNumber, Article, Price, Paid, Pi };
