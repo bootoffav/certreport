@@ -11,8 +11,6 @@ class StateAdapter {
   }
 
   getNADForTitle() {
-    if (this.stage === '9. Ended') return '';
-
     const stageMap = {
       '0. Sample to be prepared': 'sentOn',
       '1. Sample Sent': 'receivedOn',
@@ -26,8 +24,10 @@ class StateAdapter {
       '02. Estimate': '',
       '6. Pre-treatment done': '',
       '8. Certificate ready': '',
-      '10. Repeat Testing is started': '',
+      '10. Repeat Testing is started': 'repeatTestFinishedOnPlanDate',
     };
+
+    if (this.stage === '9. Ended') return '';
 
     return this[stageMap[this.stage]]
       ? ` | NAD - ${dC(this[stageMap[this.stage]], 'DD.MM.YYYY')}`
@@ -86,7 +86,7 @@ class StateAdapter {
         stageForTitle = this.certificate;
         break;
       case '10. Repeat Testing is started':
-        stageForTitle = `Repeat Testing is started `;
+        stageForTitle = `Repeat Testing is started`;
         break;
       default:
         stageForTitle = '';
