@@ -315,6 +315,8 @@ class Task {
         return this.state['certReceivedOnPlanDate'] || 'No date';
       case '8. Certificate ready':
         return '-' || 'No date';
+      case '10. Repeat Testing is started':
+        return this.state['repeatTestFinishedOnPlanDate'] || 'No date';
     }
 
     return 'No Date';

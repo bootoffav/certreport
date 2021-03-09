@@ -27,7 +27,12 @@ function getAttachedFiles(id: string) {
       qs.stringify({ TASKID: id })
   )
     .then((r) => r.json())
-    .then(({ result }: any) => result)
+    .then(({ result }: any) => {
+      return result.filter(
+        (file: any) =>
+          'NAME' in file && 'FILE_ID' in file && 'ATTACHMENT_ID' in file
+      ); //explicit check for broken attachment links in b24
+    })
     .catch((e) => {
       console.log(e);
       return [];
