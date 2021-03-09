@@ -5,7 +5,7 @@ import { Error404Page } from 'tabler-react';
 import CacheManager from '../../CacheManager';
 import { CertificationList } from '../Lists/Certification/CertificationList';
 import { ItemList } from '../Lists/ItemList/ItemList';
-import Form from '../Form/Form';
+import { Form } from '../Form/Form';
 import Dashboard from '../Dashboard/Dashboard';
 import ErrorBoundary from '../../ErrorBoundary';
 import { NavBar } from './NavBar';
@@ -164,17 +164,13 @@ class Main extends Component {
                 return <ItemInCertifications {...match.params} />;
               }}
             />
-            <Route
-              exact
-              path="/add"
-              render={({ match }) => <Form match={match} />}
-            />
+            <Route exact path="/add" render={(props) => <Form {...props} />} />
             <Route
               exact
               path="/edit/:id"
-              render={({ match }) => (
+              render={(props) => (
                 <ErrorBoundary>
-                  <Form match={match} />
+                  <Form {...props} />
                 </ErrorBoundary>
               )}
             />
