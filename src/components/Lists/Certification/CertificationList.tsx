@@ -8,23 +8,30 @@ import { ListExport } from '../../Export/PDF/ListExport';
 import './List.css';
 import { countTotalPrice } from '../../../helpers';
 
-interface IListState {
+interface ICertificationListState {
   visibleData: any[];
   totalPrice: number;
   startDate?: Date;
   endDate?: Date;
 }
 
-class CertificationList extends React.Component<{
+interface ICertificationListProps {
   tasks: any;
   update: any;
   stage: string;
-}> {
-  state: IListState = {
-    visibleData: [],
-    totalPrice: 0,
-  };
-  ref: any;
+}
+
+class CertificationList extends React.Component<
+  ICertificationListProps,
+  ICertificationListState
+> {
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      visibleData: this.props.tasks,
+      totalPrice: countTotalPrice(this.props.tasks),
+    };
+  }
 
   get columns() {
     return getColumns(this.state.totalPrice, this.props.stage);
@@ -83,7 +90,6 @@ class CertificationList extends React.Component<{
           },
         ]}
         noDataText="update takes a little while, please do not close page until it is done. See for green button at top right corner"
-        ref={(ref) => (this.ref = ref)}
         className="-highlight table"
         getTrProps={this.getTrProps}
         defaultPageSize={20}
