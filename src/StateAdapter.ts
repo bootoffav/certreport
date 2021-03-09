@@ -140,26 +140,26 @@ class StateAdapter {
   get repeatTestingIsStarted() {
     return (
       `${this.repeatReceivedOn && this.repeatReceivedOn}` +
-      ', ' +
+      ',' +
       `${this.repeatStartedOn && this.repeatStartedOn}` +
-      ', ' +
+      ',' +
       `${
         this.repeatTestFinishedOnPlanDate && this.repeatTestFinishedOnPlanDate
       }` +
-      ', ' +
+      ',' +
       `${
         this.repeatTestFinishedOnRealDate && this.repeatTestFinishedOnRealDate
       }` +
-      ', ' +
+      ',' +
       `${
         this.repeatCertReceivedOnPlanDate && this.repeatCertReceivedOnPlanDate
       }` +
-      ', ' +
+      ',' +
       `${
         this.repeatCertReceivedOnRealDate && this.repeatCertReceivedOnRealDate
       }` +
-      ', '
-    ).slice(0, -2);
+      ','
+    );
   }
 }
 

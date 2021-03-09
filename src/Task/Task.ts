@@ -217,7 +217,7 @@ class Task {
         parsedState.repeatTestFinishedOnRealDate,
         parsedState.repeatCertReceivedOnPlanDate,
         parsedState.repeatCertReceivedOnRealDate,
-      ] = parsedState.repeatTestingIsStarted.split(', ');
+      ] = parsedState.repeatTestingIsStarted.split(',', 6);
       delete parsedState.repeatTestingIsStarted;
     }
 
