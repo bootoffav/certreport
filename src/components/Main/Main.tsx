@@ -84,7 +84,7 @@ class Main extends Component {
     // datefiltering
     if (startDate && endDate) {
       filteredTasks = filteredTasks.filter((task: any) => {
-        const comparingDate = new Date(task.state.certReceivedOnRealDate);
+        const comparingDate = new Date(task.createdDate);
         // @ts-ignore
         return startDate < comparingDate && endDate > comparingDate;
       });
