@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { BrandFilter } from '../Filters/BrandFilter';
-import DateFilter from '../Filters/DateFilter';
+import { DateFilter } from '../Filters/DateFilter';
 import { State } from './State';
 
 interface INavBarProps {
