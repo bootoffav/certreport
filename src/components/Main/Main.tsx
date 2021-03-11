@@ -90,27 +90,43 @@ class Main extends Component {
       });
     }
 
-    // stagefiltering
-    switch (this.state.stages[0]) {
-      case 'all':
-        break;
-      case 'overdue':
-        filteredTasks = filteredTasks.filter((t: any) => t.overdue);
-        break;
-      case 'ongoing':
-        filteredTasks = filteredTasks.filter(
-          (t: any) => t.state.stage.match(/^([0-8]\.)/) // all stages starting 0. - 8.
-        );
-        break;
-      default:
-        filteredTasks = filteredTasks.filter((t: any) =>
-          this.state.stages.includes(t.state.stage)
-        );
-      // stage = this.state.stages.length === 1 ? this.state.stages[0] : 'all';
-    }
+    //stageFiltering
+    let filteredTaskswithStage: any = [];
+    const searchingStages = [...this.state.stages];
 
+    // @to-do: refactor asap, to use reducer
+    for (let i = 0; i < this.state.stages.length; i++) {
+      const stage = this.state.stages[i];
+      console.log(stage);
+      switch (stage) {
+        case 'all':
+          filteredTaskswithStage = filteredTaskswithStage.concat(filteredTasks);
+          break;
+        case 'overdue':
+          filteredTaskswithStage = filteredTaskswithStage.concat(
+            filteredTasks.filter((t: any) => t.overdue)
+          );
+          break;
+        case 'ongoing':
+          filteredTaskswithStage = filteredTaskswithStage.concat(
+            filteredTasks.filter(
+              (t: any) => t.state.stage.match(/^([0-8]\.)/) // all stages starting 0. - 8.
+            )
+          );
+          break;
+        default:
+          const filteredTasksByCurrentStage = filteredTasks.filter((t: any) =>
+            searchingStages.includes(t.state.stage)
+          );
+          filteredTaskswithStage = [
+            ...filteredTaskswithStage,
+            ...filteredTasksByCurrentStage,
+          ];
+          searchingStages.shift();
+      }
+    }
     this.setState({
-      filteredTasks,
+      filteredTasks: filteredTaskswithStage,
       filteredItems,
     });
   }
@@ -146,7 +162,7 @@ class Main extends Component {
                   <CertificationList
                     tasks={this.state.filteredTasks}
                     update={this.setState.bind(this)}
-                    stage={this.state.stages[0]}
+                    stages={this.state.stages}
                   />
                   <StageShortNames />
                 </>

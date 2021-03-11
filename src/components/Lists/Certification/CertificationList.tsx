@@ -1,7 +1,7 @@
 import * as React from 'react';
 import ReactTable from 'react-table';
 import { getColumns } from './columns';
-import StageFilter from '../Filters/StageFilter';
+import { StageFilter } from '../Filters/StageFilter';
 import { ColumnFilter } from '../Filters/ColumnFilter';
 import { ListExport } from '../../Export/PDF/ListExport';
 
@@ -18,7 +18,7 @@ interface ICertificationListState {
 interface ICertificationListProps {
   tasks: any;
   update: any;
-  stage: string;
+  stages: any;
 }
 
 class CertificationList extends React.Component<
@@ -34,7 +34,7 @@ class CertificationList extends React.Component<
   }
 
   get columns() {
-    return getColumns(this.state.totalPrice, this.props.stage);
+    return getColumns(this.state.totalPrice, this.props.stages[0]);
   }
 
   componentDidUpdate(prevProps: any, prevState: any) {
@@ -74,7 +74,7 @@ class CertificationList extends React.Component<
           <ListExport
             tasks={this.state.visibleData}
             columns={this.columns}
-            stage={this.props.stage}
+            stage={this.props.stages[0]}
             startDate={this.state.startDate}
             endDate={this.state.endDate}
           />
