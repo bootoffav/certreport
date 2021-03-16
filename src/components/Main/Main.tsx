@@ -110,7 +110,7 @@ class Main extends Component {
         case 'ongoing':
           filteredTaskswithStage = filteredTaskswithStage.concat(
             filteredTasks.filter(
-              (t: any) => t.state.stage.match(/^([0-8]\.)/) // all stages starting 0. - 8.
+              (t: any) => t.state.stage.match(/^(10|[0-8]\.)/) // all stages starting 0. - 8. and 10.
             )
           );
           break;
