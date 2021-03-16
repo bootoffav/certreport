@@ -18,6 +18,7 @@ enum Stage {
   '8. Certificate ready',
   '9. Ended',
   '10. Repeat Testing is started',
+  '11. Repeat Test-report ready',
 }
 const taskPropMapAliases: {
   [key: string]: string;

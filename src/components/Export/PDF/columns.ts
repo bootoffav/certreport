@@ -482,7 +482,7 @@ const tableStructures = {
       'title',
       'state.article',
       'state.testReport',
-      'state.certReceivedOnRealDate',
+      'state.repeatCertReceivedOnPlanDate',
       'state.resume',
       'state.price',
     ],
@@ -494,7 +494,34 @@ const tableStructures = {
       'Task',
       'Article',
       'Test report',
-      'Certificate really received on',
+      '*R Certificate really received on',
+      'Result',
+      'Price',
+    ],
+    widths: [20, 40, 70, 40, '*', 70, 70, 70, 70, 70],
+  },
+  '11. Repeat Test-report ready': {
+    accessors: [
+      'position',
+      'state.serialNumber',
+      'createdDate',
+      'state.brand',
+      'title',
+      'state.article',
+      'state.testReport',
+      'state.repeatCertReceivedOnRealDate',
+      'state.resume',
+      'state.price',
+    ],
+    headers: [
+      '#',
+      '##',
+      'Created',
+      'XM_',
+      'Task',
+      'Article',
+      'Test report',
+      '*R Certificate really received on',
       'Result',
       'Price',
     ],
@@ -505,23 +532,5 @@ const tableStructures = {
 function getTableStructure(stage: 'ongoing' | 'overdue' | 'all') {
   return tableStructures[stage];
 }
-
-// accessors = this.props.columns.map((col: any) => {
-//   return typeof col.accessor != 'function' ? col.accessor : `state.${col.id}`;
-// });
-
-// headers = this.props.columns.map(({ Header }: any) => this.boldText(Header));
-// widths = this.props.columns.map(({ accessor, minWidth, width }: any) => {
-//   switch (accessor) {
-//     case 'title':
-//       return 'auto';
-//     case 'state.readyOn':
-//       return 70;
-//     case 'state.article':
-//       return 130;
-//     default:
-//       return minWidth || width || '*';
-//   }
-// });
 
 export { getTableStructure };
