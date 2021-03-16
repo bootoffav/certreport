@@ -1,4 +1,4 @@
-import { useReducer, useState } from 'react';
+import { useReducer } from 'react';
 
 interface StandardFilterProps {
   update: any;
@@ -34,24 +34,12 @@ function StandardFilter({ update }: StandardFilterProps) {
     Object.keys(standards).filter((st) => standards[st]);
 
   const [standards, dispatch] = useReducer(reducer, initialState);
-  const [hidden, setHidden] = useState(true);
 
-  return hidden ? (
-    <div className="pb-1">
-      {' '}
-      <button
-        type="button"
-        className="btn btn-light btn-block"
-        onClick={() => setHidden(false)}
-      >
-        Filter by Standards
-      </button>
-    </div>
-  ) : (
+  return (
     <div className="d-flex align-items-center">
       <div className="btn-group" data-toggle="buttons">
         {Object.keys(standards).map((standard) => (
-          <label className="btn btn-secondary btn-sm" key={standard}>
+          <label className="btn btn-secondary" key={standard}>
             <input
               type="checkbox"
               value={standard}
