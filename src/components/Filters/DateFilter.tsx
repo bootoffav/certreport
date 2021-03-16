@@ -13,7 +13,7 @@ function DateFilter(props: DateFilterProps) {
   const [endDate, setEndDate] = useState(props.endDate);
 
   return (
-    <div className="d-flex mx-2 w-50 align-items-center">
+    <div className="d-flex align-items-center">
       <div className="col">
         <DatePicker
           className="form-control"

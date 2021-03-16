@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { intersection } from 'lodash';
 import { Error404Page } from 'tabler-react';
 import CacheManager from '../../CacheManager';
 import { CertificationList } from '../Lists/Certification/CertificationList';
@@ -24,6 +25,14 @@ class Main extends Component {
     startDate: undefined,
     endDate: undefined,
     activeBrands: ['XMT', 'XMS', 'XMF'],
+    activeStandards: [
+      'EN 11611',
+      'EN 11612',
+      'EN 469',
+      'EN 20471',
+      'EN 13034',
+      'EN 61482',
+    ],
   };
 
   async componentDidMount() {
@@ -55,14 +64,22 @@ class Main extends Component {
       prevState.activeBrands !== this.state.activeBrands ||
       prevState.startDate !== this.state.startDate ||
       prevState.endDate !== this.state.endDate ||
-      prevState.stages !== this.state.stages
+      prevState.stages !== this.state.stages ||
+      prevState.activeStandards !== this.state.activeStandards
     ) {
       this.filter();
     }
   }
 
   filter() {
-    let { allTasks, allItems, activeBrands, startDate, endDate } = this.state;
+    let {
+      allTasks,
+      allItems,
+      activeBrands,
+      activeStandards,
+      startDate,
+      endDate,
+    } = this.state;
 
     // brandfiltering for Tasks
     let filteredTasks = allTasks.filter((task: any) => {
@@ -78,6 +95,12 @@ class Main extends Component {
         if (activeBrands.includes('No brand')) return true;
       }
       return activeBrands.includes(item.brand);
+    });
+
+    // standardfiltering
+    filteredTasks = filteredTasks.filter((task: any) => {
+      const standards = task.state.standards.split(', ');
+      return intersection(standards, activeStandards).length;
     });
 
     // datefiltering
