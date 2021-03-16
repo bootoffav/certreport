@@ -26,6 +26,7 @@ function byStages(tasks: any): dataType {
     '8. Certificate ready': [],
     '9. Ended': [],
     '10. Repeat Testing is started': [],
+    '11. Repeat Test-report ready': [],
   };
 
   tasks.forEach((task: any) => {

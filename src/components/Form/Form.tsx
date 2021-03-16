@@ -425,7 +425,7 @@ class Form extends React.Component {
     </Dimmer>
   );
 
-  renderDatesStage10 = () => {
+  renderRepeatDates = () => {
     return (
       <>
         <hr />
@@ -552,8 +552,10 @@ class Form extends React.Component {
             }
           />
         </div>
-        {this.state.stage === '10. Repeat Testing is started' &&
-          this.renderDatesStage10()}
+        {[
+          '10. Repeat Testing is started',
+          '11. Repeat Test-report ready',
+        ].includes(this.state.stage) && this.renderRepeatDates()}
       </Dimmer>
     );
   };

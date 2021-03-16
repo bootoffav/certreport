@@ -25,6 +25,7 @@ class StateAdapter {
       '6. Pre-treatment done': '',
       '8. Certificate ready': '',
       '10. Repeat Testing is started': 'repeatTestFinishedOnPlanDate',
+      '11. Repeat Test-report ready': 'repeatTestFinishedOnRealDate',
     };
 
     if (this.stage === '9. Ended') return '';
@@ -87,6 +88,9 @@ class StateAdapter {
         break;
       case '10. Repeat Testing is started':
         stageForTitle = `Repeat Testing is started`;
+        break;
+      case '11. Repeat Test-report ready':
+        stageForTitle = 'Repeat Test-report ready';
         break;
       default:
         stageForTitle = '';

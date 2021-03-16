@@ -35,6 +35,10 @@ const StageFilter: React.FunctionComponent<{
           value: '10. Repeat Testing is started',
           label: '10. Repeat Testing is started',
         },
+        {
+          value: '11. Repeat Test-report ready',
+          label: '11. Repeat Test-report ready',
+        },
       ],
     },
     {
