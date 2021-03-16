@@ -1,4 +1,3 @@
-import React from 'react';
 import { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Error404Page } from 'tabler-react';
@@ -94,13 +93,11 @@ class Main extends Component {
     let filteredTaskswithStage: any = [];
     const searchingStages = [...this.state.stages];
 
-    // @to-do: refactor asap, to use reducer
-    for (let i = 0; i < this.state.stages.length; i++) {
-      const stage = this.state.stages[i];
-      console.log(stage);
-      switch (stage) {
+    while (searchingStages.length) {
+      let curStage = searchingStages.shift();
+      switch (curStage) {
         case 'all':
-          filteredTaskswithStage = filteredTaskswithStage.concat(filteredTasks);
+          filteredTaskswithStage = [...filteredTasks];
           break;
         case 'overdue':
           filteredTaskswithStage = filteredTaskswithStage.concat(
@@ -115,16 +112,17 @@ class Main extends Component {
           );
           break;
         default:
-          const filteredTasksByCurrentStage = filteredTasks.filter((t: any) =>
-            searchingStages.includes(t.state.stage)
+          const filteredTasksByCurrentStage = filteredTasks.filter(
+            (t: any) => t.state.stage === curStage
           );
+
           filteredTaskswithStage = [
             ...filteredTaskswithStage,
             ...filteredTasksByCurrentStage,
           ];
-          searchingStages.shift();
       }
     }
+
     this.setState({
       filteredTasks: filteredTaskswithStage,
       filteredItems,
