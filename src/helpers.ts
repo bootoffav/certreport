@@ -77,7 +77,7 @@ const StageShortNames: {
   '8. Certificate ready': '8.CR',
   '9. Ended': '9.End',
   '10. Repeat Testing is started': '10. RTS',
-  '11. Repeat Test-report ready': '11. RTK',
+  '11. Repeat Test-report ready': '11. RTR',
 };
 
 function printStage(stage: string, place: 'table' | 'select' | 'dropdown') {
