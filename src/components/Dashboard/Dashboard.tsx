@@ -5,7 +5,6 @@ import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTable from 'react-table';
 import { Grid, Card } from 'tabler-react';
 import { Doughnut } from 'react-chartjs-2';
-import React from 'react';
 import { QSpending } from './QSpending/QSpending';
 import { doughnutOptions } from './configs';
 import { byStages, byProducts } from './dataprocessing';
