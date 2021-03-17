@@ -1,39 +1,53 @@
-import { useReducer } from 'react';
+import { useReducer, useEffect } from 'react';
 
 interface StandardFilterProps {
   update: any;
 }
 
-interface StandardFilterState {
+type StandardFilterState = {
   'EN 11611': boolean;
   'EN 11612': boolean;
   'EN 469': boolean;
   'EN 20471': boolean;
   'EN 13034': boolean;
   'EN 61482-1-2': boolean;
-}
+  All: boolean;
+  [key: string]: boolean;
+};
 
 const initialState: StandardFilterState = {
-  'EN 11611': true,
-  'EN 11612': true,
-  'EN 469': true,
-  'EN 20471': true,
-  'EN 13034': true,
-  'EN 61482-1-2': true,
+  'EN 11611': false,
+  'EN 11612': false,
+  'EN 469': false,
+  'EN 20471': false,
+  'EN 13034': false,
+  'EN 61482-1-2': false,
+  All: true,
 };
 
 function StandardFilter({ update }: StandardFilterProps) {
   function reducer(state: StandardFilterState, { standard, checked }: any) {
-    // @ts-expect-error
-    state[standard] = checked;
+    if (standard === 'All') {
+      state = { ...initialState };
+      state['All'] = checked;
+    } else {
+      state = { ...state };
+      state['All'] = false;
+      state[standard] = checked;
+    }
     return state;
   }
 
-  const getActiveStandards = () =>
-    // @ts-expect-error
-    Object.keys(standards).filter((st) => standards[st]);
+  const getActiveStandards = () => {
+    return Object.keys(standards).filter((st) => standards[st]);
+  };
 
   const [standards, dispatch] = useReducer(reducer, initialState);
+
+  // eslint-disable-next-line
+  useEffect(() => update({ activeStandards: getActiveStandards() }), [
+    standards,
+  ]);
 
   return (
     <div className="d-flex align-items-center">
@@ -43,15 +57,13 @@ function StandardFilter({ update }: StandardFilterProps) {
             <input
               type="checkbox"
               value={standard}
-              // @ts-expect-error
-              defaultChecked={standards[standard]}
+              checked={standards[standard]}
               onClick={(e) => {
-                e.stopPropagation();
                 dispatch({
                   standard: e.currentTarget.value,
                   checked: e.currentTarget.checked,
                 });
-                update({ activeStandards: getActiveStandards() });
+                e.stopPropagation();
               }}
             />{' '}
             {standard}

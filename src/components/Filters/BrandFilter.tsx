@@ -33,7 +33,7 @@ class BrandFilter extends Component<{
             <input
               type="checkbox"
               value={brand}
-              defaultChecked={this.state[brand]}
+              checked={this.state[brand]}
               onClick={this.handleChange}
             />{' '}
             {brand}
