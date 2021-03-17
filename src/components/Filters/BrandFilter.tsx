@@ -26,14 +26,14 @@ class BrandFilter extends Component<{
   };
 
   render = () => (
-    <div className="d-flex mt-1 align-items-center">
-      <div className="btn-group pt-1" data-toggle="buttons">
+    <div className="d-flex align-items-center">
+      <div className="btn-group" data-toggle="buttons">
         {Object.keys(this.state).map((brand) => (
           <label className="btn btn-secondary" key={brand}>
             <input
               type="checkbox"
               value={brand}
-              defaultChecked={this.state[brand]}
+              checked={this.state[brand]}
               onClick={this.handleChange}
             />{' '}
             {brand}

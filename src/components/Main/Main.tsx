@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { intersection } from 'lodash';
+import { intersection, isEqual } from 'lodash';
 import { Error404Page } from 'tabler-react';
 import CacheManager from '../../CacheManager';
 import { CertificationList } from '../Lists/Certification/CertificationList';
@@ -25,14 +25,7 @@ class Main extends Component {
     startDate: undefined,
     endDate: undefined,
     activeBrands: ['XMT', 'XMS', 'XMF'],
-    activeStandards: [
-      'EN 11611',
-      'EN 11612',
-      'EN 469',
-      'EN 20471',
-      'EN 13034',
-      'EN 61482',
-    ],
+    activeStandards: ['All'],
   };
 
   async componentDidMount() {
@@ -61,11 +54,11 @@ class Main extends Component {
 
   componentDidUpdate(_: any, prevState: any) {
     if (
-      prevState.activeBrands !== this.state.activeBrands ||
       prevState.startDate !== this.state.startDate ||
       prevState.endDate !== this.state.endDate ||
-      prevState.stages !== this.state.stages ||
-      prevState.activeStandards !== this.state.activeStandards
+      !isEqual(prevState.activeBrands, this.state.activeBrands) ||
+      !isEqual(prevState.stages, this.state.stages) ||
+      !isEqual(prevState.activeStandards, this.state.activeStandards)
     ) {
       this.filter();
     }
@@ -98,10 +91,12 @@ class Main extends Component {
     });
 
     // standardfiltering
-    filteredTasks = filteredTasks.filter((task: any) => {
-      const standards = task.state.standards.split(', ');
-      return intersection(standards, activeStandards).length;
-    });
+    if (this.state.activeStandards[0] !== 'All') {
+      filteredTasks = filteredTasks.filter((task: any) => {
+        const standards = task.state.standards.split(', ');
+        return intersection(standards, activeStandards).length;
+      });
+    }
 
     // datefiltering
     if (startDate && endDate) {

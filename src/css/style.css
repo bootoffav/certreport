@@ -35,3 +35,8 @@ p {
   color: initial;
   cursor: pointer;
 }
+
+/* overwrite */
+.btn-group > .btn.active {
+  z-index: 0;
+}

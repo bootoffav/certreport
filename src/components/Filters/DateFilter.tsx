@@ -14,39 +14,37 @@ function DateFilter(props: DateFilterProps) {
 
   return (
     <div className="d-flex align-items-center">
-      <div className="col">
-        <DatePicker
-          className="form-control"
-          selected={startDate}
-          dateFormat="dd.MM.yy"
-          selectsStart
-          startDate={startDate}
-          endDate={endDate}
-          onChange={(date: Date) => setStartDate(date)}
-          placeholderText="from"
-          maxDate={endDate}
-        />
+      <DatePicker
+        className="form-control"
+        selected={startDate}
+        dateFormat="dd.MM.yy"
+        selectsStart
+        startDate={startDate}
+        endDate={endDate}
+        onChange={(date: Date) => setStartDate(date)}
+        placeholderText="from"
+        maxDate={endDate}
+      />
+      <DatePicker
+        className="form-control"
+        selected={endDate}
+        dateFormat="dd.MM.yy"
+        selectsEnd
+        startDate={startDate}
+        endDate={endDate}
+        onChange={(date: Date) => setEndDate(date)}
+        placeholderText="to"
+        minDate={startDate}
+      />
+      <div className="px-1">
+        <Button
+          color="info"
+          pill
+          onClick={() => props.update({ startDate, endDate })}
+        >
+          Apply Dates
+        </Button>
       </div>
-      <div className="col">
-        <DatePicker
-          className="form-control"
-          selected={endDate}
-          dateFormat="dd.MM.yy"
-          selectsEnd
-          startDate={startDate}
-          endDate={endDate}
-          onChange={(date: Date) => setEndDate(date)}
-          placeholderText="to"
-          minDate={startDate}
-        />
-      </div>
-      <Button
-        color="info"
-        pill
-        onClick={() => props.update({ startDate, endDate })}
-      >
-        Apply Dates
-      </Button>
     </div>
   );
 }
