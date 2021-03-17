@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import DatePicker from 'react-datepicker';
-import { Button } from 'tabler-react';
 
 interface DateFilterProps {
   startDate: any;
@@ -15,10 +14,14 @@ function DateFilter(props: DateFilterProps) {
   return (
     <div className="d-flex align-items-center">
       <DatePicker
-        className="form-control"
         selected={startDate}
         dateFormat="dd.MM.yy"
         selectsStart
+        isClearable
+        peekNextMonth
+        showMonthDropdown
+        showYearDropdown
+        dropdownMode="select"
         startDate={startDate}
         endDate={endDate}
         onChange={(date: Date) => setStartDate(date)}
@@ -26,10 +29,14 @@ function DateFilter(props: DateFilterProps) {
         maxDate={endDate}
       />
       <DatePicker
-        className="form-control"
         selected={endDate}
         dateFormat="dd.MM.yy"
         selectsEnd
+        isClearable
+        peekNextMonth
+        showMonthDropdown
+        showYearDropdown
+        dropdownMode="select"
         startDate={startDate}
         endDate={endDate}
         onChange={(date: Date) => setEndDate(date)}
@@ -37,13 +44,13 @@ function DateFilter(props: DateFilterProps) {
         minDate={startDate}
       />
       <div className="px-1">
-        <Button
-          color="info"
-          pill
+        <button
+          type="button"
           onClick={() => props.update({ startDate, endDate })}
+          className="btn btn-primary btn-sm"
         >
-          Apply Dates
-        </Button>
+          Apply dates
+        </button>
       </div>
     </div>
   );

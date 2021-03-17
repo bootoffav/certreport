@@ -156,6 +156,10 @@ class QSpending extends Component<{
   };
 
   getFirstLastTotalSpendingsMonths(quarters: any) {
+    // when date range is shorter than a quarter
+    if (quarters.length === 0) {
+      return { start: '', end: '' };
+    }
     const start = `${quarters[0].start.format('MM.YYYY')}`;
     const end = `${quarters[quarters.length - 1].end.format('MM.YYYY')}`;
 
