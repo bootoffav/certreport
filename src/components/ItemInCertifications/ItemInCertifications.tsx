@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import Loader from 'react-loader-spinner';
-import { Grid, Table, Icon } from 'tabler-react';
+import { Grid, Icon } from 'tabler-react';
 import { getItemAssociatedTasks } from '../../B24/B24';
 import { getTaskParamLabel } from '../../Task/Task';
 import './ItemInCertifications.css';
