@@ -58,7 +58,7 @@ function StandardFilter({ update }: StandardFilterProps) {
               type="checkbox"
               value={standard}
               checked={standards[standard]}
-              onClick={(e) => {
+              onChange={(e) => {
                 dispatch({
                   standard: e.currentTarget.value,
                   checked: e.currentTarget.checked,

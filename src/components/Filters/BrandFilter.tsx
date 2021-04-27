@@ -34,7 +34,7 @@ class BrandFilter extends Component<{
               type="checkbox"
               value={brand}
               checked={this.state[brand]}
-              onClick={this.handleChange}
+              onChange={this.handleChange}
             />{' '}
             {brand}
           </label>
