@@ -15,11 +15,11 @@ interface INavBarProps {
 function NavBar({ startDate, endDate, update, updated }: INavBarProps) {
   return (
     <div className="container-fluid rounded-bottom navbar-light mb-1">
-      <div className="d-flex justify-content-between">
+      <div className="d-flex">
         <State updated={updated} />
         <DateFilter startDate={startDate} endDate={endDate} update={update} />
 
-        <div className="d-flex justify-content-end align-items-center">
+        <div className="ml-auto d-flex justify-content-end align-items-center">
           <NavLink className="navbar-link" exact to="/dashboard">
             <p>Dashboard</p>
           </NavLink>
