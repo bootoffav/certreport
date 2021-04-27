@@ -11,10 +11,6 @@ p {
   font-size: x-large;
 }
 
-.itemInCertificationsTable td:first-child {
-  width: 10%;
-}
-
 .TD3Lines {
   max-height: 55px;
   overflow: hidden;

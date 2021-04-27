@@ -77,12 +77,12 @@ function ItemInCertifications({ item }: IItemProps) {
         </span>
       </Grid.Col>
       <Grid.Col className="mt-2">
-        <Table highlightRowOnHover className="itemInCertificationsTable">
-          <Table.Header>
-            <Table.Row>
-              <Table.ColHeader>Parameter</Table.ColHeader>
+        <table className="table table-hover table-bordered">
+          <thead>
+            <tr>
+              <th>Parameter</th>
               {tasks.map((task: any, index: number) => (
-                <Table.ColHeader key={index}>
+                <th key={index}>
                   <div className="d-flex justify-content-start">
                     <a href={`/edit/${task.id}`}>{task.title} </a>
                     &nbsp;|&nbsp;
@@ -94,23 +94,23 @@ function ItemInCertifications({ item }: IItemProps) {
                       B24
                     </a>
                   </div>
-                </Table.ColHeader>
+                </th>
               ))}
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
+            </tr>
+          </thead>
+          <tbody>
             {parameters.map((param) => (
-              <Table.Row key={param}>
-                <Table.Col>{getTaskParamLabel(param)}</Table.Col>
+              <tr key={param}>
+                <td>{getTaskParamLabel(param)}</td>
                 {tasks.map((task: any, index: number) => (
-                  <Table.Col key={index}>
+                  <td key={index}>
                     <div className="TD3Lines">{formatColumn(task, param)}</div>
-                  </Table.Col>
+                  </td>
                 ))}
-              </Table.Row>
+              </tr>
             ))}
-          </Table.Body>
-        </Table>
+          </tbody>
+        </table>
       </Grid.Col>
       <Grid.Col width="8" offset="2">
         <div className="d-flex justify-content-center mt-3">
