@@ -1,9 +1,6 @@
 {
   "compilerOptions": {
-    "typeRoots": [
-      "./types",
-      "./node_modules/@types"
-    ],
+    "typeRoots": ["./types", "./node_modules/@types"],
     "target": "ESNext",
     "allowJs": true,
     "skipLibCheck": true,
@@ -11,6 +8,7 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
+    "noImplicitThis": false,
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
@@ -22,18 +20,8 @@
     "strictBindCallApply": true,
     "downlevelIteration": true,
     "isolatedModules": true,
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "ESNext",
-      "WebWorker"
-    ]
+    "lib": ["dom", "dom.iterable", "ESNext", "WebWorker"]
   },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "node_modules",
-    "types"
-  ]
+  "include": ["src"],
+  "exclude": ["node_modules", "types"]
 }
