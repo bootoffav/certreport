@@ -60,6 +60,8 @@ export interface IState {
   otherTextInDescription: string | null;
   resume: undefined | 'fail' | 'pass' | 'no sample' | 'partly';
   rem?: string;
+  quoteNo1?: string;
+  quoteNo2?: string;
 }
 
 const emptyState: IState = {
@@ -130,6 +132,8 @@ const emptyState: IState = {
   pretreatment3: '',
   otherTextInDescription: '',
   rem: '',
+  quoteNo1: `OF.${new Date().getFullYear().toString().slice(2)}-`,
+  quoteNo2: `OF.${new Date().getFullYear().toString().slice(2)}-`,
 };
 
 const brand = [

@@ -1,5 +1,5 @@
 import { Dimmer } from 'tabler-react';
-import { Pi, Price, Paid } from '../FormFields';
+import { BaseInput, Price, Paid } from '../FormFields';
 import { Status } from '../../Notification/Notification';
 import { localizePrice } from '../../../helpers';
 
@@ -27,7 +27,16 @@ function renderPayments() {
             this.handleCheckboxChange(e);
           }}
         />
-        <Pi
+
+        <BaseInput
+          required={false}
+          value={this.state.quoteNo1}
+          id="quoteNo1"
+          label="Quote No."
+          handleChange={this.handleChange}
+        />
+        {/* 2021-05-18 replace them by new fields: Quote No, PRO-FORMA INVOICE NO */}
+        {/* <Pi
           id="proformaReceived"
           checkboxState={this.state.proformaReceived}
           proformaReceivedDate={this.state.proformaReceived}
@@ -44,7 +53,7 @@ function renderPayments() {
           handleNumberChange={(e: any) => this.handleChange(e)}
           numberId={'proformaNumber'}
           number={this.state.proformaNumber}
-        />
+        /> */}
       </div>
 
       <div className="d-flex justify-content-center">
@@ -68,7 +77,16 @@ function renderPayments() {
             this.handleCheckboxChange(e);
           }}
         />
-        <Pi
+
+        <BaseInput
+          required={false}
+          value={this.state.quoteNo2}
+          id="quoteNo2"
+          label="Quote No."
+          handleChange={this.handleChange}
+        />
+        {/* 2021-05-18 replace them by new fields: Quote No, PRO-FORMA INVOICE NO */}
+        {/* <Pi
           id="proformaReceived2"
           checkboxState={this.state.proformaReceived2}
           proformaReceivedDate={this.state.proformaReceived2}
@@ -85,7 +103,7 @@ function renderPayments() {
           handleNumberChange={(e: React.SyntheticEvent) => this.handleChange(e)}
           numberId={'proformaNumber2'}
           number={this.state.proformaNumber2}
-        />
+        /> */}
       </div>
 
       <div className="col-10 offset-1">
