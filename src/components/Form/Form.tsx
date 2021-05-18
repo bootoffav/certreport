@@ -2,7 +2,7 @@ import * as React from 'react';
 import swal from 'sweetalert';
 import 'react-datepicker/dist/react-datepicker.css';
 import dayjs from 'dayjs';
-import { BaseInput, SerialNumber, Article } from './FormFields';
+import { BaseInput } from './FormFields';
 import * as B24 from '../../B24/B24';
 import Notification, { Status } from '../Notification/Notification';
 import { IState, emptyState } from '../../Task/emptyState';
