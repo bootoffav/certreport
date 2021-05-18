@@ -35,6 +35,14 @@ function renderPayments() {
           label="Quote No."
           handleChange={this.handleChange}
         />
+        <BaseInput
+          required={false}
+          value={this.state.proformaInvoiceNo1}
+          id="proformaInvoiceNo1"
+          label="PRO-FORMA INVOICE NO."
+          handleChange={this.handleChange}
+        />
+
         {/* 2021-05-18 replace them by new fields: Quote No, PRO-FORMA INVOICE NO */}
         {/* <Pi
           id="proformaReceived"
@@ -83,6 +91,13 @@ function renderPayments() {
           value={this.state.quoteNo2}
           id="quoteNo2"
           label="Quote No."
+          handleChange={this.handleChange}
+        />
+        <BaseInput
+          required={false}
+          value={this.state.proformaInvoiceNo2}
+          id="proformaInvoiceNo2"
+          label="PRO-FORMA INVOICE NO."
           handleChange={this.handleChange}
         />
         {/* 2021-05-18 replace them by new fields: Quote No, PRO-FORMA INVOICE NO */}

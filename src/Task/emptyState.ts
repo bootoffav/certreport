@@ -62,6 +62,8 @@ export interface IState {
   rem?: string;
   quoteNo1?: string;
   quoteNo2?: string;
+  proformaInvoiceNo1?: string;
+  proformaInvoiceNo2?: string;
 }
 
 const emptyState: IState = {
@@ -134,6 +136,8 @@ const emptyState: IState = {
   rem: '',
   quoteNo1: `OF.${new Date().getFullYear().toString().slice(2)}-`,
   quoteNo2: `OF.${new Date().getFullYear().toString().slice(2)}-`,
+  proformaInvoiceNo1: `FPRO.${new Date().getFullYear().toString().slice(2)}-`,
+  proformaInvoiceNo2: `FPRO.${new Date().getFullYear().toString().slice(2)}-`,
 };
 
 const brand = [

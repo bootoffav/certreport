@@ -46,10 +46,20 @@ class Form extends React.Component {
     if (this.task_id) {
       this.setState({ requestStatus: Status.Loading });
       const dataFromDB = await DB.getData(this.task_id).then(
-        ({ exists, rem, quoteNo1, quoteNo2, ...DBState }: any) => ({
+        ({
+          exists,
+          rem,
+          quoteNo1,
+          quoteNo2,
+          proformaInvoiceNo1,
+          proformaInvoiceNo2,
+          ...DBState
+        }: any) => ({
           DBState,
           quoteNo1,
           quoteNo2,
+          proformaInvoiceNo1,
+          proformaInvoiceNo2,
           rem,
           exists,
         })
@@ -64,8 +74,12 @@ class Form extends React.Component {
             DBState: dataFromDB.DBState,
             existsInDB: dataFromDB.exists,
             rem: dataFromDB.rem || emptyState.rem,
-            quoteNo1: dataFromDB.quoteNo1 || emptyState.quoteNo1,
-            quoteNo2: dataFromDB.quoteNo2 || emptyState.quoteNo2,
+            quoteNo1: dataFromDB.quoteNo1 ?? emptyState.quoteNo1,
+            quoteNo2: dataFromDB.quoteNo2 ?? emptyState.quoteNo2,
+            proformaInvoiceNo1:
+              dataFromDB.proformaInvoiceNo1 ?? emptyState.proformaInvoiceNo1,
+            proformaInvoiceNo2:
+              dataFromDB.proformaInvoiceNo2 ?? emptyState.proformaInvoiceNo2,
             requestStatus: Status.FillingForm,
           });
         })
@@ -133,6 +147,8 @@ class Form extends React.Component {
             rem: this.state.rem,
             quoteNo1: this.state.quoteNo1,
             quoteNo2: this.state.quoteNo2,
+            proformaInvoiceNo1: this.state.proformaInvoiceNo1,
+            proformaInvoiceNo2: this.state.proformaInvoiceNo2,
             ...this.state.DBState,
           })
             .then(this.successfullySubmitted)
