@@ -2,21 +2,20 @@ import * as React from 'react';
 import swal from 'sweetalert';
 import 'react-datepicker/dist/react-datepicker.css';
 import dayjs from 'dayjs';
-import { BaseInput } from './FormFields';
 import * as B24 from '../../B24/B24';
 import Notification, { Status } from '../Notification/Notification';
 import { IState, emptyState } from '../../Task/emptyState';
-import { Standards } from '../Standards/Standards';
-import { FileManagement } from '../FileManagement/FileManagement';
-import { FabricApplicationForm } from './FabricApplicationForm';
 import { DB } from '../../DBManager';
-import { TabbedCard, Tab, Dimmer, Button } from 'tabler-react';
-import { PreTreatment1 } from './PreTreatment1';
+import { TabbedCard, Button } from 'tabler-react';
 import CacheManager from '../../CacheManager';
 import { GoBackOrHomeButton } from '../NaviButton';
 import { renderDates } from './Tabs/Dates';
 import { renderPayments } from './Tabs/Payments';
 import { renderBasicInfo } from './Tabs/BasicInfo';
+import { renderFiles } from './Tabs/Files';
+import { renderCommentsNews } from './Tabs/CommentsNews';
+import { renderFabricApplicationForm } from './Tabs/FabricApplicationForm';
+import { renderStandards } from './Tabs/Standards';
 
 interface IFormState extends IState {
   requestStatus: Status;
@@ -185,22 +184,6 @@ class Form extends React.Component {
     );
   };
 
-  renderStandards = () => (
-    <Dimmer active={this.state.requestStatus !== Status.FillingForm} loader>
-      <Standards
-        initStandards={this.state.standards.split(', ')}
-        taskId={this.task_id || ''}
-        setState={this.setState.bind(this)}
-      />
-      <PreTreatment1
-        pretreatment1={this.state.pretreatment1}
-        result={this.state.pretreatment1Result}
-        handleChange={this.handleChange}
-        resultChange={this.handlePreTreatment1Change}
-      />
-    </Dimmer>
-  );
-
   render = () => (
     <div className="container mt-2">
       <Button
@@ -216,63 +199,13 @@ class Form extends React.Component {
       <Notification status={this.state.requestStatus} />
       <form onSubmit={(e) => this.handleCert(e)}>
         <TabbedCard initialTab="Basic Info">
-          <Tab title="Basic Info">{renderBasicInfo.call(this)}</Tab>
-          <Tab title="Dates">{renderDates.call(this)}</Tab>
-          <Tab title="Payments">{renderPayments.call(this)}</Tab>
-          <Tab title="Standards">{this.renderStandards()}</Tab>
-          <Tab title="Fabric Application Form">
-            <Dimmer
-              active={this.state.requestStatus !== Status.FillingForm}
-              loader
-            >
-              <FabricApplicationForm
-                state={this.state.DBState}
-                appForm={this.state}
-                updateParent={(DBState: any) => this.setState({ DBState })}
-              />
-            </Dimmer>
-          </Tab>
-          <Tab title="Comments & News">
-            <Dimmer
-              active={this.state.requestStatus !== Status.FillingForm}
-              loader
-            >
-              <div className="form-row">
-                <BaseInput
-                  required={false}
-                  value={this.state.news}
-                  className="w-100"
-                  id="news"
-                  label="News:"
-                  handleChange={this.handleChange}
-                />
-              </div>
-              <div className="form-row">
-                <label htmlFor="comments">Comments:</label>
-                <textarea
-                  className="form-control"
-                  value={this.state.comments}
-                  id="comments"
-                  rows={15}
-                  onChange={this.handleChange}
-                />
-              </div>
-            </Dimmer>
-          </Tab>
-          {this.task_id && (
-            <Tab title="Files">
-              <Dimmer
-                active={this.state.requestStatus !== Status.FillingForm}
-                loader
-              >
-                <FileManagement
-                  taskId={this.task_id}
-                  attachedFiles={this.state.attachedFiles}
-                  updateAttachedFiles={() => this.updateAttachedFiles()}
-                />
-              </Dimmer>
-            </Tab>
-          )}
+          {renderBasicInfo.call(this)}
+          {renderDates.call(this)}
+          {renderPayments.call(this)}
+          {renderStandards.call(this)}
+          {renderFabricApplicationForm.call(this)}
+          {renderCommentsNews.call(this)}
+          {this.task_id && renderFiles.call(this)}
         </TabbedCard>
         <div className="d-flex justify-content-around">
           <button type="submit" className="col-2 btn btn-primary">

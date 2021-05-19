@@ -1,50 +1,52 @@
-import { Dimmer } from 'tabler-react';
+import { Dimmer, Tab } from 'tabler-react';
 import { BaseInput, Price, Paid } from '../FormFields';
 import { Status } from '../../Notification/Notification';
 import { localizePrice } from '../../../helpers';
 
 function renderPayments() {
   return (
-    <Dimmer active={this.state.requestStatus !== Status.FillingForm} loader>
-      <div className="d-flex justify-content-center">
-        <Price
-          value={this.state.price}
-          id="price"
-          label="Payment #1"
-          handleChange={this.handleChange}
-        />
-        <Paid
-          id="paid"
-          checkboxState={this.state.paid}
-          date={this.state.paymentDate}
-          handleChange={(date: any) =>
-            this.handleDateChange(date, 'paymentDate')
-          }
-          handleCheckboxChange={(e: any) => {
-            if (!e.target.checked) {
-              this.setState({ paymentDate: null });
+    <Tab title="Payments">
+      <Dimmer active={this.state.requestStatus !== Status.FillingForm} loader>
+        <div className="d-flex justify-content-center">
+          <Price
+            value={this.state.price}
+            id="price"
+            label="Payment #1"
+            handleChange={this.handleChange}
+          />
+          <Paid
+            id="paid"
+            checkboxState={this.state.paid}
+            date={this.state.paymentDate}
+            handleChange={(date: any) =>
+              this.handleDateChange(date, 'paymentDate')
             }
-            this.handleCheckboxChange(e);
-          }}
-        />
+            handleCheckboxChange={(e: any) => {
+              if (!e.target.checked) {
+                this.setState({ paymentDate: null });
+              }
+              this.handleCheckboxChange(e);
+            }}
+          />
 
-        <BaseInput
-          required={false}
-          value={this.state.quoteNo1}
-          id="quoteNo1"
-          label="Quote No."
-          handleChange={this.handleChange}
-        />
-        <BaseInput
-          required={false}
-          value={this.state.proformaInvoiceNo1}
-          id="proformaInvoiceNo1"
-          label="PRO-FORMA INVOICE NO."
-          handleChange={this.handleChange}
-        />
+          <BaseInput
+            required={false}
+            value={this.state.quoteNo1}
+            id="quoteNo1"
+            label="Quote No."
+            handleChange={this.handleChange}
+          />
+          <BaseInput
+            className="ml-2"
+            required={false}
+            value={this.state.proformaInvoiceNo1}
+            id="proformaInvoiceNo1"
+            label="PRO-FORMA INVOICE NO."
+            handleChange={this.handleChange}
+          />
 
-        {/* 2021-05-18 replace them by new fields: Quote No, PRO-FORMA INVOICE NO */}
-        {/* <Pi
+          {/* 2021-05-18 replace them by new fields: Quote No, PRO-FORMA INVOICE NO */}
+          {/* <Pi
           id="proformaReceived"
           checkboxState={this.state.proformaReceived}
           proformaReceivedDate={this.state.proformaReceived}
@@ -62,46 +64,47 @@ function renderPayments() {
           numberId={'proformaNumber'}
           number={this.state.proformaNumber}
         /> */}
-      </div>
+        </div>
 
-      <div className="d-flex justify-content-center">
-        <Price
-          value={this.state.price2}
-          id="price2"
-          label="Payment #2"
-          handleChange={this.handleChange}
-        />
-        <Paid
-          id="paid2"
-          checkboxState={this.state.paid2}
-          date={this.state.paymentDate2}
-          handleChange={(date: Date) =>
-            this.handleDateChange(date, 'paymentDate2')
-          }
-          handleCheckboxChange={(e: any) => {
-            if (!e.target.checked) {
-              this.setState({ paymentDate2: null });
+        <div className="d-flex justify-content-center">
+          <Price
+            value={this.state.price2}
+            id="price2"
+            label="Payment #2"
+            handleChange={this.handleChange}
+          />
+          <Paid
+            id="paid2"
+            checkboxState={this.state.paid2}
+            date={this.state.paymentDate2}
+            handleChange={(date: Date) =>
+              this.handleDateChange(date, 'paymentDate2')
             }
-            this.handleCheckboxChange(e);
-          }}
-        />
+            handleCheckboxChange={(e: any) => {
+              if (!e.target.checked) {
+                this.setState({ paymentDate2: null });
+              }
+              this.handleCheckboxChange(e);
+            }}
+          />
 
-        <BaseInput
-          required={false}
-          value={this.state.quoteNo2}
-          id="quoteNo2"
-          label="Quote No."
-          handleChange={this.handleChange}
-        />
-        <BaseInput
-          required={false}
-          value={this.state.proformaInvoiceNo2}
-          id="proformaInvoiceNo2"
-          label="PRO-FORMA INVOICE NO."
-          handleChange={this.handleChange}
-        />
-        {/* 2021-05-18 replace them by new fields: Quote No, PRO-FORMA INVOICE NO */}
-        {/* <Pi
+          <BaseInput
+            required={false}
+            value={this.state.quoteNo2}
+            id="quoteNo2"
+            label="Quote No."
+            handleChange={this.handleChange}
+          />
+          <BaseInput
+            className="ml-2"
+            required={false}
+            value={this.state.proformaInvoiceNo2}
+            id="proformaInvoiceNo2"
+            label="PRO-FORMA INVOICE NO."
+            handleChange={this.handleChange}
+          />
+          {/* 2021-05-18 replace them by new fields: Quote No, PRO-FORMA INVOICE NO */}
+          {/* <Pi
           id="proformaReceived2"
           checkboxState={this.state.proformaReceived2}
           proformaReceivedDate={this.state.proformaReceived2}
@@ -119,14 +122,15 @@ function renderPayments() {
           numberId={'proformaNumber2'}
           number={this.state.proformaNumber2}
         /> */}
-      </div>
+        </div>
 
-      <div className="col-10 offset-1">
-        <p className="text-right font-weight-bold">
-          Total: {localizePrice(+this.state.price + +this.state.price2)}
-        </p>
-      </div>
-    </Dimmer>
+        <div className="col-10 offset-1">
+          <p className="text-right font-weight-bold">
+            Total: {localizePrice(+this.state.price + +this.state.price2)}
+          </p>
+        </div>
+      </Dimmer>
+    </Tab>
   );
 }
 
