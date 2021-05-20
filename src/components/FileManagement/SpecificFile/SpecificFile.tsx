@@ -1,5 +1,4 @@
 import { Form, Grid } from 'tabler-react';
-import React from 'react';
 import type { AttachedFile } from '../../../Task/types';
 import { FileView } from '../FileView';
 

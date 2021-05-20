@@ -6,7 +6,7 @@ import * as B24 from '../../B24/B24';
 import Notification, { Status } from '../Notification/Notification';
 import { IState, emptyState } from '../../Task/emptyState';
 import { DB } from '../../DBManager';
-import { TabbedCard, Button } from 'tabler-react';
+import { TabbedCard, Button, Icon } from 'tabler-react';
 import CacheManager from '../../CacheManager';
 import { GoBackOrHomeButton } from '../NaviButton';
 import { renderDates } from './Tabs/Dates';
@@ -16,6 +16,7 @@ import { renderFiles } from './Tabs/Files';
 import { renderCommentsNews } from './Tabs/CommentsNews';
 import { renderFabricApplicationForm } from './Tabs/FabricApplicationForm';
 import { renderStandards } from './Tabs/Standards';
+import { getShippingLabelFile } from '../Export/PDF/ShippingLabelFile';
 
 interface IFormState extends IState {
   requestStatus: Status;
@@ -196,6 +197,18 @@ class Form extends React.Component {
       >
         Task in B24
       </Button>
+      {this.state.requestStatus === Status.FillingForm && (
+        <Button
+          className="float-right"
+          link
+          onClick={(e: any) => {
+            e.preventDefault();
+            getShippingLabelFile(this.state);
+          }}
+        >
+          Shipping label <Icon prefix="fe" name="download" />
+        </Button>
+      )}
       <Notification status={this.state.requestStatus} />
       <form onSubmit={(e) => this.handleCert(e)}>
         <TabbedCard initialTab="Basic Info">

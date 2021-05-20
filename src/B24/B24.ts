@@ -196,6 +196,20 @@ async function handleApplicationForm(id: string, state: any) {
   });
 }
 
+// async function handleShippingLabel(testingCompany: string, id?: string) {
+//   const useShippingLabelCompanies = ['Aitex (Spain)', 'Aitex (China)'];
+//   if (!useShippingLabelCompanies.includes(testingCompany)) {
+//     return;
+//   }
+
+//   // const pdf = await new ShippingLabelFile();
+//   return 1;
+//   //   const fileName = 'Shipping-label-AITEX-LUCIA.docx';
+//   //   fetch(`${baseUrl}/${fileName}`)
+//   //     .then((res) => res.blob())
+//   //     .then((file) => fileUpload(id, fileName, file));
+// }
+
 function createTask(state: any) {
   const defaultParams = {
     AUDITORS: auditors,
@@ -218,13 +232,15 @@ function createTask(state: any) {
     });
 }
 
-function updateTask(state: any, task_id: string | null = null) {
-  if (task_id === null) {
+function updateTask(state: any, task_id?: string) {
+  if (task_id === undefined) {
     throw new Error('task id is not defined');
   }
-  const task_data = formTaskFields(state);
 
+  const task_data = formTaskFields(state);
   handleApplicationForm(task_id, state);
+  // handleShippingLabel(state.testingCompany, task_id);
+
   return fetch(`${mainUrl}/${creatorId}/${webhookKey}/task.item.update/`, {
     method: 'post',
     headers: { 'content-type': 'application/x-www-form-urlencoded' },
@@ -232,21 +248,31 @@ function updateTask(state: any, task_id: string | null = null) {
   });
 }
 
-function fileUpload(taskId: string | undefined, name: string, content: string) {
-  if (taskId) {
-    return fetch(`${mainUrl}/${creatorId}/${webhookKey}/task.item.addfile/`, {
-      method: 'post',
-      body: qs.stringify({
-        TASK_ID: taskId,
-        FILE: {
-          NAME: name,
-          CONTENT: btoa(content),
-        },
-      }),
-    }).then((res) => res.json());
-  } else {
-    throw new Error('Task Id is not defined');
-  }
+function fileUpload(taskId: string, name: string, file: Blob): Promise<void> {
+  return new Promise((res, rej) => {
+    const reader = new FileReader();
+    reader.readAsBinaryString(file);
+    reader.onload = () => {
+      if (typeof reader.result === 'string') {
+        return fetch(
+          `${mainUrl}/${creatorId}/${webhookKey}/task.item.addfile/`,
+          {
+            method: 'post',
+            body: qs.stringify({
+              TASK_ID: taskId,
+              FILE: {
+                NAME: name,
+                CONTENT: btoa(reader.result),
+              },
+            }),
+          }
+        )
+          .then((res) => res.json())
+          .then(() => res())
+          .catch(() => rej());
+      }
+    };
+  });
 }
 
 async function getTask(id: string | undefined) {
@@ -397,4 +423,5 @@ export {
   detachFileFromTask,
   getAttachedFiles,
   removeFileFromDisk,
+  // handleShippingLabel,
 };

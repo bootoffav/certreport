@@ -30,7 +30,7 @@ const pullSpecificFiles = (
 };
 
 function FileManagement(props: {
-  taskId: string | undefined;
+  taskId: string;
   attachedFiles: AttachedFile[];
   updateAttachedFiles: () => void;
 }) {
@@ -47,15 +47,9 @@ function FileManagement(props: {
   const upload = (e: any, filePrefix: string = '') => {
     setUploading(true);
     for (let file of e.target.files) {
-      const reader = new FileReader();
-      reader.readAsBinaryString(file);
-      reader.onload = () =>
-        B24.fileUpload(
-          props.taskId,
-          `${filePrefix}${file.name}`,
-          // @ts-ignore
-          reader.result
-        ).then(props.updateAttachedFiles);
+      B24.fileUpload(props.taskId, `${filePrefix}${file.name}`, file).then(
+        props.updateAttachedFiles
+      );
     }
   };
 

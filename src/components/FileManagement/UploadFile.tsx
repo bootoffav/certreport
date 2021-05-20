@@ -1,4 +1,3 @@
-import React from 'react';
 function UploadFile({ upload }: any) {
   return (
     <div className="input-group">
