@@ -84,12 +84,12 @@ function makeDocDefinition({
 }
 
 function getShippingLabelFile(state: IState) {
-  return create(state).then((pdf) =>
+  return createShippingLabelFile(state).then((pdf) =>
     pdf.download(`Shipping label_${state.serialNumber}_${state.article}.pdf`)
   );
 }
 
-function create(state: IState) {
+function createShippingLabelFile(state: IState): Promise<pdfMake.TCreatedPdf> {
   return Promise.all([
     import('pdfmake/build/pdfmake'),
     import('./vfs_fonts.js'),
@@ -98,4 +98,4 @@ function create(state: IState) {
   );
 }
 
-export { getShippingLabelFile };
+export { getShippingLabelFile, createShippingLabelFile };

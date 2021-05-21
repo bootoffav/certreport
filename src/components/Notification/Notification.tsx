@@ -15,14 +15,14 @@ const Notification: React.FunctionComponent<{
       return (
         <div className="alert alert-success" role="alert">
           <h4 className="alert-heading">Success!</h4>
-          <p>you are being redirected within 3 seconds!</p>
+          <p>redirecting you back!</p>
         </div>
       );
     case Status.Failure:
       return (
         <div className="alert alert-danger" role="alert">
           <h4 className="alert-heading">Failure</h4>
-          <p>Try to update a bit later!</p>
+          <p>Try to save again in a few seconds!</p>
         </div>
       );
   }

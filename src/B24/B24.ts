@@ -3,12 +3,14 @@ import dayjs from 'dayjs';
 import { dataSeparator } from '../Task/Task';
 import { StateAdapter } from '../StateAdapter';
 import { AppFormExport } from '../components/Export/PDF/AppFormExport';
+import { createShippingLabelFile } from '../components/Export/PDF/ShippingLabelFile';
 import {
   detachFileFromTask,
   getAttachedFiles,
   removeFileFromDisk,
 } from './DiskMethods';
 import { rawTaskProcessor } from '../workers/dataFetcher';
+import { IState } from '../Task/emptyState';
 export const creatorId = process.env.REACT_APP_B24_USER_ID;
 export const tag = process.env.REACT_APP_TAG;
 export const responsibleId = process.env.REACT_APP_B24_RESPONSIBLE_ID;
@@ -166,49 +168,53 @@ function formTaskFields(state: any) {
 }
 
 /**
+ * @param {string} fileNamePrefix - special type of file.
  * @param  {string} id task ID
  * @param  {any} state
  */
-async function handleApplicationForm(id: string, state: any) {
-  const fileNamePrefix = 'Fabric Test Application Form_';
-
-  // look for old appForm and remove it from task
+async function handleAttachingPDF(
+  fileNamePrefix: string,
+  id: string,
+  state: IState
+): Promise<void> {
   const attachedFiles = await getAttachedFiles(id);
   attachedFiles.forEach(({ NAME, FILE_ID, ATTACHMENT_ID }: any) => {
+    debugger;
     if (NAME.startsWith(fileNamePrefix)) {
       detachFileFromTask(id, ATTACHMENT_ID);
       removeFileFromDisk(FILE_ID);
     }
   });
 
-  const pdf = await new AppFormExport(state).create();
-  pdf.getBase64((base64: string) => {
-    fetch(`${mainUrl}/${creatorId}/${webhookKey}/task.item.addfile/`, {
-      method: 'post',
-      body: qs.stringify({
-        TASK_ID: id,
-        FILE: {
-          NAME: `${fileNamePrefix}${state.serialNumber}_${state.article}.pdf`,
-          CONTENT: base64,
-        },
-      }),
+  let pdf: pdfMake.TCreatedPdf;
+  switch (fileNamePrefix) {
+    case 'Fabric Test Application Form_':
+      pdf = await new AppFormExport(state).create();
+      break;
+    case 'Shipping label_':
+      const useShippingLabelCompanies = ['Aitex (Spain)', 'Aitex (China)'];
+      if (!useShippingLabelCompanies.includes(state.testingCompany)) {
+        return;
+      }
+      pdf = await createShippingLabelFile(state);
+      break;
+  }
+
+  return new Promise((res) => {
+    pdf.getBase64((base64: string) => {
+      fetch(`${mainUrl}/${creatorId}/${webhookKey}/task.item.addfile/`, {
+        method: 'post',
+        body: qs.stringify({
+          TASK_ID: id,
+          FILE: {
+            NAME: `${fileNamePrefix}${state.serialNumber}_${state.article}.pdf`,
+            CONTENT: base64,
+          },
+        }),
+      }).then(() => res());
     });
   });
 }
-
-// async function handleShippingLabel(testingCompany: string, id?: string) {
-//   const useShippingLabelCompanies = ['Aitex (Spain)', 'Aitex (China)'];
-//   if (!useShippingLabelCompanies.includes(testingCompany)) {
-//     return;
-//   }
-
-//   // const pdf = await new ShippingLabelFile();
-//   return 1;
-//   //   const fileName = 'Shipping-label-AITEX-LUCIA.docx';
-//   //   fetch(`${baseUrl}/${fileName}`)
-//   //     .then((res) => res.blob())
-//   //     .then((file) => fileUpload(id, fileName, file));
-// }
 
 function createTask(state: any) {
   const defaultParams = {
@@ -232,14 +238,14 @@ function createTask(state: any) {
     });
 }
 
-function updateTask(state: any, task_id?: string) {
+async function updateTask(state: any, task_id?: string) {
   if (task_id === undefined) {
     throw new Error('task id is not defined');
   }
 
   const task_data = formTaskFields(state);
-  handleApplicationForm(task_id, state);
-  // handleShippingLabel(state.testingCompany, task_id);
+  await handleAttachingPDF('Fabric Test Application Form_', task_id, state);
+  await handleAttachingPDF('Shipping label_', task_id, state);
 
   return fetch(`${mainUrl}/${creatorId}/${webhookKey}/task.item.update/`, {
     method: 'post',
@@ -423,5 +429,39 @@ export {
   detachFileFromTask,
   getAttachedFiles,
   removeFileFromDisk,
-  // handleShippingLabel,
 };
+
+/**
+ * @param  {string} id task ID
+ * @param  {any} state
+ * @todo Eject handling fetch to bitrix from func, code repeats in handle functions.
+ */
+// async function handleApplicationForm(id: string, state: any): Promise<void> {
+//   const fileNamePrefix = 'Fabric Test Application Form_';
+
+//   // look for old appForm and remove it from task
+//   const attachedFiles = await getAttachedFiles(id);
+//   attachedFiles.forEach(({ NAME, FILE_ID, ATTACHMENT_ID }: any) => {
+//     if (NAME.startsWith(fileNamePrefix)) {
+//       detachFileFromTask(id, ATTACHMENT_ID);
+//       removeFileFromDisk(FILE_ID);
+//     }
+//   });
+
+//   const pdf = await new AppFormExport(state).create();
+
+//   return new Promise((res) => {
+//     pdf.getBase64((base64: string) => {
+//       fetch(`${mainUrl}/${creatorId}/${webhookKey}/task.item.addfile/`, {
+//         method: 'post',
+//         body: qs.stringify({
+//           TASK_ID: id,
+//           FILE: {
+//             NAME: `${fileNamePrefix}${state.serialNumber}_${state.article}.pdf`,
+//             CONTENT: base64,
+//           },
+//         }),
+//       }).then(() => res());
+//     });
+//   });
+// }

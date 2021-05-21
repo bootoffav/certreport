@@ -174,7 +174,7 @@ class Form extends React.Component {
 
   successfullySubmitted = () => {
     this.setState({ requestStatus: Status.Success });
-    this.props.history.goBack();
+    setTimeout(() => this.props.history.goBack(), 1000);
   };
 
   unsuccessfullySubmitted = (error: any) => {
