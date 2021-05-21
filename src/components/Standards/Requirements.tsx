@@ -97,7 +97,7 @@ function Requirements(props: RequirementsProps) {
                     disabled
                     type="number"
                     value={20}
-                    onChange={(e) => console.log(e.target.value)}
+                    // onChange={(e) => console.log(e.target.value)}
                   />
                 </td>
                 <td>{localizePrice(countCostWithDiscount(r.data.cost, 20))}</td>

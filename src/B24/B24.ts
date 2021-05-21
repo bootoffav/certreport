@@ -179,14 +179,14 @@ async function handleAttachingPDF(
 ): Promise<void> {
   const attachedFiles = await getAttachedFiles(id);
   attachedFiles.forEach(({ NAME, FILE_ID, ATTACHMENT_ID }: any) => {
-    debugger;
     if (NAME.startsWith(fileNamePrefix)) {
       detachFileFromTask(id, ATTACHMENT_ID);
       removeFileFromDisk(FILE_ID);
     }
   });
 
-  let pdf: pdfMake.TCreatedPdf;
+  let pdf: { name: string } & pdfMake.TCreatedPdf;
+
   switch (fileNamePrefix) {
     case 'Fabric Test Application Form_':
       pdf = await new AppFormExport(state).create();
@@ -207,7 +207,7 @@ async function handleAttachingPDF(
         body: qs.stringify({
           TASK_ID: id,
           FILE: {
-            NAME: `${fileNamePrefix}${state.serialNumber}_${state.article}.pdf`,
+            NAME: pdf.name,
             CONTENT: base64,
           },
         }),

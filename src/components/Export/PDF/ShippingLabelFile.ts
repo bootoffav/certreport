@@ -84,18 +84,25 @@ function makeDocDefinition({
 }
 
 function getShippingLabelFile(state: IState) {
-  return createShippingLabelFile(state).then((pdf) =>
-    pdf.download(`Shipping label_${state.serialNumber}_${state.article}.pdf`)
-  );
+  return createShippingLabelFile(state).then((pdf) => pdf.download(pdf.name));
 }
 
-function createShippingLabelFile(state: IState): Promise<pdfMake.TCreatedPdf> {
+function createShippingLabelFile(state: IState) {
+  const offerNo = state.activeQuoteNo
+    ? state[state.activeQuoteNo]
+    : 'not specified';
+
   return Promise.all([
     import('pdfmake/build/pdfmake'),
     import('./vfs_fonts.js'),
-  ]).then(([pdfmake, vfs]: any) =>
-    pdfmake.createPdf(makeDocDefinition(state), tableLayout, fonts, vfs.vfs)
-  );
+  ])
+    .then(([pdfmake, vfs]: any) =>
+      pdfmake.createPdf(makeDocDefinition(state), tableLayout, fonts, vfs.vfs)
+    )
+    .then((pdf) => {
+      pdf.name = `Shipping label_${state.serialNumber}_${state.article}_${offerNo}.pdf`;
+      return pdf;
+    });
 }
 
 export { getShippingLabelFile, createShippingLabelFile };

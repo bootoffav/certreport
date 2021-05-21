@@ -782,20 +782,17 @@ class AppFormExport {
     };
   }
 
-  save = () =>
-    this.create().then((pdf) =>
-      pdf.download(
-        `Fabric Test Application Form_${this.state.serialNumber}_${this.state.article}.pdf`
-      )
-    );
+  save = () => this.create().then((pdf) => pdf.download(pdf.name));
 
   create = () =>
-    Promise.all([
-      import('pdfmake/build/pdfmake'),
-      import('./vfs_fonts.js'),
-    ]).then(([pdfmake, vfs]: any) =>
-      pdfmake.createPdf(this.docDefinition, tableLayout, fonts, vfs.vfs)
-    );
+    Promise.all([import('pdfmake/build/pdfmake'), import('./vfs_fonts.js')])
+      .then(([pdfmake, vfs]: any) =>
+        pdfmake.createPdf(this.docDefinition, tableLayout, fonts, vfs.vfs)
+      )
+      .then((pdf) => {
+        pdf.name = `Fabric Test Application Form_${this.state.serialNumber}_${this.state.article}.pdf`;
+        return pdf;
+      });
 }
 
 export { AppFormExport };
