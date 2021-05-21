@@ -49,6 +49,7 @@ class Form extends React.Component {
         ({
           exists,
           rem,
+          activeQuoteNo,
           quoteNo1,
           quoteNo2,
           proformaInvoiceNo1,
@@ -56,6 +57,7 @@ class Form extends React.Component {
           ...DBState
         }: any) => ({
           DBState,
+          activeQuoteNo,
           quoteNo1,
           quoteNo2,
           proformaInvoiceNo1,
@@ -74,6 +76,7 @@ class Form extends React.Component {
             DBState: dataFromDB.DBState,
             existsInDB: dataFromDB.exists,
             rem: dataFromDB.rem || emptyState.rem,
+            activeQuoteNo: dataFromDB.activeQuoteNo,
             quoteNo1: dataFromDB.quoteNo1 ?? emptyState.quoteNo1,
             quoteNo2: dataFromDB.quoteNo2 ?? emptyState.quoteNo2,
             proformaInvoiceNo1:
@@ -147,6 +150,7 @@ class Form extends React.Component {
             rem: this.state.rem,
             quoteNo1: this.state.quoteNo1,
             quoteNo2: this.state.quoteNo2,
+            activeQuoteNo: this.state.activeQuoteNo,
             proformaInvoiceNo1: this.state.proformaInvoiceNo1,
             proformaInvoiceNo2: this.state.proformaInvoiceNo2,
             ...this.state.DBState,

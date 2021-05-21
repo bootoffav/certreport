@@ -76,6 +76,11 @@ interface PaymentProps {
   handleChange: (e: any) => void;
 }
 
+interface QuoteProps extends PaymentProps {
+  activeQuoteNo?: string;
+  handleActiveQuoteNoChange: (id: string) => void;
+}
+
 function Price(props: PaymentProps) {
   return (
     <div className="form-group">
@@ -99,7 +104,7 @@ function Price(props: PaymentProps) {
   );
 }
 
-function QuoteNo(props: PaymentProps) {
+function QuoteNo(props: QuoteProps) {
   return (
     <div className="form-group">
       {props.label}
@@ -107,9 +112,11 @@ function QuoteNo(props: PaymentProps) {
         <div className="input-group-prepend">
           <div className="input-group-text">
             <input
+              checked={props.activeQuoteNo === props.id}
               type="radio"
               name="shippingLabelOF"
               aria-label="Radio choose for shipping label"
+              onChange={() => props.handleActiveQuoteNoChange(props.id)}
             />
           </div>
         </div>

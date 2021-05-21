@@ -62,6 +62,7 @@ export interface IState {
   rem?: string;
   quoteNo1?: string;
   quoteNo2?: string;
+  activeQuoteNo?: string;
   proformaInvoiceNo1?: string;
   proformaInvoiceNo2?: string;
 }

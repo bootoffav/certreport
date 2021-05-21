@@ -47,6 +47,12 @@ function renderPayment(time: number) {
         }}
       />
       <QuoteNo
+        activeQuoteNo={this.state.activeQuoteNo}
+        handleActiveQuoteNoChange={(id: string) => {
+          this.setState({
+            activeQuoteNo: id,
+          });
+        }}
         value={this.state[`quoteNo${time}`]}
         id={`quoteNo${time}`}
         label="Quote No."
