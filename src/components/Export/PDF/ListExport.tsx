@@ -140,13 +140,17 @@ class ListExport extends Component<{
             row.push(results);
             break;
           case 'state.price':
-            this.totalPrice += Number(tasks[i].state.price);
+            this.totalPrice += Number(
+              tasks[i].state.price1 || 0 + tasks[i].state.price2 || 0
+            );
             row.push({
               alignment: 'right',
               text:
                 tasks[i].state.price === ''
                   ? '€ 0'
-                  : `€${Math.round(tasks[i].state.price)
+                  : `€${Math.round(
+                      tasks[i].state.price1 || 0 + tasks[i].state.price2 || 0
+                    )
                       .toLocaleString()
                       .replace(/,/g, ' ')}`,
             });

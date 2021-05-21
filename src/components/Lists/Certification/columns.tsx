@@ -163,7 +163,7 @@ function getColumns(totalPrice: number, stage?: string) {
       // 16
       Header: 'Paid',
       id: 'paid',
-      accessor: 'state.paymentDate',
+      accessor: 'state.paymentDate1',
       minWidth: 40,
       Cell: (props: any) =>
         props.value ? <span className="oi oi-check"> </span> : '',
@@ -173,7 +173,7 @@ function getColumns(totalPrice: number, stage?: string) {
       // 17
       Header: 'Payment date',
       id: 'paymentDate',
-      accessor: 'state.paymentDate',
+      accessor: 'state.paymentDate1',
       width: 130,
       sortMethod: sortDates,
     },
@@ -383,7 +383,7 @@ function getColumns(totalPrice: number, stage?: string) {
         </>
       ),
       id: 'price',
-      accessor: ({ state }: any) => (+state.price || 0) + (+state.price2 || 0),
+      accessor: ({ state }: any) => (+state.price1 || 0) + (+state.price2 || 0),
       minWidth: 90,
       Cell: (props: any) => (
         <span style={{ float: 'right' }}>{formatPrice(props.value)}</span>

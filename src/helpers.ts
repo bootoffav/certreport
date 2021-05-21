@@ -54,7 +54,7 @@ function countTotalPrice(tasks: any[]) {
   return Math.round(
     tasks.reduce(
       (sum: number, task: any) =>
-        sum + ((+task.state.price || 0) + (+task.state.price2 || 0)),
+        sum + ((+task.state.price1 || 0) + (+task.state.price2 || 0)),
       0
     )
   );

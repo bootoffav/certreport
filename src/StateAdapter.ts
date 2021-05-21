@@ -15,7 +15,7 @@ class StateAdapter {
       '0. Sample to be prepared': 'sentOn',
       '1. Sample Sent': 'receivedOn',
       '2. Sample Arrived': 'proformaReceivedDate',
-      '3. PI Issued': 'paymentDate',
+      '3. PI Issued': 'paymentDate1',
       '4. Payment Done': 'startedOn',
       '5. Testing is started': 'testFinishedOnPlanDate',
       '7. Test-report ready': 'certReceivedOnPlanDate',
@@ -60,7 +60,7 @@ class StateAdapter {
         )}`;
         break;
       case '4. Payment Done':
-        stageForTitle = `Payment Done - ${dC(this.paymentDate, 'DD.MM.YYYY')}`;
+        stageForTitle = `Payment Done - ${dC(this.paymentDate1, 'DD.MM.YYYY')}`;
         break;
       case '5. Testing is started':
         stageForTitle = `Testing is started - ${dC(

@@ -102,13 +102,13 @@ class QSpending extends Component<{
   // считает траты целых кварталов
   countQuarterSpendings(quarters: any) {
     this.props.tasks.forEach((task: any) => {
-      const { price, paymentDate, price2 } = task.state;
+      const { price1, paymentDate1, price2 } = task.state;
       Object.entries(quarters).forEach(([_, quarter]: any) => {
         if (
-          quarter.start < dayjs(paymentDate) &&
-          dayjs(paymentDate) < quarter.end
+          quarter.start < dayjs(paymentDate1) &&
+          dayjs(paymentDate1) < quarter.end
         ) {
-          quarter.spent += +price + +price2;
+          quarter.spent += +price1 + +price2;
           quarter.tasks.push(task);
         }
       });

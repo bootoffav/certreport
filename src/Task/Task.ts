@@ -49,8 +49,8 @@ const taskPropMap: {
   Standard: 'standards',
   'Test report': 'testReport',
   Certificate: 'certificate',
-  Price: 'price',
-  'Payment date': 'paymentDate',
+  Price: 'price1',
+  'Payment date': 'paymentDate1',
   Proforma: 'proforma',
   'Testing company': 'testingCompany',
   'Material needed': 'materialNeeded',
@@ -147,10 +147,10 @@ class Task {
       delete parsedState.proforma;
     }
 
-    parsedState.price = parsedState.price
-      ? parsedState.price.split(' ')[0]
+    parsedState.price1 = parsedState.price1
+      ? parsedState.price1.split(' ')[0]
       : '';
-    parsedState.paid = parsedState.paymentDate ? true : false;
+    parsedState.paid = parsedState.paymentDate1 ? true : false;
 
     if (parsedState.secondPayment) {
       const [
@@ -307,7 +307,7 @@ class Task {
       case '2. Sample Arrived':
         return this.state['proformaReceivedDate'] || 'No date';
       case '3. PI Issued':
-        return this.state['paymentDate'] || 'No date';
+        return this.state['paymentDate1'] || 'No date';
       case '4. Payment Done':
         return this.state['startedOn'] || 'No date';
       case '5. Testing is started':
@@ -348,8 +348,8 @@ class Task {
         ];
       case '4. Payment Done':
         return [
-          dayjs(this.state['paymentDate']).add(2, 'day') < today,
-          this.state['paymentDate'],
+          dayjs(this.state['paymentDate1']).add(2, 'day') < today,
+          this.state['paymentDate1'],
         ];
       case '5. Testing is started':
         return [

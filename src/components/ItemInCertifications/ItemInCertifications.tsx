@@ -152,7 +152,7 @@ function formatColumn(task: any, param: string): any[] | string {
       ));
 
     case 'price':
-      return (+task.state.price || 0 + +task.state.price2 || 0).toLocaleString(
+      return (+task.state.price1 || 0 + +task.state.price2 || 0).toLocaleString(
         'ru-RU',
         {
           style: 'currency',

@@ -69,14 +69,14 @@ const SerialNumber = (props: SerialNumberProps) => (
   </>
 );
 
-interface IPriceProps {
+interface PaymentProps {
   id: string;
   value: string;
   label: string;
   handleChange: (e: any) => void;
 }
 
-function Price(props: IPriceProps) {
+function Price(props: PaymentProps) {
   return (
     <div className="form-group">
       {props.label}
@@ -93,6 +93,32 @@ function Price(props: IPriceProps) {
             e.target.value.replace(',', '.');
             props.handleChange(e);
           }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function QuoteNo(props: PaymentProps) {
+  return (
+    <div className="form-group">
+      {props.label}
+      <div className="input-group">
+        <div className="input-group-prepend">
+          <div className="input-group-text">
+            <input
+              type="radio"
+              name="shippingLabelOF"
+              aria-label="Radio choose for shipping label"
+            />
+          </div>
+        </div>
+        <input
+          type="text"
+          className="form-control"
+          id={props.id}
+          value={props.value}
+          onChange={props.handleChange}
         />
       </div>
     </div>
@@ -209,4 +235,4 @@ class Article extends React.Component<ArticleProps> {
   );
 }
 
-export { PickDate, BaseInput, SerialNumber, Article, Price, Paid, Pi };
+export { PickDate, BaseInput, SerialNumber, Article, Price, Paid, Pi, QuoteNo };

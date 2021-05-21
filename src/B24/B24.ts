@@ -64,7 +64,7 @@ function formTaskFields(state: any) {
     TITLE:
       `${state.serialNumber}_${state.testingCompany} - ${state.standards} (${state.pretreatment1}) - ${state.article}, ${state.colour} ` +
       `(send ${state.sentOn} - plan ${state.testFinishedOnPlanDate}) = ${(
-        +state.price + +state.price2
+        +state.price1 + +state.price2
       ).toLocaleString('ru-RU', {
         style: 'currency',
         currency: 'EUR',
@@ -89,9 +89,9 @@ function formTaskFields(state: any) {
       `${
         state.standards && `[B]Standard:[/B] ${stAd.standardsWithResults}\n`
       }` +
-      `${state.price && `[B]Price:[/B] ${state.price} €\n`}` +
+      `${state.price1 && `[B]Price:[/B] ${state.price1} €\n`}` +
       `${
-        state.paymentDate ? `[B]Payment date:[/B] ${state.paymentDate}\n` : ''
+        state.paymentDate1 ? `[B]Payment date:[/B] ${state.paymentDate1}\n` : ''
       }` +
       `${
         stAd.secondPayment && `[B]Second payment:[/B] ${stAd.secondPayment}\n`

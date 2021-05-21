@@ -3,8 +3,9 @@
   "version": "3.2.6",
   "private": true,
   "dependencies": {
+    "@popperjs/core": "^2.9.2",
     "@sentry/browser": "^5.24.2",
-    "bootstrap": "^4.5.0",
+    "bootstrap": "^5.0.0",
     "chart.js": "^2.9.3",
     "dayjs": "^1.8.36",
     "faunadb": "^2.14.2",
@@ -12,7 +13,6 @@
     "lodash": "^4.17.20",
     "netlify-identity-widget": "^1.9.1",
     "pdfmake": "^0.1.68",
-    "popper.js": "^1.16.1",
     "qs": "^6.9.4",
     "react": "^17.0.0",
     "react-chartjs-2": "^2.9.0",

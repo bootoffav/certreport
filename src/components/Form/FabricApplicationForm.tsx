@@ -75,7 +75,7 @@ class FabricApplicationForm extends React.Component<
                   new AppFormExport(this.props.appForm).save();
                 }}
               >
-                <Icon prefix="fe" name="download" />
+                Get as PDF <Icon prefix="fe" name="download" />
               </Button>
             </div>
           </th>
