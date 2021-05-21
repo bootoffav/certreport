@@ -1,7 +1,16 @@
 import { tableLayout, fonts } from './settings';
 import type { IState } from '../../../Task/emptyState';
 
-function makeDocDefinition({ serialNumber, article, quoteNo1 = '' }: IState) {
+function makeDocDefinition({
+  serialNumber,
+  article,
+  activeQuoteNo,
+  ...state
+}: IState) {
+  const offerNo = activeQuoteNo
+    ? state[activeQuoteNo].slice(3)
+    : 'not specified';
+
   return {
     pageOrientation: 'landscape',
     content: [
@@ -31,7 +40,7 @@ function makeDocDefinition({ serialNumber, article, quoteNo1 = '' }: IState) {
         },
       },
       {
-        text: `OFFER NO.: ${quoteNo1.slice(3) || 'not specified'}\n`,
+        text: `OFFER NO.: ${offerNo || 'not specified'}\n`,
         style: ['bold', 'offer'],
       },
       {

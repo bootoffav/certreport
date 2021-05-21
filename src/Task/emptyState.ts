@@ -65,6 +65,7 @@ export interface IState {
   activeQuoteNo?: string;
   proformaInvoiceNo1?: string;
   proformaInvoiceNo2?: string;
+  [key: string]: any;
 }
 
 const emptyState: IState = {
