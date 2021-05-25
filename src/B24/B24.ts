@@ -10,7 +10,7 @@ import {
   removeFileFromDisk,
 } from './DiskMethods';
 import { rawTaskProcessor } from '../workers/dataFetcher';
-import { IState } from '../Task/emptyState';
+import type { TaskState } from '../Task/Task.interface';
 export const creatorId = process.env.REACT_APP_B24_USER_ID;
 export const tag = process.env.REACT_APP_TAG;
 export const responsibleId = process.env.REACT_APP_B24_RESPONSIBLE_ID;
@@ -175,7 +175,7 @@ function formTaskFields(state: any) {
 async function handleAttachingPDF(
   fileNamePrefix: string,
   id: string,
-  state: IState
+  state: TaskState
 ): Promise<void> {
   const attachedFiles = await getAttachedFiles(id);
   attachedFiles.forEach(({ NAME, FILE_ID, ATTACHMENT_ID }: any) => {

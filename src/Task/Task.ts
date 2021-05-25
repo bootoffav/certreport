@@ -51,7 +51,7 @@ const taskPropMap: {
   Certificate: 'certificate',
   Price: 'price1',
   'Payment date': 'paymentDate1',
-  Proforma: 'proforma',
+  // Proforma: 'proforma',
   'Testing company': 'testingCompany',
   'Material needed': 'materialNeeded',
   'Testing time, days': 'testingTime',
@@ -138,14 +138,14 @@ class Task {
       ] = this.parseStandardResults(parsedState.standards.split(', '));
     }
 
-    if (parsedState.proforma) {
-      [
-        parsedState.proformaReceivedDate,
-        parsedState.proformaNumber,
-      ] = parsedState.proforma.split(', ');
-      parsedState.proformaReceived = true;
-      delete parsedState.proforma;
-    }
+    // if (parsedState.proforma) {
+    //   [
+    //     parsedState.proformaReceivedDate1,
+    //     parsedState.proformaNumber,
+    //   ] = parsedState.proforma.split(', ');
+    //   parsedState.proformaReceived = true;
+    //   delete parsedState.proforma;
+    // }
 
     parsedState.price1 = parsedState.price1
       ? parsedState.price1.split(' ')[0]
@@ -163,7 +163,6 @@ class Task {
       parsedState.price2 = price2 ? price2.split(' ')[0] : '';
       parsedState.paymentDate2 = paymentDate2 || '';
       parsedState.paid2 = Boolean(paymentDate2);
-
       parsedState.proformaReceivedDate2 = proformaReceivedDate2 || '';
 
       try {

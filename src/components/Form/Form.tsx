@@ -4,7 +4,8 @@ import 'react-datepicker/dist/react-datepicker.css';
 import dayjs from 'dayjs';
 import * as B24 from '../../B24/B24';
 import Notification, { Status } from '../Notification/Notification';
-import { IState, emptyState } from '../../Task/emptyState';
+import { emptyState } from '../../Task/emptyState';
+import type { TaskState } from '../../Task/Task.interface';
 import { DB } from '../../DBManager';
 import { TabbedCard, Button, Icon } from 'tabler-react';
 import CacheManager from '../../CacheManager';
@@ -18,7 +19,7 @@ import { renderFabricApplicationForm } from './Tabs/FabricApplicationForm';
 import { renderStandards } from './Tabs/Standards';
 import { getShippingLabelFile } from '../Export/PDF/ShippingLabelFile';
 
-interface IFormState extends IState {
+interface IFormState extends TaskState {
   requestStatus: Status;
   hasError?: boolean;
   existsInDB?: boolean;

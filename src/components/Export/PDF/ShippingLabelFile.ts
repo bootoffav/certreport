@@ -1,12 +1,12 @@
 import { tableLayout, fonts } from './settings';
-import type { IState } from '../../../Task/emptyState';
+import type { TaskState } from '../../../Task/Task.interface';
 
 function makeDocDefinition({
   serialNumber,
   article,
   activeQuoteNo,
   ...state
-}: IState) {
+}: TaskState) {
   const offerNo = activeQuoteNo
     ? state[activeQuoteNo].slice(3)
     : 'not specified';
@@ -83,11 +83,11 @@ function makeDocDefinition({
   };
 }
 
-function getShippingLabelFile(state: IState) {
+function getShippingLabelFile(state: TaskState) {
   return createShippingLabelFile(state).then((pdf) => pdf.download(pdf.name));
 }
 
-function createShippingLabelFile(state: IState) {
+function createShippingLabelFile(state: TaskState) {
   const offerNo = state.activeQuoteNo
     ? state[state.activeQuoteNo]
     : 'not specified';
