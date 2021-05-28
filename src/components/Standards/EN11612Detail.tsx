@@ -31,7 +31,7 @@ function EN11612Detail(props: any) {
 
   useEffect(() => {
     (async function () {
-      setDetails(await DB.getStandardDetail(props.taskId, 'EN11612'));
+      setDetails(await DB.get(props.taskId, 'EN11612Detail', 'aitex'));
     })();
   }, [props.taskId, setDetails]);
 

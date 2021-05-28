@@ -1,6 +1,7 @@
 import faunadb, { query as q } from 'faunadb';
 import { emptyState } from '../Task/emptyState';
 import type { IRequirement } from '../components/Standards/Requirements';
+import type { Payment } from '../Task/Task.interface';
 
 class DB {
   static fdbCollection = process.env.REACT_APP_FAUNADB_CLASS || 'aitex';
@@ -42,13 +43,22 @@ class DB {
     // .catch(() => []);
   }
 
-  static getStandardDetail(taskId: string, standard: string) {
-    return DB.client().query(
-      q.Select(
-        ['data', `${standard}Detail`],
-        q.Get(q.Ref(q.Collection(this.fdbCollection), taskId))
+  static async get(
+    taskId: string,
+    property: string,
+    fdbCollection = this.fdbCollection
+  ): Promise<Payment[]> {
+    return await DB.client()
+      .query(
+        q.Select(
+          ['data', property],
+          q.Get(q.Ref(q.Collection(fdbCollection), taskId))
+        )
       )
-    );
+      .catch(({ message }) => {
+        console.log(message);
+        return [] as any;
+      });
   }
 
   static async getData(taskId: string) {
@@ -80,9 +90,13 @@ class DB {
     return data;
   }
 
-  static async createInstance(taskId: string, state: any) {
+  static async createInstance(
+    taskId: string,
+    state: any,
+    fdbCollection = this.fdbCollection
+  ) {
     return DB.client().query(
-      q.Create(q.Ref(q.Collection(this.fdbCollection), taskId), {
+      q.Create(q.Ref(q.Collection(fdbCollection), taskId), {
         data: {
           ...state,
         },

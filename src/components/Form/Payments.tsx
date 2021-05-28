@@ -1,29 +1,51 @@
-import { Price, Paid, QuoteNo, BaseInput } from './FormFields';
+import { Button, Icon } from 'tabler-react';
+import React, { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
+
+import { Price, Paid, QuoteNo, BaseInput } from './FormFields';
 import type { Payment } from '../../Task/Task.interface';
 import { localizePrice } from '../../helpers';
-import { DBPayments } from '../../backend/DBPayments';
 import { DB } from '../../backend/DBManager';
-import React, { useState, useEffect } from 'react';
 
 interface PaymentsProps {
-  // payments: Payment[];
+  payments: Payment[];
   taskId?: string;
 }
 
-function Payments({ taskId }: PaymentsProps) {
+function Payments({ taskId, ...props }: PaymentsProps) {
   const [payments, setPayments] = useState([] as Payment[]);
+
   // gets payments from DB
   useEffect(() => {
-    taskId && DBPayments.get(taskId).then(setPayments);
-  }, [taskId]);
+    (async function () {
+      if (taskId) {
+        const payments = await DB.get(taskId, 'payments', 'payments');
+        if (props.payments.length > 0) {
+          // исключить повторные оплаты (сранивание по price)
+          // возникают при получении данных из Б24 и faunaDB
+          props.payments.forEach(({ price }) => {
+            const index = payments.findIndex((p) => p.price === price);
+            if (index !== -1) {
+              payments.splice(index, 1);
+            }
+          });
+        }
+        setPayments([...props.payments, ...payments]);
+      }
+    })();
+  }, [taskId, props.payments]);
 
   // save payments in DB on unmount
-  // useEffect(() => {
-  //   return function () {
-  //     taskId && DB.updateInstance(taskId, { payments: [payments] }, 'payments');
-  //   };
-  // }, [payments]);
+  useEffect(() => {
+    return function () {
+      taskId &&
+        payments.length > 0 &&
+        DB.updateInstance(taskId, { payments }, 'payments').catch((reason) => {
+          reason.message === 'instance not found' &&
+            DB.createInstance(taskId, { payments }, 'payments');
+        });
+    };
+  }, [taskId, payments]);
 
   const genericSetter = (
     location: string,
@@ -110,16 +132,61 @@ function Payments({ taskId }: PaymentsProps) {
             });
           }}
         />
+        <RemovePayment
+          doIt={(e) => {
+            e.preventDefault();
+            setPayments((payments) => {
+              payments.splice(index, 1);
+              return [...payments];
+            });
+          }}
+        />
       </div>
     );
   };
 
   const total = payments.reduce((total, { price }) => total + Number(price), 0);
+  const emptyPayment = {
+    price: '',
+    paid: false,
+    paymentDate: '',
+    quoteNo: '',
+    proformaInvoiceNo: '',
+  };
   return (
     <>
       {payments.map(renderPayment)}
+      <AddPayment
+        doIt={(e) => {
+          e.preventDefault();
+          setPayments((payments) => [...payments, emptyPayment]);
+        }}
+      />
       {renderTotal(total)}
     </>
+  );
+}
+
+interface AddRemovePaymentProps {
+  doIt: (e: React.SyntheticEvent) => void;
+}
+
+function RemovePayment({ doIt }: AddRemovePaymentProps) {
+  return (
+    <div
+      className="ml-2 d-flex align-items-center"
+      style={{ fontSize: '1.2rem' }}
+    >
+      <Icon className="redIcon" link onClick={doIt} name="trash-2" />
+    </div>
+  );
+}
+
+function AddPayment({ doIt }: AddRemovePaymentProps) {
+  return (
+    <span style={{ fontSize: '1.2rem' }}>
+      <Icon link onClick={doIt} name="plus-circle" />
+    </span>
   );
 }
 

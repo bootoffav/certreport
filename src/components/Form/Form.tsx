@@ -81,23 +81,26 @@ class Form extends React.Component {
             activeQuoteNo: dataFromDB.activeQuoteNo,
             requestStatus: Status.FillingForm,
           });
-          this.setState((state: TaskState) => {
-            if (state.payments) {
-              const payment1 = {
+          if (this.state.payments.length > 0) {
+            this.setState((state: TaskState) => {
+              const payments = [];
+              payments.push({
                 ...state.payments[0],
                 quoteNo: dataFromDB.quoteNo1,
                 proformaInvoiceNo: dataFromDB.proformaInvoiceNo1,
-              };
-              const payment2 = {
-                ...state.payments[1],
-                quoteNo: dataFromDB.quoteNo2,
-                proformaInvoiceNo: dataFromDB.proformaInvoiceNo2,
-              };
+              });
+              if (this.state.payments.length > 1) {
+                payments.push({
+                  ...state.payments[1],
+                  quoteNo: dataFromDB.quoteNo2,
+                  proformaInvoiceNo: dataFromDB.proformaInvoiceNo2,
+                });
+              }
               return {
-                payments: [payment1, payment2],
+                payments,
               };
-            }
-          });
+            });
+          }
         })
         .catch((e) => this.setState({ hasError: true }));
     }
@@ -159,8 +162,6 @@ class Form extends React.Component {
 
       // update in FaunaDB
       if (this.state.existsInDB) {
-        // update Payments Tab
-        DB.updateInstance(taskId, {}, 'payments');
         DB.updateInstance(taskId, {
           rem: this.state.rem,
           quoteNo1: this.state.quoteNo1,
@@ -241,10 +242,7 @@ class Form extends React.Component {
               loader
             >
               {/* {renderPayments.call(this)} */}
-              <Payments
-                // payments={this.state.payments}
-                taskId={this.task_id}
-              />
+              <Payments payments={this.state.payments} taskId={this.task_id} />
             </Dimmer>
           </Tab>
           {/* {renderPayments.call(this)} */}
