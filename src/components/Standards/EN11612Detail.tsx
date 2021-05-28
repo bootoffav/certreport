@@ -1,6 +1,6 @@
 import React from 'react';
 import { Icon } from 'tabler-react';
-import { DB } from '../../DBManager';
+import { DB } from '../../backend/DBManager';
 import { useState, useEffect } from 'react';
 
 function EN11612Detail(props: any) {

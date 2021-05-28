@@ -72,6 +72,7 @@ const emptyState: TaskState = {
   quoteNo2: `OF.${new Date().getFullYear().toString().slice(2)}-`,
   proformaInvoiceNo1: `FPRO.${new Date().getFullYear().toString().slice(2)}-`,
   proformaInvoiceNo2: `FPRO.${new Date().getFullYear().toString().slice(2)}-`,
+  payments: [],
 };
 
 const brand = [

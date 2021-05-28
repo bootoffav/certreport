@@ -69,22 +69,16 @@ const SerialNumber = (props: SerialNumberProps) => (
   </>
 );
 
-interface PaymentProps {
-  id: string;
+interface PriceProps {
   value: string;
   label: string;
-  handleChange: (e: any) => void;
+  handleChange: (value: string) => void;
 }
 
-interface QuoteProps extends PaymentProps {
-  activeQuoteNo?: string;
-  handleActiveQuoteNoChange: (id: string) => void;
-}
-
-function Price(props: PaymentProps) {
+function Price({ value, label, handleChange }: PriceProps) {
   return (
     <div className="form-group">
-      {props.label}
+      {label}
       <div className="input-group">
         <div className="input-group-prepend">
           <span className="input-group-text">€</span>
@@ -92,11 +86,10 @@ function Price(props: PaymentProps) {
         <input
           type="number"
           className="form-control"
-          id={props.id}
-          value={props.value}
-          onChange={(e) => {
-            e.target.value.replace(',', '.');
-            props.handleChange(e);
+          value={value}
+          onChange={({ currentTarget }) => {
+            currentTarget.value.replace(',', '.');
+            handleChange(currentTarget.value);
           }}
         />
       </div>
@@ -104,92 +97,114 @@ function Price(props: PaymentProps) {
   );
 }
 
-function QuoteNo(props: QuoteProps) {
+interface QuoteProps {
+  activeQuoteNo?: boolean;
+  handleActiveQuoteNoChange: (e: React.SyntheticEvent) => void;
+  value: string;
+  label: string;
+  onChange: (e: React.SyntheticEvent) => void;
+}
+
+function QuoteNo({
+  value,
+  label,
+  onChange,
+  activeQuoteNo,
+  handleActiveQuoteNoChange,
+}: QuoteProps) {
   return (
     <div className="form-group">
-      {props.label}
+      {label}
       <div className="input-group">
         <div className="input-group-prepend">
           <div className="input-group-text">
             <input
-              checked={props.activeQuoteNo === props.id}
+              checked={activeQuoteNo}
               type="radio"
               name="shippingLabelOF"
               aria-label="Radio choose for shipping label"
-              onChange={() => props.handleActiveQuoteNoChange(props.id)}
+              onChange={handleActiveQuoteNoChange}
             />
           </div>
         </div>
         <input
           type="text"
           className="form-control"
-          id={props.id}
-          value={props.value}
-          onChange={props.handleChange}
+          value={value}
+          onChange={onChange}
         />
       </div>
     </div>
   );
 }
 
-const Paid = (props: any) => (
-  <div className="form-group mx-2">
-    Payment Date
-    <div className="input-group">
-      <div className="input-group-prepend">
-        <div className="input-group-text">
-          <input
-            type="checkbox"
-            id={props.id}
-            onChange={props.handleCheckboxChange}
-            checked={props.checkboxState}
-          />
-        </div>
-      </div>
-      <DatePicker
-        className="form-control"
-        disabled={!props.checkboxState}
-        selected={selected(props.date)}
-        dateFormat="dd.MM.yyyy"
-        onChange={props.handleChange}
-      />
-    </div>
-  </div>
-);
+interface PaidProps {
+  checked: boolean;
+  onChange: (e: React.BaseSyntheticEvent) => void;
+  paymentDateChange: (e: Date) => void;
+  paymentDate: string;
+}
 
-const Pi = (props: any) => (
-  <div className="form-group">
-    Proforma Received
-    <div className="input-group">
-      <div className="input-group-prepend">
-        <div className="input-group-text">
-          <input
-            type="checkbox"
-            id={props.id}
-            onChange={props.handleCheckboxChange}
-            checked={props.proformaReceivedDate}
-          />
+const Paid = ({
+  checked,
+  onChange,
+  paymentDateChange,
+  paymentDate,
+}: PaidProps) => {
+  return (
+    <div className="form-group mx-2">
+      Payment Date
+      <div className="input-group">
+        <div className="input-group-prepend">
+          <div className="input-group-text">
+            <input type="checkbox" onChange={onChange} checked={checked} />
+          </div>
         </div>
+        <DatePicker
+          className="form-control"
+          disabled={!checked}
+          selected={selected(paymentDate)}
+          dateFormat="dd.MM.yyyy"
+          onChange={paymentDateChange}
+        />
       </div>
-      <DatePicker
-        className="form-control"
-        disabled={!props.checkboxState}
-        selected={selected(props.date)}
-        dateFormat="dd.MM.yyyy"
-        onChange={props.handleDateChange}
-        todayButton={'Today'}
-      />
-      <input
-        type="text"
-        className="form-control"
-        disabled={!props.checkboxState}
-        onChange={props.handleNumberChange}
-        id={props.numberId}
-        value={props.number}
-      />
     </div>
-  </div>
-);
+  );
+};
+
+// const Pi = (props: any) => (
+//   <div className="form-group">
+//     Proforma Received
+//     <div className="input-group">
+//       <div className="input-group-prepend">
+//         <div className="input-group-text">
+//           <input
+//             type="checkbox"
+//             id={props.id}
+//             onChange={props.handleCheckboxChange}
+//             checked={props.proformaReceivedDate}
+//           />
+//         </div>
+//       </div>
+//       <DatePicker
+//         className="form-control"
+//         disabled={!props.checkboxState}
+//         selected={selected(props.date)}
+//         dateFormat="dd.MM.yyyy"
+//         onChange={props.handleDateChange}
+//         todayButton={'Today'}
+//       />
+//       <input
+//         type="text"
+//         className="form-control"
+//         disabled={!props.checkboxState}
+//         onChange={props.handleNumberChange}
+//         id={props.numberId}
+//         value={props.number}
+//       />
+//     </div>
+//   </div>
+// );
 
 interface ArticleProps {
   options: any[];
@@ -242,4 +257,4 @@ class Article extends React.Component<ArticleProps> {
   );
 }
 
-export { PickDate, BaseInput, SerialNumber, Article, Price, Paid, Pi, QuoteNo };
+export { PickDate, BaseInput, SerialNumber, Article, Price, Paid, QuoteNo };

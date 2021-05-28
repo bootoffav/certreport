@@ -1,0 +1,27 @@
+// @ts-nocheck
+// using fauna shell
+
+// Create Document with specifying its ref
+Create(Ref(Collection('payments'), 62790), {
+  data: {
+    payments: [
+      {
+        price: '400',
+        paid: true,
+        paymentDate: 'test',
+        quoteNo: 'OF21-1',
+        proformaInvoiceNo: 'FFPO-1',
+      },
+      {
+        price: '500',
+        paid: true,
+        paymentDate: 'test2',
+        quoteNo: 'OF21-2',
+        proformaInvoiceNo: 'FFPO-2',
+      },
+    ],
+  },
+});
+
+// Create Document with specifying its ref in specific Collection
+Get(Ref(Collection('payments'), 62790));

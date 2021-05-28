@@ -1,0 +1,101 @@
+import { useState, useEffect } from 'react';
+import { Icon, Button } from 'tabler-react';
+import { Price, Paid, QuoteNo, BaseInput } from '../FormFields';
+
+type Payment = {
+  price: string;
+  paymentDate: string;
+  quoteNo: string;
+  proformaInvoiceNo: string;
+};
+
+// function AdditionalPayments(props: any) {
+//   const [additionalPayments, setAdditionalPayments] = useState([] as Payment[]);
+//   const [paymentNumber, setPaymentNumber] = useState(3);
+//   useEffect(() => {}, []);
+
+//   function AddButton() {
+//     const add = (e: React.SyntheticEvent) => {
+//       e.preventDefault();
+//       const newPayment: Payment = {
+//         price: `price${paymentNumber}`,
+//         paymentDate: 'paid',
+//         quoteNo: 'quote No',
+//         proformaInvoiceNo: 'proforma Invoice No',
+//       };
+
+//       if (additionalPayments.length === 0) {
+//         setAdditionalPayments([newPayment]);
+//       } else {
+//         setAdditionalPayments([...additionalPayments, newPayment]);
+//       }
+//       setPaymentNumber(paymentNumber + 1);
+//     };
+
+//     return (
+//       <Button link onClick={add}>
+//         <span style={{ fontSize: '1.2rem' }}>
+//           <Icon name="plus-circle" />
+//         </span>
+//       </Button>
+//     );
+//   }
+
+//   return (
+//     <>
+//       {additionalPayments.map((payment: Payment, index) => {
+//         return <div>{renderAdditionalPayment(payment, index + 2)}</div>;
+//       })}
+//       <AddButton />
+//     </>
+//   );
+// }
+
+// function renderAdditionalPayment(payment: Payment, time: number) {
+//   return (
+//     <div className="d-flex justify-content-center">
+//       <Price
+//         value={payment.price}
+//         id={`price${time}`}
+//         label={`Payment #${time}`}
+//         handleChange={this.handleChange}
+//       />
+//       <Paid
+//         id={`paid${time}`}
+//         checkboxState={this.state[`paid${time}`]}
+//         date={this.state[`paymentDate${time}`]}
+//         handleChange={(date: Date) =>
+//           this.handleDateChange(date, `paymentDate${time}`)
+//         }
+//         handleCheckboxChange={(e: any) => {
+//           if (!e.target.checked) {
+//             this.setState({ [`paymentDate${time}`]: null });
+//           }
+//           this.handleCheckboxChange(e);
+//         }}
+//       />
+//       <QuoteNo
+//         activeQuoteNo={this.state.activeQuoteNo}
+//         handleActiveQuoteNoChange={(id: string) => {
+//           this.setState({
+//             activeQuoteNo: id,
+//           });
+//         }}
+//         value={this.state[`quoteNo${time}`]}
+//         id={`quoteNo${time}`}
+//         label="Quote No."
+//         handleChange={this.handleChange}
+//       />
+//       <BaseInput
+//         className="ml-2"
+//         required={false}
+//         value={this.state[`proformaInvoiceNo${time}`]}
+//         id={`proformaInvoiceNo${time}`}
+//         label="PRO-FORMA INVOICE NO."
+//         handleChange={this.handleChange}
+//       />
+//     </div>
+//   );
+// }
+
+// export { AdditionalPayments };

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StandardResult } from './StandardResult';
 import { Price } from '../Form/FormFields';
 import { useState, useEffect } from 'react';
-import { DB } from '../../DBManager';
+import { DB } from '../../backend/DBManager';
 import { EN11612Detail } from './EN11612Detail';
 import { Requirements } from './Requirements';
 import './Standards.css';
@@ -124,7 +124,6 @@ function Standards(props: StandardsProps) {
               <div className="col-3">
                 <Price
                   value={standards[standard].price}
-                  id="price"
                   label=""
                   handleChange={(e: any) => {
                     updateStandardPrice({ standard, price: +e.target.value });

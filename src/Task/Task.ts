@@ -1,5 +1,6 @@
-import { emptyState, brand } from './emptyState';
 import dayjs from 'dayjs';
+import { emptyState, brand } from './emptyState';
+// import type { Payment } from './Task.interface';
 
 const dataSeparator = '-------------------------------------------------';
 
@@ -86,6 +87,7 @@ class Task {
     Object.assign(this, props);
     this.state = this.parse(props.description, props.ufCrmTask);
     this.state.stage = this.state.stage || this.determineStage();
+    this.parsePayments();
     [this.overdue, this.lastActionDate] = this.determineOverdue();
     this.nextActionDate = this.getNextActionDate();
   }
@@ -137,7 +139,6 @@ class Task {
         parsedState.standardsResult,
       ] = this.parseStandardResults(parsedState.standards.split(', '));
     }
-
     // if (parsedState.proforma) {
     //   [
     //     parsedState.proformaReceivedDate1,
@@ -234,6 +235,27 @@ class Task {
     parsedState.ufCrmTask = ufCrmTask;
 
     return parsedState;
+  }
+
+  /**
+   *
+   */
+  parsePayments() {
+    const formPayment = (time: number) => ({
+      price: this.state[`price${time}`],
+      paid: !!this.state[`paymentDate${time}`],
+      paymentDate: this.state[`paymentDate${time}`],
+      quoteNo: this.state[`quoteNo${time}`],
+      proformaInvoiceNo: this.state[`proformaInvoiceNo${time}`],
+    });
+
+    if (this.state.price1) {
+      this.state.payments.push(formPayment(1));
+    }
+
+    if (this.state.price2) {
+      this.state.payments.push(formPayment(2));
+    }
   }
 
   /**

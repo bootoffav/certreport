@@ -1,0 +1,82 @@
+interface TaskState {
+  standardsResult: {
+    [key: string]: 'pass' | 'fail';
+  };
+  attachedFiles: any;
+  DBState: any;
+  link: string;
+  news: string;
+  testingTime: string;
+  serialNumber: string;
+  applicantName: string;
+  testingCompany: string;
+  stage: string;
+  standards: string;
+  price1: string;
+  paid: boolean;
+  paymentDate1: string;
+  proformaReceived: string;
+  proforma: string;
+  proformaReceivedDate: string;
+  proformaNumber: string;
+  price2: string;
+  paid2: boolean;
+  paymentDate2: string;
+  proformaReceived2: string;
+  proformaReceivedDate2: string;
+  proformaNumber2: string;
+  article: string;
+  product: string;
+  code: string;
+  colour: string;
+  testReport: string;
+  certificate: string;
+  materialNeeded: string;
+  pretreatment1: string;
+  pretreatment1Result: string;
+  pretreatment2: string;
+  pretreatment3: string;
+  length: string;
+  width: string;
+  partNumber: string;
+  rollNumber: string;
+  brand: string;
+  pausedUntil: string;
+  readyOn: string;
+  sentOn: string;
+  receivedOn: string;
+  repeatReceivedOn: string;
+  startedOn: string;
+  repeatStartedOn: string;
+  testFinishedOnPlanDate: string;
+  repeatTestFinishedOnPlanDate: string;
+  testFinishedOnRealDate: string;
+  repeatTestFinishedOnRealDate: string;
+  certReceivedOnPlanDate: string;
+  repeatCertReceivedOnPlanDate: string;
+  certReceivedOnRealDate: string;
+  repeatCertReceivedOnRealDate: string;
+  comments: string;
+  otherTextInDescription: string | null;
+  resume: undefined | 'fail' | 'pass' | 'no sample' | 'partly';
+  rem?: string;
+  quoteNo1?: string;
+  quoteNo2?: string;
+  activeQuoteNo?: string;
+  proformaInvoiceNo1?: string;
+  proformaInvoiceNo2?: string;
+  payments: Payment[];
+  [key: string]: any;
+}
+
+interface Payment {
+  price: string;
+  paid: boolean;
+  paymentDate: string;
+  quoteNo: string;
+  proformaInvoiceNo: string;
+  activeQuoteNo?: boolean;
+  [key: string]: string | boolean | undefined;
+}
+
+export type { TaskState, Payment };

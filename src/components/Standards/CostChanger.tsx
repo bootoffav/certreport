@@ -1,7 +1,7 @@
 import { Icon } from 'tabler-react';
 import { localizePrice } from '../../helpers';
 import { useState } from 'react';
-import { DB } from '../../DBManager';
+import { DB } from '../../backend/DBManager';
 
 interface PriceChangerProps {
   cost: string;

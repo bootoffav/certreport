@@ -6,18 +6,19 @@ import * as B24 from '../../B24/B24';
 import Notification, { Status } from '../Notification/Notification';
 import { emptyState } from '../../Task/emptyState';
 import type { TaskState } from '../../Task/Task.interface';
-import { DB } from '../../DBManager';
+import { DB } from '../../backend/DBManager';
 import { TabbedCard, Button, Icon } from 'tabler-react';
 import CacheManager from '../../CacheManager';
 import { GoBackOrHomeButton } from '../NaviButton';
 import { renderDates } from './Tabs/Dates';
-import { renderPayments } from './Tabs/Payments';
 import { renderBasicInfo } from './Tabs/BasicInfo';
 import { renderFiles } from './Tabs/Files';
 import { renderCommentsNews } from './Tabs/CommentsNews';
 import { renderFabricApplicationForm } from './Tabs/FabricApplicationForm';
 import { renderStandards } from './Tabs/Standards';
 import { getShippingLabelFile } from '../Export/PDF/ShippingLabelFile';
+import { Payments } from './Payments';
+import { Tab, Dimmer } from 'tabler-react';
 
 interface IFormState extends TaskState {
   requestStatus: Status;
@@ -78,13 +79,24 @@ class Form extends React.Component {
             existsInDB: dataFromDB.exists,
             rem: dataFromDB.rem || emptyState.rem,
             activeQuoteNo: dataFromDB.activeQuoteNo,
-            quoteNo1: dataFromDB.quoteNo1 ?? emptyState.quoteNo1,
-            quoteNo2: dataFromDB.quoteNo2 ?? emptyState.quoteNo2,
-            proformaInvoiceNo1:
-              dataFromDB.proformaInvoiceNo1 ?? emptyState.proformaInvoiceNo1,
-            proformaInvoiceNo2:
-              dataFromDB.proformaInvoiceNo2 ?? emptyState.proformaInvoiceNo2,
             requestStatus: Status.FillingForm,
+          });
+          this.setState((state: TaskState) => {
+            if (state.payments) {
+              const payment1 = {
+                ...state.payments[0],
+                quoteNo: dataFromDB.quoteNo1,
+                proformaInvoiceNo: dataFromDB.proformaInvoiceNo1,
+              };
+              const payment2 = {
+                ...state.payments[1],
+                quoteNo: dataFromDB.quoteNo2,
+                proformaInvoiceNo: dataFromDB.proformaInvoiceNo2,
+              };
+              return {
+                payments: [payment1, payment2],
+              };
+            }
           });
         })
         .catch((e) => this.setState({ hasError: true }));
@@ -146,21 +158,25 @@ class Form extends React.Component {
       await CacheManager.updateTask(taskId);
 
       // update in FaunaDB
-      this.state.existsInDB
-        ? DB.updateInstance(taskId, {
-            rem: this.state.rem,
-            quoteNo1: this.state.quoteNo1,
-            quoteNo2: this.state.quoteNo2,
-            activeQuoteNo: this.state.activeQuoteNo,
-            proformaInvoiceNo1: this.state.proformaInvoiceNo1,
-            proformaInvoiceNo2: this.state.proformaInvoiceNo2,
-            ...this.state.DBState,
-          })
-            .then(this.successfullySubmitted)
-            .catch(this.unsuccessfullySubmitted)
-        : DB.createInstance(taskId, this.state.DBState)
-            .then(this.successfullySubmitted)
-            .catch(this.unsuccessfullySubmitted);
+      if (this.state.existsInDB) {
+        // update Payments Tab
+        DB.updateInstance(taskId, {}, 'payments');
+        DB.updateInstance(taskId, {
+          rem: this.state.rem,
+          quoteNo1: this.state.quoteNo1,
+          quoteNo2: this.state.quoteNo2,
+          activeQuoteNo: this.state.activeQuoteNo,
+          proformaInvoiceNo1: this.state.proformaInvoiceNo1,
+          proformaInvoiceNo2: this.state.proformaInvoiceNo2,
+          ...this.state.DBState,
+        })
+          .then(this.successfullySubmitted)
+          .catch(this.unsuccessfullySubmitted);
+      } else {
+        DB.createInstance(taskId, this.state.DBState)
+          .then(this.successfullySubmitted)
+          .catch(this.unsuccessfullySubmitted);
+      }
     }
   }
 
@@ -219,7 +235,19 @@ class Form extends React.Component {
         <TabbedCard initialTab="Basic Info">
           {renderBasicInfo.call(this)}
           {renderDates.call(this)}
-          {renderPayments.call(this)}
+          <Tab title="Payments">
+            <Dimmer
+              active={this.state.requestStatus !== Status.FillingForm}
+              loader
+            >
+              {/* {renderPayments.call(this)} */}
+              <Payments
+                // payments={this.state.payments}
+                taskId={this.task_id}
+              />
+            </Dimmer>
+          </Tab>
+          {/* {renderPayments.call(this)} */}
           {renderStandards.call(this)}
           {renderFabricApplicationForm.call(this)}
           {renderCommentsNews.call(this)}

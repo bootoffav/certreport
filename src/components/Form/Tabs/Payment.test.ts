@@ -1,0 +1,1 @@
+import { addPayment } from './Payments';
