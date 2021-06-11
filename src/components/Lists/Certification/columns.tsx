@@ -1,7 +1,11 @@
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { Icon } from 'tabler-react';
-import { dateConverter, printStage } from '../../../helpers';
+import {
+  dateConverter,
+  printStage,
+  getTotalPriceHelper,
+} from '../../../helpers';
 import type { CellInfo } from 'react-table';
 
 function sortDates(a: string | undefined, b: string | undefined): number {
@@ -382,7 +386,7 @@ function getColumns(totalPrice: number, stage?: string) {
         </>
       ),
       id: 'price',
-      accessor: ({ state }: any) => (+state.price1 || 0) + (+state.price2 || 0),
+      accessor: ({ state }: any) => getTotalPriceHelper(state),
       minWidth: 90,
       Cell: (props: any) => (
         <span style={{ float: 'right' }}>{formatPrice(props.value)}</span>

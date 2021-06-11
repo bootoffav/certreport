@@ -1,6 +1,5 @@
 import dayjs from 'dayjs';
 import { emptyState, brand } from './emptyState';
-// import type { Payment } from './Task.interface';
 
 const dataSeparator = '-------------------------------------------------';
 

@@ -11,6 +11,7 @@ import {
 } from './DiskMethods';
 import { rawTaskProcessor } from '../workers/dataFetcher';
 import type { TaskState } from '../Task/Task.interface';
+import { getTotalPriceHelper } from '../helpers';
 export const creatorId = process.env.REACT_APP_B24_USER_ID;
 export const tag = process.env.REACT_APP_TAG;
 export const responsibleId = process.env.REACT_APP_B24_RESPONSIBLE_ID;
@@ -65,9 +66,9 @@ function formTaskFields(state: any) {
     UF_CRM_TASK: makeUfCrmTaskField(state),
     TITLE:
       `${state.serialNumber}_${state.testingCompany} - ${state.standards} (${state.pretreatment1}) - ${state.article}, ${state.colour} ` +
-      `(send ${state.sentOn} - plan ${state.testFinishedOnPlanDate}) = ${(
-        +state.price1 + +state.price2
-      ).toLocaleString('ru-RU', {
+      `(send ${state.sentOn} - plan ${
+        state.testFinishedOnPlanDate
+      }) = ${getTotalPriceHelper(state).toLocaleString('ru-RU', {
         style: 'currency',
         currency: 'EUR',
       })} | ${stAd.getStageForTitle()}${stAd.getNADForTitle()}`,
@@ -91,14 +92,7 @@ function formTaskFields(state: any) {
       `${
         state.standards && `[B]Standard:[/B] ${stAd.standardsWithResults}\n`
       }` +
-      // excluding due to moving Payments into remove DB storage
-      // `${state.price1 && `[B]Price:[/B] ${state.price1} €\n`}` +
-      // `${
-      //   state.paymentDate1 ? `[B]Payment date:[/B] ${state.paymentDate1}\n` : ''
-      // }` +
-      // `${
-      //   stAd.secondPayment && `[B]Second payment:[/B] ${stAd.secondPayment}\n`
-      // }` +
+      `${state.totalPrice && `[B]Total Price:[/B] ${state.totalPrice}\n`}` +
       `${
         state.testingCompany &&
         `[B]Testing company:[/B] ${state.testingCompany}\n`

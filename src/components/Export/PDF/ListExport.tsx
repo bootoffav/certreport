@@ -3,8 +3,8 @@ import pdfMake from 'pdfmake/build/pdfmake';
 import dayjs from 'dayjs';
 import { vfs } from './vfs_fonts.js';
 import * as tableStructures from './columns';
-
 import { tableLayout, fonts } from './settings';
+import { getTotalPriceHelper } from '../../../helpers';
 
 class ListExport extends Component<{
   tasks: any;
@@ -140,17 +140,13 @@ class ListExport extends Component<{
             row.push(results);
             break;
           case 'state.price':
-            this.totalPrice += Number(
-              tasks[i].state.price1 || 0 + tasks[i].state.price2 || 0
-            );
+            this.totalPrice += Number(getTotalPriceHelper(tasks[i].state));
             row.push({
               alignment: 'right',
               text:
                 tasks[i].state.price === ''
                   ? '€ 0'
-                  : `€${Math.round(
-                      tasks[i].state.price1 || 0 + tasks[i].state.price2 || 0
-                    )
+                  : `€${Math.round(getTotalPriceHelper(tasks[i].state))
                       .toLocaleString()
                       .replace(/,/g, ' ')}`,
             });

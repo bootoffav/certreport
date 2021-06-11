@@ -2,6 +2,7 @@ import * as React from 'react';
 import swal from 'sweetalert';
 import 'react-datepicker/dist/react-datepicker.css';
 import dayjs from 'dayjs';
+import { connect } from 'react-redux';
 import * as B24 from '../../B24/B24';
 import Notification, { Status } from '../Notification/Notification';
 import { emptyState } from '../../Task/emptyState';
@@ -19,6 +20,7 @@ import { renderStandards } from './Tabs/Standards';
 import { getShippingLabelFile } from '../Export/PDF/ShippingLabelFile';
 import { Payments } from './Payments';
 import { Tab, Dimmer } from 'tabler-react';
+import { changeActiveQuoteNo, changeTotalPrice } from '../../store';
 
 interface IFormState extends TaskState {
   requestStatus: Status;
@@ -29,6 +31,7 @@ interface IFormState extends TaskState {
 class Form extends React.Component {
   task_id: string | undefined;
   state: IFormState;
+  // @ts-expect-error
   props: any;
 
   constructor(props: any) {
@@ -51,7 +54,6 @@ class Form extends React.Component {
         ({
           exists,
           rem,
-          activeQuoteNo,
           quoteNo1,
           quoteNo2,
           proformaInvoiceNo1,
@@ -59,7 +61,6 @@ class Form extends React.Component {
           ...DBState
         }: any) => ({
           DBState,
-          activeQuoteNo,
           quoteNo1,
           quoteNo2,
           proformaInvoiceNo1,
@@ -68,6 +69,16 @@ class Form extends React.Component {
           exists,
         })
       );
+
+      // put activeQuoteNo into react store
+      const payments = await DB.get(this.task_id, 'payments', 'payments');
+      const totalPrice = payments.reduce(
+        (total, { price }) => total + Number(price),
+        0
+      );
+      const found = payments.find((p) => p.activeQuoteNo);
+      this.props.changeActiveQuoteNo({ value: found ? found.quoteNo : '' });
+      this.props.changeTotalPrice({ value: totalPrice });
 
       await B24.getTask(this.task_id)
         .then((r: any) => {
@@ -78,7 +89,6 @@ class Form extends React.Component {
             DBState: dataFromDB.DBState,
             existsInDB: dataFromDB.exists,
             rem: dataFromDB.rem || emptyState.rem,
-            activeQuoteNo: dataFromDB.activeQuoteNo,
             requestStatus: Status.FillingForm,
           });
           if (this.state.payments.length > 0) {
@@ -152,10 +162,21 @@ class Form extends React.Component {
       this.setState({ requestStatus: Status.Loading });
       // update in Bitrix
       const taskId = this.task_id
-        ? await B24.updateTask(this.state, this.task_id)
+        ? await B24.updateTask(
+            {
+              ...this.state,
+              activeQuoteNo: this.props.activeQuoteNo.value,
+              totalPrice: this.props.totalPrice.value,
+            },
+            this.task_id
+          )
             .then((_) => this.task_id)
             .catch(this.unsuccessfullySubmitted)
-        : await B24.createTask(this.state).catch(this.unsuccessfullySubmitted);
+        : await B24.createTask({
+            ...this.state,
+            activeQuoteNo: this.props.activeQuoteNo.value,
+            totalPrice: this.props.totalPrice.value,
+          }).catch(this.unsuccessfullySubmitted);
 
       // update in indexedDB
       await CacheManager.updateTask(taskId);
@@ -225,7 +246,10 @@ class Form extends React.Component {
           link
           onClick={(e: any) => {
             e.preventDefault();
-            getShippingLabelFile(this.state);
+            getShippingLabelFile({
+              ...this.state,
+              activeQuoteNo: this.props.activeQuoteNo.value,
+            });
           }}
         >
           Shipping label <Icon prefix="fe" name="download" />
@@ -241,11 +265,9 @@ class Form extends React.Component {
               active={this.state.requestStatus !== Status.FillingForm}
               loader
             >
-              {/* {renderPayments.call(this)} */}
               <Payments payments={this.state.payments} taskId={this.task_id} />
             </Dimmer>
           </Tab>
-          {/* {renderPayments.call(this)} */}
           {renderStandards.call(this)}
           {renderFabricApplicationForm.call(this)}
           {renderCommentsNews.call(this)}
@@ -267,4 +289,7 @@ class Form extends React.Component {
     });
 }
 
-export { Form };
+export default connect((store: any) => store, {
+  changeActiveQuoteNo,
+  changeTotalPrice,
+})(Form);

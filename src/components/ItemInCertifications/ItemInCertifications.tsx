@@ -9,6 +9,7 @@ import { GoBackOrHomeButton } from '../NaviButton';
 import { pullSpecificFiles } from '../FileManagement/FileManagement';
 import CacheManager from '../../CacheManager';
 import { Items } from '../../Item/Item';
+import { getTotalPriceHelper } from '../../helpers';
 
 interface IItemProps {
   item: string;
@@ -152,13 +153,10 @@ function formatColumn(task: any, param: string): any[] | string {
       ));
 
     case 'price':
-      return (+task.state.price1 || 0 + +task.state.price2 || 0).toLocaleString(
-        'ru-RU',
-        {
-          style: 'currency',
-          currency: 'EUR',
-        }
-      );
+      return getTotalPriceHelper(task.state).toLocaleString('ru-RU', {
+        style: 'currency',
+        currency: 'EUR',
+      });
     default:
       return task.state[param];
   }

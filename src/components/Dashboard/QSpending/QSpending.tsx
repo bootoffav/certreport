@@ -3,7 +3,7 @@ import { Component } from 'react';
 import dayjs from 'dayjs';
 import quarterOfYear from 'dayjs/plugin/quarterOfYear';
 import './QSpending.css';
-import React from 'react';
+import { getTotalPriceHelper } from '../../../helpers';
 
 dayjs.extend(quarterOfYear);
 
@@ -102,13 +102,13 @@ class QSpending extends Component<{
   // считает траты целых кварталов
   countQuarterSpendings(quarters: any) {
     this.props.tasks.forEach((task: any) => {
-      const { price1, paymentDate1, price2 } = task.state;
+      const { paymentDate1 } = task.state;
       Object.entries(quarters).forEach(([_, quarter]: any) => {
         if (
           quarter.start < dayjs(paymentDate1) &&
           dayjs(paymentDate1) < quarter.end
         ) {
-          quarter.spent += +price1 + +price2;
+          quarter.spent += getTotalPriceHelper(task.state);
           quarter.tasks.push(task);
         }
       });

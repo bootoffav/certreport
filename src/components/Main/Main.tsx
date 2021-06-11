@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { intersection, isEqual } from 'lodash';
@@ -5,7 +6,7 @@ import { Error404Page } from 'tabler-react';
 import CacheManager from '../../CacheManager';
 import { CertificationList } from '../Lists/Certification/CertificationList';
 import { ItemList } from '../Lists/ItemList/ItemList';
-import { Form } from '../Form/Form';
+import Form from '../Form/Form';
 import Dashboard from '../Dashboard/Dashboard';
 import ErrorBoundary from '../../ErrorBoundary';
 import { NavBar } from './NavBar';

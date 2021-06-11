@@ -1,3 +1,5 @@
+import type { TaskState } from './Task/Task.interface';
+
 /**
  * Converts strings that represent dates in the app.
  * @param {string} oldFormat like '05Mar2019' or ''
@@ -48,16 +50,21 @@ function removeEmptyProps(obj: any) {
   return obj;
 }
 
-export { dateConverter, removeEmptyProps };
-
 function countTotalPrice(tasks: any[]) {
   return Math.round(
     tasks.reduce(
-      (sum: number, task: any) =>
-        sum + ((+task.state.price1 || 0) + (+task.state.price2 || 0)),
+      (sum: number, task: any) => sum + getTotalPriceHelper(task.state),
       0
     )
   );
+}
+
+function getTotalPriceHelper(state: TaskState): number {
+  if (state.totalPrice) {
+    return +state.totalPrice;
+  }
+
+  return (+state.price1 || 0) + (+state.price2 || 0);
 }
 
 const StageShortNames: {
@@ -125,4 +132,7 @@ export {
   shortenTitle,
   isMainHeaderAllowed,
   localizePrice,
+  dateConverter,
+  removeEmptyProps,
+  getTotalPriceHelper,
 };

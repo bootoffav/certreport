@@ -1,19 +1,39 @@
-import { Button, Icon } from 'tabler-react';
+import { Icon } from 'tabler-react';
 import React, { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
-
 import { Price, Paid, QuoteNo, BaseInput } from './FormFields';
 import type { Payment } from '../../Task/Task.interface';
 import { localizePrice } from '../../helpers';
 import { DB } from '../../backend/DBManager';
+import { useDispatch } from 'react-redux';
+import { changeActiveQuoteNo, changeTotalPrice } from '../../store';
 
 interface PaymentsProps {
   payments: Payment[];
   taskId?: string;
 }
 
+const emptyPayment: Payment = {
+  price: '',
+  paid: false,
+  paymentDate: '',
+  quoteNo: '',
+  proformaInvoiceNo: '',
+};
+
+function removeEmptyPaymentsBeforeSave(payments: Payment[]): Payment[] {
+  return payments.filter((payment) => {
+    for (const prop in emptyPayment) {
+      if (payment[prop] !== emptyPayment[prop]) return true;
+    }
+    return false;
+  });
+}
+
 function Payments({ taskId, ...props }: PaymentsProps) {
   const [payments, setPayments] = useState([] as Payment[]);
+
+  const dispatch = useDispatch();
 
   // gets payments from DB
   useEffect(() => {
@@ -33,16 +53,29 @@ function Payments({ taskId, ...props }: PaymentsProps) {
         setPayments([...props.payments, ...payments]);
       }
     })();
-  }, [taskId, props.payments]);
+  }, [taskId, props.payments, dispatch]);
 
   // save payments in DB on unmount
   useEffect(() => {
     return function () {
+      const filteredPayments = payments.length
+        ? // clear out emptyPayments
+          removeEmptyPaymentsBeforeSave(payments)
+        : payments;
+
       taskId &&
-        payments.length > 0 &&
-        DB.updateInstance(taskId, { payments }, 'payments').catch((reason) => {
+        filteredPayments.length &&
+        DB.updateInstance(
+          taskId,
+          { payments: filteredPayments },
+          'payments'
+        ).catch((reason) => {
           reason.message === 'instance not found' &&
-            DB.createInstance(taskId, { payments }, 'payments');
+            DB.createInstance(
+              taskId,
+              { payments: filteredPayments },
+              'payments'
+            );
         });
     };
   }, [taskId, payments]);
@@ -95,6 +128,7 @@ function Payments({ taskId, ...props }: PaymentsProps) {
         <QuoteNo
           activeQuoteNo={payment.activeQuoteNo || false}
           handleActiveQuoteNoChange={() => {
+            dispatch(changeActiveQuoteNo({ value: payment.quoteNo }));
             setPayments(() => {
               payments.forEach((p) => delete p.activeQuoteNo);
               return [...genericSetter('activeQuoteNo', true, index)];
@@ -145,24 +179,26 @@ function Payments({ taskId, ...props }: PaymentsProps) {
     );
   };
 
-  const total = payments.reduce((total, { price }) => total + Number(price), 0);
-  const emptyPayment = {
-    price: '',
-    paid: false,
-    paymentDate: '',
-    quoteNo: '',
-    proformaInvoiceNo: '',
-  };
+  const totalPrice = payments.reduce(
+    (total, { price }) => total + Number(price),
+    0
+  );
+  dispatch(
+    changeTotalPrice({
+      value: totalPrice,
+    })
+  );
+
   return (
     <>
       {payments.map(renderPayment)}
       <AddPayment
         doIt={(e) => {
           e.preventDefault();
-          setPayments((payments) => [...payments, emptyPayment]);
+          setPayments((payments) => [...payments, { ...emptyPayment }]);
         }}
       />
-      {renderTotal(total)}
+      {renderTotal(totalPrice)}
     </>
   );
 }

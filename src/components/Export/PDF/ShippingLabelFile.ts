@@ -7,9 +7,7 @@ function makeDocDefinition({
   activeQuoteNo,
   ...state
 }: TaskState) {
-  const offerNo = activeQuoteNo
-    ? state[activeQuoteNo].slice(3)
-    : 'not specified';
+  const offerNo = activeQuoteNo ? activeQuoteNo.slice(3) : 'not specified';
 
   return {
     pageOrientation: 'landscape',
@@ -40,7 +38,7 @@ function makeDocDefinition({
         },
       },
       {
-        text: `OFFER NO.: ${offerNo || 'not specified'}\n`,
+        text: `OFFER NO.: ${offerNo}\n`,
         style: ['bold', 'offer'],
       },
       {
@@ -88,9 +86,7 @@ function getShippingLabelFile(state: TaskState) {
 }
 
 function createShippingLabelFile(state: TaskState) {
-  const offerNo = state.activeQuoteNo
-    ? state[state.activeQuoteNo]
-    : 'not specified';
+  const offerNo = state.activeQuoteNo ?? 'not specified';
 
   return Promise.all([
     import('pdfmake/build/pdfmake'),

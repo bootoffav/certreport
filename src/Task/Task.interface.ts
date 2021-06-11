@@ -66,6 +66,7 @@ interface TaskState {
   proformaInvoiceNo1?: string;
   proformaInvoiceNo2?: string;
   payments: Payment[];
+  totalPrice?: string;
   [key: string]: any;
 }
 
