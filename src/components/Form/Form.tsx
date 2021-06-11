@@ -289,7 +289,7 @@ class Form extends React.Component {
     });
 }
 
-export default connect((store: any) => store, {
+export default connect((state: any) => state, {
   changeActiveQuoteNo,
   changeTotalPrice,
 })(Form);
