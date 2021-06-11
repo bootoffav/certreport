@@ -73,6 +73,7 @@ const taskPropMap: {
   Comments: 'comments',
   Edit: 'link',
   'Second payment': 'secondPayment',
+  'Total Price': 'totalPrice',
 };
 
 class Task {

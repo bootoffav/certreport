@@ -289,7 +289,8 @@ class Form extends React.Component {
     });
 }
 
-export default connect((state: any) => state, {
+const mapStateToProps = (state: any) => state;
+export default connect(mapStateToProps, {
   changeActiveQuoteNo,
   changeTotalPrice,
 })(Form);
