@@ -53,7 +53,7 @@ const columns = [
             <span key={id}>
               &nbsp;
               <a
-                href={`https://xmtextiles.bitrix24.ru/company/personal/user/460/tasks/task/view/${id}/`}
+                href={`${process.env.REACT_APP_B24_HOST}/company/personal/user/460/tasks/task/view/${id}/`}
                 target="_blank"
                 rel="noopener noreferrer"
               >

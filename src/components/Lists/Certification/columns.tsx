@@ -41,7 +41,7 @@ function getColumns(totalPrice: number, stage?: string) {
       width: 48,
       Cell: (props: any) => (
         <a
-          href={`https://xmtextiles.bitrix24.ru/company/personal/user/460/tasks/task/view/${props.original.id}/`}
+          href={`${process.env.REACT_APP_B24_HOST}/company/personal/user/460/tasks/task/view/${props.original.id}/`}
           target="_blank"
           rel="noopener noreferrer"
         >

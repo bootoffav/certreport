@@ -88,7 +88,7 @@ function ItemInCertifications({ item }: IItemProps) {
                     <a href={`/edit/${task.id}`}>{task.title} </a>
                     &nbsp;|&nbsp;
                     <a
-                      href={`https://xmtextiles.bitrix24.ru/company/personal/user/460/tasks/task/view/${task.id}/`}
+                      href={`${process.env.REACT_APP_B24_HOST}/company/personal/user/460/tasks/task/view/${task.id}/`}
                       target="_blank"
                       rel="noreferrer"
                     >
@@ -133,7 +133,7 @@ function formatColumn(task: any, param: string): any[] | string {
       );
       return testReportFiles.map((file) => (
         <div key={file.ATTACHMENT_ID}>
-          <a href={'https://xmtextiles.bitrix24.ru' + file.DOWNLOAD_URL}>
+          <a href={`${process.env.REACT_APP_B24_HOST}${file.DOWNLOAD_URL}`}>
             {file.NAME}
           </a>
         </div>
@@ -146,7 +146,7 @@ function formatColumn(task: any, param: string): any[] | string {
       );
       return certificateFiles.map((file) => (
         <div key={file.ATTACHMENT_ID}>
-          <a href={'https://xmtextiles.bitrix24.ru' + file.DOWNLOAD_URL}>
+          <a href={`${process.env.REACT_APP_B24_HOST}${file.DOWNLOAD_URL}`}>
             {file.NAME}
           </a>
         </div>

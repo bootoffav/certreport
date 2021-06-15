@@ -29,7 +29,8 @@ const taskPropMapAliases: {
 function getTaskParamLabel(param: string) {
   return (
     taskPropMapAliases[param] ??
-    Object.keys(taskPropMap).find((key) => taskPropMap[key] === param)
+    (Object.keys(taskPropMap).find((key) => taskPropMap[key] === param) ||
+      'Price') // because deleted
   );
 }
 
@@ -51,7 +52,6 @@ const taskPropMap: {
   Certificate: 'certificate',
   Price: 'price1',
   'Payment date': 'paymentDate1',
-  // Proforma: 'proforma',
   'Testing company': 'testingCompany',
   'Material needed': 'materialNeeded',
   'Testing time, days': 'testingTime',

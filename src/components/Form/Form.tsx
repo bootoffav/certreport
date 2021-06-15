@@ -232,7 +232,7 @@ class Form extends React.Component {
     <div className="container mt-2">
       <Button
         RootComponent="a"
-        href={`https://xmtextiles.bitrix24.ru/company/personal/user/460/tasks/task/view/${this.task_id}/`}
+        href={`${process.env.REACT_APP_B24_HOST}/company/personal/user/460/tasks/task/view/${this.task_id}/`}
         target="_blank"
         rel="noopener noreferrer"
         link
