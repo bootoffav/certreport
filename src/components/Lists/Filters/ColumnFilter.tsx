@@ -70,6 +70,7 @@ const ColumnFilter = ({
         type="text"
         className="form-control"
         placeholder="search"
+        autoFocus
         value={value}
         onChange={({ currentTarget }: React.SyntheticEvent) => {
           const value = (currentTarget as HTMLInputElement).value;
