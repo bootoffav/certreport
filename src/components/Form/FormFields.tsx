@@ -231,14 +231,16 @@ class Article extends React.Component<ArticleProps> {
     };
 
     this.props.handleChange({ value, label });
-    const {
-      PROPERTY_386,
+    let {
+      PROPERTY_420,
       PROPERTY_384,
       PROPERTY_380,
       SECTION_ID,
     } = await B24.get_product(value);
-    const product = `${PROPERTY_386.value || ''}, ${PROPERTY_384.value || ''}`;
-    const code = PROPERTY_380.value || '';
+    const product = `${PROPERTY_420?.value ?? ''}, ${
+      PROPERTY_384?.value ?? ''
+    }`;
+    const code = PROPERTY_380?.value || '';
     const brand = brand_map[SECTION_ID] || '';
     this.props.handleSlaveChange(product, code, brand);
   };
