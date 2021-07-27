@@ -7,7 +7,7 @@ import CacheManager from '../../CacheManager';
 import { CertificationList } from '../Lists/Certification/CertificationList';
 import { ItemList } from '../Lists/ItemList/ItemList';
 import Form from '../Form/Form';
-import Dashboard from '../Dashboard/Dashboard';
+import { Dashboard } from '../Dashboard/Dashboard';
 import ErrorBoundary from '../../ErrorBoundary';
 import { NavBar } from './NavBar';
 import { StageShortNames } from '../StageShortNames/StageShortNames';

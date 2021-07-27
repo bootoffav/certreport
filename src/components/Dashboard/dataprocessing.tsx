@@ -1,14 +1,6 @@
-type dataType = {
-  names: any;
-  labels: any;
-  datasets: {
-    data: any;
-    backgroundColor: any;
-    hoverBackgroundColor: any;
-  };
-};
+import type { ChartData } from 'react-chartjs-2';
 
-function byStages(tasks: any): dataType {
+function byStages(tasks: any): ChartData<any> {
   const data: any = {};
   data.names = {
     'no stage': [],
@@ -53,7 +45,7 @@ function byStages(tasks: any): dataType {
   return data;
 }
 
-function byProducts(tasks: any): dataType {
+function byProducts(tasks: any): ChartData<any> {
   let data: any = { names: {} };
   const articles: any = new Set(
     tasks.map(({ state: { article } }: any) => article || 'no product')

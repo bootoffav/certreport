@@ -4,9 +4,9 @@ import { BrowserRouter } from 'react-router-dom';
 import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTable from 'react-table';
 import { Grid, Card } from 'tabler-react';
-import { Doughnut } from 'react-chartjs-2';
+import { HorizontalBar } from 'react-chartjs-2';
 import { QSpending } from './QSpending/QSpending';
-import { doughnutOptions } from './configs';
+import { chartOptions } from './configs';
 import { byStages, byProducts } from './dataprocessing';
 import { AmountOfCertifications, CompletedCertifications } from './StatCards';
 
@@ -86,12 +86,10 @@ class Dashboard extends Component<any, IDashboard> {
               isCollapsible
               title="Task by stages"
               body={
-                <Doughnut
+                <HorizontalBar
                   data={byStages(this.state.tasks)}
                   options={{
-                    legend: {
-                      position: 'bottom',
-                    },
+                    ...chartOptions,
                     onClick: (_: MouseEvent, chartElement: any) => {
                       if (chartElement.length !== 0) {
                         const {
@@ -110,10 +108,10 @@ class Dashboard extends Component<any, IDashboard> {
               isCollapsible
               title="Products"
               body={
-                <Doughnut
+                <HorizontalBar
                   data={byProducts(this.state.tasks)}
                   options={{
-                    ...doughnutOptions,
+                    ...chartOptions,
                     onClick: (_: MouseEvent, chartElement: any) => {
                       const {
                         _model: { label: article },
@@ -178,6 +176,6 @@ class Dashboard extends Component<any, IDashboard> {
   }
 }
 
-export default Dashboard;
+export { Dashboard };
 export const StatCardsContext = createContext({});
 export { tasksInRange };

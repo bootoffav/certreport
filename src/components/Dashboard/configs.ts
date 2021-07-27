@@ -1,4 +1,4 @@
-let doughnutOptions = {
+let chartOptions = {
   legend: {
     display: false,
   },
@@ -13,4 +13,4 @@ let doughnutOptions = {
   },
 };
 
-export { doughnutOptions };
+export { chartOptions };
