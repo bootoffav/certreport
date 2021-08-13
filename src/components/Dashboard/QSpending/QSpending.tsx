@@ -14,6 +14,7 @@ interface ITotalQuarterSpent {
 }
 
 class QSpending extends Component<{
+  updateQuarters: (quarters: any) => void;
   renderTable: (t: any[]) => void;
   tasks: any;
   startDate?: Date;
@@ -133,16 +134,21 @@ class QSpending extends Component<{
       quarters = this.countQuarterSpendings(quarters);
       const { start, end } = this.getFirstLastTotalSpendingsMonths(quarters);
 
-      this.setState({
-        quarters,
-        startDate,
-        endDate,
-        total: {
-          start,
-          end,
-          amount: this.countTotalSpendings(quarters),
+      this.setState(
+        {
+          quarters,
+          startDate,
+          endDate,
+          total: {
+            start,
+            end,
+            amount: this.countTotalSpendings(quarters),
+          },
         },
-      });
+        () => {
+          this.props.updateQuarters({ quarters: this.state.quarters });
+        }
+      );
     }
   }
 
@@ -173,7 +179,7 @@ class QSpending extends Component<{
           <Card>
             <Card.Header>
               <div
-                className="mx-auto quarterHeader"
+                className="mx-auto quarterHeader fix-quarter-label"
                 onClick={() => this.props.renderTable(quarter.tasks)}
               >
                 {`Q${quarter.start.quarter()}-${quarter.start.format('YY')}`}

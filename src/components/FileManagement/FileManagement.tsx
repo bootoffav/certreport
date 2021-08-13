@@ -1,7 +1,6 @@
 import qs from 'qs';
 import { Dimmer } from 'tabler-react';
 import { useEffect, useState } from 'react';
-import React from 'react';
 import * as B24 from '../../B24/B24';
 import { OtherFilesList } from './OtherFilesList';
 import { UploadFile } from './UploadFile';

@@ -6,6 +6,7 @@ import ReactTable from 'react-table';
 import { Grid, Card } from 'tabler-react';
 import { HorizontalBar } from 'react-chartjs-2';
 import { QSpending } from './QSpending/QSpending';
+import { QuarterCheckboxes } from './QuarterCheckboxes';
 import { chartOptions } from './configs';
 import { byStages, byProducts } from './dataprocessing';
 import { AmountOfCertifications, CompletedCertifications } from './StatCards';
@@ -17,6 +18,7 @@ interface IDashboard {
   tasks: any;
   startDate?: Date;
   endDate?: Date;
+  quarters: any;
 }
 
 function tasksInRange(
@@ -50,6 +52,7 @@ class Dashboard extends Component<any, IDashboard> {
     },
     startDate: undefined,
     endDate: undefined,
+    quarters: [],
   };
 
   componentDidUpdate(prevProps: any, prevState: any) {
@@ -76,16 +79,24 @@ class Dashboard extends Component<any, IDashboard> {
                 tasks={this.state.tasks}
                 startDate={this.props.startDate}
                 endDate={this.props.endDate}
+                updateQuarters={this.setState.bind(this)}
               />
             </Grid.Row>
           </Grid.Col>
         </Grid.Row>
         <Grid.Row>
           <Grid.Col width={5}>
-            <Card
-              isCollapsible
-              title="Task by stages"
-              body={
+            <Card isCollapsible>
+              <Card.Header>
+                <Card.Title>Task by stages</Card.Title>
+                <Card.Options>
+                  <QuarterCheckboxes
+                    quarters={this.state.quarters}
+                    chart="stages"
+                  />
+                </Card.Options>
+              </Card.Header>
+              <Card.Body>
                 <HorizontalBar
                   data={byStages(this.state.tasks)}
                   options={{
@@ -100,14 +111,21 @@ class Dashboard extends Component<any, IDashboard> {
                     },
                   }}
                 />
-              }
-            />
+              </Card.Body>
+            </Card>
           </Grid.Col>
           <Grid.Col width={5}>
-            <Card
-              isCollapsible
-              title="Products"
-              body={
+            <Card isCollapsible>
+              <Card.Header>
+                <Card.Title>Products</Card.Title>
+                <Card.Options>
+                  <QuarterCheckboxes
+                    quarters={this.state.quarters}
+                    chart="products"
+                  />
+                </Card.Options>
+              </Card.Header>
+              <Card.Body>
                 <HorizontalBar
                   data={byProducts(this.state.tasks)}
                   options={{
@@ -120,8 +138,8 @@ class Dashboard extends Component<any, IDashboard> {
                     },
                   }}
                 />
-              }
-            />
+              </Card.Body>
+            </Card>
           </Grid.Col>
           <Grid.Col width={2}>
             <StatCardsContext.Provider

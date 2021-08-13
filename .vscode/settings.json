@@ -9,5 +9,6 @@
   "deno.unstable": true,
   "editor.formatOnSave": true,
   "search.showLineNumbers": true,
-  "zenMode.hideLineNumbers": false
+  "zenMode.hideLineNumbers": false,
+  "zenMode.hideStatusBar": false
 }
