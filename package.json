@@ -82,5 +82,9 @@
   "browserslist": [
     ">0.2%",
     "not dead"
-  ]
+  ],
+  "volta": {
+    "node": "14.17.5",
+    "yarn": "1.22.11"
+  }
 }
