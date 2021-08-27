@@ -1,6 +1,21 @@
 import type { ChartData } from 'react-chartjs-2';
 
-function byStages(tasks: any): ChartData<any> {
+function dataAdapter(data: any) {
+  if (data === undefined || data.length === 0) return [];
+
+  if (data[0].hasOwnProperty('end') && data[0].hasOwnProperty('start')) {
+    return data.reduce((tasks: [], quarter: any) => {
+      // @ts-expect-error
+      quarter.active && tasks.push(...quarter.tasks);
+      return tasks;
+    }, []);
+  }
+
+  return data;
+}
+
+function byStages(rawData: any): ChartData<any> {
+  const tasks = dataAdapter(rawData);
   const data: any = {};
   data.names = {
     'no stage': [],
@@ -45,8 +60,9 @@ function byStages(tasks: any): ChartData<any> {
   return data;
 }
 
-function byProducts(tasks: any): ChartData<any> {
+function byProducts(rawData: any): ChartData<any> {
   let data: any = { names: {} };
+  const tasks = dataAdapter(rawData);
   const articles: any = new Set(
     tasks.map(({ state: { article } }: any) => article || 'no product')
   );

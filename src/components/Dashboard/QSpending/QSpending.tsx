@@ -11,6 +11,7 @@ interface ITotalQuarterSpent {
   start: string;
   end: string;
   amount: number;
+  active: boolean;
 }
 
 class QSpending extends Component<{
@@ -41,6 +42,7 @@ class QSpending extends Component<{
         start,
         end,
         amount: this.countTotalSpendings(quarters),
+        active: true,
       },
     };
   }
@@ -53,6 +55,7 @@ class QSpending extends Component<{
       end: q.endOf('quarter'),
       spent: 0,
       tasks: [],
+      active: false,
     };
   }
 
@@ -71,6 +74,7 @@ class QSpending extends Component<{
           end: start.endOf('quarter'),
           spent: 0,
           tasks: [],
+          active: false,
         });
       }
 
@@ -85,6 +89,7 @@ class QSpending extends Component<{
           end: start.add(i, 'quarter').endOf('quarter'),
           spent: 0,
           tasks: [],
+          active: false,
         });
       }
 
@@ -173,11 +178,31 @@ class QSpending extends Component<{
   }
 
   render() {
-    const quarters = this.state.quarters.map((quarter: any) => {
+    const quarters = this.state.quarters.map((quarter: any, index: number) => {
       return (
         <Grid.Col key={quarter.start}>
           <Card>
             <Card.Header>
+              <div className="form-check form-check-inline">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  checked={quarter.active}
+                  onChange={({ currentTarget }) => {
+                    this.setState(
+                      (state: any) => {
+                        state.quarters[index].active = currentTarget.checked;
+                        return { quarters: state.quarters };
+                      },
+                      () => {
+                        this.props.updateQuarters({
+                          quarters: this.state.quarters,
+                        });
+                      }
+                    );
+                  }}
+                />
+              </div>
               <div
                 className="mx-auto quarterHeader fix-quarter-label"
                 onClick={() => this.props.renderTable(quarter.tasks)}
@@ -198,6 +223,28 @@ class QSpending extends Component<{
       <Grid.Col width={3} key="total">
         <Card>
           <Card.Header>
+            <div className="form-check form-check-inline">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                defaultChecked={this.state.total.active}
+                onChange={({ currentTarget }) => {
+                  this.setState(
+                    {
+                      total: {
+                        ...this.state.total,
+                        active: currentTarget.checked,
+                      },
+                    },
+                    () => {
+                      this.props.updateQuarters({
+                        allDataInChartsVisible: currentTarget.checked,
+                      });
+                    }
+                  );
+                }}
+              />
+            </div>
             <div className="mx-auto quarterHeader">
               {this.state.total.start} - {this.state.total.end}
             </div>

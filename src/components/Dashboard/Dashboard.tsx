@@ -6,7 +6,6 @@ import ReactTable from 'react-table';
 import { Grid, Card } from 'tabler-react';
 import { HorizontalBar } from 'react-chartjs-2';
 import { QSpending } from './QSpending/QSpending';
-import { QuarterCheckboxes } from './QuarterCheckboxes';
 import { chartOptions } from './configs';
 import { byStages, byProducts } from './dataprocessing';
 import { AmountOfCertifications, CompletedCertifications } from './StatCards';
@@ -19,6 +18,7 @@ interface IDashboard {
   startDate?: Date;
   endDate?: Date;
   quarters: any;
+  allDataInChartsVisible: boolean;
 }
 
 function tasksInRange(
@@ -53,9 +53,10 @@ class Dashboard extends Component<any, IDashboard> {
     startDate: undefined,
     endDate: undefined,
     quarters: [],
+    allDataInChartsVisible: true,
   };
 
-  componentDidUpdate(prevProps: any, prevState: any) {
+  componentDidUpdate(prevProps: any) {
     if (prevProps.tasks !== this.props.tasks) {
       this.setState({
         tasks: this.props.tasks,
@@ -89,16 +90,14 @@ class Dashboard extends Component<any, IDashboard> {
             <Card isCollapsible>
               <Card.Header>
                 <Card.Title>Task by stages</Card.Title>
-                <Card.Options>
-                  <QuarterCheckboxes
-                    quarters={this.state.quarters}
-                    chart="stages"
-                  />
-                </Card.Options>
               </Card.Header>
               <Card.Body>
                 <HorizontalBar
-                  data={byStages(this.state.tasks)}
+                  data={byStages(
+                    this.state.allDataInChartsVisible
+                      ? this.state.tasks
+                      : this.state.quarters
+                  )}
                   options={{
                     ...chartOptions,
                     onClick: (_: MouseEvent, chartElement: any) => {
@@ -118,16 +117,14 @@ class Dashboard extends Component<any, IDashboard> {
             <Card isCollapsible>
               <Card.Header>
                 <Card.Title>Products</Card.Title>
-                <Card.Options>
-                  <QuarterCheckboxes
-                    quarters={this.state.quarters}
-                    chart="products"
-                  />
-                </Card.Options>
               </Card.Header>
               <Card.Body>
                 <HorizontalBar
-                  data={byProducts(this.state.tasks)}
+                  data={byProducts(
+                    this.state.allDataInChartsVisible
+                      ? this.state.tasks
+                      : this.state.quarters
+                  )}
                   options={{
                     ...chartOptions,
                     onClick: (_: MouseEvent, chartElement: any) => {
