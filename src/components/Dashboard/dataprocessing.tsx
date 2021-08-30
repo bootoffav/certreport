@@ -16,8 +16,7 @@ function dataAdapter(data: any) {
 
 function byStages(rawData: any): ChartData<any> {
   const tasks = dataAdapter(rawData);
-  const data: any = {};
-  data.names = {
+  const dataPreparation: { [key: string]: string[] } = {
     'no stage': [],
     '00. Paused': [],
     '01. Canceled': [],
@@ -40,50 +39,60 @@ function byStages(rawData: any): ChartData<any> {
     if (task.hasOwnProperty('state')) {
       // существует state
       task.state.stage === ''
-        ? data.names['no stage'].push(task.title.substring(0, 50))
-        : data.names[task.state.stage].push(task.title.substring(0, 50));
+        ? dataPreparation['no stage'].push(task.title.substring(0, 50))
+        : dataPreparation[task.state.stage].push(task.title.substring(0, 50));
     } else {
-      data.names['no stage'].push(task.title.substring(0, 50));
+      dataPreparation['no stage'].push(task.title.substring(0, 50));
     }
   });
-  data.labels = Object.keys(data.names);
-  const colors = getRandomColors(Object.keys(data.names).length);
+  const colors = getRandomColors(Object.keys(dataPreparation).length);
 
-  data.datasets = [
-    {
-      data: Object.keys(data.names).map((stage) => data.names[stage].length),
-      backgroundColor: colors,
-      hoverBackgroundColor: colors,
-    },
-  ];
-
-  return data;
+  return {
+    labels: Object.keys(dataPreparation),
+    datasets: [
+      {
+        data: Object.values(dataPreparation).map(
+          (tasksNames) => tasksNames.length
+        ),
+        backgroundColor: colors,
+        hoverBackgroundColor: colors,
+      },
+    ],
+  };
 }
 
 function byProducts(rawData: any): ChartData<any> {
-  let data: any = { names: {} };
+  const dataPreparation: {
+    articles: {
+      [key: string]: string[];
+    };
+  } = { articles: {} };
+
+  let data: any = {};
   const tasks = dataAdapter(rawData);
-  const articles: any = new Set(
+  const uniqueArticles: any = new Set(
     tasks.map(({ state: { article } }: any) => article || 'no product')
   );
-  articles.forEach((article: any) => (data.names[article] = []));
+  data.labels = [...uniqueArticles];
+  uniqueArticles.forEach(
+    (article: string) => (dataPreparation.articles[article] = [])
+  );
 
   for (let i = 0; i < tasks.length; i++) {
     tasks[i].state === undefined || tasks[i].state.article === ''
-      ? data.names['no product'].push(
+      ? dataPreparation.articles['no product'].push(
           tasks[i].title.substring(0, tasks[i].title.indexOf(' '))
         )
-      : data.names[tasks[i].state.article].push(
+      : dataPreparation.articles[tasks[i].state.article].push(
           tasks[i].title.substring(0, tasks[i].title.indexOf(' '))
         );
   }
 
-  data.labels = Object.keys(data.names);
-  const colors = getRandomColors(Object.keys(data.names).length);
+  const colors = getRandomColors(data.labels.length);
   data.datasets = [
     {
-      data: Object.keys(data.names).map(
-        (article) => data.names[article].length
+      data: Object.values(dataPreparation.articles).map(
+        (tasksNames) => tasksNames.length
       ),
       backgroundColor: colors,
       hoverBackgroundColor: colors,
