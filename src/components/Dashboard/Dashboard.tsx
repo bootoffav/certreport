@@ -102,23 +102,8 @@ class Dashboard extends Component<any, IDashboard> {
                   )}
                   options={{
                     ...chartOptions,
-                    onClick: (_: MouseEvent, chartElement: any) => {
-                      if (chartElement.length !== 0) {
-                        const {
-                          _model: { label: stage },
-                        } = chartElement.pop();
-                        this.renderTableOfDiagramSegment(
-                          stage,
-                          'stage',
-                          // passing specific tasks
-                          dashboardDataChartAdapter(
-                            this.state.allDataInChartsVisible
-                              ? this.state.tasks
-                              : this.state.quarters
-                          )
-                        );
-                      }
-                    },
+                    onClick: (_: PointerEvent, chartElement: any) =>
+                      this.onClickChartHandler(chartElement, 'stage'),
                   }}
                 />
               </Card.Body>
@@ -140,21 +125,8 @@ class Dashboard extends Component<any, IDashboard> {
                   )}
                   options={{
                     ...chartOptions,
-                    onClick: (_: MouseEvent, chartElement: any) => {
-                      const {
-                        _model: { label: article },
-                      } = chartElement.pop();
-                      this.renderTableOfDiagramSegment(
-                        article,
-                        'article',
-                        // passing specific tasks
-                        dashboardDataChartAdapter(
-                          this.state.allDataInChartsVisible
-                            ? this.state.tasks
-                            : this.state.quarters
-                        )
-                      );
-                    },
+                    onClick: (_: PointerEvent, chartElement: any) =>
+                      this.onClickChartHandler(chartElement, 'article'),
                   }}
                 />
               </Card.Body>
@@ -181,6 +153,24 @@ class Dashboard extends Component<any, IDashboard> {
       </>
     );
   }
+
+  onClickChartHandler = (chartElement: any, param: 'stage' | 'article') => {
+    if (chartElement.length !== 0) {
+      const {
+        _model: { label },
+      } = chartElement.pop();
+      this.renderTableOfDiagramSegment(
+        label,
+        param,
+        // passing specific tasks
+        dashboardDataChartAdapter(
+          this.state.allDataInChartsVisible
+            ? this.state.tasks
+            : this.state.quarters
+        )
+      );
+    }
+  };
 
   renderTableOfDiagramSegment(
     checkedValue: string,
