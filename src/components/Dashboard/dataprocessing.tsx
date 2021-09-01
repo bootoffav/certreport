@@ -1,21 +1,6 @@
 import type { ChartData } from 'react-chartjs-2';
 
-function dataAdapter(data: any) {
-  if (data === undefined || data.length === 0) return [];
-
-  if (data[0].hasOwnProperty('end') && data[0].hasOwnProperty('start')) {
-    return data.reduce((tasks: [], quarter: any) => {
-      // @ts-expect-error
-      quarter.active && tasks.push(...quarter.tasks);
-      return tasks;
-    }, []);
-  }
-
-  return data;
-}
-
-function byStages(rawData: any): ChartData<any> {
-  const tasks = dataAdapter(rawData);
+function byStages(tasks: any): ChartData<any> {
   const dataPreparation: { [key: string]: string[] } = {
     'no stage': [],
     '00. Paused': [],
@@ -61,7 +46,7 @@ function byStages(rawData: any): ChartData<any> {
   };
 }
 
-function byProducts(rawData: any): ChartData<any> {
+function byProducts(tasks: any): ChartData<any> {
   const dataPreparation: {
     articles: {
       [key: string]: string[];
@@ -69,7 +54,6 @@ function byProducts(rawData: any): ChartData<any> {
   } = { articles: {} };
 
   let data: any = {};
-  const tasks = dataAdapter(rawData);
   const uniqueArticles: any = new Set(
     tasks.map(({ state: { article } }: any) => article || 'no product')
   );

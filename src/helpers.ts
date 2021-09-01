@@ -126,6 +126,20 @@ function localizePrice(number: number | ''): string {
   });
 }
 
+function dashboardDataChartAdapter(data: any) {
+  if (data === undefined || data.length === 0) return [];
+
+  if (data[0].hasOwnProperty('end') && data[0].hasOwnProperty('start')) {
+    return data.reduce((tasks: [], quarter: any) => {
+      // @ts-expect-error
+      quarter.active && tasks.push(...quarter.tasks);
+      return tasks;
+    }, []);
+  }
+
+  return data;
+}
+
 export {
   countTotalPrice,
   printStage,
@@ -135,4 +149,5 @@ export {
   dateConverter,
   removeEmptyProps,
   getTotalPriceHelper,
+  dashboardDataChartAdapter,
 };

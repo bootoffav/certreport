@@ -11,7 +11,7 @@ import { byStages, byProducts } from './dataprocessing';
 import { AmountOfCertifications, CompletedCertifications } from './StatCards';
 
 import { getColumns } from '../Lists/Certification/columns';
-import { countTotalPrice } from '../../helpers';
+import { countTotalPrice, dashboardDataChartAdapter } from '../../helpers';
 
 interface IDashboard {
   tasks: any;
@@ -94,9 +94,11 @@ class Dashboard extends Component<any, IDashboard> {
               <Card.Body>
                 <HorizontalBar
                   data={byStages(
-                    this.state.allDataInChartsVisible
-                      ? this.state.tasks
-                      : this.state.quarters
+                    dashboardDataChartAdapter(
+                      this.state.allDataInChartsVisible
+                        ? this.state.tasks
+                        : this.state.quarters
+                    )
                   )}
                   options={{
                     ...chartOptions,
@@ -105,7 +107,16 @@ class Dashboard extends Component<any, IDashboard> {
                         const {
                           _model: { label: stage },
                         } = chartElement.pop();
-                        this.renderTableOfDiagramSegment(stage, 'stage');
+                        this.renderTableOfDiagramSegment(
+                          stage,
+                          'stage',
+                          // passing specific tasks
+                          dashboardDataChartAdapter(
+                            this.state.allDataInChartsVisible
+                              ? this.state.tasks
+                              : this.state.quarters
+                          )
+                        );
                       }
                     },
                   }}
@@ -121,9 +132,11 @@ class Dashboard extends Component<any, IDashboard> {
               <Card.Body>
                 <HorizontalBar
                   data={byProducts(
-                    this.state.allDataInChartsVisible
-                      ? this.state.tasks
-                      : this.state.quarters
+                    dashboardDataChartAdapter(
+                      this.state.allDataInChartsVisible
+                        ? this.state.tasks
+                        : this.state.quarters
+                    )
                   )}
                   options={{
                     ...chartOptions,
@@ -131,7 +144,16 @@ class Dashboard extends Component<any, IDashboard> {
                       const {
                         _model: { label: article },
                       } = chartElement.pop();
-                      this.renderTableOfDiagramSegment(article, 'article');
+                      this.renderTableOfDiagramSegment(
+                        article,
+                        'article',
+                        // passing specific tasks
+                        dashboardDataChartAdapter(
+                          this.state.allDataInChartsVisible
+                            ? this.state.tasks
+                            : this.state.quarters
+                        )
+                      );
                     },
                   }}
                 />
@@ -167,9 +189,9 @@ class Dashboard extends Component<any, IDashboard> {
   ) {
     if (['no product', 'no stage'].includes(checkedValue)) checkedValue = '';
 
-    tasks =
-      tasks ||
-      this.state.tasks.filter((t: any) => t.state[param] === checkedValue);
+    tasks = (tasks || this.state.tasks).filter(
+      (t: any) => t.state[param] === checkedValue
+    );
 
     const totalPrice = countTotalPrice(tasks);
     render(
