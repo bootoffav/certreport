@@ -40,3 +40,9 @@ p {
 .btn-group > .btn.active {
   z-index: 0;
 }
+
+input-group-prepend .btn,
+.input-group-append .btn,
+.pretreatment1-override-framework {
+  z-index: auto;
+}

@@ -58,7 +58,7 @@ function PreTreatment1(props: any) {
             </div>
             <button
               type="button"
-              className="btn btn-sm btn-link btn-reset"
+              className="btn btn-sm btn-link btn-reset pretreatment1-override-framework"
               onClick={() => props.resultChange('')}
             >
               Reset

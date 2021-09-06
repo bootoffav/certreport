@@ -12,7 +12,7 @@ import { TabbedCard, Button, Icon } from 'tabler-react';
 import CacheManager from '../../CacheManager';
 import { GoBackOrHomeButton } from '../NaviButton';
 import { renderDates } from './Tabs/Dates';
-import { renderBasicInfo } from './Tabs/BasicInfo';
+import { renderBasicInfo } from './Tabs/BasicInfo/BasicInfo';
 import { renderFiles } from './Tabs/Files';
 import { renderCommentsNews } from './Tabs/CommentsNews';
 import { renderFabricApplicationForm } from './Tabs/FabricApplicationForm';

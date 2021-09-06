@@ -1,9 +1,10 @@
 import { Dimmer, Tab } from 'tabler-react';
 import Select from 'react-select';
-import { Status } from '../../Notification/Notification';
-import { BaseInput, Article, SerialNumber } from '../FormFields';
-import { PreTreatment1 } from '../PreTreatment1';
-import { selectOptions } from '../../../defaults';
+import { Status } from '../../../Notification/Notification';
+import { BaseInput, Article, SerialNumber } from '../../FormFields';
+import { PreTreatment1 } from '../../PreTreatment1';
+import { selectOptions } from '../../../../defaults';
+import { StageSelect } from './StageSelect';
 
 function renderBasicInfo() {
   return (
@@ -48,7 +49,7 @@ function renderBasicInfo() {
           <div className="w-50">
             <div className="form-group">
               Stage
-              <Select
+              <StageSelect
                 value={this.asSelectable(this.state.stage)}
                 onChange={(e: any) => {
                   this.handleSelectChange(e, 'stage');
