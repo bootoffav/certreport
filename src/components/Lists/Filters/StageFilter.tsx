@@ -1,4 +1,5 @@
 import Select from 'react-select';
+import { stages as stagesOptionsDefault } from '../../../defaults';
 
 type SelectItem = {
   value?: string;
@@ -12,35 +13,7 @@ const StageFilter: React.FunctionComponent<{
   stages: any;
 }> = ({ tasks, update, stages }) => {
   const stagesOptions: any[] = [
-    {
-      label: 'Stages',
-      options: [
-        { value: '00. Paused', label: '00. Paused' },
-        { value: '01. Canceled', label: '01. Canceled' },
-        { value: '02. Estimate', label: '02. Estimate' },
-        {
-          value: '0. Sample to be prepared',
-          label: '0. Sample to be prepared',
-        },
-        { value: '1. Sample Sent', label: '1. Sample Sent' },
-        { value: '2. Sample Arrived', label: '2. Sample Arrived' },
-        { value: '3. PI Issued', label: '3. PI Issued' },
-        { value: '4. Payment Done', label: '4. Payment Done' },
-        { value: '5. Testing is started', label: '5. Testing is started' },
-        { value: '6. Pre-treatment done', label: '6. Pre-treatment done' },
-        { value: '7. Test-report ready', label: '7. Test-report ready' },
-        { value: '8. Certificate ready', label: '8. Certificate ready' },
-        { value: '9. Ended', label: '9. Ended' },
-        {
-          value: '10. Repeat Testing is started',
-          label: '10. Repeat Testing is started',
-        },
-        {
-          value: '11. Repeat Test-report ready',
-          label: '11. Repeat Test-report ready',
-        },
-      ],
-    },
+    ...stagesOptionsDefault,
     {
       label: 'More',
       options: [

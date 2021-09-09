@@ -83,8 +83,15 @@ const StageShortNames: {
   '7. Test-report ready': '7.TR',
   '8. Certificate ready': '8.CR',
   '9. Ended': '9.End',
-  '10. Repeat Testing is started': '10. RTS',
-  '11. Repeat Test-report ready': '11. RTR',
+  '10. Repeat Sample to be prepared': '10.R_STP',
+  '11. Repeat Sample Sent': '11.R_SS',
+  '12. Repeat Sample Arrived': '12.R_SA',
+  '13 Repeat PI issued': '13.R_PI',
+  '14. Repeat Payment done': '14.R_PD',
+  '15. Repeat Testing is started': '15.R_TS',
+  '16. Repeat Pre-Treatment done': '16.R_PTD',
+  '17. Repeat Test-report ready': '17.R_TR',
+  '18. Repeat Certificate ready': '18.R_CR',
 };
 
 function printStage(stage: string, place: 'table' | 'select' | 'dropdown') {

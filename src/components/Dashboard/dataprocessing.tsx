@@ -16,8 +16,15 @@ function byStages(tasks: any): ChartData<any> {
     '7. Test-report ready': [],
     '8. Certificate ready': [],
     '9. Ended': [],
-    '10. Repeat Testing is started': [],
-    '11. Repeat Test-report ready': [],
+    '10. Repeat Sample to be prepared': [],
+    '11. Repeat Sample Sent': [],
+    '12. Repeat Sample Arrived': [],
+    '13 Repeat PI issued': [],
+    '14. Repeat Payment done': [],
+    '15. Repeat Testing is started': [],
+    '16. Repeat Pre-Treatment done': [],
+    '17. Repeat Test-report ready': [],
+    '18. Repeat Certificate ready': [],
   };
 
   tasks.forEach((task: any) => {
