@@ -1,8 +1,11 @@
 import { Dimmer, Tab } from 'tabler-react';
 import { PickDate } from '../FormFields';
 import { Status } from '../../Notification/Notification';
+import { stages } from '../../../defaults';
+import { values } from 'lodash';
 
 function renderDates() {
+  const repeatedStages = stages[1].options.map((stage: any) => stage.label);
   return (
     <Tab title="Dates">
       <Dimmer active={this.state.requestStatus !== Status.FillingForm} loader>
@@ -73,10 +76,8 @@ function renderDates() {
             }
           />
         </div>
-        {[
-          '10. Repeat Testing is started',
-          '11. Repeat Test-report ready',
-        ].includes(this.state.stage) && renderRepeatDates.call(this)}
+        {repeatedStages.includes(this.state.stage) &&
+          renderRepeatDates.call(this)}
       </Dimmer>
     </Tab>
   );
