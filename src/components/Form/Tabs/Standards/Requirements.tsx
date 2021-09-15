@@ -93,12 +93,7 @@ function Requirements(props: RequirementsProps) {
                   />
                 </td>
                 <td width={'10%'}>
-                  <input
-                    disabled
-                    type="number"
-                    value={20}
-                    // onChange={(e) => console.log(e.target.value)}
-                  />
+                  <input disabled type="number" value={20} />
                 </td>
                 <td>{localizePrice(countCostWithDiscount(r.data.cost, 20))}</td>
               </tr>

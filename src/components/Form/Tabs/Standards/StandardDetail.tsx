@@ -1,14 +1,19 @@
-import React from 'react';
 import { Icon } from 'tabler-react';
 import { DB } from '../../../../backend/DBManager';
 import { useState, useEffect } from 'react';
 
-function EN11612Detail(props: any) {
+type StandardDetailProps = {
+  name: 'EN 11612' | 'EN 469';
+  taskId: string;
+};
+
+function StandardDetail(props: StandardDetailProps) {
   const blocks = ['A1', 'A2', 'B', 'C', 'D', 'E', 'F'];
+  const standardName = props.name.split(' ').join(''); // remove whitespace
 
   const onChange = ({ currentTarget: { name, dataset } }: any) => {
     DB.updateInstance(props.taskId, {
-      EN11612Detail: {
+      [`${standardName}Detail`]: {
         [name]: dataset.result,
       },
     }).catch(console.log);
@@ -20,7 +25,7 @@ function EN11612Detail(props: any) {
 
   const reset = () => {
     DB.updateInstance(props.taskId, {
-      EN11612Detail: null,
+      [`${standardName}Detail`]: null,
     });
     setDetails({});
   };
@@ -31,7 +36,7 @@ function EN11612Detail(props: any) {
 
   useEffect(() => {
     (async function () {
-      setDetails(await DB.get(props.taskId, 'EN11612Detail', 'aitex'));
+      setDetails(await DB.get(props.taskId, `${standardName}Detail`, 'aitex'));
     })();
   }, [props.taskId, setDetails]);
 
@@ -113,4 +118,4 @@ function EN11612Detail(props: any) {
   );
 }
 
-export { EN11612Detail };
+export { StandardDetail };

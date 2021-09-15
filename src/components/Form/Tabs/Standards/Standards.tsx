@@ -3,7 +3,7 @@ import { StandardResult } from './StandardResult';
 import { Price } from '../../FormFields';
 import { useState, useEffect } from 'react';
 import { DB } from '../../../../backend/DBManager';
-import { EN11612Detail } from './EN11612Detail';
+import { StandardDetail } from './StandardDetail';
 import { Requirements } from './Requirements';
 import './Standards.css';
 import { localizePrice } from '../../../../helpers';
@@ -93,16 +93,16 @@ function Standards(props: StandardsProps) {
   function renderStandard(standard: string, i: any) {
     const id = standard.replace(/\s/g, '');
     return (
-      <div key={i}>
+      <div className="accordion-item" key={i}>
         <div className="card">
           <div className="card-header" id={`heading_${id}`}>
             <div className="container-fluid row align-items-center">
               <div className="col-6">
                 <button
-                  className="btn btn-link"
-                  onClick={(e) => e.preventDefault()}
-                  data-toggle="collapse"
-                  data-target={`#collapse_${id}`}
+                  className="btn btn-link accordion-button"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target={`#collapse_${id}`}
                   aria-expanded="true"
                   aria-controls={`collapse_${id}`}
                 >
@@ -134,14 +134,15 @@ function Standards(props: StandardsProps) {
           </div>
           <div
             id={`collapse_${id}`}
-            className={standard === 'EN 11612' ? 'show' : 'collapse'}
+            className="collapse"
             aria-labelledby={`heading_${id}`}
             data-parent="#accordionStandards"
           >
             <div className="card-body">
+              {/* TODO: refactor Standard body presentation */}
               {standard === 'EN 11612' && (
                 <>
-                  <EN11612Detail taskId={props.taskId} />
+                  <StandardDetail name={standard} taskId={props.taskId} />
                   <hr />
                 </>
               )}
