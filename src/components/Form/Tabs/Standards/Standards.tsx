@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { StandardResult } from './StandardResult';
-import { Price } from '../Form/FormFields';
+import { Price } from '../../FormFields';
 import { useState, useEffect } from 'react';
-import { DB } from '../../backend/DBManager';
+import { DB } from '../../../../backend/DBManager';
 import { EN11612Detail } from './EN11612Detail';
 import { Requirements } from './Requirements';
 import './Standards.css';
-import { localizePrice } from '../../helpers';
+import { localizePrice } from '../../../../helpers';
 
 type StandardsProps = {
   initStandards: string[];

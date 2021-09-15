@@ -1,6 +1,6 @@
 import faunadb, { query as q } from 'faunadb';
 import { emptyState } from '../Task/emptyState';
-import type { IRequirement } from '../components/Standards/Requirements';
+import type { IRequirement } from '../components/Form/Tabs/Standards/Requirements';
 import type { Payment } from '../Task/Task.interface';
 
 class DB {

@@ -1,6 +1,6 @@
 import { Tab, Dimmer } from 'tabler-react';
 import { Status } from '../../Notification/Notification';
-import { Standards } from '../../Standards/Standards';
+import { Standards } from './Standards/Standards';
 import { PreTreatment1 } from '../PreTreatment1';
 
 function renderStandards() {

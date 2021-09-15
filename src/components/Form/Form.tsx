@@ -16,7 +16,7 @@ import { renderBasicInfo } from './Tabs/BasicInfo/BasicInfo';
 import { renderFiles } from './Tabs/Files';
 import { renderCommentsNews } from './Tabs/CommentsNews';
 import { renderFabricApplicationForm } from './Tabs/FabricApplicationForm';
-import { renderStandards } from './Tabs/Standards';
+import { renderStandards } from './Tabs/renderStandards';
 import { getShippingLabelFile } from '../Export/PDF/ShippingLabelFile';
 import { Payments } from './Payments';
 import { Tab, Dimmer } from 'tabler-react';
