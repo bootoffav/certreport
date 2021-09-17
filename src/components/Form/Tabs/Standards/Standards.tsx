@@ -7,6 +7,7 @@ import { StandardDetail } from './StandardDetail';
 import { Requirements } from './Requirements';
 import './Standards.css';
 import { localizePrice } from '../../../../helpers';
+import type { StandardDetailProps } from './StandardDetail';
 
 type StandardsProps = {
   initStandards: string[];
@@ -140,9 +141,12 @@ function Standards(props: StandardsProps) {
           >
             <div className="card-body">
               {/* TODO: refactor Standard body presentation */}
-              {standard === 'EN 11612' && (
+              {['EN11612', 'EN469', 'EN20471'].includes(id) && (
                 <>
-                  <StandardDetail name={standard} taskId={props.taskId} />
+                  <StandardDetail
+                    name={standard as StandardDetailProps['name']}
+                    taskId={props.taskId}
+                  />
                   <hr />
                 </>
               )}

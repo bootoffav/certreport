@@ -2,14 +2,30 @@ import { Icon } from 'tabler-react';
 import { DB } from '../../../../backend/DBManager';
 import { useState, useEffect } from 'react';
 
-type StandardDetailProps = {
-  name: 'EN 11612' | 'EN 469';
+export type StandardDetailProps = {
+  name: 'EN11612' | 'EN469' | 'EN20471';
   taskId: string;
 };
 
 function StandardDetail(props: StandardDetailProps) {
-  const blocks = ['A1', 'A2', 'B', 'C', 'D', 'E', 'F'];
-  const standardName = props.name.split(' ').join(''); // remove whitespace
+  const blocks = {
+    EN11612: ['A1', 'A2', 'B', 'C', 'D', 'E', 'F'],
+    EN469: [
+      '6.2.1.1 Flame-New',
+      '6.2.2 Flame-Wash',
+      '6.2.1.6 Heat-New',
+      '6.2.6.4 Ra',
+    ],
+    EN20471: [
+      '5.1.2 Color-New',
+      '5.2 Color-Xenon',
+      '6.1 Ra-New',
+      '6.2 Ra-Wash',
+    ],
+  };
+  const standardName = props.name
+    .split(' ')
+    .join('') as StandardDetailProps['name'];
 
   const onChange = ({ currentTarget: { name, dataset } }: any) => {
     DB.updateInstance(props.taskId, {
@@ -38,11 +54,11 @@ function StandardDetail(props: StandardDetailProps) {
     (async function () {
       setDetails(await DB.get(props.taskId, `${standardName}Detail`, 'aitex'));
     })();
-  }, [props.taskId, setDetails]);
+  }, [props.taskId, setDetails, standardName]);
 
   return (
     <div className="d-flex justify-content-between align-item-center">
-      {blocks.map((name) => {
+      {blocks[standardName].map((name) => {
         return (
           <div key={name} className="flex-fill d-flex flex-column">
             <p className="text-center">
