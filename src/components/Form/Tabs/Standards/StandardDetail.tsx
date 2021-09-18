@@ -1,9 +1,10 @@
 import { Icon } from 'tabler-react';
 import { DB } from '../../../../backend/DBManager';
 import { useState, useEffect } from 'react';
+import { ResultField } from './ResultField';
 
 export type StandardDetailProps = {
-  name: 'EN11612' | 'EN469' | 'EN20471';
+  name: 'EN 11612' | 'EN 469' | 'EN 20471';
   taskId: string;
 };
 
@@ -23,9 +24,10 @@ function StandardDetail(props: StandardDetailProps) {
       '6.2 Ra-Wash',
     ],
   };
-  const standardName = props.name
-    .split(' ')
-    .join('') as StandardDetailProps['name'];
+  const standardName = props.name.split(' ').join('') as
+    | 'EN11612'
+    | 'EN469'
+    | 'EN20471';
 
   const onChange = ({ currentTarget: { name, dataset } }: any) => {
     DB.updateInstance(props.taskId, {
@@ -58,20 +60,20 @@ function StandardDetail(props: StandardDetailProps) {
 
   return (
     <div className="d-flex justify-content-between align-item-center">
-      {blocks[standardName].map((name) => {
+      {blocks[standardName].map((paramName) => {
         return (
-          <div key={name} className="flex-fill d-flex flex-column">
+          <div key={paramName} className="flex-fill d-flex flex-column">
             <p className="text-center">
-              <span className="m-1">{name}</span>
+              <span className="m-1">{paramName}</span>
             </p>
             <div className="d-flex justify-content-center">
               <div className="form-check">
                 <input
                   className="form-check-input"
                   type="radio"
-                  name={name}
+                  name={paramName}
                   data-result="fail"
-                  checked={details[name] === 'fail'}
+                  checked={details[paramName] === 'fail'}
                   onChange={onChange}
                 />
                 <label className="form-check-label">
@@ -87,9 +89,9 @@ function StandardDetail(props: StandardDetailProps) {
                 <input
                   className="form-check-input"
                   type="radio"
-                  name={name}
+                  name={paramName}
                   data-result="pass"
-                  checked={details[name] === 'pass'}
+                  checked={details[paramName] === 'pass'}
                   onChange={onChange}
                 />
                 <label className="form-check-label">
@@ -105,9 +107,9 @@ function StandardDetail(props: StandardDetailProps) {
                 <input
                   className="form-check-input"
                   type="radio"
-                  name={name}
+                  name={paramName}
                   data-result="partly"
-                  checked={details[name] === 'partly'}
+                  checked={details[paramName] === 'partly'}
                   onChange={onChange}
                 />
                 <label className="form-check-label">
@@ -120,6 +122,13 @@ function StandardDetail(props: StandardDetailProps) {
                 </label>
               </div>
             </div>
+            {(props.name === 'EN 469' || props.name === 'EN 20471') && (
+              <ResultField
+                standardName={props.name}
+                param={paramName}
+                taskId={props.taskId}
+              />
+            )}
           </div>
         );
       })}

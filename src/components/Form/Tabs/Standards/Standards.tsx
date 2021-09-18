@@ -29,7 +29,7 @@ function Standards(props: StandardsProps) {
 
   useEffect(() => {
     props.taskId &&
-      DB.getStandards(props.taskId).then((newSt) => {
+      DB.genericGet(props.taskId, 'standards').then((newSt) => {
         setStandards((state: any) => ({ ...state, ...newSt }));
       });
   }, [props.taskId, setStandards]);

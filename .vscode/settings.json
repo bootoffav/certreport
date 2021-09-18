@@ -3,6 +3,8 @@
   "jest.rootPath": "src/",
   "jest.debugCodeLens.showWhenTestStateIn": ["fail", "unknown"],
   "jest.enableInlineErrorMessages": true,
+  "editor.detectIndentation": true,
+  "editor.tabSize": 2,
   "typescript.tsdk": "node_modules/typescript/lib",
   "deno.enable": false,
   "deno.lint": false,

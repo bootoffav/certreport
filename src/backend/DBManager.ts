@@ -17,11 +17,11 @@ class DB {
     });
   }
 
-  static getStandards(taskId: string) {
+  static genericGet(taskId: string, propertyToGet: string) {
     return DB.client()
       .query(
         q.Select(
-          ['data', 'standards'],
+          ['data', propertyToGet],
           q.Get(q.Ref(q.Collection(this.fdbCollection), taskId))
         )
       )
