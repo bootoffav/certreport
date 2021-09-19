@@ -9,6 +9,7 @@ interface ResultFieldProps {
 
 function ResultField(props: ResultFieldProps) {
   const propertyToGet = `${props.standardName.replace(/\s/g, '')}Result`;
+  // TODO: reduce amount of DB requests
   useEffect(() => {
     DB.genericGet(
       props.taskId,
@@ -24,9 +25,14 @@ function ResultField(props: ResultFieldProps) {
       type="number"
       aria-label="Result field for standard test param"
       value={value}
-      onChange={(currentTarget) => {
-        setValue(Number(currentTarget.target.value));
-      }}
+      onBlur={({ currentTarget }) =>
+        DB.updateInstance(props.taskId, {
+          [propertyToGet]: {
+            [props.param]: Number(currentTarget.value),
+          },
+        })
+      }
+      onChange={({ currentTarget }) => setValue(Number(currentTarget.value))}
     />
   );
 }
