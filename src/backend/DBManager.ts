@@ -17,11 +17,11 @@ class DB {
     });
   }
 
-  static genericGet(taskId: string, propertyToGet: string) {
+  static genericGet(taskId: string, propertyToGet: string[]) {
     return DB.client()
       .query(
         q.Select(
-          ['data', propertyToGet],
+          ['data', ...propertyToGet],
           q.Get(q.Ref(q.Collection(this.fdbCollection), taskId))
         )
       )

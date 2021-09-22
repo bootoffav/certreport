@@ -11,10 +11,10 @@ function ResultField(props: ResultFieldProps) {
   const propertyToGet = `${props.standardName.replace(/\s/g, '')}Result`;
   // TODO: reduce amount of DB requests
   useEffect(() => {
-    DB.genericGet(
-      props.taskId,
-      propertyToGet
-    ).then((result: { [key: string]: any }) => setValue(result[props.param]));
+    DB.genericGet(props.taskId, [
+      propertyToGet,
+      props.param,
+    ]).then((result: { [key: string]: any }) => setValue(result[props.param]));
   }, [propertyToGet, props.param, props.taskId]);
 
   const [value, setValue] = useState<number>();
