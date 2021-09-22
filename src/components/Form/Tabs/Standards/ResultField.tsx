@@ -7,28 +7,27 @@ interface ResultFieldProps {
   taskId: string;
 }
 
-function ResultField(props: ResultFieldProps) {
-  const propertyToGet = `${props.standardName.replace(/\s/g, '')}Result`;
-  // TODO: reduce amount of DB requests
+function ResultField({ taskId, param, standardName }: ResultFieldProps) {
+  const propertyToGet = `${standardName.replace(/\s/g, '')}Result`;
   useEffect(() => {
-    DB.genericGet(props.taskId, [
-      propertyToGet,
-      props.param,
-    ]).then((result: { [key: string]: any }) => setValue(result[props.param]));
-  }, [propertyToGet, props.param, props.taskId]);
+    DB.genericGet(taskId, [propertyToGet, param]).then((result) => {
+      if (typeof result === 'number') setValue(result);
+    });
+  }, [propertyToGet, param, taskId]);
 
   const [value, setValue] = useState<number>();
+
   return (
     <input
       style={{ width: '60%' }}
       className="mx-auto form-control form-control-sm mt-2"
       type="number"
       aria-label="Result field for standard test param"
-      value={value}
-      onBlur={({ currentTarget }) =>
-        DB.updateInstance(props.taskId, {
+      value={value || ''}
+      onBlur={({ currentTarget: { value } }) =>
+        DB.updateInstance(taskId, {
           [propertyToGet]: {
-            [props.param]: Number(currentTarget.value),
+            [param]: Number(value),
           },
         })
       }
