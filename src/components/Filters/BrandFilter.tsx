@@ -26,7 +26,7 @@ class BrandFilter extends Component<{
   };
 
   render = () => (
-    <div className="d-flex align-items-center">
+    <div className="d-flex align-items-start">
       <div className="btn-group" data-toggle="buttons">
         {Object.keys(this.state).map((brand) => (
           <label className="btn btn-secondary" key={brand}>
