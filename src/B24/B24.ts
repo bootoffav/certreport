@@ -4,6 +4,7 @@ import { dataSeparator } from '../Task/Task';
 import { StateAdapter } from '../StateAdapter';
 import { AppFormExport } from '../components/Export/PDF/AppFormExport';
 import { createShippingLabelFile } from '../components/Export/PDF/ShippingLabelFile';
+import { get_products, get_product } from './ProductMethods';
 import {
   detachFileFromTask,
   getAttachedFiles,
@@ -359,63 +360,8 @@ async function get_standards() {
   }));
 }
 
-async function get_products() {
-  const products = [];
-
-  const productSections = [
-    [8568, 'XMF'],
-    [8574, 'XMT'],
-    [8572, 'XMS'],
-  ];
-  let productsInSection: any[] = [];
-
-  let start = 0;
-  for (let [sectionId, brand] of productSections) {
-    do {
-      const { next, result } = await fetch(
-        `${mainUrl}/${creatorId}/${webhookKey}/crm.product.list?` +
-          qs.stringify({
-            order: {
-              NAME: 'ASC',
-            },
-            filter: {
-              SECTION_ID: sectionId,
-            },
-            select: ['ID', 'NAME'],
-            start,
-          })
-      )
-        .then((res) => res.json())
-        .then(step);
-      start = next;
-      productsInSection = productsInSection.concat(result);
-    } while (start !== undefined);
-    productsInSection = productsInSection.map((product) => ({
-      value: product.ID,
-      label: product.NAME,
-    }));
-    products.push({
-      label: brand,
-      options: [...productsInSection],
-    });
-
-    productsInSection.length = 0;
-  }
-
-  return products;
-}
-
-function get_product(id = null) {
-  if (id === null) {
-    throw Error('Product id is not provided');
-  }
-
-  return fetch(`${mainUrl}/${creatorId}/${webhookKey}/crm.product.get?id=${id}`)
-    .then((res) => res.json())
-    .then((json) => json.result);
-}
-
 export {
+  step,
   get_product,
   get_standards,
   get_products,
