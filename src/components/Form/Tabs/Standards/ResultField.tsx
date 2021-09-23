@@ -2,13 +2,13 @@ import { useState, useEffect } from 'react';
 import { DB } from '../../../../backend/DBManager';
 
 interface ResultFieldProps {
-  standardName: 'EN 469' | 'EN 20471';
+  standard: 'EN 469' | 'EN 20471';
   param: string;
   taskId: string;
 }
 
-function ResultField({ taskId, param, standardName }: ResultFieldProps) {
-  const propertyToGet = `${standardName.replace(/\s/g, '')}Result`;
+function ResultField({ taskId, param, standard }: ResultFieldProps) {
+  const propertyToGet = `${standard}Result`;
   useEffect(() => {
     DB.genericGet(taskId, [propertyToGet, param]).then((result) => {
       if (typeof result === 'number') setValue(result);

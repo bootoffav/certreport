@@ -2,6 +2,7 @@ import { Icon } from 'tabler-react';
 import { DB } from '../../../../backend/DBManager';
 import { useState, useEffect } from 'react';
 import { ResultField } from './ResultField';
+import { standardParamMap } from '../../../../defaults';
 
 export type StandardDetailProps = {
   name: 'EN 11612' | 'EN 469' | 'EN 20471';
@@ -10,28 +11,13 @@ export type StandardDetailProps = {
 
 function StandardDetail(props: StandardDetailProps) {
   const blocks = {
-    EN11612: ['A1', 'A2', 'B', 'C', 'D', 'E', 'F'],
-    EN469: [
-      '6.2.1.1 Flame-New',
-      '6.2.2 Flame-Wash',
-      '6.2.1.6 Heat-New',
-      '6.2.6.4 Ra',
-    ],
-    EN20471: [
-      '5.1.2 Color-New',
-      '5.2 Color-Xenon',
-      '6.1 Ra-New',
-      '6.2 Ra-Wash',
-    ],
+    'EN 11612': ['A1', 'A2', 'B', 'C', 'D', 'E', 'F'],
+    ...standardParamMap,
   };
-  const standardName = props.name.split(' ').join('') as
-    | 'EN11612'
-    | 'EN469'
-    | 'EN20471';
 
   const onChange = ({ currentTarget: { name, dataset } }: any) => {
     DB.updateInstance(props.taskId, {
-      [`${standardName}Detail`]: {
+      [`${props.name}Detail`]: {
         [name]: dataset.result,
       },
     }).catch(console.log);
@@ -43,7 +29,7 @@ function StandardDetail(props: StandardDetailProps) {
 
   const reset = () => {
     DB.updateInstance(props.taskId, {
-      [`${standardName}Detail`]: null,
+      [`${props.name}Detail`]: null,
     });
     setDetails({});
   };
@@ -54,13 +40,13 @@ function StandardDetail(props: StandardDetailProps) {
 
   useEffect(() => {
     (async function () {
-      setDetails(await DB.get(props.taskId, `${standardName}Detail`, 'aitex'));
+      setDetails(await DB.get(props.taskId, `${props.name}Detail`, 'aitex'));
     })();
-  }, [props.taskId, setDetails, standardName]);
+  }, [props.taskId, setDetails, props.name]);
 
   return (
     <div className="d-flex justify-content-between align-item-center">
-      {blocks[standardName].map((paramName) => {
+      {blocks[props.name].map((paramName) => {
         return (
           <div key={paramName} className="flex-fill d-flex flex-column">
             <p className="text-center">
@@ -124,7 +110,7 @@ function StandardDetail(props: StandardDetailProps) {
             </div>
             {(props.name === 'EN 469' || props.name === 'EN 20471') && (
               <ResultField
-                standardName={props.name}
+                standard={props.name}
                 param={paramName}
                 taskId={props.taskId}
               />

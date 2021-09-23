@@ -141,7 +141,7 @@ function Standards(props: StandardsProps) {
           >
             <div className="card-body">
               {/* TODO: refactor Standard body presentation */}
-              {['EN11612', 'EN469', 'EN20471'].includes(id) && (
+              {['EN 11612', 'EN 469', 'EN 20471'].includes(standard) && (
                 <>
                   <StandardDetail
                     name={standard as StandardDetailProps['name']}

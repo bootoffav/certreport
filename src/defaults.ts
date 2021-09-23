@@ -1,5 +1,4 @@
 import * as B24 from './B24/B24';
-import * as Sentry from '@sentry/browser';
 
 const stages = [
   {
@@ -94,10 +93,25 @@ let selectOptions: {
   articles: JSON.parse(localStorage.getItem('articles') || '[]'),
 };
 
+const standardParamMap = {
+  'EN 469': [
+    '6.2.1.1 Flame-New',
+    '6.2.2 Flame-Wash',
+    '6.2.1.6 Heat-New',
+    '6.2.6.4 Ra',
+  ],
+  'EN 20471': [
+    '5.1.2 Color-New',
+    '5.2 Color-Xenon',
+    '6.1 Ra-New',
+    '6.2 Ra-Wash',
+  ],
+};
+
 function initApp() {
-  Sentry.init({
-    dsn: 'https://09c5935753774acabba136bf59c9e31f@sentry.io/1796060',
-  });
+  // Sentry.init({
+  //   dsn: 'https://09c5935753774acabba136bf59c9e31f@sentry.io/1796060',
+  // });
   const saveAndApply = (data: any[], item: string) => {
     localStorage.setItem(item, JSON.stringify(data));
     selectOptions[item] = data;
@@ -107,4 +121,4 @@ function initApp() {
   B24.get_standards().then((data) => saveAndApply(data, 'standards'));
 }
 
-export { selectOptions, initApp, stages };
+export { selectOptions, standardParamMap, initApp, stages };
