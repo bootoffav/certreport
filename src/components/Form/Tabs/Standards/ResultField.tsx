@@ -8,14 +8,14 @@ interface ResultFieldProps {
 }
 
 function ResultField({ taskId, param, standard }: ResultFieldProps) {
-  const propertyToGet = `${standard}Result`;
+  const documentKey = `${standard.replace(/\s/, '')}Result`; //
   useEffect(() => {
-    DB.genericGet(taskId, [propertyToGet, param]).then((result) => {
+    DB.genericGet(taskId, [documentKey, param]).then((result) => {
       if (typeof result === 'number') setValue(result);
     });
-  }, [propertyToGet, param, taskId]);
+  }, [documentKey, param, taskId]);
 
-  const [value, setValue] = useState<number>();
+  const [value, setValue] = useState<number | undefined>();
 
   return (
     <input
@@ -26,7 +26,7 @@ function ResultField({ taskId, param, standard }: ResultFieldProps) {
       value={value || ''}
       onBlur={({ currentTarget: { value } }) =>
         DB.updateInstance(taskId, {
-          [propertyToGet]: {
+          [documentKey]: {
             [param]: Number(value),
           },
         })

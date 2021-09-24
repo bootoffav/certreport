@@ -94,18 +94,8 @@ let selectOptions: {
 };
 
 const standardParamMap = {
-  'EN 469': [
-    '6.2.1.1 Flame-New',
-    '6.2.2 Flame-Wash',
-    '6.2.1.6 Heat-New',
-    '6.2.6.4 Ra',
-  ],
-  'EN 20471': [
-    '5.1.2 Color-New',
-    '5.2 Color-Xenon',
-    '6.1 Ra-New',
-    '6.2 Ra-Wash',
-  ],
+  'EN 469': ['6.1 B.3.2 FR-New', '6.1 B.3.2 FR-Wash', '6.5 B.3.1 Heat-New'],
+  'EN 20471': ['6.1 C-New', '6.1 C-Xenon', '6.1 R-New', '6.2 R-Wash'],
 };
 
 function initApp() {

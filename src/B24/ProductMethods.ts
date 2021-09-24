@@ -22,7 +22,6 @@ async function get_products() {
     ['8572', 'XMS'],
     ...(await getProductSectionsFromB2B()),
   ];
-  debugger;
   let productsInSection: any[] = [];
 
   let start = 0;
