@@ -67,9 +67,14 @@ function StandardFilter({ update }: StandardFilterProps) {
   const [standards, dispatch] = useReducer(standardFilterReducer, initialState);
 
   // eslint-disable-next-line
-  useEffect(() => update({ activeStandards: getActiveCheckboxes(standards) }), [
-    standards,
-  ]);
+  useEffect(
+    () =>
+      update({
+        activeStandards: getActiveCheckboxes(standards),
+        additionalStandardTaskList: undefined,
+      }),
+    [standards]
+  );
 
   return (
     <div className="d-flex flex-column">
@@ -98,6 +103,7 @@ function StandardFilter({ update }: StandardFilterProps) {
         <AdditionalStandardFilter
           // @ts-ignore
           standard={getActiveCheckboxes(standards)[0]}
+          update={update}
         />
       ) : (
         ''

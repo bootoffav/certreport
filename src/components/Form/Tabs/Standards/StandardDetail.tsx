@@ -14,10 +14,10 @@ function StandardDetail(props: StandardDetailProps) {
     'EN 11612': ['A1', 'A2', 'B', 'C', 'D', 'E', 'F'],
     ...standardParamMap,
   };
-
+  const dbField = `${props.name.replace(/\s/, '')}Detail`;
   const onChange = ({ currentTarget: { name, dataset } }: any) => {
     DB.updateInstance(props.taskId, {
-      [`${props.name}Detail`]: {
+      [dbField]: {
         [name]: dataset.result,
       },
     }).catch(console.log);
@@ -29,7 +29,7 @@ function StandardDetail(props: StandardDetailProps) {
 
   const reset = () => {
     DB.updateInstance(props.taskId, {
-      [`${props.name}Detail`]: null,
+      [dbField]: null,
     });
     setDetails({});
   };
@@ -40,9 +40,9 @@ function StandardDetail(props: StandardDetailProps) {
 
   useEffect(() => {
     (async function () {
-      setDetails(await DB.get(props.taskId, `${props.name}Detail`, 'aitex'));
+      setDetails(await DB.get(props.taskId, dbField, 'aitex'));
     })();
-  }, [props.taskId, setDetails, props.name]);
+  }, [props.taskId, setDetails, props.name, dbField]);
 
   return (
     <div className="d-flex justify-content-between align-item-center">

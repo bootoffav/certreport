@@ -59,7 +59,11 @@ class Main extends Component {
       prevState.endDate !== this.state.endDate ||
       !isEqual(prevState.activeBrands, this.state.activeBrands) ||
       !isEqual(prevState.stages, this.state.stages) ||
-      !isEqual(prevState.activeStandards, this.state.activeStandards)
+      !isEqual(prevState.activeStandards, this.state.activeStandards) ||
+      !isEqual(
+        prevState.additionalStandardTaskList,
+        this.state.additionalStandardTaskList
+      )
     ) {
       this.filter();
     }
@@ -92,11 +96,17 @@ class Main extends Component {
     });
 
     // standardfiltering
-    if (this.state.activeStandards[0] !== 'All') {
-      filteredTasks = filteredTasks.filter((task: any) => {
-        const standards = task.state.standards.split(', ');
-        return intersection(standards, activeStandards).length;
-      });
+    if (this.state.additionalStandardTaskList) {
+      filteredTasks = filteredTasks.filter((task: any) =>
+        this.state.additionalStandardTaskList.includes(task.id)
+      );
+    } else {
+      if (this.state.activeStandards[0] !== 'All') {
+        filteredTasks = filteredTasks.filter((task: any) => {
+          const standards = task.state.standards.split(', ');
+          return intersection(standards, activeStandards).length;
+        });
+      }
     }
 
     // datefiltering

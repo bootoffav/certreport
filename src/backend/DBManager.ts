@@ -28,6 +28,21 @@ class DB {
       .catch((e) => ({}));
   }
 
+  static queryIndex(index: string) {
+    return DB.client().query(
+      q.Map(
+        q.Paginate(
+          q.Union(
+            q.Match(q.Index(index), 'fail'),
+            q.Match(q.Index(index), 'pass'),
+            q.Match(q.Index(index), 'partly')
+          )
+        ),
+        q.Lambda('standard', q.Get(q.Var('standard')))
+      )
+    );
+  }
+
   static async getRequirementsForStandard(
     standard: string
   ): Promise<IRequirement[]> {
