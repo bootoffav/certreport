@@ -2,7 +2,6 @@ import { useReducer, useState, useEffect } from 'react';
 import { DB } from '../../backend/DBManager';
 import { standardParamMap } from '../../defaults';
 import type { StandardFilterState } from './StandardFilter';
-import { getActiveCheckboxes } from './StandardFilter';
 
 type AdditionalStandardFilterProps = {
   standard: keyof StandardFilterState & ('EN 469' | 'EN 20471');

@@ -66,13 +66,13 @@ const getActiveCheckboxes = (checkboxPair: any) => {
 function StandardFilter({ update }: StandardFilterProps) {
   const [standards, dispatch] = useReducer(standardFilterReducer, initialState);
 
-  // eslint-disable-next-line
   useEffect(
     () =>
       update({
         activeStandards: getActiveCheckboxes(standards),
         additionalStandardTaskList: undefined,
       }),
+    // eslint-disable-next-line
     [standards]
   );
 

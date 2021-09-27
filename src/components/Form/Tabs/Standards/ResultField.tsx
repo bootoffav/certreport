@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Icon } from 'tabler-react';
 import { DB } from '../../../../backend/DBManager';
 
 interface ResultFieldProps {
@@ -9,30 +10,45 @@ interface ResultFieldProps {
 
 function ResultField({ taskId, param, standard }: ResultFieldProps) {
   const documentKey = `${standard.replace(/\s/, '')}Result`; //
-  useEffect(() => {
-    DB.genericGet(taskId, [documentKey, param]).then((result) => {
-      if (typeof result === 'number') setValue(result);
-    });
-  }, [documentKey, param, taskId]);
 
-  const [value, setValue] = useState<number | undefined>();
+  const [value, setValue] = useState<string>('');
+  const [iconState, setIconState] = useState<boolean>(true);
+
+  useEffect(() => {
+    (async () => {
+      const response = await DB.genericGet(taskId, [documentKey, param]);
+      if (typeof response === 'string') {
+        setValue(response);
+      }
+    })();
+  }, [taskId, param, documentKey]);
 
   return (
-    <input
-      style={{ width: '60%' }}
-      className="mx-auto form-control form-control-sm mt-2"
-      type="number"
-      aria-label="Result field for standard test param"
-      value={value || ''}
-      onBlur={({ currentTarget: { value } }) =>
-        DB.updateInstance(taskId, {
-          [documentKey]: {
-            [param]: Number(value),
-          },
-        })
-      }
-      onChange={({ currentTarget }) => setValue(Number(currentTarget.value))}
-    />
+    <div className="mx-auto mt-2 input-group" style={{ width: '60%' }}>
+      <input
+        className="form-control form-control-sm"
+        type="number"
+        aria-label="Result field for standard test param"
+        value={value}
+        onBlur={({ currentTarget: { value } }) => {
+          DB.updateInstance(taskId, {
+            [documentKey]: {
+              [param]: value,
+            },
+          }).then(() => setIconState(true));
+        }}
+        onChange={({ currentTarget }) => {
+          setIconState(false);
+          setValue(currentTarget.value);
+        }}
+      />
+      <Icon
+        prefix="fe"
+        width="60"
+        className={`input-group-text ${iconState ? 'greenIcon' : 'redIcon'}`}
+        name={iconState ? 'check-square' : 'slash'}
+      />
+    </div>
   );
 }
 
