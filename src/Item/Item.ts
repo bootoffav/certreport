@@ -9,6 +9,7 @@ type ItemType = {
   article: string;
   standards: string[];
   brand: string;
+  testingCompany: string;
   tasks: taskOfItem[];
 };
 
@@ -18,7 +19,7 @@ function Items(tasks: any[]) {
 
   tasks.forEach((t) => {
     if (t.state && t.state.article) {
-      let { article, standards, brand } = t.state;
+      let { article, standards, brand, testingCompany } = t.state;
       standards = standards.split(', ');
 
       // check for existence
@@ -34,6 +35,7 @@ function Items(tasks: any[]) {
           article,
           standards,
           brand,
+          testingCompany,
           tasks: [taskWithConvertedTitle],
         });
       } else {

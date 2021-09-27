@@ -26,6 +26,7 @@ class Main extends Component {
     startDate: undefined,
     endDate: undefined,
     activeBrands: ['XMT', 'XMS', 'XMF'],
+    activeTestingCompanies: ['aitex', 'bttg', 'satra'],
     activeStandards: ['All'],
   };
 
@@ -63,6 +64,10 @@ class Main extends Component {
       !isEqual(
         prevState.additionalStandardTaskList,
         this.state.additionalStandardTaskList
+      ) ||
+      !isEqual(
+        prevState.activeTestingCompanies,
+        this.state.activeTestingCompanies
       )
     ) {
       this.filter();
@@ -79,34 +84,52 @@ class Main extends Component {
       endDate,
     } = this.state;
 
-    // brandfiltering for Tasks
-    let filteredTasks = allTasks.filter((task: any) => {
-      if (task.state.brand === '') {
-        if (activeBrands.includes('No brand')) return true;
-      }
-      return activeBrands.includes(task.state.brand);
-    });
+    function brandFilteringFunc({ brand }: any) {
+      return brand === '' && activeBrands.includes('No brand')
+        ? true
+        : activeBrands.includes(brand);
+    }
 
-    // brandfiltering for Products
-    let filteredItems = allItems.filter((item: any) => {
-      if (item.brand === '') {
-        if (activeBrands.includes('No brand')) return true;
-      }
-      return activeBrands.includes(item.brand);
-    });
+    const testingCompanyFilteringFunc = ({ testingCompany }: any) => {
+      testingCompany = testingCompany.split(' ')[0].toLowerCase();
+      return this.state.activeTestingCompanies.includes(testingCompany);
+    };
 
-    // standardfiltering
+    // brandfiltering for Certification Tasks
+    let filteredTasks = allTasks.filter(({ state }: any) =>
+      brandFilteringFunc(state)
+    );
+
+    // brandfiltering for Items
+    let filteredItems = allItems.filter(brandFilteringFunc);
+
+    // testing company filtering for Certification Tasks
+    filteredTasks = filteredTasks.filter(({ state }: any) =>
+      testingCompanyFilteringFunc(state)
+    );
+
+    // testing company filtering for Items
+    filteredItems = filteredItems.filter(testingCompanyFilteringFunc);
+
+    // standardfiltering for Certification Tasks
     if (this.state.additionalStandardTaskList) {
       filteredTasks = filteredTasks.filter((task: any) =>
         this.state.additionalStandardTaskList.includes(task.id)
       );
     } else {
-      if (this.state.activeStandards[0] !== 'All') {
+      if (activeStandards[0] !== 'All') {
         filteredTasks = filteredTasks.filter((task: any) => {
           const standards = task.state.standards.split(', ');
           return intersection(standards, activeStandards).length;
         });
       }
+    }
+
+    // standardFiltering for Items
+    if (activeStandards[0] !== 'All') {
+      filteredItems = filteredItems.filter(
+        ({ standards }) => intersection(standards, activeStandards).length
+      );
     }
 
     // datefiltering

@@ -1,5 +1,6 @@
-import { useReducer, useState, useEffect } from 'react';
-import { DB } from '../../backend/DBManager';
+// import { useReducer, useState, useEffect } from 'react';
+import { useReducer } from 'react';
+// import { DB } from '../../backend/DBManager';
 import { standardParamMap } from '../../defaults';
 import type { StandardFilterState } from './StandardFilter';
 
@@ -24,12 +25,12 @@ function AdditionalStandardFilter({
   });
 
   const [state, dispatch] = useReducer(additionalStandardReducer, initialState);
-  const [tasksList, setTasksList] = useState<string[]>();
+  // const [tasksList, setTasksList] = useState<string[]>();
 
-  useEffect(() => {
-    update({ additionalStandardTaskList: tasksList });
-    // eslint-disable-next-line
-  }, [tasksList]);
+  // useEffect(() => {
+  //   update({ additionalStandardTaskList: tasksList });
+  //   // eslint-disable-next-line
+  // }, [tasksList]);
 
   return (
     <>
@@ -58,14 +59,14 @@ function AdditionalStandardFilter({
         </div>
         <button
           className="btn btn-success ml-1"
-          // data-bs-toggle="modal"
+          data-bs-toggle="modal"
           data-bs-target="#notAvailableModal"
           type="submit"
-          onClick={() => {
-            fetchTaskIdsFromDB(state, standard).then((list) =>
-              setTasksList(list)
-            );
-          }}
+          // onClick={() => {
+          // fetchTaskIdsFromDB(state, standard).then((list) =>
+          //   setTasksList(list)
+          // );
+          // }}
         >
           Apply
         </button>
@@ -75,40 +76,40 @@ function AdditionalStandardFilter({
   );
 }
 
-function buildIndex(prop: string, standard: string) {
-  return (
-    `aitex_${standard.replace(/\s/g, '')}Detail` +
-    `${prop.replace(/\s|\./g, '')}`
-  );
-}
+// function buildIndex(prop: string, standard: string) {
+//   return (
+//     `aitex_${standard.replace(/\s/g, '')}Detail` +
+//     `${prop.replace(/\s|\./g, '')}`
+//   );
+// }
 
-const fetchTaskIdsFromDB = async (
-  params: any,
-  standard: string
-): Promise<string[]> => {
-  const list: string[] = [];
+// const fetchTaskIdsFromDB = async (
+//   params: any,
+//   standard: string
+// ): Promise<string[]> => {
+//   const list: string[] = [];
 
-  // build indexes
-  const indexes: string[] = [];
-  for (const prop in params) {
-    if (params[prop]) {
-      indexes.push(buildIndex(prop, standard));
-    }
-  }
+//   // build indexes
+//   const indexes: string[] = [];
+//   for (const prop in params) {
+//     if (params[prop]) {
+//       indexes.push(buildIndex(prop, standard));
+//     }
+//   }
 
-  // query per index
-  for (const index of indexes) {
-    const listPerIndex = await DB.queryIndex(index).then((result: unknown) => {
-      if (result && typeof result === 'object') {
-        // @ts-ignore
-        return result.data.map(({ ref }: any) => ref.id);
-      }
-    });
-    list.push(...listPerIndex);
-  }
+//   // query per index
+//   for (const index of indexes) {
+//     const listPerIndex = await DB.queryIndex(index).then((result: unknown) => {
+//       if (result && typeof result === 'object') {
+//         // @ts-ignore
+//         return result.data.map(({ ref }: any) => ref.id);
+//       }
+//     });
+//     list.push(...listPerIndex);
+//   }
 
-  return [...new Set(list)]; // remove duplicates
-};
+//   return [...new Set(list)]; // remove duplicates
+// };
 
 const Modal = () => (
   <div

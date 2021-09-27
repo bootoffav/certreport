@@ -2,6 +2,7 @@ import { NavLink } from 'react-router-dom';
 import { BrandFilter } from '../Filters/BrandFilter';
 import { StandardFilter } from '../Filters/StandardFilter';
 import { DateFilter } from '../Filters/DateFilter';
+import { TestingCompanyFilter } from '../Filters/TestingCompanyFilter';
 import { State } from './State';
 
 interface INavBarProps {
@@ -43,6 +44,11 @@ function NavBar({ startDate, endDate, update, updated }: INavBarProps) {
 
       <div className="d-flex justify-content-start">
         <BrandFilter update={update} />
+
+        <div className="pl-1">
+          <TestingCompanyFilter update={update} />
+        </div>
+
         <div className="pl-1">
           <StandardFilter update={update} />
         </div>
