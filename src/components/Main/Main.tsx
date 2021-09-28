@@ -104,15 +104,14 @@ class Main extends Component {
     // brandfiltering for Items
     let filteredItems = allItems.filter(brandFilteringFunc);
 
-    // testing company filtering for Certification Tasks
     if (activeTestingCompanies[0] !== 'all') {
+      // testing company filtering for Certification Tasks
       filteredTasks = filteredTasks.filter(({ state }: any) =>
         testingCompanyFilteringFunc(state)
       );
+      // testing company filtering for Items
+      filteredItems = filteredItems.filter(testingCompanyFilteringFunc);
     }
-
-    // testing company filtering for Items
-    // filteredItems = filteredItems.filter(testingCompanyFilteringFunc);
 
     // standardfiltering for Certification Tasks
     if (this.state.additionalStandardTaskList) {
