@@ -80,7 +80,10 @@ function StandardFilter({ update }: StandardFilterProps) {
     <div className="d-flex flex-column">
       <div className="btn-group" data-toggle="buttons">
         {Object.keys(standards).map((standard) => (
-          <label className="btn btn-secondary" key={standard}>
+          <label
+            className={`btn btn-${standard === 'All' ? 'info' : 'secondary'}`}
+            key={standard}
+          >
             <input
               type="checkbox"
               value={standard}

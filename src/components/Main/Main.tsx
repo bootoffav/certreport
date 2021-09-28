@@ -26,7 +26,7 @@ class Main extends Component {
     startDate: undefined,
     endDate: undefined,
     activeBrands: ['XMT', 'XMS', 'XMF'],
-    activeTestingCompanies: ['aitex', 'bttg', 'satra'],
+    activeTestingCompanies: ['all'],
     activeStandards: ['All'],
   };
 
@@ -82,6 +82,7 @@ class Main extends Component {
       activeStandards,
       startDate,
       endDate,
+      activeTestingCompanies,
     } = this.state;
 
     function brandFilteringFunc({ brand }: any) {
@@ -92,7 +93,7 @@ class Main extends Component {
 
     const testingCompanyFilteringFunc = ({ testingCompany }: any) => {
       testingCompany = testingCompany.split(' ')[0].toLowerCase();
-      return this.state.activeTestingCompanies.includes(testingCompany);
+      return activeTestingCompanies.includes(testingCompany);
     };
 
     // brandfiltering for Certification Tasks
@@ -104,12 +105,14 @@ class Main extends Component {
     let filteredItems = allItems.filter(brandFilteringFunc);
 
     // testing company filtering for Certification Tasks
-    filteredTasks = filteredTasks.filter(({ state }: any) =>
-      testingCompanyFilteringFunc(state)
-    );
+    if (activeTestingCompanies[0] !== 'all') {
+      filteredTasks = filteredTasks.filter(({ state }: any) =>
+        testingCompanyFilteringFunc(state)
+      );
+    }
 
     // testing company filtering for Items
-    filteredItems = filteredItems.filter(testingCompanyFilteringFunc);
+    // filteredItems = filteredItems.filter(testingCompanyFilteringFunc);
 
     // standardfiltering for Certification Tasks
     if (this.state.additionalStandardTaskList) {

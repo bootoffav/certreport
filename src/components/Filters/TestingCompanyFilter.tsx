@@ -1,10 +1,10 @@
-import { useEffect } from 'react';
-import { useState } from 'react';
+import { useEffect, useReducer } from 'react';
 
 type TestingCompanyState = {
   aitex: boolean;
   satra: boolean;
   bttg: boolean;
+  all: boolean;
 };
 
 const getActiveCompanies = (state: TestingCompanyState) => {
@@ -13,19 +13,40 @@ const getActiveCompanies = (state: TestingCompanyState) => {
     .map(([company, _]) => company);
 };
 
+const initialState = {
+  aitex: false,
+  satra: false,
+  bttg: false,
+  all: true,
+};
+
+const testingCompanyFilterReducer = (
+  state: TestingCompanyState,
+  {
+    testingCompany,
+    checked,
+  }: { testingCompany: keyof TestingCompanyState & string; checked: boolean }
+) =>
+  testingCompany === 'all'
+    ? { ...initialState, all: checked }
+    : {
+        ...state,
+        all: false,
+        [testingCompany]: checked,
+      };
+
 function TestingCompanyFilter({ update }: any) {
-  const [state, setState] = useState<TestingCompanyState>({
-    aitex: true,
-    satra: true,
-    bttg: true,
-  });
+  const [state, dispatch] = useReducer(
+    testingCompanyFilterReducer,
+    initialState
+  );
 
   const handleChange = ({ target }: React.SyntheticEvent) => {
-    setState(() => ({
-      ...state,
-      // @ts-ignore
-      [target.value]: target.checked,
-    }));
+    const { value: testingCompany, checked }: any = target;
+    dispatch({
+      testingCompany,
+      checked,
+    });
   };
 
   useEffect(() => {
@@ -37,7 +58,10 @@ function TestingCompanyFilter({ update }: any) {
     <div className="d-flex align-items-start">
       <div className="btn-group" data-toggle="buttons">
         {Object.keys(state).map((item) => (
-          <label className="btn btn-secondary" key={item}>
+          <label
+            className={`btn btn-${item === 'all' ? 'info' : 'secondary'}`}
+            key={item}
+          >
             <input
               type="checkbox"
               value={item}
