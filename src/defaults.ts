@@ -95,7 +95,15 @@ let selectOptions: {
 
 const standardParamMap = {
   'EN 469': ['6.1 B.3.2 FR-New', '6.1 B.3.2 FR-Wash', '6.5 B.3.1 Heat-New'],
-  'EN 20471': ['6.1 C-New', '6.1 C-Xenon', '6.1 R-New', '6.2 R-Wash'],
+  'EN 20471': [
+    '6.1 C-New',
+    '6.1 C-Xenon',
+    '6.1 R-New',
+    '6.2 R-Wash',
+    '7.5.1 C-Wash',
+    '7.5.2 R-Wash',
+    '7.5.3 R-Dry',
+  ],
 };
 
 function initApp() {

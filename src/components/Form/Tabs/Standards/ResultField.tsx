@@ -24,7 +24,7 @@ function ResultField({ taskId, param, standard }: ResultFieldProps) {
   }, [taskId, param, documentKey]);
 
   return (
-    <div className="mx-auto mt-2 input-group" style={{ width: '60%' }}>
+    <div className="mx-auto mt-2 input-group" style={{ width: '80%' }}>
       <input
         className="form-control form-control-sm"
         type="number"
