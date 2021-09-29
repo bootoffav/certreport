@@ -26,6 +26,7 @@ function AdditionalStandardFilter({
       )
     );
     return () => update({ additionalStandardFilterTaskList: undefined });
+    // eslint-disable-next-line
   }, [standard]);
 
   const jsx = Object.keys(state).map((param) => (
