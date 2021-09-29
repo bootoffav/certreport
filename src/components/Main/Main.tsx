@@ -62,8 +62,8 @@ class Main extends Component {
       !isEqual(prevState.stages, this.state.stages) ||
       !isEqual(prevState.activeStandards, this.state.activeStandards) ||
       !isEqual(
-        prevState.additionalStandardTaskList,
-        this.state.additionalStandardTaskList
+        prevState.additionalStandardFilterTaskList,
+        this.state.additionalStandardFilterTaskList
       ) ||
       !isEqual(
         prevState.activeTestingCompanies,
@@ -83,6 +83,7 @@ class Main extends Component {
       startDate,
       endDate,
       activeTestingCompanies,
+      additionalStandardFilterTaskList,
     } = this.state;
 
     function brandFilteringFunc({ brand }: any) {
@@ -114,9 +115,9 @@ class Main extends Component {
     }
 
     // standardfiltering for Certification Tasks
-    if (this.state.additionalStandardTaskList) {
+    if (additionalStandardFilterTaskList) {
       filteredTasks = filteredTasks.filter((task: any) =>
-        this.state.additionalStandardTaskList.includes(task.id)
+        additionalStandardFilterTaskList.includes(task.id)
       );
     } else {
       if (activeStandards[0] !== 'All') {

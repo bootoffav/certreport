@@ -70,7 +70,6 @@ function StandardFilter({ update }: StandardFilterProps) {
     () =>
       update({
         activeStandards: getActiveCheckboxes(standards),
-        additionalStandardTaskList: undefined,
       }),
     // eslint-disable-next-line
     [standards]

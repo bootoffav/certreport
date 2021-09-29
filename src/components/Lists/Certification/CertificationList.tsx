@@ -89,7 +89,7 @@ class CertificationList extends React.Component<
             desc: true,
           },
         ]}
-        noDataText="update takes a little while, please do not close page until it is done. See for green button at top right corner"
+        noDataText="no rows found, or if it's first time loading please give it about 30 sec to finish"
         className="-highlight table"
         getTrProps={this.getTrProps}
         defaultPageSize={20}

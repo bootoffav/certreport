@@ -28,19 +28,22 @@ class DB {
       .catch((e) => ({}));
   }
 
-  static queryIndex(index: string) {
-    return DB.client().query(
-      q.Map(
-        q.Paginate(
-          q.Union(
-            q.Match(q.Index(index), 'fail'),
-            q.Match(q.Index(index), 'pass'),
-            q.Match(q.Index(index), 'partly')
-          )
-        ),
-        q.Lambda('standard', q.Get(q.Var('standard')))
+  static async queryIndex(index: string): Promise<string[]> {
+    return await DB.client()
+      .query(
+        q.Map(
+          q.Paginate(
+            q.Union(
+              q.Match(q.Index(index), 'fail'),
+              q.Match(q.Index(index), 'pass'),
+              q.Match(q.Index(index), 'partly')
+            )
+          ),
+          q.Lambda('standard', q.Get(q.Var('standard')))
+        )
       )
-    );
+      .then(({ data }: any) => data.map(({ ref }: any) => ref.id))
+      .catch(() => []);
   }
 
   static async getRequirementsForStandard(
