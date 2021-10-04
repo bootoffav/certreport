@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { intersection, isEqual } from 'lodash';
@@ -28,6 +27,7 @@ class Main extends Component {
     activeBrands: ['XMT', 'XMS', 'XMF'],
     activeTestingCompanies: ['all'],
     activeStandards: ['All'],
+    additionalStandardFilterTaskList: undefined,
   };
 
   async componentDidMount() {
@@ -117,6 +117,7 @@ class Main extends Component {
     // standardfiltering for Certification Tasks
     if (additionalStandardFilterTaskList) {
       filteredTasks = filteredTasks.filter((task: any) =>
+        // @ts-ignore
         additionalStandardFilterTaskList.includes(task.id)
       );
     } else {
@@ -233,14 +234,20 @@ class Main extends Component {
                 return <ItemInCertifications {...match.params} />;
               }}
             />
-            <Route exact path="/add" render={(props) => <Form {...props} />} />
+            <Route
+              exact
+              path="/add"
+              render={(props) => (
+                // @ts-expect-error
+                <Form {...props} />
+              )}
+            />
             <Route
               exact
               path="/edit/:id"
               render={(props) => (
-                <ErrorBoundary>
-                  <Form {...props} />
-                </ErrorBoundary>
+                // @ts-expect-error
+                <ErrorBoundary children={<Form {...props} />} />
               )}
             />
             <Route path="*" component={Error404Page} />
