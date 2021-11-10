@@ -122,8 +122,8 @@ function renderBasicInfo() {
               value={this.asSelectable(this.state.article)}
               options={selectOptions.articles}
               handleChange={(e: any) => this.handleSelectChange([e], 'article')}
-              handleSlaveChange={(product, code, brand) =>
-                this.setState({ product, code, brand })
+              handleSlaveChange={(product, code, brand, colour) =>
+                this.setState({ product, code, brand, colour })
               }
             />
           </div>

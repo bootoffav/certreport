@@ -209,7 +209,12 @@ const Paid = ({
 interface ArticleProps {
   options: any[];
   value: any;
-  handleSlaveChange: (product: string, code: string, brand: string) => void;
+  handleSlaveChange: (
+    product: string,
+    code: string,
+    brand: string,
+    colour: string
+  ) => void;
   handleChange: (a: any) => void;
 }
 
@@ -235,6 +240,7 @@ class Article extends React.Component<ArticleProps> {
       PROPERTY_420,
       PROPERTY_384,
       PROPERTY_380,
+      PROPERTY_482,
       SECTION_ID,
     } = await B24.get_product(value);
     const product = `${PROPERTY_420?.value ?? ''}, ${
@@ -242,7 +248,8 @@ class Article extends React.Component<ArticleProps> {
     }`;
     const code = PROPERTY_380?.value || '';
     const brand = brand_map[SECTION_ID] || '';
-    this.props.handleSlaveChange(product, code, brand);
+    const colour = PROPERTY_482 ? PROPERTY_482.value : '';
+    this.props.handleSlaveChange(product, code, brand, colour);
   };
 
   render = () => (
