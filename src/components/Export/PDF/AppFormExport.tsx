@@ -4,6 +4,17 @@ import { footerImage } from './footer-image';
 const checkedSquare = { text: '', style: { font: 'Icons' } };
 const emptySquare = { text: '', style: { font: 'Icons' } };
 
+/**
+ * Remove everything after Article name, so
+ * OXFORD-160 (Oxford-160, 100% poly, 160gsm, PU600, Green #21-08) becomes OXFORD-160
+ * @param article
+ * @returns only Article real name
+ */
+function formatArticle(article: string): string {
+  const end = article.indexOf('(');
+  return article.substring(0, end === -1 ? undefined : end).trim();
+}
+
 class AppFormExport {
   state: any;
   docDefinition: any;
@@ -13,13 +24,14 @@ class AppFormExport {
 
   constructor(state: any) {
     this.state = state;
+    this.state.article = formatArticle(this.state.article);
     const companyProfile = {
       table: {
         widths: [120, '*'],
         body: [
           [
             'Applicant of report',
-            { text: state.applicantName, fillColor: '#FFFF08' },
+            { text: this.state.applicantName, fillColor: '#FFFF08' },
           ],
           ['Contact Person', { text: 'Vitaly Aliev', fillColor: '#FFFF08' }],
           [
@@ -92,7 +104,7 @@ class AppFormExport {
 
           [
             'Fabric ref.',
-            { text: state.article, colSpan: 5, fillColor: '#FFFF08' },
+            { text: this.state.article, colSpan: 5, fillColor: '#FFFF08' },
             {},
             {},
             {},
@@ -100,7 +112,7 @@ class AppFormExport {
           ],
           [
             'Composition and percentage',
-            { text: state.product, colSpan: 5, fillColor: '#FFFF08' },
+            { text: this.state.product, colSpan: 5, fillColor: '#FFFF08' },
             {},
             {},
             {},
@@ -109,8 +121,8 @@ class AppFormExport {
           [
             'Weight',
             {
-              text: state.product
-                .slice(1 + state.product.lastIndexOf(','))
+              text: this.state.product
+                .slice(1 + this.state.product.lastIndexOf(','))
                 .trim(),
               colSpan: 5,
               fillColor: '#FFFF08',
@@ -122,7 +134,7 @@ class AppFormExport {
           ],
           [
             'Color',
-            { text: state.colour, colSpan: 5, fillColor: '#FFFF08' },
+            { text: this.state.colour, colSpan: 5, fillColor: '#FFFF08' },
             {},
             {},
             {},
@@ -130,7 +142,11 @@ class AppFormExport {
           ],
           [
             'Others (if any)',
-            { text: state.partNumber || '', colSpan: 5, fillColor: '#FFFF08' },
+            {
+              text: this.state.partNumber || '',
+              colSpan: 5,
+              fillColor: '#FFFF08',
+            },
             {},
             {},
             {},
@@ -419,10 +435,10 @@ class AppFormExport {
               ],
             },
             {
-              text: state.DBState.testRequirement[7].includes(
+              text: this.state.DBState.testRequirement[7].includes(
                 'Other Standard 1'
               )
-                ? state.DBState.otherStandard1
+                ? this.state.DBState.otherStandard1
                 : 'According to Standard Mandotory Test Requirement',
               colSpan: 7,
             },
@@ -567,7 +583,7 @@ class AppFormExport {
           [
             'Domestic Wash(ISO 6330)',
             {
-              text: state.DBState.cycles[0],
+              text: this.state.DBState.cycles[0],
               fillColor: '#FFFF08',
               alignment: 'center',
             },
@@ -604,7 +620,7 @@ class AppFormExport {
           [
             'Industrial Wash (ISO 15797)',
             {
-              text: state.DBState.cycles[1],
+              text: this.state.DBState.cycles[1],
               fillColor: '#FFFF08',
               alignment: 'center',
             },
@@ -795,4 +811,4 @@ class AppFormExport {
       });
 }
 
-export { AppFormExport };
+export { AppFormExport, formatArticle };
