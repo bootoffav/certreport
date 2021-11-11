@@ -3,6 +3,7 @@ import {
   printStage,
   isMainHeaderAllowed,
   shortenTitle,
+  formatArticle,
 } from '../helpers';
 
 it('correctly converts dates', () => {
@@ -100,4 +101,14 @@ it('checks shortenTitle', () => {
   ).toBe('092_Aitex');
 
   expect(shortenTitle('092_Aitex')).toBe('092_Aitex');
+});
+
+it('formats Article name', () => {
+  expect(
+    formatArticle(
+      'OXFORD-160 (Oxford-160, 100% poly, 160gsm, PU600, Green #21-08)'
+    )
+  ).toBe('OXFORD-160');
+
+  expect(formatArticle('OXFORD-160')).toBe('OXFORD-160');
 });

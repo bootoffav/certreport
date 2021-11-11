@@ -147,6 +147,17 @@ function dashboardDataChartAdapter(data: any) {
   return data;
 }
 
+/**
+ * Remove everything after Article name, so
+ * OXFORD-160 (Oxford-160, 100% poly, 160gsm, PU600, Green #21-08) becomes OXFORD-160
+ * @param article
+ * @returns only Article real name
+ */
+function formatArticle(article: string): string {
+  const end = article.indexOf('(');
+  return article.substring(0, end === -1 ? undefined : end).trim();
+}
+
 export {
   countTotalPrice,
   printStage,
@@ -157,4 +168,5 @@ export {
   removeEmptyProps,
   getTotalPriceHelper,
   dashboardDataChartAdapter,
+  formatArticle,
 };

@@ -12,7 +12,7 @@ import {
 } from './DiskMethods';
 import { rawTaskProcessor } from '../workers/dataFetcher';
 import type { TaskState } from '../Task/Task.interface';
-import { getTotalPriceHelper } from '../helpers';
+import { getTotalPriceHelper, formatArticle } from '../helpers';
 export const creatorId = process.env.REACT_APP_B24_USER_ID;
 export const tag = process.env.REACT_APP_TAG;
 export const responsibleId = process.env.REACT_APP_B24_RESPONSIBLE_ID;
@@ -66,7 +66,9 @@ function formTaskFields(state: any) {
     TAGS: [tag, state.article],
     UF_CRM_TASK: makeUfCrmTaskField(state),
     TITLE:
-      `${state.serialNumber}_${state.testingCompany} - ${state.standards} (${state.pretreatment1}) - ${state.article}, ${state.colour} ` +
+      `${state.serialNumber}_${state.testingCompany} - ${state.standards} (${
+        state.pretreatment1
+      }) - ${formatArticle(state.article)}, ${state.colour} ` +
       `(send ${state.sentOn} - plan ${
         state.testFinishedOnPlanDate
       }) = ${getTotalPriceHelper(state).toLocaleString('ru-RU', {

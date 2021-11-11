@@ -1,18 +1,24 @@
 import { tableLayout, fonts } from './settings';
 import { footerImage } from './footer-image';
+import { formatArticle } from '../../../helpers';
 
 const checkedSquare = { text: '', style: { font: 'Icons' } };
 const emptySquare = { text: '', style: { font: 'Icons' } };
 
-/**
- * Remove everything after Article name, so
- * OXFORD-160 (Oxford-160, 100% poly, 160gsm, PU600, Green #21-08) becomes OXFORD-160
- * @param article
- * @returns only Article real name
- */
-function formatArticle(article: string): string {
-  const end = article.indexOf('(');
-  return article.substring(0, end === -1 ? undefined : end).trim();
+
+type weight = `${number}${' ' | ''}gsm` | '';
+
+function splitProductAndWeight(product: string): [string, weight] {
+  const regexp = /\d{1,3}\s?gsm/gi;
+
+  const [ weight ] = product.match(regexp) ?? [''];
+  
+  product = product.replace(regexp, '').trim();
+  if (product[product.length -1 ] === ',') {
+    product = product.substring(0, product.length - 1 );
+  }
+
+  return [product, weight as weight];
 }
 
 class AppFormExport {
@@ -23,8 +29,9 @@ class AppFormExport {
     this.state.DBState[table][row].includes(item) ? checkedSquare : emptySquare;
 
   constructor(state: any) {
-    this.state = state;
+    this.state = { ...state };
     this.state.article = formatArticle(this.state.article);
+    [this.state.product, this.state.weight] = splitProductAndWeight(this.state.product);
     const companyProfile = {
       table: {
         widths: [120, '*'],
@@ -121,9 +128,7 @@ class AppFormExport {
           [
             'Weight',
             {
-              text: this.state.product
-                .slice(1 + this.state.product.lastIndexOf(','))
-                .trim(),
+              text: this.state.weight,
               colSpan: 5,
               fillColor: '#FFFF08',
             },
@@ -588,7 +593,7 @@ class AppFormExport {
               alignment: 'center',
             },
             {
-              text: `${state.DBState.washTemp}C`,
+              text: `${this.state.DBState.washTemp}C`,
               fillColor: '#FFFF08',
               alignment: 'center',
             },
@@ -787,7 +792,7 @@ class AppFormExport {
         footer,
       ],
       info: {
-        title: `Fabric Test Application Form_${state.serialNumber}_${state.article}.pdf`,
+        title: `Fabric Test Application Form_${this.state.serialNumber}_${this.state.article}.pdf`,
         author: 'XM Group',
       },
       defaultStyle: {
@@ -811,4 +816,4 @@ class AppFormExport {
       });
 }
 
-export { AppFormExport, formatArticle };
+export { AppFormExport, formatArticle, splitProductAndWeight };
