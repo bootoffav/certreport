@@ -1,3 +1,4 @@
+import { formatArticle } from '../../../helpers';
 import { tableLayout, fonts } from './settings';
 import type { TaskState } from '../../../Task/Task.interface';
 
@@ -48,7 +49,7 @@ function makeDocDefinition({
       },
       {
         text: [
-          `Material Reference: ${article}\n`,
+          `Material Reference: ${formatArticle(article)}\n`,
           `Customer order: ${serialNumber}`,
         ],
         style: {
@@ -75,7 +76,7 @@ function makeDocDefinition({
     },
     pageMargins: [50, 50],
     info: {
-      title: `Shipping label_${serialNumber}_${article}.pdf`,
+      title: `Shipping label_${serialNumber}_${formatArticle(article)}.pdf`,
       author: 'XM Group',
     },
   };
@@ -96,7 +97,9 @@ function createShippingLabelFile(state: TaskState) {
       pdfmake.createPdf(makeDocDefinition(state), tableLayout, fonts, vfs.vfs)
     )
     .then((pdf) => {
-      pdf.name = `Shipping label_${state.serialNumber}_${state.article}_${offerNo}.pdf`;
+      pdf.name = `Shipping label_${state.serialNumber}_${formatArticle(
+        state.article
+      )}_${offerNo}.pdf`;
       return pdf;
     });
 }
