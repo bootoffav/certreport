@@ -159,9 +159,9 @@ class FabricApplicationForm extends React.Component<
           <td>
             <FabricApplicationForm.CheckBox
               label={'EN 14116'}
-              checked={this.props.state.testRequirement[5].includes('EN 11416')}
+              checked={this.props.state.testRequirement[5].includes('EN 14116')}
               onChange={() =>
-                this.toggleCheckboxState('testRequirement', 5, 'EN 11416')
+                this.toggleCheckboxState('testRequirement', 5, 'EN 14116')
               }
             />
           </td>
