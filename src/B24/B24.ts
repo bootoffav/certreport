@@ -26,6 +26,7 @@ const auditors: string[] = process.env.REACT_APP_B24_AUDITORS
 const defaultParams = {
   CREATED_BY: creatorId,
   GROUP_ID: 21,
+  ACCOMPLICES: [3524],
 };
 
 const step = (json: any) => ({
@@ -165,6 +166,7 @@ function formTaskFields(state: any) {
   if (state.certReceivedOnPlanDate)
     taskFields.DEADLINE = dayjs(state.certReceivedOnPlanDate).toISOString();
 
+  debugger;
   return taskFields;
 }
 
