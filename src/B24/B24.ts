@@ -64,6 +64,7 @@ function formTaskFields(state: any) {
   let stAd = new StateAdapter(state);
   const taskFields: any = {
     ...defaultParams,
+    ACCOMPLICES: [...state.accomplices, ...defaultParams.ACCOMPLICES],
     TAGS: [tag, state.article],
     UF_CRM_TASK: makeUfCrmTaskField(state),
     TITLE:
@@ -166,7 +167,6 @@ function formTaskFields(state: any) {
   if (state.certReceivedOnPlanDate)
     taskFields.DEADLINE = dayjs(state.certReceivedOnPlanDate).toISOString();
 
-  debugger;
   return taskFields;
 }
 
@@ -299,6 +299,7 @@ async function getTask(id: string | undefined) {
           'DESCRIPTION',
           'UF_CRM_TASK',
           'UF_TASK_WEBDAV_FILES',
+          'ACCOMPLICES',
           'CREATED_DATE',
         ],
       })

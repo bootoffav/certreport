@@ -25,6 +25,7 @@ function rawTaskProcessor(rawTasks: any) {
       id: rawTasks[i].id,
       title: rawTasks[i].title,
       createdDate: rawTasks[i].createdDate,
+      accomplices: rawTasks[i].accomplices,
       ufTaskWebdavFiles: [],
     };
 
