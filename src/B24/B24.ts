@@ -12,7 +12,7 @@ import {
 } from './DiskMethods';
 import { rawTaskProcessor } from '../workers/dataFetcher';
 import type { TaskState } from '../Task/Task.interface';
-import { getTotalPriceHelper, formatArticle } from '../helpers';
+import formTaskTitle from './utils/formTaskTitle';
 export const creatorId = process.env.REACT_APP_B24_USER_ID;
 export const tag = process.env.REACT_APP_TAG;
 export const responsibleId = process.env.REACT_APP_B24_RESPONSIBLE_ID;
@@ -67,16 +67,7 @@ function formTaskFields(state: any) {
     ACCOMPLICES: [...state.accomplices, ...defaultParams.ACCOMPLICES],
     TAGS: [tag, state.article],
     UF_CRM_TASK: makeUfCrmTaskField(state),
-    TITLE:
-      `${state.serialNumber}_${state.testingCompany} - ${state.standards} (${
-        state.pretreatment1
-      }) - ${formatArticle(state.article)}, ${state.colour} ` +
-      `(send ${state.sentOn} - plan ${
-        state.testFinishedOnPlanDate
-      }) = ${getTotalPriceHelper(state).toLocaleString('ru-RU', {
-        style: 'currency',
-        currency: 'EUR',
-      })} | ${stAd.getStageForTitle()}${stAd.getNADForTitle()}`,
+    TITLE: formTaskTitle(state, stAd),
     DESCRIPTION:
       `${
         state.applicantName && `[B]Applicant name:[/B] ${state.applicantName}\n`
@@ -367,6 +358,7 @@ async function get_standards() {
 
 export {
   step,
+  formTaskTitle,
   get_product,
   get_standards,
   get_products,
