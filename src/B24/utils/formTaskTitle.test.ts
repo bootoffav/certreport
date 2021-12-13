@@ -125,17 +125,27 @@ const correctTitle =
   '329_Aitex (Spain) - EN 11612, EN 469, EN 20471 (50x75C, ISO 15797) - Etna, Royal Blue (send 13Aug2021 - plan 11Oct2021) = 3 078,69 € | Testing is started - 31.08.2021 | NAD - 11.10.2021';
 
 it('forms Task title properly', () => {
+  // wash1 has value, pretreatment2 is undef
   const title = formTaskTitle(state, stAd);
   expect(title).toBe(correctTitle);
 
+  // wash1 and pretreatment2 have values
   const stateWithPretreatment2 = {
     ...state,
     pretreatment2: '50xDryClean, ISO 3175',
   };
   const titleWithPretreatment2 =
     '329_Aitex (Spain) - EN 11612, EN 469, EN 20471 (50x75C, ISO 15797, 50xDryClean, ISO 3175) - Etna, Royal Blue (send 13Aug2021 - plan 11Oct2021) = 3 078,69 € | Testing is started - 31.08.2021 | NAD - 11.10.2021';
-
   expect(formTaskTitle(stateWithPretreatment2, stAd)).toBe(
     titleWithPretreatment2
   );
+
+  // wash1 is undef
+  const stateWash1Undef = {
+    ...state,
+    pretreatment1: undefined,
+  };
+  const titleWash1Undef =
+    '329_Aitex (Spain) - EN 11612, EN 469, EN 20471 - Etna, Royal Blue (send 13Aug2021 - plan 11Oct2021) = 3 078,69 € | Testing is started - 31.08.2021 | NAD - 11.10.2021';
+  expect(formTaskTitle(stateWash1Undef, stAd)).toBe(titleWash1Undef);
 });

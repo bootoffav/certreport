@@ -1,10 +1,15 @@
 import { formatArticle, getTotalPriceHelper } from '../../helpers';
 
-function formTaskTitle(state: any, stAd: any) {
-  const formPretreatmentPart = () =>
-    state.pretreatment2 === 'no' || undefined
-      ? `(${state.pretreatment1})`
-      : `(${state.pretreatment1}, ${state.pretreatment2})`;
+function formTaskTitle(state: any, stAd: any): string {
+  const formPretreatmentPart = () => {
+    if (state.pretreatment1) {
+      return state.pretreatment2 === 'no' || undefined
+        ? ` (${state.pretreatment1})`
+        : ` (${state.pretreatment1}, ${state.pretreatment2})`;
+    } else {
+      return '';
+    }
+  };
 
   const convertPriceToStr = (price: number) =>
     price.toLocaleString().replace(',', ' ').replace('.', ',') + ' €';
@@ -12,7 +17,7 @@ function formTaskTitle(state: any, stAd: any) {
   return (
     `${state.serialNumber}_${state.testingCompany} - ${
       state.standards
-    } ${formPretreatmentPart()} - ${formatArticle(state.article)}, ${
+    }${formPretreatmentPart()} - ${formatArticle(state.article)}, ${
       state.colour
     } ` +
     `(send ${state.sentOn} - plan ${
