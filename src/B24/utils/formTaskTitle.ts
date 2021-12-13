@@ -5,7 +5,7 @@ function formTaskTitle(state: any, stAd: any): string {
     if (state.pretreatment1) {
       return state.pretreatment2 === 'no' || undefined
         ? ` (${state.pretreatment1})`
-        : ` (${state.pretreatment1}, ${state.pretreatment2})`;
+        : ` (${state.pretreatment1}; ${state.pretreatment2})`;
     } else {
       return '';
     }

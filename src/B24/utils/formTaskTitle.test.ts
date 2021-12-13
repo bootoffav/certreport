@@ -121,13 +121,13 @@ const state = {
 
 const stAd = new StateAdapter(state);
 
-const correctTitle =
+const titleOnlyWash1 =
   '329_Aitex (Spain) - EN 11612, EN 469, EN 20471 (50x75C, ISO 15797) - Etna, Royal Blue (send 13Aug2021 - plan 11Oct2021) = 3 078,69 € | Testing is started - 31.08.2021 | NAD - 11.10.2021';
 
 it('forms Task title properly', () => {
   // wash1 has value, pretreatment2 is undef
   const title = formTaskTitle(state, stAd);
-  expect(title).toBe(correctTitle);
+  expect(title).toBe(titleOnlyWash1);
 
   // wash1 and pretreatment2 have values
   const stateWithPretreatment2 = {
@@ -135,7 +135,7 @@ it('forms Task title properly', () => {
     pretreatment2: '50xDryClean, ISO 3175',
   };
   const titleWithPretreatment2 =
-    '329_Aitex (Spain) - EN 11612, EN 469, EN 20471 (50x75C, ISO 15797, 50xDryClean, ISO 3175) - Etna, Royal Blue (send 13Aug2021 - plan 11Oct2021) = 3 078,69 € | Testing is started - 31.08.2021 | NAD - 11.10.2021';
+    '329_Aitex (Spain) - EN 11612, EN 469, EN 20471 (50x75C, ISO 15797; 50xDryClean, ISO 3175) - Etna, Royal Blue (send 13Aug2021 - plan 11Oct2021) = 3 078,69 € | Testing is started - 31.08.2021 | NAD - 11.10.2021';
   expect(formTaskTitle(stateWithPretreatment2, stAd)).toBe(
     titleWithPretreatment2
   );
