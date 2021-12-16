@@ -34,3 +34,7 @@ yarn-error.log*
 .prettierignore
 .faunarc
 *.fql
+
+
+# VSCode
+.vscode

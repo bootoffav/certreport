@@ -1,8 +1,6 @@
 {
-  "jest.pathToJest": "yarn test",
   "jest.rootPath": "src/",
   "jest.debugCodeLens.showWhenTestStateIn": ["fail", "unknown"],
-  "jest.enableInlineErrorMessages": true,
   "editor.detectIndentation": true,
   "editor.tabSize": 2,
   "typescript.tsdk": "node_modules/typescript/lib",
@@ -12,5 +10,6 @@
   "editor.formatOnSave": true,
   "search.showLineNumbers": true,
   "zenMode.hideLineNumbers": false,
-  "zenMode.hideStatusBar": false
+  "zenMode.hideStatusBar": false,
+  "explorer.openEditors.visible": 0
 }
