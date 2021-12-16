@@ -3,7 +3,7 @@ import { formatArticle, getTotalPriceHelper } from '../../helpers';
 function formTaskTitle(state: any, stAd: any): string {
   const formPretreatmentPart = () => {
     if (state.pretreatment1) {
-      return state.pretreatment2 === 'no' || undefined
+      return state.pretreatment2.toLowerCase() === 'no' || undefined
         ? ` (${state.pretreatment1})`
         : ` (${state.pretreatment1}; ${state.pretreatment2})`;
     } else {
