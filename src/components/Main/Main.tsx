@@ -7,6 +7,7 @@ import { CertificationList } from '../Lists/Certification/CertificationList';
 import { ItemList } from '../Lists/ItemList/ItemList';
 import Form from '../Form/Form';
 import { Dashboard } from '../Dashboard/Dashboard';
+import ExpiringCerts from '../ExpiringCerts/ExpiringCerts';
 import ErrorBoundary from '../../ErrorBoundary';
 import NavBar from './NavBar';
 import { StageShortNames } from '../StageShortNames/StageShortNames';
@@ -221,6 +222,7 @@ class Main extends Component {
                 </>
               )}
             />
+            <Route exact path="/expiringcerts" component={ExpiringCerts} />
             <Route
               exact
               path="/items"
