@@ -4,7 +4,7 @@ import {
   isMainHeaderAllowed,
   shortenTitle,
   formatArticle,
-} from '../helpers';
+} from './helpers';
 
 it('correctly converts dates', () => {
   expect(dateConverter('05Mar2019')).toBe('2019-03-05');

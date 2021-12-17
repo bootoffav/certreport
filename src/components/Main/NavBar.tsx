@@ -7,9 +7,8 @@ import { State } from './State';
 
 interface INavBarProps {
   update: any;
-  tasks: any[];
-  startDate: Date | undefined;
-  endDate: Date | undefined;
+  startDate?: Date;
+  endDate?: Date;
   updated: boolean;
 }
 
@@ -28,6 +27,17 @@ function NavBar({ startDate, endDate, update, updated }: INavBarProps) {
 
           <NavLink className="navbar-link" to="/">
             <p>Certification tasks</p>
+          </NavLink>
+          <span className="vl"></span>
+
+          <NavLink className="navbar-link" to="/expiringcerts">
+            <p>
+              Expiring Certificates
+              <sup>
+                {' '}
+                <span className="badge badge-success">New</span>
+              </sup>
+            </p>
           </NavLink>
           <span className="vl"></span>
 
@@ -57,4 +67,4 @@ function NavBar({ startDate, endDate, update, updated }: INavBarProps) {
   );
 }
 
-export { NavBar };
+export default NavBar;

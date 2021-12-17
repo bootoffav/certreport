@@ -8,7 +8,7 @@ import { ItemList } from '../Lists/ItemList/ItemList';
 import Form from '../Form/Form';
 import { Dashboard } from '../Dashboard/Dashboard';
 import ErrorBoundary from '../../ErrorBoundary';
-import { NavBar } from './NavBar';
+import NavBar from './NavBar';
 import { StageShortNames } from '../StageShortNames/StageShortNames';
 import { ItemInCertifications } from '../ItemInCertifications/ItemInCertifications';
 import { isMainHeaderAllowed } from '../../helpers';
@@ -192,7 +192,6 @@ class Main extends Component {
           <NavBar
             startDate={this.state.startDate}
             endDate={this.state.endDate}
-            tasks={this.state.allTasks}
             update={this.setState.bind(this)}
             updated={this.state.updated}
           />

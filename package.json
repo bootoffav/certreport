@@ -59,6 +59,7 @@
   },
   "devDependencies": {
     "@babel/helper-regex": "^7.10.5",
+    "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@types/jest": "^26.0.15",
     "@types/jquery": "^3.5.5",
