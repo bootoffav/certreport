@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import { Price, Paid, QuoteNo, BaseInput } from './FormFields';
 import type { Payment } from 'Task/Task.interface';
 import { localizePrice } from 'helpers';
-import { DB } from 'backend/DBManager';
+import DB from 'backend/DBManager';
 import { useDispatch } from 'react-redux';
 import { changeActiveQuoteNo, changeTotalPrice } from 'store';
 

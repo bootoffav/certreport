@@ -1,7 +1,7 @@
 import { selectOptions } from 'defaults';
 import Select, { components } from 'react-select';
 import { useEffect, useReducer } from 'react';
-import { DB } from 'backend/DBManager';
+import DB from 'backend/DBManager';
 
 function standardsForTitleReducer(state: any, { type, payload }: any) {
   switch (type) {
@@ -10,6 +10,9 @@ function standardsForTitleReducer(state: any, { type, payload }: any) {
         ...state,
         [payload]: !state[payload],
       };
+    case 'update':
+      const labels = payload.map((item: any) => item.label);
+      return Object.fromEntries(labels.map((l: string) => [l, state[l]]));
     default:
       return { ...payload };
   }
@@ -47,7 +50,7 @@ function StandardSelector(props: StandardSelectorProps) {
   );
 
   useEffect(() => {
-    if (props.taskId && props.chosenStandards) {
+    if (props.taskId) {
       DB.get(props.taskId, 'standardsForTitle', 'certification')
         .then((initState) => {
           dispatch({ payload: initState });
@@ -61,7 +64,8 @@ function StandardSelector(props: StandardSelectorProps) {
           });
         });
     }
-  }, [props.taskId, props.chosenStandards]);
+    // eslint-disable-next-line
+  }, [props.taskId]);
 
   return (
     <Select
@@ -72,8 +76,9 @@ function StandardSelector(props: StandardSelectorProps) {
         DB.updateInstance(
           props.taskId,
           { standardsForTitle: standardsForTitleState },
-          'certification'
-        );
+          'certification',
+          'Replace'
+        ).then((e) => console.log(e, 'done'));
       }}
       // @ts-ignore
       standardsForTitle={standardsForTitleState}
@@ -81,6 +86,7 @@ function StandardSelector(props: StandardSelectorProps) {
       value={props.asSelectable(props.chosenStandards)}
       onChange={(e) => {
         props.handleSelectChange(e, 'standards');
+        dispatch({ type: 'update', payload: e });
       }}
       components={{ Option }}
       options={selectOptions.standards}

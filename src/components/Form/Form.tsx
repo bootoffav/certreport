@@ -7,7 +7,7 @@ import * as B24 from 'B24/B24';
 import Notification, { Status } from '../Notification/Notification';
 import { emptyState } from 'Task/emptyState';
 import type { TaskState } from 'Task/Task.interface';
-import { DB } from 'backend/DBManager';
+import DB from 'backend/DBManager';
 import { TabbedCard, Button, Icon } from 'tabler-react';
 import CacheManager from 'CacheManager';
 import { GoBackOrHomeButton } from '../NaviButton';
@@ -283,7 +283,6 @@ class Form extends React.Component {
       </form>
     </div>
   );
-
   updateAttachedFiles = () =>
     B24.getAttachedFiles(this.task_id as string).then((r: []) => {
       this.setState({ attachedFiles: r });

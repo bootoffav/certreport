@@ -1,5 +1,5 @@
 import { Icon } from 'tabler-react';
-import { DB } from 'backend/DBManager';
+import DB from 'backend/DBManager';
 import { useState, useEffect } from 'react';
 import { ResultField } from './ResultField';
 import { standardParamMap } from 'defaults';

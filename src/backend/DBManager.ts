@@ -115,13 +115,18 @@ class DB {
     );
   }
 
-  static updateInstance(ref: string, state: any, fdbCollection = 'aitex') {
+  static updateInstance(
+    ref: string,
+    state: any,
+    fdbCollection = 'aitex',
+    updateType: 'Replace' | 'Update' = 'Update'
+  ) {
     return DB.client().query(
-      q.Update(q.Ref(q.Collection(fdbCollection), ref), {
+      q[updateType](q.Ref(q.Collection(fdbCollection), ref), {
         data: { ...state },
       })
     );
   }
 }
 
-export { DB };
+export default DB;
