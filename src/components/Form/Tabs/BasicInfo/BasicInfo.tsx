@@ -5,6 +5,7 @@ import { BaseInput, Article, SerialNumber } from '../../FormFields';
 import { PreTreatment1 } from '../../PreTreatment1';
 import { selectOptions } from '../../../../defaults';
 import { StageSelect } from './StageSelect';
+import StandardSelector from './StandardSelector/StandardSelector';
 
 function renderBasicInfo() {
   return (
@@ -34,13 +35,11 @@ function renderBasicInfo() {
           <div className="w-50">
             <div className="form-group">
               Standards
-              <Select
-                isMulti
-                value={this.asSelectable(this.state.standards)}
-                onChange={(e: any) => {
-                  this.handleSelectChange(e, 'standards');
-                }}
-                options={selectOptions.standards}
+              <StandardSelector
+                taskId={this.task_id}
+                asSelectable={this.asSelectable}
+                chosenStandards={this.state.standards}
+                handleSelectChange={this.handleSelectChange}
               />
             </div>
           </div>

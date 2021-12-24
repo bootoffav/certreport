@@ -20,6 +20,7 @@
     "strictBindCallApply": true,
     "downlevelIteration": true,
     "isolatedModules": true,
+    "baseUrl": "src",
     "lib": ["dom", "dom.iterable", "ESNext", "WebWorker"]
   },
   "include": ["src"],

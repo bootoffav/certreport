@@ -1,7 +1,6 @@
 import faunadb, { query as q } from 'faunadb';
-import { emptyState } from '../Task/emptyState';
-import type { IRequirement } from '../components/Form/Tabs/Standards/Requirements';
-import type { Payment } from '../Task/Task.interface';
+import { emptyState } from 'Task/emptyState';
+import type { IRequirement } from 'components/Form/Tabs/Standards/Requirements';
 
 class DB {
   static fdbCollection = process.env.REACT_APP_FAUNADB_CLASS || 'aitex';
@@ -58,25 +57,19 @@ class DB {
         )
       )
     );
-    // .catch(() => []);
   }
 
   static async get(
     taskId: string,
     property: string,
     fdbCollection = this.fdbCollection
-  ): Promise<Payment[]> {
-    return await DB.client()
-      .query(
-        q.Select(
-          ['data', property],
-          q.Get(q.Ref(q.Collection(fdbCollection), taskId))
-        )
+  ): Promise<any> {
+    return await DB.client().query(
+      q.Select(
+        ['data', property],
+        q.Get(q.Ref(q.Collection(fdbCollection), taskId))
       )
-      .catch(({ message }) => {
-        console.log(message);
-        return [] as any;
-      });
+    );
   }
 
   static async getData(taskId: string) {

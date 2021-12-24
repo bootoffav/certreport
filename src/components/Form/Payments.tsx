@@ -44,7 +44,7 @@ function Payments({ taskId, ...props }: PaymentsProps) {
           // исключить повторные оплаты (сранивание по price)
           // возникают при получении данных из Б24 и faunaDB
           props.payments.forEach(({ price }) => {
-            const index = payments.findIndex((p) => p.price === price);
+            const index = payments.findIndex((p: Payment) => p.price === price);
             if (index !== -1) {
               payments.splice(index, 1);
             }

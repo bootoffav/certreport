@@ -1,5 +1,4 @@
 import Select from 'react-select';
-import { SelectComponentsProps } from 'react-select/src/Select';
 
 const groupStyles = {
   display: 'flex',
@@ -28,7 +27,7 @@ const formatGroupLabel = (data: any) => (
   </div>
 );
 
-const StageSelect = (props: SelectComponentsProps) => (
+const StageSelect = (props: any) => (
   <Select
     value={props.value}
     options={props.options}

@@ -73,10 +73,10 @@ class Form extends React.Component {
       // put activeQuoteNo into react store
       const payments = await DB.get(this.task_id, 'payments', 'payments');
       const totalPrice = payments.reduce(
-        (total, { price }) => total + Number(price),
+        (total: any, { price }: any) => total + Number(price),
         0
       );
-      const found = payments.find((p) => p.activeQuoteNo);
+      const found = payments.find((p: any) => p.activeQuoteNo);
       this.props.changeActiveQuoteNo({ value: found ? found.quoteNo : '' });
       this.props.changeTotalPrice({ value: totalPrice });
 
