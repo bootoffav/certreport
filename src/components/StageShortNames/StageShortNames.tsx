@@ -1,6 +1,5 @@
-import React from 'react';
-import { printStage } from '../../helpers';
-import { Stage } from '../../Task/Task';
+import { printStage } from 'helpers';
+import { Stage } from 'Task/Task';
 
 const StageShortNames = () => {
   const stages = Object.values(Stage)

@@ -11,7 +11,7 @@ import { byStages, byProducts } from './dataprocessing';
 import { AmountOfCertifications, CompletedCertifications } from './StatCards';
 
 import { getColumns } from '../Lists/Certification/columns';
-import { countTotalPrice, dashboardDataChartAdapter } from '../../helpers';
+import { countTotalPrice, dashboardDataChartAdapter } from 'helpers';
 
 interface IDashboard {
   tasks: any;

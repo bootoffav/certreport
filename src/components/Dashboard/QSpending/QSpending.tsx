@@ -3,7 +3,7 @@ import { Component } from 'react';
 import dayjs from 'dayjs';
 import quarterOfYear from 'dayjs/plugin/quarterOfYear';
 import './QSpending.css';
-import { getTotalPriceHelper } from '../../../helpers';
+import { getTotalPriceHelper } from 'helpers';
 
 dayjs.extend(quarterOfYear);
 

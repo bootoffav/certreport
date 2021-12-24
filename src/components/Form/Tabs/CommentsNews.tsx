@@ -1,5 +1,5 @@
 import { Dimmer, Tab } from 'tabler-react';
-import { Status } from '../../Notification/Notification';
+import { Status } from 'components/Notification/Notification';
 import { BaseInput } from '../FormFields';
 
 function renderCommentsNews() {

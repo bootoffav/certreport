@@ -1,9 +1,9 @@
 import * as React from 'react';
 import DatePicker from 'react-datepicker';
-import * as B24 from '../../B24/B24';
+import * as B24 from 'B24/B24';
 import Select from 'react-select';
 import './FormFields.css';
-import { dateConverter } from '../../helpers';
+import { dateConverter } from 'helpers';
 
 const selected = (date: string) =>
   date ? new Date(dateConverter(date)) : null;

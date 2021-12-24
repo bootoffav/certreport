@@ -1,6 +1,6 @@
 import React from 'react';
 import { FileView } from './FileView';
-import { AttachedFile } from '../../Task/types';
+import { AttachedFile } from 'Task/types';
 import './OtherFilesList.css';
 
 interface IUploadedFilesList {

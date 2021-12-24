@@ -1,11 +1,7 @@
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { Icon } from 'tabler-react';
-import {
-  dateConverter,
-  printStage,
-  getTotalPriceHelper,
-} from '../../../helpers';
+import { dateConverter, printStage, getTotalPriceHelper } from 'helpers';
 import type { CellInfo } from 'react-table';
 
 function sortDates(a: string | undefined, b: string | undefined): number {

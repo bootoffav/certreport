@@ -1,8 +1,8 @@
 import { Icon } from 'tabler-react';
-import { DB } from '../../../../backend/DBManager';
+import { DB } from 'backend/DBManager';
 import { useState, useEffect } from 'react';
 import { ResultField } from './ResultField';
-import { standardParamMap } from '../../../../defaults';
+import { standardParamMap } from 'defaults';
 
 export type StandardDetailProps = {
   name: 'EN 11612' | 'EN 469' | 'EN 20471';

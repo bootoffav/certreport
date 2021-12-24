@@ -1,5 +1,5 @@
 import Select from 'react-select';
-import { stages as stagesOptionsDefault } from '../../../defaults';
+import { stages as stagesOptionsDefault } from 'defaults';
 
 type SelectItem = {
   value?: string;

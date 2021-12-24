@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Icon } from 'tabler-react';
-import { DB } from '../../../../backend/DBManager';
+import { DB } from 'backend/DBManager';
 
 interface ResultFieldProps {
   standard: 'EN 469' | 'EN 20471';

@@ -1,5 +1,5 @@
 import { Tab, Dimmer } from 'tabler-react';
-import { Status } from '../../Notification/Notification';
+import { Status } from 'components/Notification/Notification';
 import { FabricApplicationForm } from '../FabricApplicationForm';
 
 function renderFabricApplicationForm() {

@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import Loader from 'react-loader-spinner';
 
-import { DB } from '../../backend/DBManager';
-import { standardParamMap } from '../../defaults';
+import { DB } from 'backend/DBManager';
+import { standardParamMap } from 'defaults';
 import { getActiveCheckboxes } from './StandardFilter';
 import type { StandardFilterState } from './StandardFilter';
 

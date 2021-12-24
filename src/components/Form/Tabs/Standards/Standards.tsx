@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { StandardResult } from './StandardResult';
-import { Price } from '../../FormFields';
+import { Price } from 'components/Form/FormFields';
 import { useState, useEffect } from 'react';
-import { DB } from '../../../../backend/DBManager';
+import { DB } from 'backend/DBManager';
 import { StandardDetail } from './StandardDetail';
 import { Requirements } from './Requirements';
 import './Standards.css';
-import { localizePrice } from '../../../../helpers';
+import { localizePrice } from 'helpers';
 import type { StandardDetailProps } from './StandardDetail';
 
 type StandardsProps = {

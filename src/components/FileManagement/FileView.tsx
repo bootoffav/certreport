@@ -1,5 +1,5 @@
 import { Icon, Button } from 'tabler-react';
-import type { AttachedFile } from '../../Task/types';
+import type { AttachedFile } from 'Task/types';
 
 interface FileViewProps {
   file?: AttachedFile;

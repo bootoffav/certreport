@@ -1,6 +1,6 @@
 import { Dimmer, Tab } from 'tabler-react';
-import { Status } from '../../Notification/Notification';
-import { FileManagement } from '../../FileManagement/FileManagement';
+import { Status } from 'components/Notification/Notification';
+import { FileManagement } from 'components/FileManagement/FileManagement';
 
 function renderFiles() {
   return (

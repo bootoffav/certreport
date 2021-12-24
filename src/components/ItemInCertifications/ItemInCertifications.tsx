@@ -2,14 +2,14 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import Loader from 'react-loader-spinner';
 import { Grid, Icon } from 'tabler-react';
-import { getItemAssociatedTasks } from '../../B24/B24';
-import { getTaskParamLabel } from '../../Task/Task';
+import { getItemAssociatedTasks } from 'B24/B24';
+import { getTaskParamLabel } from 'Task/Task';
 import './ItemInCertifications.css';
 import { GoBackOrHomeButton } from '../NaviButton';
 import { pullSpecificFiles } from '../FileManagement/FileManagement';
-import CacheManager from '../../CacheManager';
-import { Items } from '../../Item/Item';
-import { getTotalPriceHelper } from '../../helpers';
+import CacheManager from 'CacheManager';
+import { Items } from 'Item/Item';
+import { getTotalPriceHelper } from 'helpers';
 
 interface IItemProps {
   item: string;

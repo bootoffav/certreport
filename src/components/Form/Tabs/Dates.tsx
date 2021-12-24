@@ -1,7 +1,7 @@
 import { Dimmer, Tab } from 'tabler-react';
 import { PickDate } from '../FormFields';
-import { Status } from '../../Notification/Notification';
-import { stages } from '../../../defaults';
+import { Status } from 'components/Notification/Notification';
+import { stages } from 'defaults';
 
 function renderDates() {
   const repeatedStages = stages[1].options.map((stage: any) => stage.label);

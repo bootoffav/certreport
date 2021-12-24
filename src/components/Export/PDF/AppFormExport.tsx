@@ -1,6 +1,6 @@
 import { tableLayout, fonts } from './settings';
 import { footerImage } from './footer-image';
-import { formatArticle } from '../../../helpers';
+import { formatArticle } from 'helpers';
 
 const checkedSquare = { text: '', style: { font: 'Icons' } };
 const emptySquare = { text: '', style: { font: 'Icons' } };

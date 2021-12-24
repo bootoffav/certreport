@@ -2,7 +2,7 @@
 
 /* eslint-disable import/no-webpack-loader-syntax */
 import dataFetcher from 'workerize-loader!../workers/dataFetcher';
-import { Items, ItemType } from '../Item/Item';
+import { Items, ItemType } from 'Item/Item';
 
 const worker = dataFetcher();
 

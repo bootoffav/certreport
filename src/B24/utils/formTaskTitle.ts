@@ -1,4 +1,4 @@
-import { formatArticle, getTotalPriceHelper } from '../../helpers';
+import { formatArticle, getTotalPriceHelper } from 'helpers';
 
 function formTaskTitle(state: any, stAd: any): string {
   const formPretreatmentPart = () => {

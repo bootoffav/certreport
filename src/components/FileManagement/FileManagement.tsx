@@ -1,10 +1,10 @@
 import qs from 'qs';
 import { Dimmer } from 'tabler-react';
 import { useEffect, useState } from 'react';
-import * as B24 from '../../B24/B24';
+import * as B24 from 'B24/B24';
 import { OtherFilesList } from './OtherFilesList';
 import { UploadFile } from './UploadFile';
-import type { AttachedFile } from '../../Task/types';
+import type { AttachedFile } from 'Task/types';
 import { SpecificFile } from './SpecificFile/SpecificFile';
 
 const creator_id = process.env.REACT_APP_B24_USER_ID;

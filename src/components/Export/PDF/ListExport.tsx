@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import { vfs } from './vfs_fonts.js';
 import * as tableStructures from './columns';
 import { tableLayout, fonts } from './settings';
-import { getTotalPriceHelper } from '../../../helpers';
+import { getTotalPriceHelper } from 'helpers';
 
 class ListExport extends Component<{
   tasks: any;

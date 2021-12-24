@@ -3,13 +3,13 @@ import swal from 'sweetalert';
 import 'react-datepicker/dist/react-datepicker.css';
 import dayjs from 'dayjs';
 import { connect } from 'react-redux';
-import * as B24 from '../../B24/B24';
+import * as B24 from 'B24/B24';
 import Notification, { Status } from '../Notification/Notification';
-import { emptyState } from '../../Task/emptyState';
-import type { TaskState } from '../../Task/Task.interface';
-import { DB } from '../../backend/DBManager';
+import { emptyState } from 'Task/emptyState';
+import type { TaskState } from 'Task/Task.interface';
+import { DB } from 'backend/DBManager';
 import { TabbedCard, Button, Icon } from 'tabler-react';
-import CacheManager from '../../CacheManager';
+import CacheManager from 'CacheManager';
 import { GoBackOrHomeButton } from '../NaviButton';
 import { renderDates } from './Tabs/Dates';
 import { renderBasicInfo } from './Tabs/BasicInfo/BasicInfo';
@@ -20,7 +20,7 @@ import { renderStandards } from './Tabs/renderStandards';
 import { getShippingLabelFile } from '../Export/PDF/ShippingLabelFile';
 import { Payments } from './Payments';
 import { Tab, Dimmer } from 'tabler-react';
-import { changeActiveQuoteNo, changeTotalPrice } from '../../store';
+import { changeActiveQuoteNo, changeTotalPrice } from 'store';
 
 interface IFormState extends TaskState {
   requestStatus: Status;

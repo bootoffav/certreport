@@ -3,10 +3,10 @@ import ReactTable from 'react-table';
 import { getColumns } from './columns';
 import { StageFilter } from '../Filters/StageFilter';
 import { ColumnFilter } from '../Filters/ColumnFilter';
-import { ListExport } from '../../Export/PDF/ListExport';
+import { ListExport } from 'components/Export/PDF/ListExport';
 
 import './List.css';
-import { countTotalPrice } from '../../../helpers';
+import { countTotalPrice } from 'helpers';
 
 interface ICertificationListState {
   visibleData: any[];

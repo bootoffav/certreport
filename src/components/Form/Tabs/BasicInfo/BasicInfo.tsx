@@ -1,9 +1,9 @@
 import { Dimmer, Tab } from 'tabler-react';
 import Select from 'react-select';
-import { Status } from '../../../Notification/Notification';
-import { BaseInput, Article, SerialNumber } from '../../FormFields';
-import { PreTreatment1 } from '../../PreTreatment1';
-import { selectOptions } from '../../../../defaults';
+import { Status } from 'components/Notification/Notification';
+import { BaseInput, Article, SerialNumber } from 'components/Form/FormFields';
+import { PreTreatment1 } from 'components/Form/PreTreatment1';
+import { selectOptions } from 'defaults';
 import { StageSelect } from './StageSelect';
 import StandardSelector from './StandardSelector/StandardSelector';
 

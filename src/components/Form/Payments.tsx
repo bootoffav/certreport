@@ -2,11 +2,11 @@ import { Icon } from 'tabler-react';
 import React, { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
 import { Price, Paid, QuoteNo, BaseInput } from './FormFields';
-import type { Payment } from '../../Task/Task.interface';
-import { localizePrice } from '../../helpers';
-import { DB } from '../../backend/DBManager';
+import type { Payment } from 'Task/Task.interface';
+import { localizePrice } from 'helpers';
+import { DB } from 'backend/DBManager';
 import { useDispatch } from 'react-redux';
-import { changeActiveQuoteNo, changeTotalPrice } from '../../store';
+import { changeActiveQuoteNo, changeTotalPrice } from 'store';
 
 interface PaymentsProps {
   payments: Payment[];

@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import ReactTable, { CellInfo } from 'react-table';
-import React from 'react';
 import { ColumnFilter } from '../Filters/ColumnFilter';
-import type { ItemType, taskOfItem } from '../../../Item/Item';
+import type { ItemType, taskOfItem } from 'Item/Item';
 import { Grid, Tooltip } from 'tabler-react';
 
 const columns = [

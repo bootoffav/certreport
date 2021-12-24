@@ -1,17 +1,17 @@
 import qs from 'qs';
 import dayjs from 'dayjs';
-import { dataSeparator } from '../Task/Task';
-import { StateAdapter } from '../StateAdapter';
-import { AppFormExport } from '../components/Export/PDF/AppFormExport';
-import { createShippingLabelFile } from '../components/Export/PDF/ShippingLabelFile';
+import { dataSeparator } from 'Task/Task';
+import { StateAdapter } from 'StateAdapter';
+import { AppFormExport } from 'components/Export/PDF/AppFormExport';
+import { createShippingLabelFile } from 'components/Export/PDF/ShippingLabelFile';
 import { get_products, get_product } from './ProductMethods';
 import {
   detachFileFromTask,
   getAttachedFiles,
   removeFileFromDisk,
 } from './DiskMethods';
-import { rawTaskProcessor } from '../workers/dataFetcher';
-import type { TaskState } from '../Task/Task.interface';
+import { rawTaskProcessor } from 'workers/dataFetcher';
+import type { TaskState } from 'Task/Task.interface';
 import formTaskTitle from './utils/formTaskTitle';
 export const creatorId = process.env.REACT_APP_B24_USER_ID;
 export const tag = process.env.REACT_APP_TAG;

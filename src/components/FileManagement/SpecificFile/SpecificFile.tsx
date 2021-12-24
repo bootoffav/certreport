@@ -1,5 +1,5 @@
 import { Form, Grid } from 'tabler-react';
-import type { AttachedFile } from '../../../Task/types';
+import type { AttachedFile } from 'Task/types';
 import { FileView } from '../FileView';
 
 interface Props {

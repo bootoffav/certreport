@@ -1,5 +1,5 @@
 import formTaskTitle from './formTaskTitle';
-import { StateAdapter } from '../../StateAdapter';
+import { StateAdapter } from 'StateAdapter';
 
 const state = {
   standardsResult: {},
