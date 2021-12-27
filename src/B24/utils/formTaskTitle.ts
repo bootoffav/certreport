@@ -35,19 +35,21 @@ async function formTaskTitle(
 }
 
 async function formStandardsPart(standards: any, taskId?: string) {
-  if (taskId) {
-    // get standards from DB
-    const standardsForTitle = await DB.get(
-      taskId,
-      'standardsForTitle',
-      'certification'
-    );
-    // only truthy properties goes into title
-    return Object.entries(standardsForTitle)
-      .filter(([_, v]) => v)
-      .map(([p, _]) => p)
-      .join(', ');
-  }
+  try {
+    if (taskId) {
+      // get standards from DB
+      const standardsForTitle = await DB.get(
+        taskId,
+        'standardsForTitle',
+        'certification'
+      );
+      // only truthy properties goes into title
+      return Object.entries(standardsForTitle)
+        .filter(([_, v]) => v)
+        .map(([p, _]) => p)
+        .join(', ');
+    }
+  } catch {}
 
   return standards;
 }
