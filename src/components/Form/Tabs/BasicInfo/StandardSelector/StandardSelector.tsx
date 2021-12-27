@@ -64,8 +64,7 @@ function StandardSelector(props: StandardSelectorProps) {
           });
         });
     }
-    // eslint-disable-next-line
-  }, [props.taskId]);
+  }, [props.taskId, props.chosenStandards]);
 
   return (
     <Select
@@ -78,7 +77,15 @@ function StandardSelector(props: StandardSelectorProps) {
           { standardsForTitle: standardsForTitleState },
           'certification',
           'Replace'
-        ).then((e) => console.log(e, 'done'));
+        ).catch((e) => {
+          if (e.name === 'NotFound') {
+            DB.createInstance(
+              props.taskId,
+              { standardsForTitle: standardsForTitleState },
+              'certification'
+            ).catch((e) => console.log(e));
+          }
+        });
       }}
       // @ts-ignore
       standardsForTitle={standardsForTitleState}
