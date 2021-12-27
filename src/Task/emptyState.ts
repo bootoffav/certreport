@@ -12,6 +12,7 @@ const emptyState: TaskState = {
     otherStandard2: 'According to Standard Mandotory Test Requirement',
   },
   attachedFiles: [],
+  accomplices: [],
   resume: undefined,
   link: '',
   paid: false,
