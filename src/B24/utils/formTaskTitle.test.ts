@@ -1,4 +1,4 @@
-import formTaskTitle from './formTaskTitle';
+import formTaskTitle, { formStandardsPart } from './formTaskTitle';
 import { StateAdapter } from 'StateAdapter';
 
 const state = {
@@ -124,9 +124,9 @@ const stAd = new StateAdapter(state);
 const titleOnlyWash1 =
   '329_Aitex (Spain) - EN 11612, EN 469, EN 20471 (50x75C, ISO 15797) - Etna, Royal Blue (send 13Aug2021 - plan 11Oct2021) = 3 078,69 € | Testing is started - 31.08.2021 | NAD - 11.10.2021';
 
-it('forms Task title properly', () => {
+it('forms Task title properly', async () => {
   // wash1 has value, pretreatment2 is undef
-  const title = formTaskTitle(state, stAd);
+  const title = await formTaskTitle(state, stAd);
   expect(title).toBe(titleOnlyWash1);
 
   // wash1 and pretreatment2 have values
@@ -136,7 +136,7 @@ it('forms Task title properly', () => {
   };
   const titleWithPretreatment2 =
     '329_Aitex (Spain) - EN 11612, EN 469, EN 20471 (50x75C, ISO 15797; 50xDryClean, ISO 3175) - Etna, Royal Blue (send 13Aug2021 - plan 11Oct2021) = 3 078,69 € | Testing is started - 31.08.2021 | NAD - 11.10.2021';
-  expect(formTaskTitle(stateWithPretreatment2, stAd)).toBe(
+  expect(await formTaskTitle(stateWithPretreatment2, stAd)).toBe(
     titleWithPretreatment2
   );
 
@@ -147,5 +147,11 @@ it('forms Task title properly', () => {
   };
   const titleWash1Undef =
     '329_Aitex (Spain) - EN 11612, EN 469, EN 20471 - Etna, Royal Blue (send 13Aug2021 - plan 11Oct2021) = 3 078,69 € | Testing is started - 31.08.2021 | NAD - 11.10.2021';
-  expect(formTaskTitle(stateWash1Undef, stAd)).toBe(titleWash1Undef);
+  expect(await formTaskTitle(stateWash1Undef, stAd)).toBe(titleWash1Undef);
+});
+
+it('forms standard part properly', async () => {
+  // no task ID case
+  const standards = 'EN 20471, EN 469';
+  expect(await formStandardsPart(standards)).toBe('EN 20471, EN 469');
 });

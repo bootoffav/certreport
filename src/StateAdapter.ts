@@ -118,15 +118,6 @@ class StateAdapter {
 
   set standardsWithResults(e) {}
 
-  // get secondPayment() {
-  //   return (
-  //     `${this.price2 && this.price2 + ' €, '}` +
-  //     `${this.paymentDate2 && this.paymentDate2 + ', '}` +
-  //     `${this.proformaReceivedDate2 && this.proformaReceivedDate2 + ', '}` +
-  //     `${this.proformaNumber2 && this.proformaNumber2 + ', '}`
-  //   ).slice(0, -2);
-  // }
-
   get testFinishedOn() {
     return (
       `${this.testFinishedOnPlanDate && this.testFinishedOnPlanDate + ', '}` +

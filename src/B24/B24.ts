@@ -60,14 +60,14 @@ function makeUfCrmTaskField(state: any) {
   return ufCrmTask;
 }
 
-function formTaskFields(state: any) {
+async function formTaskFields(state: any, taskId?: string) {
   let stAd = new StateAdapter(state);
   const taskFields: any = {
     ...defaultParams,
     ACCOMPLICES: [...state.accomplices, ...defaultParams.ACCOMPLICES],
     TAGS: [tag, state.article],
     UF_CRM_TASK: makeUfCrmTaskField(state),
-    TITLE: formTaskTitle(state, stAd),
+    TITLE: await formTaskTitle(state, stAd, taskId),
     DESCRIPTION:
       `${
         state.applicantName && `[B]Applicant name:[/B] ${state.applicantName}\n`
@@ -210,14 +210,14 @@ async function handleAttachingPDF(
   });
 }
 
-function createTask(state: any) {
+async function createTask(state: any) {
   const defaultParams = {
     AUDITORS: auditors,
     PARENT_ID: 46902,
     RESPONSIBLE_ID: responsibleId,
   };
 
-  const taskData = { ...formTaskFields(state), ...defaultParams };
+  const taskData = { ...(await formTaskFields(state)), ...defaultParams };
 
   return fetch(`${mainUrl}/${creatorId}/${webhookKey}/task.item.add/`, {
     method: 'post',
@@ -237,7 +237,7 @@ async function updateTask(state: any, task_id?: string) {
     throw new Error('task id is not defined');
   }
 
-  const task_data = formTaskFields(state);
+  const task_data = await formTaskFields(state, task_id);
   await handleAttachingPDF('Fabric Test Application Form_', task_id, state);
   await handleAttachingPDF('Shipping label_', task_id, state);
 
