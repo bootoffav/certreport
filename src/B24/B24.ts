@@ -1,4 +1,5 @@
 import qs from 'qs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 import dayjs from 'dayjs';
 import { dataSeparator } from 'Task/Task';
 import { StateAdapter } from 'StateAdapter';
@@ -18,6 +19,8 @@ export const tag = process.env.REACT_APP_TAG;
 export const responsibleId = process.env.REACT_APP_B24_RESPONSIBLE_ID;
 export const webhookKey = process.env.REACT_APP_B24_WEBHOOK_KEY;
 export const mainUrl = process.env.REACT_APP_B24_MAIN_URL;
+
+dayjs.extend(customParseFormat);
 
 const auditors: string[] = process.env.REACT_APP_B24_AUDITORS
   ? process.env.REACT_APP_B24_AUDITORS.split(',')
@@ -156,7 +159,10 @@ async function formTaskFields(state: any, taskId?: string) {
       (state.otherTextInDescription || ''),
   };
   if (state.certReceivedOnPlanDate)
-    taskFields.DEADLINE = dayjs(state.certReceivedOnPlanDate).toISOString();
+    taskFields.DEADLINE = dayjs(
+      state.certReceivedOnPlanDate,
+      'DDMMMYYYY'
+    ).toISOString();
 
   return taskFields;
 }
