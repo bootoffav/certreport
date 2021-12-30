@@ -222,7 +222,11 @@ class Main extends Component {
                 </>
               )}
             />
-            <Route exact path="/expiringcerts" component={ExpiringCerts} />
+            <Route
+              exact
+              path="/expiringcerts"
+              render={() => <ExpiringCerts tasks={this.state.filteredTasks} />}
+            />
             <Route
               exact
               path="/items"
