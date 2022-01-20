@@ -29,6 +29,10 @@ const auditors: string[] = process.env.REACT_APP_B24_AUDITORS
 const defaultParams = {
   CREATED_BY: creatorId,
   GROUP_ID: 21,
+  PARENT_ID: {
+    XMF: 46902,
+    XMS: 97256,
+  },
   ACCOMPLICES: process.env.NODE_ENV === 'development' ? [] : [3524],
 };
 
@@ -67,6 +71,10 @@ async function formTaskFields(state: any, taskId?: string) {
   let stAd = new StateAdapter(state);
   const taskFields: any = {
     ...defaultParams,
+    PARENT_ID:
+      state['brand'] === 'XMS'
+        ? defaultParams.PARENT_ID['XMS']
+        : defaultParams.PARENT_ID['XMF'],
     ACCOMPLICES: [...state.accomplices, ...defaultParams.ACCOMPLICES],
     TAGS: [tag, state.article],
     UF_CRM_TASK: makeUfCrmTaskField(state),
@@ -219,7 +227,6 @@ async function handleAttachingPDF(
 async function createTask(state: any) {
   const defaultParams = {
     AUDITORS: auditors,
-    PARENT_ID: 46902,
     RESPONSIBLE_ID: responsibleId,
   };
 
@@ -243,14 +250,14 @@ async function updateTask(state: any, task_id?: string) {
     throw new Error('task id is not defined');
   }
 
-  const task_data = await formTaskFields(state, task_id);
+  const taskData = await formTaskFields(state, task_id);
   await handleAttachingPDF('Fabric Test Application Form_', task_id, state);
   await handleAttachingPDF('Shipping label_', task_id, state);
 
   return fetch(`${mainUrl}/${creatorId}/${webhookKey}/task.item.update/`, {
     method: 'post',
     headers: { 'content-type': 'application/x-www-form-urlencoded' },
-    body: qs.stringify([task_id, task_data]),
+    body: qs.stringify([task_id, taskData]),
   });
 }
 
@@ -376,6 +383,7 @@ export {
   detachFileFromTask,
   getAttachedFiles,
   removeFileFromDisk,
+  formTaskFields,
 };
 
 /**
