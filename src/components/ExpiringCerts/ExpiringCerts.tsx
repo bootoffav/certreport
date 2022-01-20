@@ -32,7 +32,7 @@ const Tab = ({ months }: TabProps) => {
 const TabContent = ({ months }: TabProps) => {
   return (
     <div
-      className="tab-pane fade show active"
+      className={`tab-pane fade show ${months === 6 ? 'active' : ''}`}
       id={`months${months}`}
       role="tabpanel"
       aria-labelledby={`months${months}-tab`}
