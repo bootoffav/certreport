@@ -1,4 +1,7 @@
-import formTaskTitle, { formStandardsPart } from './formTaskTitle';
+import formTaskTitle, {
+  formStandardsPart,
+  convertPriceToStr,
+} from './formTaskTitle';
 import { StateAdapter } from 'StateAdapter';
 
 const state = {
@@ -154,4 +157,10 @@ it('forms standard part properly', async () => {
   // no task ID case
   const standards = 'EN 20471, EN 469';
   expect(await formStandardsPart(standards)).toBe('EN 20471, EN 469');
+});
+
+it('parse price properly', () => {
+  expect(convertPriceToStr(934.85)).toBe('934,85 €');
+  expect(convertPriceToStr(934)).toBe('934 €');
+  // expect(convertPriceToStr('934,85')).toBe('934,85 €');
 });

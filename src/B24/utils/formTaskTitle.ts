@@ -1,6 +1,13 @@
 import { formatArticle, getTotalPriceHelper } from 'helpers';
 import DB from 'backend/DBManager';
 
+const convertPriceToStr = (price: number) => {
+  return (
+    price.toLocaleString('en-US').replaceAll(',', ' ').replaceAll('.', ',') +
+    ' €'
+  );
+};
+
 async function formTaskTitle(
   state: any,
   stAd: any,
@@ -15,9 +22,6 @@ async function formTaskTitle(
       return '';
     }
   };
-
-  const convertPriceToStr = (price: number) =>
-    price.toLocaleString().replace(',', ' ').replace('.', ',') + ' €';
 
   return (
     `${state.serialNumber}_${state.testingCompany} - ${await formStandardsPart(
@@ -54,4 +58,4 @@ async function formStandardsPart(standards: any, taskId?: string) {
   return standards;
 }
 export default formTaskTitle;
-export { formStandardsPart };
+export { formStandardsPart, convertPriceToStr };
