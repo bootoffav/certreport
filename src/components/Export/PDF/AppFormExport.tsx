@@ -5,17 +5,16 @@ import { formatArticle } from 'helpers';
 const checkedSquare = { text: '', style: { font: 'Icons' } };
 const emptySquare = { text: '', style: { font: 'Icons' } };
 
-
 type weight = `${number}${' ' | ''}gsm` | '';
 
 function splitProductAndWeight(product: string): [string, weight] {
   const regexp = /\d{1,3}\s?gsm/gi;
 
-  const [ weight ] = product.match(regexp) ?? [''];
-  
+  const [weight] = product.match(regexp) ?? [''];
+
   product = product.replace(regexp, '').trim();
-  if (product[product.length -1 ] === ',') {
-    product = product.substring(0, product.length - 1 );
+  if (product[product.length - 1] === ',') {
+    product = product.substring(0, product.length - 1);
   }
 
   return [product, weight as weight];
@@ -31,7 +30,9 @@ class AppFormExport {
   constructor(state: any) {
     this.state = { ...state };
     this.state.article = formatArticle(this.state.article);
-    [this.state.product, this.state.weight] = splitProductAndWeight(this.state.product);
+    [this.state.product, this.state.weight] = splitProductAndWeight(
+      this.state.product
+    );
     const companyProfile = {
       table: {
         widths: [120, '*'],
@@ -94,8 +95,7 @@ class AppFormExport {
               text: [
                 { text: '*Single Layer Fabric', fontSize: 11, bold: true },
                 {
-                  text:
-                    ' (Please note that the sentence of sample Ref. can`t include composition/ weight/ color information)',
+                  text: ' (Please note that the sentence of sample Ref. can`t include composition/ weight/ color information)',
                   color: 'red',
                 },
               ],
@@ -214,14 +214,12 @@ class AppFormExport {
             {
               text: [
                 {
-                  text:
-                    '*Test according to completed Standard Requirement (mandatory test included)',
+                  text: '*Test according to completed Standard Requirement (mandatory test included)',
                   fontSize: 11,
                   bold: true,
                 },
                 {
-                  text:
-                    ' - Please mark "V" in below □ to confirm your standardlized and optional requirement.',
+                  text: ' - Please mark "V" in below □ to confirm your standardlized and optional requirement.',
                   bold: true,
                 },
               ],
@@ -498,8 +496,7 @@ class AppFormExport {
           ],
           [
             {
-              text:
-                ' *Test according to single method (If any) - Please write down your requirement of test standard No./ Name in below space.',
+              text: ' *Test according to single method (If any) - Please write down your requirement of test standard No./ Name in below space.',
               bold: true,
               fontSize: 9,
               colSpan: 9,
@@ -677,8 +674,7 @@ class AppFormExport {
           ],
           [
             {
-              text:
-                '*When wash according to EN ISO 6330 method, the usual Temperature will be 30/ 40/ 50/ 60/ 70/ 92°C; Dry Method - A: line dry/ B: drip line dry/ C: flat dry/ D: drip flat dry/ E: flat press/ F: tumbler dry. Please mention your requirement or any other °C/ Dry Requirement according to standard.',
+              text: '*When wash according to EN ISO 6330 method, the usual Temperature will be 30/ 40/ 50/ 60/ 70/ 92°C; Dry Method - A: line dry/ B: drip line dry/ C: flat dry/ D: drip flat dry/ E: flat press/ F: tumbler dry. Please mention your requirement or any other °C/ Dry Requirement according to standard.',
               color: 'red',
               colSpan: 9,
               fontSize: 7,
@@ -702,8 +698,7 @@ class AppFormExport {
         columns: [
           {
             width: 350,
-            text:
-              'Please mark the "FACE side" on your fabric sample for our kind reference.',
+            text: 'Please mark the "FACE side" on your fabric sample for our kind reference.',
             fillColor: '#FFFF08',
             margin: [0, 6],
             color: 'red',

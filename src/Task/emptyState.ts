@@ -40,6 +40,7 @@ const emptyState: TaskState = {
   repeatCertReceivedOnPlanDate: '',
   certReceivedOnRealDate: '',
   repeatCertReceivedOnRealDate: '',
+  expirationDate: '',
   paymentDate1: '',
   paymentDate2: '',
   proformaReceived: '',

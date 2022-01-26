@@ -236,13 +236,8 @@ class Article extends React.Component<ArticleProps> {
     };
 
     this.props.handleChange({ value, label });
-    let {
-      PROPERTY_420,
-      PROPERTY_384,
-      PROPERTY_380,
-      PROPERTY_482,
-      SECTION_ID,
-    } = await B24.get_product(value);
+    let { PROPERTY_420, PROPERTY_384, PROPERTY_380, PROPERTY_482, SECTION_ID } =
+      await B24.get_product(value);
     const product = `${PROPERTY_420?.value ?? ''}, ${
       PROPERTY_384?.value ?? ''
     }`;

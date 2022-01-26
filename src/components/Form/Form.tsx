@@ -11,7 +11,7 @@ import DB from 'backend/DBManager';
 import { TabbedCard, Button, Icon } from 'tabler-react';
 import CacheManager from 'CacheManager';
 import { GoBackOrHomeButton } from '../NaviButton';
-import { renderDates } from './Tabs/Dates';
+import { RenderDates } from './Tabs/Dates';
 import { renderBasicInfo } from './Tabs/BasicInfo/BasicInfo';
 import { renderFiles } from './Tabs/Files';
 import { renderCommentsNews } from './Tabs/CommentsNews';
@@ -29,7 +29,7 @@ interface IFormState extends TaskState {
 }
 
 class Form extends React.Component {
-  task_id: string | undefined;
+  task_id: `${number}` | undefined;
   state: IFormState;
   // @ts-expect-error
   props: any;
@@ -71,11 +71,10 @@ class Form extends React.Component {
       );
 
       // put activeQuoteNo into react store
-      const payments = await DB.get(
-        this.task_id,
-        'payments',
-        'payments'
-      ).catch((e) => []);
+      const payments = await DB.get(this.task_id, 'payments', 'payments').catch(
+        (e) => []
+      );
+
       const totalPrice = payments.reduce(
         (total: any, { price }: any) => total + Number(price),
         0
@@ -264,7 +263,37 @@ class Form extends React.Component {
       <form onSubmit={(e) => this.handleCert(e)}>
         <TabbedCard initialTab="Basic Info">
           {renderBasicInfo.call(this)}
-          {renderDates.call(this)}
+          <Tab title="Dates">
+            <RenderDates
+              taskId={this.task_id}
+              pausedUntil={this.state.pausedUntil}
+              requestStatus={this.state.requestStatus}
+              readyOn={this.state.readyOn}
+              sentOn={this.state.sentOn}
+              receivedOn={this.state.receivedOn}
+              startedOn={this.state.startedOn}
+              testFinishedOnPlanDate={this.state.testFinishedOnPlanDate}
+              testFinishedOnRealDate={this.state.testFinishedOnRealDate}
+              certReceivedOnPlanDate={this.state.certReceivedOnPlanDate}
+              certReceivedOnRealDate={this.state.certReceivedOnRealDate}
+              stage={this.state.stage}
+              repeatReceivedOn={this.state.repeatReceivedOn}
+              repeatStartedOn={this.state.repeatStartedOn}
+              repeatTestFinishedOnPlanDate={
+                this.state.repeatTestFinishedOnPlanDate
+              }
+              repeatTestFinishedOnRealDate={
+                this.state.repeatTestFinishedOnRealDate
+              }
+              repeatCertReceivedOnPlanDate={
+                this.state.repeatCertReceivedOnPlanDate
+              }
+              repeatCertReceivedOnRealDate={
+                this.state.repeatCertReceivedOnRealDate
+              }
+              handleDateChange={this.handleDateChange}
+            />
+          </Tab>
           <Tab title="Payments">
             <Dimmer
               active={this.state.requestStatus !== Status.FillingForm}

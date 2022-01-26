@@ -1,5 +1,5 @@
 import { printStage } from 'helpers';
-import { Stage } from 'Task/Task';
+import { Stage } from 'Task/Task.interface';
 
 const StageShortNames = () => {
   const stages = Object.values(Stage)

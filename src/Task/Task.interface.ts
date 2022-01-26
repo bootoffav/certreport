@@ -1,3 +1,23 @@
+type DateFormatType = `${number}${string}` | '';
+
+enum Stage {
+  '00. Paused',
+  '01. Canceled',
+  '02. Estimate',
+  '0. Sample to be prepared',
+  '1. Sample Sent',
+  '2. Sample Arrived',
+  '3. PI Issued',
+  '4. Payment Done',
+  '5. Testing is started',
+  '6. Pre-treatment done',
+  '7. Test-report ready',
+  '8. Certificate ready',
+  '9. Ended',
+  '10. Repeat Testing is started',
+  '11. Repeat Test-report ready',
+}
+
 interface TaskState {
   standardsResult: {
     [key: string]: 'pass' | 'fail';
@@ -10,7 +30,7 @@ interface TaskState {
   serialNumber: string;
   applicantName: string;
   testingCompany: string;
-  stage: string;
+  stage: Stage | string;
   standards: string;
   price1: string;
   paid: boolean;
@@ -41,21 +61,22 @@ interface TaskState {
   partNumber: string;
   rollNumber: string;
   brand: string;
-  pausedUntil: string;
-  readyOn: string;
-  sentOn: string;
-  receivedOn: string;
-  repeatReceivedOn: string;
-  startedOn: string;
-  repeatStartedOn: string;
-  testFinishedOnPlanDate: string;
-  repeatTestFinishedOnPlanDate: string;
-  testFinishedOnRealDate: string;
-  repeatTestFinishedOnRealDate: string;
-  certReceivedOnPlanDate: string;
-  repeatCertReceivedOnPlanDate: string;
-  certReceivedOnRealDate: string;
-  repeatCertReceivedOnRealDate: string;
+  pausedUntil: DateFormatType;
+  readyOn: DateFormatType;
+  sentOn: DateFormatType;
+  receivedOn: DateFormatType;
+  repeatReceivedOn: DateFormatType;
+  startedOn: DateFormatType;
+  repeatStartedOn: DateFormatType;
+  testFinishedOnPlanDate: DateFormatType;
+  repeatTestFinishedOnPlanDate: DateFormatType;
+  testFinishedOnRealDate: DateFormatType;
+  repeatTestFinishedOnRealDate: DateFormatType;
+  certReceivedOnPlanDate: DateFormatType;
+  repeatCertReceivedOnPlanDate: DateFormatType;
+  certReceivedOnRealDate: DateFormatType;
+  repeatCertReceivedOnRealDate: DateFormatType;
+  expirationDate: DateFormatType;
   comments: string;
   otherTextInDescription: string | null;
   resume: undefined | 'fail' | 'pass' | 'no sample' | 'partly';
@@ -80,4 +101,5 @@ interface Payment {
   [key: string]: string | boolean | undefined;
 }
 
+export { Stage };
 export type { TaskState, Payment };

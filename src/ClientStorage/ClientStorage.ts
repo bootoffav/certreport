@@ -96,18 +96,16 @@ class ClientStorage {
       db.onsuccess = ({ target }) => {
         const db = target.result;
 
-        db
-          .transaction('products')
-          .objectStore('products')
-          .getAll().onsuccess = ({ target }: any) => {
-          const items = target.result;
-          db.transaction('tasks').objectStore('tasks').getAll().onsuccess = ({
-            target,
-          }: any) => {
-            const tasks = target.result;
-            res({ tasks, items });
+        db.transaction('products').objectStore('products').getAll().onsuccess =
+          ({ target }: any) => {
+            const items = target.result;
+            db.transaction('tasks').objectStore('tasks').getAll().onsuccess = ({
+              target,
+            }: any) => {
+              const tasks = target.result;
+              res({ tasks, items });
+            };
           };
-        };
       };
 
       db.onupgradeneeded = (e: any) => {

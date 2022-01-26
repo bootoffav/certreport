@@ -3,23 +3,6 @@ import { emptyState, brand } from './emptyState';
 
 const dataSeparator = '-------------------------------------------------';
 
-enum Stage {
-  '00. Paused',
-  '01. Canceled',
-  '02. Estimate',
-  '0. Sample to be prepared',
-  '1. Sample Sent',
-  '2. Sample Arrived',
-  '3. PI Issued',
-  '4. Payment Done',
-  '5. Testing is started',
-  '6. Pre-treatment done',
-  '7. Test-report ready',
-  '8. Certificate ready',
-  '9. Ended',
-  '10. Repeat Testing is started',
-  '11. Repeat Test-report ready',
-}
 const taskPropMapAliases: {
   [key: string]: string;
 } = {
@@ -111,10 +94,8 @@ class Task {
       };
     }
 
-    let {
-      unParsedTaskState,
-      otherTextInDescription,
-    } = Task.separateParseableDataAndOtherTextOfDescription(description);
+    let { unParsedTaskState, otherTextInDescription } =
+      Task.separateParseableDataAndOtherTextOfDescription(description);
 
     let parsedState: {
       [k: string]: any;
@@ -134,10 +115,8 @@ class Task {
       parsedState[taskPropMap[props[i]]] = vals[i];
 
     if (parsedState.standards) {
-      [
-        parsedState.standards,
-        parsedState.standardsResult,
-      ] = this.parseStandardResults(parsedState.standards.split(', '));
+      [parsedState.standards, parsedState.standardsResult] =
+        this.parseStandardResults(parsedState.standards.split(', '));
     }
     // if (parsedState.proforma) {
     //   [
@@ -154,12 +133,8 @@ class Task {
     parsedState.paid = parsedState.paymentDate1 ? true : false;
 
     if (parsedState.secondPayment) {
-      const [
-        price2,
-        paymentDate2,
-        proformaReceivedDate2,
-        proformaNumber2,
-      ] = parsedState.secondPayment.split(', ');
+      const [price2, paymentDate2, proformaReceivedDate2, proformaNumber2] =
+        parsedState.secondPayment.split(', ');
 
       parsedState.price2 = price2 ? price2.split(' ')[0] : '';
       parsedState.paymentDate2 = paymentDate2 || '';
@@ -188,10 +163,8 @@ class Task {
     }
 
     if (parsedState.pretreatment1) {
-      [
-        parsedState.pretreatment1,
-        parsedState.pretreatment1Result = '',
-      ] = this.parsePretreatment1(parsedState.pretreatment1);
+      [parsedState.pretreatment1, parsedState.pretreatment1Result = ''] =
+        this.parsePretreatment1(parsedState.pretreatment1);
     }
 
     if (parsedState.testFinishedOn) {
@@ -407,4 +380,4 @@ class Task {
   }
 }
 
-export { dataSeparator, Task, Stage, taskPropMap, getTaskParamLabel };
+export { dataSeparator, Task, taskPropMap, getTaskParamLabel };
