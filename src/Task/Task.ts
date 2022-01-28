@@ -118,14 +118,6 @@ class Task {
       [parsedState.standards, parsedState.standardsResult] =
         this.parseStandardResults(parsedState.standards.split(', '));
     }
-    // if (parsedState.proforma) {
-    //   [
-    //     parsedState.proformaReceivedDate1,
-    //     parsedState.proformaNumber,
-    //   ] = parsedState.proforma.split(', ');
-    //   parsedState.proformaReceived = true;
-    //   delete parsedState.proforma;
-    // }
 
     parsedState.price1 = parsedState.price1
       ? parsedState.price1.split(' ')[0]

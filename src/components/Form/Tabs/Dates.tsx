@@ -51,19 +51,19 @@ function RenderDates(props: DatesProps) {
         <PickDate
           date={props.pausedUntil}
           label="Paused until:"
-          handleChange={(date: Date) =>
-            this.handleDateChange(date, 'pausedUntil')
-          }
+          handleChange={(date: Date) => {
+            props.handleDateChange(date, 'pausedUntil');
+          }}
         />
         <PickDate
           date={props.readyOn}
           label="Sample to be prepared:"
-          handleChange={(date: Date) => this.handleDateChange(date, 'readyOn')}
+          handleChange={(date: Date) => props.handleDateChange(date, 'readyOn')}
         />
         <PickDate
           date={props.sentOn}
           label="Sample has sent:"
-          handleChange={(date: Date) => this.handleDateChange(date, 'sentOn')}
+          handleChange={(date: Date) => props.handleDateChange(date, 'sentOn')}
         />
       </div>
       <div className="d-flex justify-content-center">
@@ -71,21 +71,21 @@ function RenderDates(props: DatesProps) {
           date={props.receivedOn}
           label="Sample has received by lab:"
           handleChange={(date: Date) =>
-            this.handleDateChange(date, 'receivedOn')
+            props.handleDateChange(date, 'receivedOn')
           }
         />
         <PickDate
           date={props.startedOn}
           label="Test is started:"
           handleChange={(date: Date) =>
-            this.handleDateChange(date, 'startedOn')
+            props.handleDateChange(date, 'startedOn')
           }
         />
         <PickDate
           date={props.testFinishedOnPlanDate}
           label="ETD (Test-report)"
           handleChange={(date: Date) =>
-            this.handleDateChange(date, 'testFinishedOnPlanDate')
+            props.handleDateChange(date, 'testFinishedOnPlanDate')
           }
         />
       </div>
@@ -94,21 +94,21 @@ function RenderDates(props: DatesProps) {
           date={props.testFinishedOnRealDate}
           label="Test really finished on:"
           handleChange={(date: Date) =>
-            this.handleDateChange(date, 'testFinishedOnRealDate')
+            props.handleDateChange(date, 'testFinishedOnRealDate')
           }
         />
         <PickDate
           date={props.certReceivedOnPlanDate}
           label="ETD (Certificate)"
           handleChange={(date: Date) =>
-            this.handleDateChange(date, 'certReceivedOnPlanDate')
+            props.handleDateChange(date, 'certReceivedOnPlanDate')
           }
         />
         <PickDate
           date={props.certReceivedOnRealDate}
           label="Certificate really received on:"
           handleChange={(date: Date) =>
-            this.handleDateChange(date, 'certReceivedOnRealDate')
+            props.handleDateChange(date, 'certReceivedOnRealDate')
           }
         />
         <PickDate
@@ -143,21 +143,21 @@ function renderRepeatDates(props: any) {
           date={props.repeatReceivedOn}
           label="R* - Sample has received by lab:"
           handleChange={(date: Date) =>
-            this.handleDateChange(date, 'repeatReceivedOn')
+            props.handleDateChange(date, 'repeatReceivedOn')
           }
         />
         <PickDate
           date={props.repeatStartedOn}
           label="R* - Test is started:"
           handleChange={(date: Date) =>
-            this.handleDateChange(date, 'repeatStartedOn')
+            props.handleDateChange(date, 'repeatStartedOn')
           }
         />
         <PickDate
           date={props.repeatTestFinishedOnPlanDate}
           label="R* - ETD (Test-report)"
           handleChange={(date: Date) =>
-            this.handleDateChange(date, 'repeatTestFinishedOnPlanDate')
+            props.handleDateChange(date, 'repeatTestFinishedOnPlanDate')
           }
         />
       </div>
@@ -166,21 +166,21 @@ function renderRepeatDates(props: any) {
           date={props.repeatTestFinishedOnRealDate}
           label="R* - Test really finished on:"
           handleChange={(date: Date) =>
-            this.handleDateChange(date, 'repeatTestFinishedOnRealDate')
+            props.handleDateChange(date, 'repeatTestFinishedOnRealDate')
           }
         />
         <PickDate
           date={props.repeatCertReceivedOnPlanDate}
           label="R* - ETD (Certificate)"
           handleChange={(date: Date) =>
-            this.handleDateChange(date, 'repeatCertReceivedOnPlanDate')
+            props.handleDateChange(date, 'repeatCertReceivedOnPlanDate')
           }
         />
         <PickDate
           date={props.repeatCertReceivedOnRealDate}
           label="R* - Certificate really received on:"
           handleChange={(date: Date) =>
-            this.handleDateChange(date, 'repeatCertReceivedOnRealDate')
+            props.handleDateChange(date, 'repeatCertReceivedOnRealDate')
           }
         />
       </div>
