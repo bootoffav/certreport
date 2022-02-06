@@ -30,8 +30,9 @@ const defaultParams = {
   CREATED_BY: creatorId,
   GROUP_ID: 21,
   PARENT_ID: {
-    XMF: 46902,
+    XMF: 46902, // used as default
     XMS: 97256,
+    XMT: 97250,
   },
   ACCOMPLICES: process.env.NODE_ENV === 'development' ? [] : [3524],
 };
@@ -69,12 +70,17 @@ function makeUfCrmTaskField(state: any) {
 
 async function formTaskFields(state: any, taskId?: string) {
   let stAd = new StateAdapter(state);
+  const findParentId = () => {
+    if (['XMS', 'XMT'].includes(state['brand'])) {
+      return defaultParams.PARENT_ID[state['brand'] as 'XMT' | 'XMS'];
+    }
+
+    return defaultParams.PARENT_ID['XMF'];
+  };
+
   const taskFields: any = {
     ...defaultParams,
-    PARENT_ID:
-      state['brand'] === 'XMS'
-        ? defaultParams.PARENT_ID['XMS']
-        : defaultParams.PARENT_ID['XMF'],
+    PARENT_ID: findParentId(),
     ACCOMPLICES: [...state.accomplices, ...defaultParams.ACCOMPLICES],
     TAGS: [tag, state.article],
     UF_CRM_TASK: makeUfCrmTaskField(state),
