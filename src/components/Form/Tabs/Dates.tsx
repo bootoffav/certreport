@@ -164,7 +164,17 @@ function RenderDates(props: DatesProps) {
                 calendarExpirationEventId: newCalendarExpirationEventId,
               },
               'certification'
-            );
+            ).catch((reason) => {
+              reason.message === 'instance not found' &&
+                DB.createInstance(
+                  props.taskId as string,
+                  {
+                    expirationDate: newExpirationDate,
+                    calendarExpirationEventId: newCalendarExpirationEventId,
+                  },
+                  'certification'
+                );
+            });
           }}
         />
       </div>
