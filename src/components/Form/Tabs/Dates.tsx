@@ -7,8 +7,10 @@ import { stages } from 'defaults';
 import DB from 'backend/DBManager';
 import type { Stage, TaskState } from 'Task/Task.interface';
 import { useEffect, useState } from 'react';
+import { addExpirationDate, deleteExpirationDate } from 'B24/CalendarMethods';
 
 type DatesProps = {
+  calendarEventName: string;
   requestStatus: Status;
   pausedUntil: TaskState['pausedUntil'];
   readyOn: TaskState['readyOn'];
@@ -32,12 +34,20 @@ type DatesProps = {
 
 function RenderDates(props: DatesProps) {
   const [expirationDate, setExpirationDate] = useState('');
+  const [calendarExpirationEventId, setCalendarExpirationEventId] =
+    useState<number>();
+
   useEffect(() => {
     (async () => {
       if (props.taskId) {
         await DB.get(props.taskId, 'expirationDate', 'certification')
           .then((expirationDate: TaskState['expirationDate']) => {
             setExpirationDate(expirationDate);
+          })
+          .catch((e) => console.log(e));
+        await DB.get(props.taskId, 'calendarExpirationEventId', 'certification')
+          .then((calendarExpirationEventId: number) => {
+            setCalendarExpirationEventId(calendarExpirationEventId);
           })
           .catch((e) => console.log(e));
       }
@@ -114,12 +124,29 @@ function RenderDates(props: DatesProps) {
         <PickDate
           date={expirationDate}
           label="Expiration Date:"
-          handleChange={(rawDate: Date) => {
+          handleChange={async (rawDate: Date) => {
             const newExpirationDate = dayjs(rawDate).format('DDMMMYYYY');
+            // delete previous calendar event Id
+            if (calendarExpirationEventId) {
+              deleteExpirationDate(calendarExpirationEventId);
+            }
+            // send expiration date to bitrix calendar
+            const newCalendarExpirationEventId = await addExpirationDate({
+              expirationDate: dayjs(rawDate).format('YYYY-MM-DD'),
+              description: `${process.env.REACT_APP_B24_HOST}/company/personal/user/${process.env.REACT_APP_B24_USER_ID}/tasks/task/view/${props.taskId}/`,
+              name: props.calendarEventName,
+            })
+              .then((res) => res.json())
+              .then(({ result: id }) => id);
             setExpirationDate(newExpirationDate);
+            setCalendarExpirationEventId(newCalendarExpirationEventId);
+            // update fauna instance, add new Event Id
             DB.updateInstance(
               props.taskId as string,
-              { expirationDate: newExpirationDate },
+              {
+                expirationDate: newExpirationDate,
+                calendarExpirationEventId: newCalendarExpirationEventId,
+              },
               'certification'
             );
           }}

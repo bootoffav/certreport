@@ -265,6 +265,7 @@ class Form extends React.Component {
           {renderBasicInfo.call(this)}
           <Tab title="Dates">
             <RenderDates
+              calendarEventName={`${this.state.serialNumber}_${this.state.testingCompany}`}
               taskId={this.task_id}
               pausedUntil={this.state.pausedUntil}
               requestStatus={this.state.requestStatus}
