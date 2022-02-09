@@ -30,7 +30,7 @@ function addExpirationDate({
         // attendees: [5, 19, 3524], // Butov Aleksei, Vitaly Aliev, Ira Danilova
         importance: 'normal',
         is_meeting: 'N',
-        private_event: 'Y',
+        private_event: 'N',
         remind: [{ type: 'day', count: 20 }],
       })
   );
