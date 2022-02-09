@@ -125,11 +125,25 @@ function RenderDates(props: DatesProps) {
           date={expirationDate}
           label="Expiration Date:"
           handleChange={async (rawDate: Date) => {
-            const newExpirationDate = dayjs(rawDate).format('DDMMMYYYY');
+            // clear
+            if (rawDate === null) {
+              DB.updateInstance(
+                props.taskId as string,
+                {
+                  expirationDate: null,
+                  calendarExpirationEventId: null,
+                },
+                'certification'
+              );
+              setExpirationDate('');
+              return;
+            }
+
             // delete previous calendar event Id
             if (calendarExpirationEventId) {
               deleteExpirationDate(calendarExpirationEventId);
             }
+
             // send expiration date to bitrix calendar
             const newCalendarExpirationEventId = await addExpirationDate({
               expirationDate: dayjs(rawDate).format('YYYY-MM-DD'),
@@ -138,8 +152,10 @@ function RenderDates(props: DatesProps) {
             })
               .then((res) => res.json())
               .then(({ result: id }) => id);
+            const newExpirationDate = dayjs(rawDate).format('DDMMMYYYY');
             setExpirationDate(newExpirationDate);
             setCalendarExpirationEventId(newCalendarExpirationEventId);
+
             // update fauna instance, add new Event Id
             DB.updateInstance(
               props.taskId as string,
