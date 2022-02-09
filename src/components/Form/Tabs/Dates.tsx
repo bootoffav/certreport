@@ -125,6 +125,11 @@ function RenderDates(props: DatesProps) {
           date={expirationDate}
           label="Expiration Date:"
           handleChange={async (rawDate: Date) => {
+            // delete previous calendar event Id
+            if (calendarExpirationEventId) {
+              deleteExpirationDate(calendarExpirationEventId);
+            }
+
             // clear
             if (rawDate === null) {
               DB.updateInstance(
@@ -138,12 +143,6 @@ function RenderDates(props: DatesProps) {
               setExpirationDate('');
               return;
             }
-
-            // delete previous calendar event Id
-            if (calendarExpirationEventId) {
-              deleteExpirationDate(calendarExpirationEventId);
-            }
-
             // send expiration date to bitrix calendar
             const newCalendarExpirationEventId = await addExpirationDate({
               expirationDate: dayjs(rawDate).format('YYYY-MM-DD'),
