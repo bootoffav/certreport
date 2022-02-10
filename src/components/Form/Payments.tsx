@@ -65,18 +65,7 @@ function Payments({ taskId, ...props }: PaymentsProps) {
 
       taskId &&
         filteredPayments.length &&
-        DB.updateInstance(
-          taskId,
-          { payments: filteredPayments },
-          'payments'
-        ).catch((reason) => {
-          reason.message === 'instance not found' &&
-            DB.createInstance(
-              taskId,
-              { payments: filteredPayments },
-              'payments'
-            );
-        });
+        DB.updateInstance(taskId, { payments: filteredPayments }, 'payments');
     };
   }, [taskId, payments]);
 

@@ -75,17 +75,8 @@ function StandardSelector(props: StandardSelectorProps) {
         DB.updateInstance(
           props.taskId,
           { standardsForTitle: standardsForTitleState },
-          'certification',
-          'Replace'
-        ).catch((e) => {
-          if (e.name === 'NotFound') {
-            DB.createInstance(
-              props.taskId,
-              { standardsForTitle: standardsForTitleState },
-              'certification'
-            ).catch((e) => console.log(e));
-          }
-        });
+          'certification'
+        );
       }}
       // @ts-ignore
       standardsForTitle={standardsForTitleState}

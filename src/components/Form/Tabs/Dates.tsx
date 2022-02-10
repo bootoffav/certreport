@@ -147,10 +147,10 @@ function RenderDates(props: DatesProps) {
             const newCalendarExpirationEventId = await addExpirationDate({
               expirationDate: dayjs(rawDate).format('YYYY-MM-DD'),
               description: `${process.env.REACT_APP_B24_HOST}/company/personal/user/${process.env.REACT_APP_B24_USER_ID}/tasks/task/view/${props.taskId}/`,
-              name: props.calendarEventName,
+              name: `Expiration of ${props.calendarEventName}`,
             })
               .then((res) => res.json())
-              .then(({ result: id }) => id);
+              .then(({ result }) => result);
             const newExpirationDate = dayjs(rawDate).format('DDMMMYYYY');
             setExpirationDate(newExpirationDate);
             setCalendarExpirationEventId(newCalendarExpirationEventId);
@@ -163,17 +163,18 @@ function RenderDates(props: DatesProps) {
                 calendarExpirationEventId: newCalendarExpirationEventId,
               },
               'certification'
-            ).catch((reason) => {
-              reason.message === 'instance not found' &&
-                DB.createInstance(
-                  props.taskId as string,
-                  {
-                    expirationDate: newExpirationDate,
-                    calendarExpirationEventId: newCalendarExpirationEventId,
-                  },
-                  'certification'
-                );
-            });
+            );
+            // .catch((reason) => {
+            //   reason.message === 'instance not found' &&
+            //     DB.createInstance(
+            //       props.taskId as string,
+            //       {
+            //         expirationDate: newExpirationDate,
+            //         calendarExpirationEventId: newCalendarExpirationEventId,
+            //       },
+            //       'certification'
+            //     );
+            // });
           }}
         />
       </div>

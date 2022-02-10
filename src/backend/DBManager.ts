@@ -115,17 +115,17 @@ class DB {
     );
   }
 
-  static updateInstance(
-    ref: string,
-    state: any,
-    fdbCollection = 'aitex',
-    updateType: 'Replace' | 'Update' = 'Update'
-  ) {
-    return DB.client().query(
-      q[updateType](q.Ref(q.Collection(fdbCollection), ref), {
-        data: { ...state },
-      })
-    );
+  static updateInstance(taskId: string, state: any, fdbCollection = 'aitex') {
+    return DB.client()
+      .query(
+        q.Update(q.Ref(q.Collection(fdbCollection), taskId), {
+          data: { ...state },
+        })
+      )
+      .catch(({ message }) => {
+        message === 'instance not found' &&
+          DB.createInstance(taskId, state, fdbCollection);
+      });
   }
 }
 

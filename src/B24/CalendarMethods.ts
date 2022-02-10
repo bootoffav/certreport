@@ -18,14 +18,14 @@ function addExpirationDate({
       qs.stringify({
         type: 'user',
         ownerId: creatorId,
-        name: `Expiration of ${name}`,
+        name,
         description, // b24 link
-        from: expirationDate, // expiration date
-        to: expirationDate, // expiration date
+        from: expirationDate,
+        to: expirationDate,
         skipTime: 'Y',
         section: 680,
-        color: '#9cbe1c', // to be determined
-        text_color: '#283033', // to be determined
+        color: '#9cbe1c',
+        text_color: '#283033',
         accessibility: 'free',
         // attendees: [5, 19, 3524], // Butov Aleksei, Vitaly Aliev, Ira Danilova
         importance: 'normal',
@@ -37,7 +37,7 @@ function addExpirationDate({
 }
 
 function deleteExpirationDate(id: number) {
-  fetch(
+  return fetch(
     `${mainUrl}/${creatorId}/${webhookKey}/calendar.event.delete?` +
       qs.stringify({
         type: 'user',
