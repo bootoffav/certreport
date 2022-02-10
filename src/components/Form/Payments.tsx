@@ -64,7 +64,6 @@ function Payments({ taskId, ...props }: PaymentsProps) {
         : payments;
 
       taskId &&
-        filteredPayments.length &&
         DB.updateInstance(taskId, { payments: filteredPayments }, 'payments');
     };
   }, [taskId, payments]);
