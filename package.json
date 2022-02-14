@@ -9,7 +9,7 @@
     "bootstrap": "^5.0.0",
     "chart.js": "2.9",
     "dayjs": "^1.10",
-    "faunadb": "^4.4",
+    "faunadb": "^4.5",
     "jquery": "^3.5.1",
     "lodash": "^4.17.21",
     "netlify-identity-widget": "^1.9.1",

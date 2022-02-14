@@ -1,27 +1,7 @@
 import * as React from 'react';
-import DatePicker from 'react-datepicker';
 import * as B24 from 'B24/B24';
 import Select from 'react-select';
 import './FormFields.css';
-import { dateConverter } from 'helpers';
-
-const selected = (date: string) =>
-  date ? new Date(dateConverter(date)) : null;
-
-const PickDate = (props: any) => (
-  <div>
-    <span className="mx-2">{props.label}</span>
-    <div className="form-group mx-2">
-      <DatePicker
-        className="form-control"
-        disabled={props.disabled}
-        selected={selected(props.date)}
-        dateFormat="dd.MM.yyyy"
-        onChange={props.handleChange}
-      />
-    </div>
-  </div>
-);
 
 const BaseInput = (props: {
   required?: boolean;
@@ -138,74 +118,6 @@ function QuoteNo({
   );
 }
 
-interface PaidProps {
-  checked: boolean;
-  onChange: (e: React.BaseSyntheticEvent) => void;
-  paymentDateChange: (e: Date) => void;
-  paymentDate: string;
-}
-
-const Paid = ({
-  checked,
-  onChange,
-  paymentDateChange,
-  paymentDate,
-}: PaidProps) => {
-  return (
-    <div className="form-group mx-2">
-      Payment Date
-      <div className="input-group">
-        <div className="input-group-prepend">
-          <div className="input-group-text">
-            <input type="checkbox" onChange={onChange} checked={checked} />
-          </div>
-        </div>
-        <DatePicker
-          className="form-control"
-          disabled={!checked}
-          selected={selected(paymentDate)}
-          dateFormat="dd.MM.yyyy"
-          onChange={paymentDateChange}
-        />
-      </div>
-    </div>
-  );
-};
-
-// const Pi = (props: any) => (
-//   <div className="form-group">
-//     Proforma Received
-//     <div className="input-group">
-//       <div className="input-group-prepend">
-//         <div className="input-group-text">
-//           <input
-//             type="checkbox"
-//             id={props.id}
-//             onChange={props.handleCheckboxChange}
-//             checked={props.proformaReceivedDate}
-//           />
-//         </div>
-//       </div>
-//       <DatePicker
-//         className="form-control"
-//         disabled={!props.checkboxState}
-//         selected={selected(props.date)}
-//         dateFormat="dd.MM.yyyy"
-//         onChange={props.handleDateChange}
-//         todayButton={'Today'}
-//       />
-//       <input
-//         type="text"
-//         className="form-control"
-//         disabled={!props.checkboxState}
-//         onChange={props.handleNumberChange}
-//         id={props.numberId}
-//         value={props.number}
-//       />
-//     </div>
-//   </div>
-// );
-
 interface ArticleProps {
   options: any[];
   value: any;
@@ -261,4 +173,6 @@ class Article extends React.Component<ArticleProps> {
   );
 }
 
-export { PickDate, BaseInput, SerialNumber, Article, Price, Paid, QuoteNo };
+export { default as PickDate } from './Fields/PickDate';
+export { default as Paid } from './Fields/Paid';
+export { BaseInput, SerialNumber, Article, Price, QuoteNo };

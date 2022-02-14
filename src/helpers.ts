@@ -14,6 +14,11 @@ function dateConverter(
     return oldFormat;
   }
 
+  // check if oldFormat is ISO8601-compat, skip conversion
+  if (oldFormat.charAt(4) === '-' && oldFormat.charAt(7) === '-') {
+    return oldFormat;
+  }
+
   const months: {
     [k: string]: string;
   } = {
