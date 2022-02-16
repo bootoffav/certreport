@@ -127,6 +127,26 @@ class DB {
           DB.createInstance(taskId, state, fdbCollection);
       });
   }
+
+  static getExpiringCerts(months: 1 | 3 | 6) {
+    return DB.client().query(
+      q.Filter(
+        q.Filter(
+          q.Paginate(q.Match('expirationDate')),
+          q.Lambda(['ref', 'date'], q.Not(q.IsNull(q.Var('date'))))
+        ),
+        q.Lambda(
+          ['ref', 'date'],
+          // q.Not(
+          q.LTE(
+            q.TimeDiff(q.ToDate(q.Now()), q.Date(q.Var('date')), 'days'),
+            months * 30 // 6 months in days
+          )
+          // )
+        )
+      )
+    );
+  }
 }
 
 export default DB;
