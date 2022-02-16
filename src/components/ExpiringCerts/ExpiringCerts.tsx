@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { Dimmer } from 'tabler-react';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import type { TaskState } from 'Task/Task.interface';
@@ -10,6 +11,7 @@ type ExpiringCertsProps = {
 };
 
 type TabProps = {
+  tasks?: TaskState[];
   months: 1 | 3 | 6;
 };
 
@@ -34,7 +36,7 @@ const Tab = ({ months }: TabProps) => {
   );
 };
 
-const TabContent = ({ months }: TabProps) => {
+const TabContent = ({ months, tasks }: TabProps) => {
   const [expiringCerts, setExpiringCerts] = useState<any[]>();
   useEffect(() => {
     (async () => {
@@ -69,7 +71,8 @@ const TabContent = ({ months }: TabProps) => {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  {task[0]}
+                  {tasks?.find(({ id }) => id === task[0])?.title ||
+                    'title placeholder'}
                 </a>
               </td>
               <td>
@@ -77,7 +80,8 @@ const TabContent = ({ months }: TabProps) => {
                   to={`/edit/${task[0]}`}
                   style={{ textDecoration: 'none' }}
                 >
-                  {task[0]}
+                  {tasks?.find(({ id }) => id === task[0])?.title ||
+                    'title placeholder'}
                 </Link>
               </td>
             </tr>
@@ -94,7 +98,13 @@ const TabContent = ({ months }: TabProps) => {
       role="tabpanel"
       aria-labelledby={`months${months}-tab`}
     >
-      {expiringCerts ? outputTasks() : <>loading</>}
+      {expiringCerts ? (
+        outputTasks()
+      ) : (
+        <div className="mt-4 pt-4">
+          <Dimmer active loader></Dimmer>
+        </div>
+      )}
     </div>
   );
 };
@@ -108,16 +118,7 @@ async function getExpiringCertsTasks(
 }
 
 function ExpiringCerts({ tasks }: ExpiringCertsProps) {
-  // debugger;
-  // useEffect(() => {
-  //   if (tasks.length > 0) {
-  //     tasks.forEach((t) => {
-  //       console.log(t.id);
-  //     });
-  //   }
-  // }, [tasks]);
-
-  return (
+  return tasks.length ? (
     <div className="container">
       <ul
         className="nav nav-tabs nav-justified"
@@ -130,10 +131,12 @@ function ExpiringCerts({ tasks }: ExpiringCertsProps) {
       </ul>
       <div className="tab-content" id="expiringCertsTabContent">
         {([6, 3, 1] as const).map((month) => (
-          <TabContent key={month} months={month} />
+          <TabContent key={month} tasks={tasks} months={month} />
         ))}
       </div>
     </div>
+  ) : (
+    <></>
   );
 }
 

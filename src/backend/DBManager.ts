@@ -137,12 +137,10 @@ class DB {
         ),
         q.Lambda(
           ['ref', 'date'],
-          // q.Not(
           q.LTE(
             q.TimeDiff(q.ToDate(q.Now()), q.Date(q.Var('date')), 'days'),
             months * 30 // 6 months in days
           )
-          // )
         )
       )
     );
