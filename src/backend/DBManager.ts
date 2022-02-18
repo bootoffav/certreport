@@ -1,6 +1,7 @@
 import faunadb, { query as q } from 'faunadb';
 import { emptyState } from 'Task/emptyState';
 import type { IRequirement } from 'components/Form/Tabs/Standards/Requirements';
+import type { TabProps } from 'components/ExpiringCerts/ExpiringCerts';
 
 class DB {
   static fdbCollection = process.env.REACT_APP_FAUNADB_CLASS || 'aitex';
@@ -128,12 +129,40 @@ class DB {
       });
   }
 
-  static getExpiringCerts(months: 1 | 3 | 6) {
+  static getExpiringCerts(months: TabProps['months']) {
+    if (months === 0) {
+      // expired certs case
+      return DB.client().query(
+        q.Filter(
+          q.Filter(
+            q.Paginate(q.Match('expirationDate')),
+            q.Lambda(['ref', 'date'], q.Not(q.IsNull(q.Var('date'))))
+          ),
+          q.Lambda(
+            ['ref', 'date'],
+            q.LT(
+              q.TimeDiff(q.ToDate(q.Now()), q.Date(q.Var('date')), 'days'),
+              months // expired yesterday or futher on
+            )
+          )
+        )
+      );
+    }
+
     return DB.client().query(
       q.Filter(
         q.Filter(
-          q.Paginate(q.Match('expirationDate')),
-          q.Lambda(['ref', 'date'], q.Not(q.IsNull(q.Var('date'))))
+          q.Filter(
+            q.Paginate(q.Match('expirationDate')),
+            q.Lambda(['ref', 'date'], q.Not(q.IsNull(q.Var('date'))))
+          ),
+          q.Lambda(
+            ['ref', 'date'],
+            q.GTE(
+              q.TimeDiff(q.ToDate(q.Now()), q.Date(q.Var('date')), 'days'),
+              0
+            )
+          )
         ),
         q.Lambda(
           ['ref', 'date'],

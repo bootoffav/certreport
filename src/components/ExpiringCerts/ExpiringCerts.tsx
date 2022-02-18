@@ -10,12 +10,20 @@ type ExpiringCertsProps = {
   tasks: TaskState[];
 };
 
-type TabProps = {
+export type TabProps = {
   tasks?: TaskState[];
-  months: 1 | 3 | 6;
+  months: 0 | 1 | 3 | 6;
 };
 
 const Tab = ({ months }: TabProps) => {
+  const getTabTitle = () => {
+    return months ? (
+      months + ` month${months !== 1 ? 's' : ''}`
+    ) : (
+      <span style={{ color: 'red' }}>Expired certs</span>
+    );
+  };
+
   return (
     <li className="nav-item" role="presentation" key={months}>
       <button
@@ -30,7 +38,7 @@ const Tab = ({ months }: TabProps) => {
         aria-controls={`months${months}`}
         aria-selected="true"
       >
-        {months} month{months !== 1 ? 's' : ''}
+        {getTabTitle()}
       </button>
     </li>
   );
@@ -125,12 +133,12 @@ function ExpiringCerts({ tasks }: ExpiringCertsProps) {
         id="expiringCertsTabs"
         role="tablist"
       >
-        {([6, 3, 1] as const).map((month) => (
+        {([6, 3, 1, 0] as const).map((month) => (
           <Tab key={month} months={month} />
         ))}
       </ul>
       <div className="tab-content" id="expiringCertsTabContent">
-        {([6, 3, 1] as const).map((month) => (
+        {([6, 3, 1, 0] as const).map((month) => (
           <TabContent key={month} tasks={tasks} months={month} />
         ))}
       </div>
