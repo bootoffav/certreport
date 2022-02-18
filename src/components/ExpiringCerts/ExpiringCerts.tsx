@@ -12,7 +12,7 @@ type ExpiringCertsProps = {
 
 export type TabProps = {
   tasks?: TaskState[];
-  months: 0 | 1 | 3 | 6;
+  months: 0 | 1 | 3 | 6 | 12;
 };
 
 const Tab = ({ months }: TabProps) => {
@@ -28,7 +28,7 @@ const Tab = ({ months }: TabProps) => {
     <li className="nav-item" role="presentation" key={months}>
       <button
         className={`nav-link ${
-          months === 6 ? 'active' : ''
+          months === 12 ? 'active' : ''
         } mx-auto expiringCertsTab`}
         id={`months${months}-tab`}
         data-bs-toggle="tab"
@@ -101,7 +101,7 @@ const TabContent = ({ months, tasks }: TabProps) => {
 
   return (
     <div
-      className={`tab-pane fade show ${months === 6 ? 'active' : ''}`}
+      className={`tab-pane fade show ${months === 12 ? 'active' : ''}`}
       id={`months${months}`}
       role="tabpanel"
       aria-labelledby={`months${months}-tab`}
@@ -126,6 +126,7 @@ async function getExpiringCertsTasks(
 }
 
 function ExpiringCerts({ tasks }: ExpiringCertsProps) {
+  const months: TabProps['months'][] = [12, 6, 3, 1, 0];
   return tasks.length ? (
     <div className="container">
       <ul
@@ -133,12 +134,12 @@ function ExpiringCerts({ tasks }: ExpiringCertsProps) {
         id="expiringCertsTabs"
         role="tablist"
       >
-        {([6, 3, 1, 0] as const).map((month) => (
+        {months.map((month) => (
           <Tab key={month} months={month} />
         ))}
       </ul>
       <div className="tab-content" id="expiringCertsTabContent">
-        {([6, 3, 1, 0] as const).map((month) => (
+        {months.map((month) => (
           <TabContent key={month} tasks={tasks} months={month} />
         ))}
       </div>
