@@ -169,7 +169,10 @@ function RenderDates(props: DatesProps) {
         />
       </div>
       {repeatedStages.includes(props.stage) &&
-        renderRepeatDates(pickBy(props, (_, k) => k.startsWith('repeat')))}
+        renderRepeatDates({
+          ...pickBy(props, (_, k) => k.startsWith('repeat')),
+          handleDateChange: props.handleDateChange,
+        })}
     </Dimmer>
   );
 }
@@ -185,9 +188,9 @@ function renderRepeatDates(props: any) {
         <PickDate
           date={props.repeatReceivedOn}
           label="R* - Sample has received by lab:"
-          handleChange={(date: Date) =>
-            props.handleDateChange(date, 'repeatReceivedOn')
-          }
+          handleChange={(date: Date) => {
+            props.handleDateChange(date, 'repeatReceivedOn');
+          }}
         />
         <PickDate
           date={props.repeatStartedOn}
