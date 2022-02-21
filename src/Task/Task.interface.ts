@@ -65,17 +65,11 @@ interface TaskState {
   readyOn: DateFormatType;
   sentOn: DateFormatType;
   receivedOn: DateFormatType;
-  repeatReceivedOn: DateFormatType;
   startedOn: DateFormatType;
-  repeatStartedOn: DateFormatType;
   testFinishedOnPlanDate: DateFormatType;
-  repeatTestFinishedOnPlanDate: DateFormatType;
   testFinishedOnRealDate: DateFormatType;
-  repeatTestFinishedOnRealDate: DateFormatType;
   certReceivedOnPlanDate: DateFormatType;
-  repeatCertReceivedOnPlanDate: DateFormatType;
   certReceivedOnRealDate: DateFormatType;
-  repeatCertReceivedOnRealDate: DateFormatType;
   expirationDate: DateFormatType;
   comments: string;
   otherTextInDescription: string | null;

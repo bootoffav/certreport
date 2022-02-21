@@ -48,7 +48,6 @@ const taskPropMap: {
   'tests to be started on': 'startedOn',
   'tests to be finished on': 'testFinishedOn',
   'results to be received on': 'certReceivedOn',
-  'repeat testing is started': 'repeatTestingIsStarted',
   REM: 'rem',
   Resume: 'resume',
   Stage: 'stage',
@@ -175,18 +174,6 @@ class Task {
       delete parsedState.certReceivedOn;
     }
 
-    if (parsedState.repeatTestingIsStarted) {
-      [
-        parsedState.repeatReceivedOn,
-        parsedState.repeatStartedOn,
-        parsedState.repeatTestFinishedOnPlanDate,
-        parsedState.repeatTestFinishedOnRealDate,
-        parsedState.repeatCertReceivedOnPlanDate,
-        parsedState.repeatCertReceivedOnRealDate,
-      ] = parsedState.repeatTestingIsStarted.split(',', 6);
-      delete parsedState.repeatTestingIsStarted;
-    }
-
     parsedState.brand = ufCrmTask
       .filter((v: any) =>
         ['C_10033', 'C_10035', 'C_10037', 'C_10041'].includes(v)
@@ -302,8 +289,6 @@ class Task {
         return this.state['certReceivedOnPlanDate'] || 'No date';
       case '8. Certificate ready':
         return '-' || 'No date';
-      case '10. Repeat Testing is started':
-        return this.state['repeatTestFinishedOnPlanDate'] || 'No date';
     }
 
     return 'No Date';

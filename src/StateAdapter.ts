@@ -24,8 +24,6 @@ class StateAdapter {
       '02. Estimate': '',
       '6. Pre-treatment done': '',
       '8. Certificate ready': '',
-      '10. Repeat Testing is started': 'repeatTestFinishedOnPlanDate',
-      '11. Repeat Test-report ready': 'repeatTestFinishedOnRealDate',
     };
 
     if (this.stage === '9. Ended') return '';
@@ -86,14 +84,8 @@ class StateAdapter {
       case '9. Ended':
         stageForTitle = this.certificate;
         break;
-      case '10. Repeat Testing is started':
-        stageForTitle = `Repeat Testing is started`;
-        break;
-      case '11. Repeat Test-report ready':
-        stageForTitle = 'Repeat Test-report ready';
-        break;
       default:
-        stageForTitle = '';
+        stageForTitle = this.stage.substring(this.stage.indexOf(' ') + 1);
     }
     return stageForTitle;
   };
@@ -130,31 +122,6 @@ class StateAdapter {
       `${this.certReceivedOnPlanDate && this.certReceivedOnPlanDate + ', '}` +
       `${this.certReceivedOnRealDate && this.certReceivedOnRealDate + ', '}`
     ).slice(0, -2);
-  }
-
-  get repeatTestingIsStarted() {
-    return (
-      `${this.repeatReceivedOn && this.repeatReceivedOn}` +
-      ',' +
-      `${this.repeatStartedOn && this.repeatStartedOn}` +
-      ',' +
-      `${
-        this.repeatTestFinishedOnPlanDate && this.repeatTestFinishedOnPlanDate
-      }` +
-      ',' +
-      `${
-        this.repeatTestFinishedOnRealDate && this.repeatTestFinishedOnRealDate
-      }` +
-      ',' +
-      `${
-        this.repeatCertReceivedOnPlanDate && this.repeatCertReceivedOnPlanDate
-      }` +
-      ',' +
-      `${
-        this.repeatCertReceivedOnRealDate && this.repeatCertReceivedOnRealDate
-      }` +
-      ','
-    );
   }
 }
 

@@ -11,7 +11,7 @@ import DB from 'backend/DBManager';
 import { TabbedCard, Button, Icon } from 'tabler-react';
 import CacheManager from 'CacheManager';
 import { GoBackOrHomeButton } from '../NaviButton';
-import { RenderDates } from './Tabs/Dates';
+import Dates from './Tabs/Dates';
 import { renderBasicInfo } from './Tabs/BasicInfo/BasicInfo';
 import { renderFiles } from './Tabs/Files';
 import { renderCommentsNews } from './Tabs/CommentsNews';
@@ -264,7 +264,7 @@ class Form extends React.Component {
         <TabbedCard initialTab="Basic Info">
           {renderBasicInfo.call(this)}
           <Tab title="Dates">
-            <RenderDates
+            <Dates
               calendarEventName={`${this.state.serialNumber}_${this.state.testingCompany}`}
               taskId={this.task_id}
               pausedUntil={this.state.pausedUntil}
@@ -278,20 +278,6 @@ class Form extends React.Component {
               certReceivedOnPlanDate={this.state.certReceivedOnPlanDate}
               certReceivedOnRealDate={this.state.certReceivedOnRealDate}
               stage={this.state.stage}
-              repeatReceivedOn={this.state.repeatReceivedOn}
-              repeatStartedOn={this.state.repeatStartedOn}
-              repeatTestFinishedOnPlanDate={
-                this.state.repeatTestFinishedOnPlanDate
-              }
-              repeatTestFinishedOnRealDate={
-                this.state.repeatTestFinishedOnRealDate
-              }
-              repeatCertReceivedOnPlanDate={
-                this.state.repeatCertReceivedOnPlanDate
-              }
-              repeatCertReceivedOnRealDate={
-                this.state.repeatCertReceivedOnRealDate
-              }
               handleDateChange={this.handleDateChange}
             />
           </Tab>

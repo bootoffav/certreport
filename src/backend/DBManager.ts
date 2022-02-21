@@ -61,14 +61,14 @@ class DB {
   }
 
   static async get(
-    taskId: string,
+    ref: string,
     property: string,
     fdbCollection = this.fdbCollection
   ): Promise<any> {
     return await DB.client().query(
       q.Select(
         ['data', property],
-        q.Get(q.Ref(q.Collection(fdbCollection), taskId))
+        q.Get(q.Ref(q.Collection(fdbCollection), ref))
       )
     );
   }

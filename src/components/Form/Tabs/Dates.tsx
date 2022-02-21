@@ -1,6 +1,5 @@
 import { Dimmer } from 'tabler-react';
 import dayjs from 'dayjs';
-import { pickBy } from 'lodash';
 import { PickDate } from '../FormFields';
 import { Status } from 'components/Notification/Notification';
 import { stages } from 'defaults';
@@ -23,16 +22,10 @@ type DatesProps = {
   certReceivedOnRealDate: TaskState['certReceivedOnRealDate'];
   stage: Stage | string;
   taskId?: `${number}`;
-  repeatReceivedOn: TaskState['repeatReceivedOn'];
-  repeatStartedOn: TaskState['repeatStartedOn'];
-  repeatTestFinishedOnPlanDate: TaskState['repeatTestFinishedOnPlanDate'];
-  repeatTestFinishedOnRealDate: TaskState['repeatTestFinishedOnRealDate'];
-  repeatCertReceivedOnPlanDate: TaskState['repeatCertReceivedOnPlanDate'];
-  repeatCertReceivedOnRealDate: TaskState['repeatCertReceivedOnRealDate'];
   handleDateChange: any;
 };
 
-function RenderDates(props: DatesProps) {
+function Dates(props: DatesProps) {
   const [expirationDate, setExpirationDate] = useState('');
   const [calendarExpirationEventId, setCalendarExpirationEventId] =
     useState<number>();
@@ -169,15 +162,54 @@ function RenderDates(props: DatesProps) {
         />
       </div>
       {repeatedStages.includes(props.stage) &&
-        renderRepeatDates({
-          ...pickBy(props, (_, k) => k.startsWith('repeat')),
-          handleDateChange: props.handleDateChange,
+        RepeatDates({
+          taskId: props.taskId,
         })}
     </Dimmer>
   );
 }
 
-function renderRepeatDates(props: any) {
+type ISODate = `${number}-${number}-${number}`;
+
+interface IRepeatDates {
+  repeatReceivedOn?: ISODate;
+  repeatStartedOn?: ISODate;
+  repeatTestFinishedOnPlanDate?: ISODate;
+  repeatTestFinishedOnRealDate?: ISODate;
+  repeatCertReceivedOnPlanDate?: ISODate;
+  repeatCertReceivedOnRealDate?: ISODate;
+}
+
+function RepeatDates({ taskId }: { taskId?: string }) {
+  const [repeatDates, setRepeatDates] = useState<IRepeatDates>();
+
+  useEffect(() => {
+    taskId &&
+      DB.get(taskId, 'repeatDates', 'certification').then((response) => {
+        setRepeatDates(response);
+      });
+  }, [taskId]);
+
+  const dateChanger = (field: keyof IRepeatDates & string, date: Date) => {
+    const newDate = date ? (dayjs(date).format('YYYY-MM-DD') as ISODate) : null;
+    // 1. change UI state
+    setRepeatDates((state) => ({
+      ...state,
+      [field]: newDate,
+    }));
+
+    // 2. change value in DB
+    DB.updateInstance(
+      taskId as string,
+      {
+        repeatDates: {
+          [field]: newDate,
+        },
+      },
+      'certification'
+    );
+  };
+
   return (
     <>
       <hr />
@@ -186,47 +218,43 @@ function renderRepeatDates(props: any) {
       </div>
       <div className="d-flex justify-content-center">
         <PickDate
-          date={props.repeatReceivedOn}
+          date={repeatDates?.repeatReceivedOn || ''}
           label="R* - Sample has received by lab:"
-          handleChange={(date: Date) => {
-            props.handleDateChange(date, 'repeatReceivedOn');
-          }}
+          handleChange={(date: Date) => dateChanger('repeatReceivedOn', date)}
         />
         <PickDate
-          date={props.repeatStartedOn}
+          date={repeatDates?.repeatStartedOn || ''}
           label="R* - Test is started:"
-          handleChange={(date: Date) =>
-            props.handleDateChange(date, 'repeatStartedOn')
-          }
+          handleChange={(date: Date) => dateChanger('repeatStartedOn', date)}
         />
         <PickDate
-          date={props.repeatTestFinishedOnPlanDate}
+          date={repeatDates?.repeatTestFinishedOnPlanDate || ''}
           label="R* - ETD (Test-report)"
           handleChange={(date: Date) =>
-            props.handleDateChange(date, 'repeatTestFinishedOnPlanDate')
+            dateChanger('repeatTestFinishedOnPlanDate', date)
           }
         />
       </div>
       <div className="d-flex justify-content-center">
         <PickDate
-          date={props.repeatTestFinishedOnRealDate}
+          date={repeatDates?.repeatTestFinishedOnRealDate || ''}
           label="R* - Test really finished on:"
           handleChange={(date: Date) =>
-            props.handleDateChange(date, 'repeatTestFinishedOnRealDate')
+            dateChanger('repeatTestFinishedOnRealDate', date)
           }
         />
         <PickDate
-          date={props.repeatCertReceivedOnPlanDate}
+          date={repeatDates?.repeatCertReceivedOnPlanDate || ''}
           label="R* - ETD (Certificate)"
           handleChange={(date: Date) =>
-            props.handleDateChange(date, 'repeatCertReceivedOnPlanDate')
+            dateChanger('repeatCertReceivedOnPlanDate', date)
           }
         />
         <PickDate
-          date={props.repeatCertReceivedOnRealDate}
+          date={repeatDates?.repeatCertReceivedOnRealDate || ''}
           label="R* - Certificate really received on:"
           handleChange={(date: Date) =>
-            props.handleDateChange(date, 'repeatCertReceivedOnRealDate')
+            dateChanger('repeatCertReceivedOnRealDate', date)
           }
         />
       </div>
@@ -234,4 +262,4 @@ function renderRepeatDates(props: any) {
   );
 }
 
-export { RenderDates };
+export default Dates;
