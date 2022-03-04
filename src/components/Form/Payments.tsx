@@ -21,15 +21,6 @@ const emptyPayment: Payment = {
   proformaInvoiceNo: '',
 };
 
-// function removeEmptyPaymentsBeforeSave(payments: Payment[]): Payment[] {
-//   return payments.filter((payment) => {
-//     for (const prop in emptyPayment) {
-//       if (payment[prop] !== emptyPayment[prop]) return true;
-//     }
-//     return false;
-//   });
-// }
-
 function Payments({ taskId, ...props }: PaymentsProps) {
   const [payments, setPayments] = useState([] as Payment[]);
 
@@ -72,59 +63,64 @@ function Payments({ taskId, ...props }: PaymentsProps) {
           value={payment.price}
           label={`Payment #${paymentPosition}`}
           handleChange={(value) => {
-            setPayments(() => {
-              return [...genericSetter('price', value, index)];
-            });
-            taskId && DB.updateInstance(taskId, { payments }, 'payments');
+            const newPayments = [...genericSetter('price', value, index)];
+            setPayments(newPayments);
+            taskId &&
+              DB.updateInstance(taskId, { payments: newPayments }, 'payments');
           }}
         />
         <Paid
           checked={payment.paid}
           onChange={({ target }) => {
-            setPayments(() => {
-              if (!target.checked) {
-                payments[index].paymentDate = '';
-              }
-              return [...genericSetter('paid', target.checked, index)];
-            });
-            taskId && DB.updateInstance(taskId, { payments }, 'payments');
+            if (!target.checked) {
+              payments[index].paymentDate = '';
+            }
+            const newPayments = [
+              ...genericSetter('paid', target.checked, index),
+            ];
+            setPayments(newPayments);
+            taskId &&
+              DB.updateInstance(taskId, { payments: newPayments }, 'payments');
           }}
           paymentDate={payment.paymentDate}
           paymentDateChange={(date) => {
-            setPayments(() => {
-              return [
-                ...genericSetter(
-                  'paymentDate',
-                  dayjs(date).format('DDMMMYYYY'),
-                  index
-                ),
-              ];
-            });
-            taskId && DB.updateInstance(taskId, { payments }, 'payments');
+            const newPayments = [
+              ...genericSetter(
+                'paymentDate',
+                dayjs(date).format('DDMMMYYYY'),
+                index
+              ),
+            ];
+            setPayments(newPayments);
+            taskId &&
+              DB.updateInstance(taskId, { payments: newPayments }, 'payments');
           }}
         />
         <QuoteNo
           activeQuoteNo={payment.activeQuoteNo || false}
           handleActiveQuoteNoChange={() => {
             dispatch(changeActiveQuoteNo({ value: payment.quoteNo }));
-            setPayments(() => {
-              payments.forEach((p) => delete p.activeQuoteNo);
-              return [...genericSetter('activeQuoteNo', true, index)];
-            });
-            taskId && DB.updateInstance(taskId, { payments }, 'payments');
+            payments.forEach((p) => delete p.activeQuoteNo);
+            const newPayments = [
+              ...genericSetter('activeQuoteNo', true, index),
+            ];
+            setPayments(newPayments);
+            taskId &&
+              DB.updateInstance(taskId, { payments: newPayments }, 'payments');
           }}
           value={payment.quoteNo}
           label="Quote No."
           onChange={({ currentTarget }) => {
-            setPayments(() => {
-              return [
-                ...genericSetter(
-                  'quoteNo',
-                  (currentTarget as HTMLInputElement).value,
-                  index
-                ),
-              ];
-            });
+            const newPayments = [
+              ...genericSetter(
+                'quoteNo',
+                (currentTarget as HTMLInputElement).value,
+                index
+              ),
+            ];
+            setPayments(newPayments);
+            taskId &&
+              DB.updateInstance(taskId, { payments: newPayments }, 'payments');
           }}
         />
         <BaseInput
@@ -134,25 +130,26 @@ function Payments({ taskId, ...props }: PaymentsProps) {
           id={`proformaInvoiceNo${paymentPosition}`}
           label="PRO-FORMA INVOICE NO."
           handleChange={({ currentTarget }) => {
-            setPayments(() => {
-              return [
-                ...genericSetter(
-                  'proformaInvoiceNo',
-                  (currentTarget as HTMLInputElement).value,
-                  index
-                ),
-              ];
-            });
-            taskId && DB.updateInstance(taskId, { payments }, 'payments');
+            const newPayments = [
+              ...genericSetter(
+                'proformaInvoiceNo',
+                (currentTarget as HTMLInputElement).value,
+                index
+              ),
+            ];
+            setPayments(newPayments);
+            taskId &&
+              DB.updateInstance(taskId, { payments: newPayments }, 'payments');
           }}
         />
         <RemovePayment
           doIt={(e) => {
             e.preventDefault();
-            setPayments((payments) => {
-              payments.splice(index, 1);
-              return [...payments];
-            });
+            payments.splice(index, 1);
+            const newPayments = [...payments];
+            setPayments(newPayments);
+            taskId &&
+              DB.updateInstance(taskId, { payments: newPayments }, 'payments');
           }}
         />
       </div>

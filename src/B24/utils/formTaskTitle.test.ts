@@ -156,5 +156,4 @@ it('forms standard part properly', async () => {
 it('parse price properly', () => {
   expect(convertPriceToStr(934.85)).toBe('934,85 €');
   expect(convertPriceToStr(934)).toBe('934 €');
-  // expect(convertPriceToStr('934,85')).toBe('934,85 €');
 });
