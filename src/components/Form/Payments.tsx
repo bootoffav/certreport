@@ -55,19 +55,6 @@ function Payments({ taskId, ...props }: PaymentsProps) {
     })();
   }, [taskId, props.payments, dispatch]);
 
-  // save payments in DB on unmount
-  useEffect(() => {
-    return function () {
-      const filteredPayments = payments.length
-        ? // clear out emptyPayments
-          removeEmptyPaymentsBeforeSave(payments)
-        : payments;
-
-      taskId &&
-        DB.updateInstance(taskId, { payments: filteredPayments }, 'payments');
-    };
-  }, [taskId, payments]);
-
   const genericSetter = (
     location: string,
     value: string | boolean,
@@ -88,6 +75,7 @@ function Payments({ taskId, ...props }: PaymentsProps) {
             setPayments(() => {
               return [...genericSetter('price', value, index)];
             });
+            taskId && DB.updateInstance(taskId, { payments }, 'payments');
           }}
         />
         <Paid
@@ -99,6 +87,7 @@ function Payments({ taskId, ...props }: PaymentsProps) {
               }
               return [...genericSetter('paid', target.checked, index)];
             });
+            taskId && DB.updateInstance(taskId, { payments }, 'payments');
           }}
           paymentDate={payment.paymentDate}
           paymentDateChange={(date) => {
@@ -111,6 +100,7 @@ function Payments({ taskId, ...props }: PaymentsProps) {
                 ),
               ];
             });
+            taskId && DB.updateInstance(taskId, { payments }, 'payments');
           }}
         />
         <QuoteNo
@@ -121,6 +111,7 @@ function Payments({ taskId, ...props }: PaymentsProps) {
               payments.forEach((p) => delete p.activeQuoteNo);
               return [...genericSetter('activeQuoteNo', true, index)];
             });
+            taskId && DB.updateInstance(taskId, { payments }, 'payments');
           }}
           value={payment.quoteNo}
           label="Quote No."
@@ -152,6 +143,7 @@ function Payments({ taskId, ...props }: PaymentsProps) {
                 ),
               ];
             });
+            taskId && DB.updateInstance(taskId, { payments }, 'payments');
           }}
         />
         <RemovePayment
