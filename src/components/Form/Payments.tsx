@@ -21,14 +21,14 @@ const emptyPayment: Payment = {
   proformaInvoiceNo: '',
 };
 
-function removeEmptyPaymentsBeforeSave(payments: Payment[]): Payment[] {
-  return payments.filter((payment) => {
-    for (const prop in emptyPayment) {
-      if (payment[prop] !== emptyPayment[prop]) return true;
-    }
-    return false;
-  });
-}
+// function removeEmptyPaymentsBeforeSave(payments: Payment[]): Payment[] {
+//   return payments.filter((payment) => {
+//     for (const prop in emptyPayment) {
+//       if (payment[prop] !== emptyPayment[prop]) return true;
+//     }
+//     return false;
+//   });
+// }
 
 function Payments({ taskId, ...props }: PaymentsProps) {
   const [payments, setPayments] = useState([] as Payment[]);

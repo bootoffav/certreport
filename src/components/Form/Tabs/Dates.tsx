@@ -27,7 +27,7 @@ type DatesProps = {
 
 function Dates(props: DatesProps) {
   const [expirationDate, setExpirationDate] = useState('');
-  const [ETDCertificateEventId, setETDCertificateEventId] = useState<number>();
+  // const [ETDCertificateEventId, setETDCertificateEventId] = useState<number>();
   const [calendarExpirationEventId, setCalendarExpirationEventId] =
     useState<number>();
 
