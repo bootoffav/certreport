@@ -6,7 +6,7 @@ import { stages } from 'defaults';
 import DB from 'backend/DBManager';
 import type { Stage, TaskState } from 'Task/Task.interface';
 import { useEffect, useState } from 'react';
-import { addExpirationDate, deleteExpirationDate } from 'B24/CalendarMethods';
+import { addEvent, deleteEvent } from 'B24/CalendarMethods';
 
 type DatesProps = {
   calendarEventName: string;
@@ -27,24 +27,30 @@ type DatesProps = {
 
 function Dates(props: DatesProps) {
   const [expirationDate, setExpirationDate] = useState('');
+  const [ETDCertificateEventId, setETDCertificateEventId] = useState<number>();
   const [calendarExpirationEventId, setCalendarExpirationEventId] =
     useState<number>();
 
   useEffect(() => {
-    (async () => {
-      if (props.taskId) {
-        await DB.get(props.taskId, 'expirationDate', 'certification')
-          .then((expirationDate: TaskState['expirationDate']) => {
-            setExpirationDate(expirationDate);
-          })
-          .catch((e) => console.log(e));
-        await DB.get(props.taskId, 'calendarExpirationEventId', 'certification')
-          .then((calendarExpirationEventId: number) => {
-            setCalendarExpirationEventId(calendarExpirationEventId);
-          })
-          .catch((e) => console.log(e));
-      }
-    })();
+    if (props.taskId) {
+      DB.get(props.taskId, 'expirationDate', 'certification')
+        .then((expirationDate: TaskState['expirationDate']) => {
+          setExpirationDate(expirationDate);
+        })
+        .catch((e) => console.log(e));
+      DB.get(props.taskId, 'calendarExpirationEventId', 'certification')
+        .then((ExpirationEventId: number) =>
+          setCalendarExpirationEventId(ExpirationEventId)
+        )
+        .catch((e) => console.log(e));
+      // DB.get(
+      //   props.taskId,
+      //   'calendarETDCertificateEventId',
+      //   'certification'
+      // ).then((ETDCertificateEventId: number) =>
+      //   setETDCertificateEventId(ETDCertificateEventId)
+      // );
+    }
   }, [props.taskId]);
 
   const repeatedStages = stages[1].options.map((stage: any) => stage.label);
@@ -103,9 +109,39 @@ function Dates(props: DatesProps) {
         <PickDate
           date={props.certReceivedOnPlanDate}
           label="ETD (Certificate)"
-          handleChange={(date: Date) =>
-            props.handleDateChange(date, 'certReceivedOnPlanDate')
-          }
+          handleChange={async (date: Date) => {
+            // console.log(ETDCertificateEventId);
+            props.handleDateChange(date, 'certReceivedOnPlanDate');
+            // ETDCertificateEventId && deleteEvent(ETDCertificateEventId);
+            // clear
+            // if (date === null) {
+            //   DB.updateInstance(
+            //     props.taskId as string,
+            //     {
+            //       calendarETDCertificateEventId: null,
+            //     },
+            //     'certification'
+            //   );
+            //   return;
+            // }
+
+            // const newETDCertificateEventId = await addEvent({
+            //   date,
+            //   description: 'test',
+            //   name: `ETD (Certificate) ${props.calendarEventName}`,
+            //   section: 682,
+            // })
+            //   .then((res) => res.json())
+            //   .then(({ result }) => result);
+            // setETDCertificateEventId(newETDCertificateEventId);
+            // DB.updateInstance(
+            //   props.taskId as string,
+            //   {
+            //     calendarETDCertificateEventId: newETDCertificateEventId,
+            //   },
+            //   'certification'
+            // );
+          }}
         />
         <PickDate
           date={props.certReceivedOnRealDate}
@@ -120,7 +156,7 @@ function Dates(props: DatesProps) {
           handleChange={async (rawDate: Date) => {
             // delete previous calendar event Id
             if (calendarExpirationEventId) {
-              deleteExpirationDate(calendarExpirationEventId);
+              deleteEvent(calendarExpirationEventId);
             }
 
             // clear
@@ -140,8 +176,9 @@ function Dates(props: DatesProps) {
             setExpirationDate(newExpirationDate);
 
             // send expiration date to bitrix calendar
-            const newCalendarExpirationEventId = await addExpirationDate({
-              expirationDate: newExpirationDate,
+            const newCalendarExpirationEventId = await addEvent({
+              section: 680,
+              date: newExpirationDate,
               description: `${process.env.REACT_APP_B24_HOST}/company/personal/user/${process.env.REACT_APP_B24_USER_ID}/tasks/task/view/${props.taskId}/`,
               name: `Expiration of ${props.calendarEventName}`,
             })
