@@ -73,23 +73,32 @@ const TabContent = ({ months, tasks }: TabProps) => {
           <th scope="col" style={{ width: '15%' }}>
             Expiration Date
           </th>
+          <th scope="col" style={{ width: '15%' }}>
+            Item
+          </th>
           <th scope="col">Task in B24</th>
           <th scope="col">Edit task</th>
         </tr>
       </thead>
       <tbody>
         {filteredCerts?.map((task: any, index) => {
+          const linkedTask = tasks?.find(({ id }) => id === task[0]);
           return (
             <tr key={index}>
               <th scope="row">{index + 1}</th>
               <td>{dayjs(task[1]).format('DDMMMYYYY')}</td>
+              <td>
+                <a href={'item/' + linkedTask?.state.article}>
+                  {tasks?.find(({ id }) => id === task[0])?.state.article}
+                </a>
+              </td>
               <td>
                 <a
                   href={`${process.env.REACT_APP_B24_HOST}/company/personal/user/460/tasks/task/view/${task[0]}/`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  {tasks?.find(({ id }) => id === task[0])?.title}
+                  {linkedTask?.title}
                 </a>
               </td>
               <td>
@@ -97,7 +106,7 @@ const TabContent = ({ months, tasks }: TabProps) => {
                   to={`/edit/${task[0]}`}
                   style={{ textDecoration: 'none' }}
                 >
-                  {tasks?.find(({ id }) => id === task[0])?.title}
+                  {linkedTask?.title}
                 </Link>
               </td>
             </tr>
