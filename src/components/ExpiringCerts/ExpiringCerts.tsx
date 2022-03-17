@@ -46,12 +46,22 @@ const Tab = ({ months }: TabProps) => {
 
 const TabContent = ({ months, tasks }: TabProps) => {
   const [expiringCerts, setExpiringCerts] = useState<any[]>();
+  const [filteredCerts, setFilteredCerts] = useState<any[]>();
+
   useEffect(() => {
     (async () => {
-      const certs = await getExpiringCertsTasks(months);
+      // filter certs by comparing existing task pool with expiring tasks
+      const certs = await getExpiringCertsTasks(months); //.then((certs) =>
       setExpiringCerts(certs);
     })();
   }, [months]);
+
+  useEffect(() => {
+    const certs = expiringCerts?.filter(([certTaskId, _]) => {
+      return Boolean(tasks?.find(({ id }) => id === certTaskId));
+    });
+    setFilteredCerts(certs);
+  }, [expiringCerts, tasks]);
 
   const outputTasks = () => (
     <table className="mt-2 table">
@@ -68,7 +78,7 @@ const TabContent = ({ months, tasks }: TabProps) => {
         </tr>
       </thead>
       <tbody>
-        {expiringCerts?.map((task: any, index) => {
+        {filteredCerts?.map((task: any, index) => {
           return (
             <tr key={index}>
               <th scope="row">{index + 1}</th>
@@ -79,8 +89,7 @@ const TabContent = ({ months, tasks }: TabProps) => {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  {tasks?.find(({ id }) => id === task[0])?.title ||
-                    'title placeholder'}
+                  {tasks?.find(({ id }) => id === task[0])?.title}
                 </a>
               </td>
               <td>
@@ -88,8 +97,7 @@ const TabContent = ({ months, tasks }: TabProps) => {
                   to={`/edit/${task[0]}`}
                   style={{ textDecoration: 'none' }}
                 >
-                  {tasks?.find(({ id }) => id === task[0])?.title ||
-                    'title placeholder'}
+                  {tasks?.find(({ id }) => id === task[0])?.title}
                 </Link>
               </td>
             </tr>

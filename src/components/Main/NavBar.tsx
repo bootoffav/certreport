@@ -31,13 +31,7 @@ function NavBar({ startDate, endDate, update, updated }: INavBarProps) {
           <span className="vl"></span>
 
           <NavLink className="navbar-link" to="/expiringcerts">
-            <p>
-              Expiring Certificates
-              <sup>
-                {' '}
-                <span className="badge badge-success">New</span>
-              </sup>
-            </p>
+            <p>Expiring Certificates</p>
           </NavLink>
           <span className="vl"></span>
 
