@@ -465,7 +465,11 @@ class AppFormExport {
               ],
             },
             {
-              text: `According to Standard Mandotory Test Requirement`,
+              text: this.state.DBState.testRequirement[8].includes(
+                'Other Standard 2'
+              )
+                ? this.state.DBState.otherStandard2
+                : 'According to Standard Mandotory Test Requirement',
               colSpan: 7,
             },
             {},
