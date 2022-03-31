@@ -154,14 +154,18 @@ function Dates(props: DatesProps) {
           date={expirationDate}
           label="Expiration Date:"
           handleChange={async (rawDate: Date) => {
+            const newExpirationDate =
+              rawDate === null ? '' : dayjs(rawDate).format('YYYY-MM-DD');
+            setExpirationDate(newExpirationDate);
+          }}
+          onClose={async () => {
             // delete previous calendar event Id
             if (calendarExpirationEventId) {
               deleteEvent(calendarExpirationEventId);
             }
 
-            // clear
-            if (rawDate === null) {
-              DB.updateInstance(
+            if (expirationDate === '') {
+              return DB.updateInstance(
                 props.taskId as string,
                 {
                   expirationDate: null,
@@ -169,28 +173,23 @@ function Dates(props: DatesProps) {
                 },
                 'certification'
               );
-              setExpirationDate('');
-              return;
             }
-            const newExpirationDate = dayjs(rawDate).format('YYYY-MM-DD');
-            setExpirationDate(newExpirationDate);
 
             // send expiration date to bitrix calendar
             const newCalendarExpirationEventId = await addEvent({
               section: 680,
-              date: newExpirationDate,
+              date: expirationDate,
               description: `${process.env.REACT_APP_B24_HOST}/company/personal/user/${process.env.REACT_APP_B24_USER_ID}/tasks/task/view/${props.taskId}/`,
               name: `Expiration of ${props.calendarEventName}`,
             })
               .then((res) => res.json())
               .then(({ result }) => result);
             setCalendarExpirationEventId(newCalendarExpirationEventId);
-
             // update fauna instance, add new Event Id
             DB.updateInstance(
               props.taskId as string,
               {
-                expirationDate: newExpirationDate,
+                expirationDate,
                 calendarExpirationEventId: newCalendarExpirationEventId,
               },
               'certification'

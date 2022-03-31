@@ -6,9 +6,16 @@ type PickDateProps = {
   label: string;
   disabled?: boolean;
   handleChange: any;
+  onClose?: () => void;
 };
 
-const PickDate = ({ disabled, label, date, handleChange }: PickDateProps) => {
+const PickDate = ({
+  disabled,
+  label,
+  date,
+  handleChange,
+  onClose,
+}: PickDateProps) => {
   return (
     <div>
       <span className="mx-2">{label}</span>
@@ -16,9 +23,12 @@ const PickDate = ({ disabled, label, date, handleChange }: PickDateProps) => {
         <DatePicker
           className="form-control"
           disabled={disabled}
+          showYearDropdown
+          showMonthDropdown
           selected={date ? new Date(dateConverter(date)) : null}
           dateFormat="dd.MM.yyyy"
           onChange={handleChange}
+          onCalendarClose={onClose}
         />
       </div>
     </div>
