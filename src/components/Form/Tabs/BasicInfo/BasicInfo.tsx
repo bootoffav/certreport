@@ -217,13 +217,31 @@ function renderBasicInfo() {
               resultChange={this.handlePreTreatment1Change}
             />
           </div>
-          <BaseInput
-            value={this.state.pretreatment2}
-            className="w-25 mr-2"
-            id="pretreatment2"
-            label="Pre-treatment 2"
-            handleChange={this.handleChange}
-          />
+          <div className="w-25 mr-2">
+            Pre-treatment 2
+            <div className="input-group">
+              <div className="input-group-text w-25">
+                <input
+                  className="form-check-input ml-4"
+                  type="checkbox"
+                  checked={this.state.pretreatment2Active}
+                  onChange={({ target }) => {
+                    this.setState({
+                      pretreatment2Active: target.checked,
+                    });
+                  }}
+                />
+              </div>
+              <input
+                type="text"
+                id="pretreatment2"
+                className="form-control"
+                value={this.state.pretreatment2}
+                onChange={this.handleChange}
+                disabled={!this.state.pretreatment2Active}
+              />
+            </div>
+          </div>
           <BaseInput
             value={this.state.pretreatment3}
             className="w-25"

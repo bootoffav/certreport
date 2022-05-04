@@ -49,7 +49,9 @@ class Form extends React.Component {
 
   async componentDidMount() {
     if (this.task_id) {
-      this.setState({ requestStatus: Status.Loading });
+      this.setState({
+        requestStatus: Status.Loading,
+      });
       const dataFromDB = await DB.getData(this.task_id).then(
         ({
           exists,
@@ -94,6 +96,7 @@ class Form extends React.Component {
             existsInDB: dataFromDB.exists,
             rem: dataFromDB.rem || emptyState.rem,
             requestStatus: Status.FillingForm,
+            pretreatment2Active: Boolean(r.state.pretreatment2),
           });
           if (this.state.payments.length > 0) {
             this.setState((state: TaskState) => {
@@ -313,4 +316,5 @@ const mapStateToProps = (state: any) => state;
 export default connect(mapStateToProps, {
   changeActiveQuoteNo,
   changeTotalPrice,
+  // @ts-ignore
 })(Form);

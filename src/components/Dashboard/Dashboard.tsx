@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Component, createContext } from 'react';
 import './Dashboard.css';
 import { BrowserRouter } from 'react-router-dom';

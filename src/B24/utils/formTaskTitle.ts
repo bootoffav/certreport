@@ -15,9 +15,9 @@ async function formTaskTitle(
 ): Promise<string> {
   const formPretreatmentPart = () => {
     if (state.pretreatment1) {
-      return state.pretreatment2.toLowerCase() === 'no' || undefined
-        ? ` (${state.pretreatment1})`
-        : ` (${state.pretreatment1}; ${state.pretreatment2})`;
+      return state.pretreatment2Active
+        ? ` (${state.pretreatment1}; ${state.pretreatment2})`
+        : ` (${state.pretreatment1})`;
     } else {
       return '';
     }
