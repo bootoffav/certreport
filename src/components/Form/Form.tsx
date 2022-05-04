@@ -12,7 +12,7 @@ import { TabbedCard, Button, Icon } from 'tabler-react';
 import CacheManager from 'CacheManager';
 import { GoBackOrHomeButton } from '../NaviButton';
 import Dates from './Tabs/Dates';
-import { renderBasicInfo } from './Tabs/BasicInfo/BasicInfo';
+import BasicInfo from './Tabs/BasicInfo/BasicInfo';
 import { renderFiles } from './Tabs/Files';
 import { renderCommentsNews } from './Tabs/CommentsNews';
 import { renderFabricApplicationForm } from './Tabs/FabricApplicationForm';
@@ -265,7 +265,16 @@ class Form extends React.Component {
       <Notification status={this.state.requestStatus} />
       <form onSubmit={(e) => this.handleCert(e)}>
         <TabbedCard initialTab="Basic Info">
-          {renderBasicInfo.call(this)}
+          <Tab title="Basic Info">
+            <BasicInfo
+              {...this.state}
+              handleChange={this.handleChange}
+              asSelectable={this.asSelectable}
+              handleSelectChange={this.handleSelectChange}
+              taskId={this.task_id}
+              setState={this.setState.bind(this)}
+            ></BasicInfo>
+          </Tab>
           <Tab title="Dates">
             <Dates
               calendarEventName={`${this.state.serialNumber}_${this.state.testingCompany}`}

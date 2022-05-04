@@ -1,4 +1,5 @@
-import { Dimmer, Tab } from 'tabler-react';
+import { useState, useEffect } from 'react';
+import { Dimmer } from 'tabler-react';
 import Select from 'react-select';
 import { Status } from 'components/Notification/Notification';
 import { BaseInput, Article, SerialNumber } from 'components/Form/FormFields';
@@ -6,279 +7,295 @@ import { PreTreatment1 } from 'components/Form/PreTreatment1';
 import { selectOptions } from 'defaults';
 import { StageSelect } from './StageSelect';
 import StandardSelector from './StandardSelector/StandardSelector';
+import DB from 'backend/DBManager';
 
-function renderBasicInfo() {
+function BasicInfo(props: any) {
+  const [factory, setFactory] = useState('');
+
+  useEffect(() => {
+    (async function () {
+      const newFactory = await DB.get(props.taskId, 'factory', 'certification');
+      setFactory(newFactory);
+    })();
+  }, [props.taskId, setFactory]);
+
   return (
-    <Tab title="Basic Info">
-      <Dimmer active={this.state.requestStatus !== Status.FillingForm} loader>
-        <div className="d-flex">
-          <BaseInput
-            className="w-50"
-            value={this.state.applicantName}
-            placeholder="SHANGHAI XM GROUP LTD"
-            id="applicantName"
-            label="Applicant name"
-            handleChange={this.handleChange}
-          />
-          <div className="w-25 mx-2">
-            <div className="form-group">
-              Testing company
-              <Select
-                value={this.asSelectable(this.state.testingCompany)}
-                onChange={(e: any) => {
-                  this.handleSelectChange(e, 'testingCompany');
-                }}
-                options={selectOptions.testingCompany}
-              />
-            </div>
-          </div>
-          <div className="w-50">
-            <div className="form-group">
-              Standards
-              <StandardSelector
-                taskId={this.task_id}
-                asSelectable={this.asSelectable}
-                chosenStandards={this.state.standards}
-                handleSelectChange={this.handleSelectChange}
-              />
-            </div>
-          </div>
-        </div>
-        <div className="d-flex">
-          <div className="w-50">
-            <div className="form-group">
-              Stage
-              <StageSelect
-                value={this.asSelectable(this.state.stage)}
-                onChange={(e: any) => {
-                  this.handleSelectChange(e, 'stage');
-                }}
-                options={selectOptions.stages}
-              />
-            </div>
-          </div>
-          <div className="ml-2">
-            Results:
-            <div className="form-group">
-              <div className="btn-group btn-group-toggle" data-toggle="buttons">
-                <label
-                  className={
-                    'btn btn-outline-secondary ' +
-                    `${this.state.resume === undefined ? 'active' : ''}`
-                  }
-                  onClick={() => this.setState({ resume: undefined })}
-                >
-                  <input type="radio" />
-                  None
-                </label>
-                <label
-                  className={
-                    'btn btn-outline-danger ' +
-                    `${this.state.resume === 'fail' ? 'active' : ''}`
-                  }
-                  onClick={() => this.setState({ resume: 'fail' })}
-                >
-                  <input type="radio" />
-                  FAIL
-                </label>
-                <label
-                  className={
-                    'btn btn-outline-success ' +
-                    `${this.state.resume === 'pass' ? 'active' : ''}`
-                  }
-                  onClick={() => this.setState({ resume: 'pass' })}
-                >
-                  <input type="radio" />
-                  PASS
-                </label>
-                <label
-                  className={
-                    'btn btn-outline-warning ' +
-                    `${this.state.resume === 'partly' ? 'active' : ''}`
-                  }
-                  onClick={() => this.setState({ resume: 'partly' })}
-                >
-                  <input type="radio" />
-                  PASS (partly)
-                </label>
-                <label
-                  className={
-                    'btn btn-outline-dark ' +
-                    `${this.state.resume === 'no sample' ? 'active' : ''}`
-                  }
-                  onClick={() => this.setState({ resume: 'no sample' })}
-                >
-                  <input type="radio" />
-                  NO Sample
-                </label>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="d-flex">
-          <div className="w-25">
-            <Article
-              value={this.asSelectable(this.state.article)}
-              options={selectOptions.articles}
-              handleChange={(e: any) => this.handleSelectChange([e], 'article')}
-              handleSlaveChange={(product, code, brand, colour) =>
-                this.setState({ product, code, brand, colour })
-              }
-            />
-          </div>
-          <BaseInput
-            value={this.state.product}
-            className="ml-2 w-25"
-            id="product"
-            label="Product"
-            handleChange={this.handleChange}
-          />
-          <BaseInput
-            value={this.state.code}
-            className="ml-2 w-25"
-            id="code"
-            label="Code"
-            handleChange={this.handleChange}
-          />
-          <BaseInput
-            value={this.state.colour}
-            className="ml-2 w-25"
-            id="colour"
-            label="Colour"
-            handleChange={this.handleChange}
-          />
-        </div>
-        <div className="d-flex">
-          <div className="w-25 mr-2">
-            Brand
+    <Dimmer active={props.requestStatus !== Status.FillingForm} loader>
+      <div className="d-flex">
+        <BaseInput
+          className="w-50"
+          value={props.applicantName}
+          placeholder="SHANGHAI XM GROUP LTD"
+          id="applicantName"
+          label="Applicant name"
+          handleChange={props.handleChange}
+        />
+        <div className="w-25 mx-2">
+          <div className="form-group">
+            Testing company
             <Select
-              value={this.asSelectable(this.state.brand)}
-              onChange={(e: any) => this.handleSelectChange([e], 'brand')}
-              options={selectOptions.brand}
-            />
-          </div>
-          <BaseInput
-            value={this.state.materialNeeded}
-            className="w-25 mr-2"
-            id="materialNeeded"
-            label="Material needed"
-            handleChange={this.handleChange}
-          />
-          <BaseInput
-            value={this.state.testingTime}
-            className="w-25 mr-2"
-            id="testingTime"
-            label="Testing Time"
-            handleChange={this.handleChange}
-          />
-          <div className="w-25">
-            <SerialNumber
-              serialNumber={this.state.serialNumber}
-              handleChange={this.handleChange}
+              value={props.asSelectable(props.testingCompany)}
+              onChange={(e: any) => {
+                props.handleSelectChange(e, 'testingCompany');
+              }}
+              options={selectOptions.testingCompany}
             />
           </div>
         </div>
-        <div className="d-flex">
-          <BaseInput
-            value={this.state.length}
-            className="w-25 mr-2"
-            id="length"
-            label="Sample length (m)"
-            handleChange={this.handleChange}
-          />
-          <BaseInput
-            value={this.state.width}
-            className="w-25 mr-2"
-            id="width"
-            label="Sample width (m)"
-            handleChange={this.handleChange}
-          />
-          <BaseInput
-            value={this.state.partNumber}
-            className="w-25 mr-2"
-            id="partNumber"
-            label="Part number"
-            handleChange={this.handleChange}
-          />
-          <BaseInput
-            value={this.state.rollNumber}
-            className="w-25"
-            id="rollNumber"
-            label="Roll number"
-            handleChange={this.handleChange}
-          />
-        </div>
-        <div className="d-flex">
-          <div className="w-50 mr-2">
-            <PreTreatment1
-              pretreatment1={this.state.pretreatment1}
-              result={this.state.pretreatment1Result}
-              handleChange={this.handleChange}
-              resultChange={this.handlePreTreatment1Change}
+        <div className="w-50">
+          <div className="form-group">
+            Standards
+            <StandardSelector
+              taskId={props.task_id}
+              asSelectable={props.asSelectable}
+              chosenStandards={props.standards}
+              handleSelectChange={props.handleSelectChange}
             />
           </div>
-          <div className="w-25 mr-2">
-            Pre-treatment 2
-            <div className="input-group">
-              <div className="input-group-text w-25">
-                <input
-                  className="form-check-input ml-4"
-                  type="checkbox"
-                  checked={this.state.pretreatment2Active}
-                  onChange={({ target }) => {
-                    this.setState({
-                      pretreatment2Active: target.checked,
-                    });
-                  }}
-                />
-              </div>
-              <input
-                type="text"
-                id="pretreatment2"
-                className="form-control"
-                value={this.state.pretreatment2}
-                onChange={this.handleChange}
-                disabled={!this.state.pretreatment2Active}
-              />
+        </div>
+      </div>
+      <div className="d-flex">
+        <div className="w-50">
+          <div className="form-group">
+            Stage
+            <StageSelect
+              value={props.asSelectable(props.stage)}
+              onChange={(e: any) => {
+                props.handleSelectChange(e, 'stage');
+              }}
+              options={selectOptions.stages}
+            />
+          </div>
+        </div>
+        <div className="ml-2">
+          Results:
+          <div className="form-group">
+            <div className="btn-group btn-group-toggle" data-toggle="buttons">
+              <label
+                className={
+                  'btn btn-outline-secondary ' +
+                  `${props.resume === undefined ? 'active' : ''}`
+                }
+                onClick={() => props.setState({ resume: undefined })}
+              >
+                <input type="radio" />
+                None
+              </label>
+              <label
+                className={
+                  'btn btn-outline-danger ' +
+                  `${props.resume === 'fail' ? 'active' : ''}`
+                }
+                onClick={() => props.setState({ resume: 'fail' })}
+              >
+                <input type="radio" />
+                FAIL
+              </label>
+              <label
+                className={
+                  'btn btn-outline-success ' +
+                  `${props.resume === 'pass' ? 'active' : ''}`
+                }
+                onClick={() => props.setState({ resume: 'pass' })}
+              >
+                <input type="radio" />
+                PASS
+              </label>
+              <label
+                className={
+                  'btn btn-outline-warning ' +
+                  `${props.resume === 'partly' ? 'active' : ''}`
+                }
+                onClick={() => props.setState({ resume: 'partly' })}
+              >
+                <input type="radio" />
+                PASS (partly)
+              </label>
+              <label
+                className={
+                  'btn btn-outline-dark ' +
+                  `${props.resume === 'no sample' ? 'active' : ''}`
+                }
+                onClick={() => props.setState({ resume: 'no sample' })}
+              >
+                <input type="radio" />
+                NO Sample
+              </label>
             </div>
           </div>
-          <BaseInput
-            value={this.state.pretreatment3}
-            className="w-25"
-            id="pretreatment3"
-            label="Pre-treatment 3"
-            handleChange={this.handleChange}
-          />
         </div>
-        <div className="d-flex">
-          <BaseInput
-            value={this.state.testReport}
-            className="w-50 mr-2"
-            id="testReport"
-            required={false}
-            label="Test Report"
-            handleChange={this.handleChange}
-          />
-          <BaseInput
-            value={this.state.certificate}
-            className="w-50"
-            id="certificate"
-            required={false}
-            label="Certificate"
-            handleChange={this.handleChange}
+      </div>
+      <div className="d-flex">
+        <div className="w-25">
+          <Article
+            value={props.asSelectable(props.article)}
+            options={selectOptions.articles}
+            handleChange={(e: any) => props.handleSelectChange([e], 'article')}
+            handleSlaveChange={(product, code, brand, colour) =>
+              props.setState({ product, code, brand, colour })
+            }
           />
         </div>
         <BaseInput
-          value={this.state.rem}
-          className="w-100"
-          id="rem"
-          required={false}
-          label="REM"
-          handleChange={this.handleChange}
+          value={props.product}
+          className="ml-2 w-25"
+          id="product"
+          label="Product"
+          handleChange={props.handleChange}
         />
-      </Dimmer>
-    </Tab>
+        <BaseInput
+          value={props.code}
+          className="ml-2 w-25"
+          id="code"
+          label="Code"
+          handleChange={props.handleChange}
+        />
+        <BaseInput
+          value={props.colour}
+          className="ml-2 w-25"
+          id="colour"
+          label="Colour"
+          handleChange={props.handleChange}
+        />
+      </div>
+      <div className="d-flex">
+        <div className="w-25 mr-2">
+          Brand
+          <Select
+            value={props.asSelectable(props.brand)}
+            onChange={(e: any) => props.handleSelectChange([e], 'brand')}
+            options={selectOptions.brand}
+          />
+        </div>
+        <BaseInput
+          value={props.materialNeeded}
+          className="w-25 mr-2"
+          id="materialNeeded"
+          label="Material needed"
+          handleChange={props.handleChange}
+        />
+        <BaseInput
+          value={props.testingTime}
+          className="w-25 mr-2"
+          id="testingTime"
+          label="Testing Time"
+          handleChange={props.handleChange}
+        />
+        <div className="w-25">
+          <SerialNumber
+            serialNumber={props.serialNumber}
+            handleChange={props.handleChange}
+          />
+        </div>
+      </div>
+      <div className="d-flex">
+        <BaseInput
+          value={props.length}
+          className="w-25 mr-2"
+          id="length"
+          label="Sample length (m)"
+          handleChange={props.handleChange}
+        />
+        <BaseInput
+          value={props.width}
+          className="w-25 mr-2"
+          id="width"
+          label="Sample width (m)"
+          handleChange={props.handleChange}
+        />
+        <BaseInput
+          value={props.partNumber}
+          className="w-25 mr-2"
+          id="partNumber"
+          label="Part number"
+          handleChange={props.handleChange}
+        />
+        <BaseInput
+          value={props.rollNumber}
+          className="w-25"
+          id="rollNumber"
+          label="Roll number"
+          handleChange={props.handleChange}
+        />
+      </div>
+      <div className="d-flex">
+        <div className="w-50 mr-2">
+          <PreTreatment1
+            pretreatment1={props.pretreatment1}
+            result={props.pretreatment1Result}
+            handleChange={props.handleChange}
+            resultChange={props.handlePreTreatment1Change}
+          />
+        </div>
+        <div className="w-25 mr-2">
+          Pre-treatment 2
+          <div className="input-group">
+            <div className="input-group-text w-25">
+              <input
+                className="form-check-input ml-4"
+                type="checkbox"
+                checked={props.pretreatment2Active || false}
+                onChange={({ target }) => {
+                  props.setState({
+                    pretreatment2Active: target.checked,
+                  });
+                }}
+              />
+            </div>
+            <input
+              type="text"
+              id="pretreatment2"
+              className="form-control"
+              value={props.pretreatment2}
+              onChange={props.handleChange}
+              disabled={!props.pretreatment2Active}
+            />
+          </div>
+        </div>
+        <BaseInput
+          value={factory}
+          className="w-25"
+          id="factory"
+          label="Factory"
+          handleChange={({ target }) => {
+            const { value } = target as HTMLInputElement;
+            setFactory(value);
+            DB.updateInstance(
+              props.taskId,
+              { factory: value },
+              'certification'
+            );
+          }}
+        />
+      </div>
+      <div className="d-flex">
+        <BaseInput
+          value={props.testReport}
+          className="w-50 mr-2"
+          id="testReport"
+          required={false}
+          label="Test Report"
+          handleChange={props.handleChange}
+        />
+        <BaseInput
+          value={props.certificate}
+          className="w-50"
+          id="certificate"
+          required={false}
+          label="Certificate"
+          handleChange={props.handleChange}
+        />
+      </div>
+      <BaseInput
+        value={props.rem}
+        className="w-100"
+        id="rem"
+        required={false}
+        label="REM"
+        handleChange={props.handleChange}
+      />
+    </Dimmer>
   );
 }
 
-export { renderBasicInfo };
+export default BasicInfo;

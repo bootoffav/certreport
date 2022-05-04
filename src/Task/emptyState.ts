@@ -13,6 +13,7 @@ const emptyState: TaskState = {
   },
   attachedFiles: [],
   accomplices: [],
+  factory: '',
   resume: undefined,
   link: '',
   paid: false,

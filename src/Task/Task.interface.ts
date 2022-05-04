@@ -70,6 +70,7 @@ interface TaskState {
   testFinishedOnRealDate: DateFormatType;
   certReceivedOnPlanDate: DateFormatType;
   certReceivedOnRealDate: DateFormatType;
+  factory: string;
   expirationDate: DateFormatType;
   comments: string;
   otherTextInDescription: string | null;

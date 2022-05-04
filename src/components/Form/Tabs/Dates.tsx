@@ -27,7 +27,6 @@ type DatesProps = {
 
 function Dates(props: DatesProps) {
   const [expirationDate, setExpirationDate] = useState('');
-  // const [ETDCertificateEventId, setETDCertificateEventId] = useState<number>();
   const [calendarExpirationEventId, setCalendarExpirationEventId] =
     useState<number>();
 
@@ -43,13 +42,6 @@ function Dates(props: DatesProps) {
           setCalendarExpirationEventId(ExpirationEventId)
         )
         .catch((e) => console.log(e));
-      // DB.get(
-      //   props.taskId,
-      //   'calendarETDCertificateEventId',
-      //   'certification'
-      // ).then((ETDCertificateEventId: number) =>
-      //   setETDCertificateEventId(ETDCertificateEventId)
-      // );
     }
   }, [props.taskId]);
 
