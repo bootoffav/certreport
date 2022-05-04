@@ -15,7 +15,7 @@ async function formTaskTitle(
 ): Promise<string> {
   const formPretreatmentPart = () => {
     if (state.pretreatment1) {
-      return state.pretreatment2Active
+      return state.pretreatment2Active && state.pretreatment2
         ? ` (${state.pretreatment1}; ${state.pretreatment2})`
         : ` (${state.pretreatment1})`;
     } else {
