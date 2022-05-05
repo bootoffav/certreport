@@ -12,6 +12,7 @@ const BaseInput = (props: {
   id: string;
   value?: string;
   handleChange: (e: React.SyntheticEvent) => void;
+  onBlur?: () => void;
 }) => (
   <div className={`${props.className ? props.className : ''}`}>
     <div className="form-group">
@@ -24,6 +25,7 @@ const BaseInput = (props: {
         id={props.id}
         value={props.value}
         onChange={props.handleChange}
+        onBlur={props.onBlur}
       />
     </div>
   </div>

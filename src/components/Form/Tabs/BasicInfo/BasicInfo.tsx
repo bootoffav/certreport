@@ -9,15 +9,16 @@ import { StageSelect } from './StageSelect';
 import StandardSelector from './StandardSelector/StandardSelector';
 import DB from 'backend/DBManager';
 
-function BasicInfo(props: any) {
+function BasicInfo({ taskId, setState, ...props }: any) {
   const [factory, setFactory] = useState('');
 
   useEffect(() => {
     (async function () {
-      const newFactory = await DB.get(props.taskId, 'factory', 'certification');
-      setFactory(newFactory);
+      const factory = await DB.get(taskId, 'factory', 'certification');
+      setState({ factory });
+      setFactory(factory);
     })();
-  }, [props.taskId, setFactory]);
+  }, [taskId, setFactory, props.factory]);
 
   return (
     <Dimmer active={props.requestStatus !== Status.FillingForm} loader>
@@ -46,7 +47,7 @@ function BasicInfo(props: any) {
           <div className="form-group">
             Standards
             <StandardSelector
-              taskId={props.task_id}
+              taskId={taskId}
               asSelectable={props.asSelectable}
               chosenStandards={props.standards}
               handleSelectChange={props.handleSelectChange}
@@ -76,7 +77,7 @@ function BasicInfo(props: any) {
                   'btn btn-outline-secondary ' +
                   `${props.resume === undefined ? 'active' : ''}`
                 }
-                onClick={() => props.setState({ resume: undefined })}
+                onClick={() => setState({ resume: undefined })}
               >
                 <input type="radio" />
                 None
@@ -86,7 +87,7 @@ function BasicInfo(props: any) {
                   'btn btn-outline-danger ' +
                   `${props.resume === 'fail' ? 'active' : ''}`
                 }
-                onClick={() => props.setState({ resume: 'fail' })}
+                onClick={() => setState({ resume: 'fail' })}
               >
                 <input type="radio" />
                 FAIL
@@ -96,7 +97,7 @@ function BasicInfo(props: any) {
                   'btn btn-outline-success ' +
                   `${props.resume === 'pass' ? 'active' : ''}`
                 }
-                onClick={() => props.setState({ resume: 'pass' })}
+                onClick={() => setState({ resume: 'pass' })}
               >
                 <input type="radio" />
                 PASS
@@ -106,7 +107,7 @@ function BasicInfo(props: any) {
                   'btn btn-outline-warning ' +
                   `${props.resume === 'partly' ? 'active' : ''}`
                 }
-                onClick={() => props.setState({ resume: 'partly' })}
+                onClick={() => setState({ resume: 'partly' })}
               >
                 <input type="radio" />
                 PASS (partly)
@@ -116,7 +117,7 @@ function BasicInfo(props: any) {
                   'btn btn-outline-dark ' +
                   `${props.resume === 'no sample' ? 'active' : ''}`
                 }
-                onClick={() => props.setState({ resume: 'no sample' })}
+                onClick={() => setState({ resume: 'no sample' })}
               >
                 <input type="radio" />
                 NO Sample
@@ -132,7 +133,7 @@ function BasicInfo(props: any) {
             options={selectOptions.articles}
             handleChange={(e: any) => props.handleSelectChange([e], 'article')}
             handleSlaveChange={(product, code, brand, colour) =>
-              props.setState({ product, code, brand, colour })
+              setState({ product, code, brand, colour })
             }
           />
         </div>
@@ -236,7 +237,7 @@ function BasicInfo(props: any) {
                 type="checkbox"
                 checked={props.pretreatment2Active || false}
                 onChange={({ target }) => {
-                  props.setState({
+                  setState({
                     pretreatment2Active: target.checked,
                   });
                 }}
@@ -257,14 +258,12 @@ function BasicInfo(props: any) {
           className="w-25"
           id="factory"
           label="Factory"
-          handleChange={({ target }) => {
-            const { value } = target as HTMLInputElement;
-            setFactory(value);
-            DB.updateInstance(
-              props.taskId,
-              { factory: value },
-              'certification'
-            );
+          handleChange={({ target }) =>
+            setFactory((target as HTMLInputElement).value)
+          }
+          onBlur={() => {
+            setState({ factory });
+            DB.updateInstance(taskId, { factory }, 'certification');
           }}
         />
       </div>
