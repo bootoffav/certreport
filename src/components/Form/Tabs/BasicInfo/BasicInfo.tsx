@@ -18,6 +18,7 @@ function BasicInfo({ taskId, setState, ...props }: any) {
       setState({ factory });
       setFactory(factory);
     })();
+    // eslint-disable-next-line
   }, [taskId, setFactory, props.factory]);
 
   return (
