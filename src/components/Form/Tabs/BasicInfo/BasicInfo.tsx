@@ -258,6 +258,7 @@ function BasicInfo({ taskId, setState, ...props }: any) {
           className="w-25"
           id="factory"
           label="Factory"
+          required={false}
           handleChange={({ target }) =>
             setFactory((target as HTMLInputElement).value)
           }
