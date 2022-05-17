@@ -18,8 +18,7 @@ function BasicInfo({ taskId, setState, ...props }: any) {
       setState({ factory });
       setFactory(factory);
     })();
-    // eslint-disable-next-line
-  }, [taskId, setFactory, props.factory]);
+  }, [taskId, setFactory, props.factory]); // eslint-disable-line
 
   return (
     <Dimmer active={props.requestStatus !== Status.FillingForm} loader>

@@ -31,6 +31,6 @@ const store = configureStore({
   },
 });
 
-const { changeActiveQuoteNo } = quoteNoSlice.actions;
-const { changeTotalPrice } = totalPriceSlice.actions;
-export { store, changeActiveQuoteNo, changeTotalPrice };
+export const { changeActiveQuoteNo } = quoteNoSlice.actions;
+export const { changeTotalPrice } = totalPriceSlice.actions;
+export { store };

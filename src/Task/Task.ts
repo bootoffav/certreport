@@ -110,8 +110,11 @@ class Task {
       .map((item) => item.trim())
       .slice(1);
 
-    for (let i = 0; i < props.length; i++)
-      parsedState[taskPropMap[props[i]]] = vals[i];
+    for (let i = 0; i < props.length; i++) {
+      const prop = taskPropMap[props[i]];
+      if (prop === undefined) continue; // case when something in task description should not be parseable
+      parsedState[prop] = vals[i];
+    }
 
     if (parsedState.standards) {
       [parsedState.standards, parsedState.standardsResult] =

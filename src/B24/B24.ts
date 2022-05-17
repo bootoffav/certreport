@@ -13,6 +13,7 @@ import {
 } from './DiskMethods';
 import { rawTaskProcessor } from 'workers/dataFetcher';
 import type { TaskState } from 'Task/Task.interface';
+import assignParentTask from './utils/assignParentTask';
 import formTaskTitle from './utils/formTaskTitle';
 export const creatorId = process.env.REACT_APP_B24_USER_ID;
 export const tag = process.env.REACT_APP_TAG;
@@ -26,14 +27,9 @@ const auditors: string[] = process.env.REACT_APP_B24_AUDITORS
   ? process.env.REACT_APP_B24_AUDITORS.split(',')
   : [];
 
-const defaultParams = {
+export const defaultParams = {
   CREATED_BY: creatorId,
   GROUP_ID: 21,
-  PARENT_ID: {
-    XMF: 46902, // used as default
-    XMS: 97256,
-    XMT: 97250,
-  },
   ACCOMPLICES: process.env.NODE_ENV === 'development' ? [] : [3524],
 };
 
@@ -70,17 +66,10 @@ function makeUfCrmTaskField(state: any) {
 
 async function formTaskFields(state: any, taskId?: string) {
   let stAd = new StateAdapter(state);
-  const findParentId = () => {
-    if (['XMS', 'XMT'].includes(state['brand'])) {
-      return defaultParams.PARENT_ID[state['brand'] as 'XMT' | 'XMS'];
-    }
-
-    return defaultParams.PARENT_ID['XMF'];
-  };
 
   const taskFields: any = {
     ...defaultParams,
-    PARENT_ID: findParentId(),
+    PARENT_ID: assignParentTask(state.createdDate, state.brand),
     ACCOMPLICES: [...state.accomplices, ...defaultParams.ACCOMPLICES],
     TAGS: [tag, state.article],
     UF_CRM_TASK: makeUfCrmTaskField(state),

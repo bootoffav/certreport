@@ -89,6 +89,7 @@ class Form extends React.Component {
         .then((r: any) => {
           this.setState({
             ...r.state,
+            createdDate: r.createdDate,
             accomplices: r.accomplices,
             attachedFiles: r.ufTaskWebdavFiles,
             link: `[URL=certreport.xmtextiles.com/edit/${this.task_id}/]this task[/URL]`,

@@ -60,7 +60,7 @@ interface TaskState {
   width: string;
   partNumber: string;
   rollNumber: string;
-  brand: string;
+  brand: 'XMT' | 'XMS' | 'XMF' | 'XMG' | '';
   pausedUntil: DateFormatType;
   readyOn: DateFormatType;
   sentOn: DateFormatType;
