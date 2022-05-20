@@ -80,7 +80,7 @@ class Task {
   static separateParseableDataAndOtherTextOfDescription = (desc: string) => ({
     unParsedTaskState: desc.slice(0, desc.indexOf(dataSeparator)).trim(),
     otherTextInDescription: desc.slice(
-      desc.indexOf(dataSeparator) + dataSeparator.length
+      desc.indexOf(dataSeparator) + (dataSeparator + '\n').length
     ),
   });
 

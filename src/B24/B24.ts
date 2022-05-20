@@ -155,7 +155,7 @@ async function formTaskFields(state: any, taskId?: string) {
       }` +
       `${state.comments && `[B]Comments:[/B] ${state.comments}\n`}` +
       `${state.link && `[B]Edit:[/B] ${state.link}\n`}` +
-      `${dataSeparator}\n` +
+      `${dataSeparator}` +
       (state.otherTextInDescription || ''),
   };
   if (state.certReceivedOnPlanDate)
