@@ -79,9 +79,9 @@ class Task {
 
   static separateParseableDataAndOtherTextOfDescription = (desc: string) => ({
     unParsedTaskState: desc.slice(0, desc.indexOf(dataSeparator)).trim(),
-    otherTextInDescription: desc.slice(
-      desc.indexOf(dataSeparator) + (dataSeparator + '\n').length
-    ),
+    otherTextInDescription: desc
+      .slice(desc.indexOf(dataSeparator) + dataSeparator.length)
+      .trim(),
   });
 
   parse(description: string, ufCrmTask: string[]) {
