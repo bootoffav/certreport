@@ -3,7 +3,7 @@ import { BrandFilter } from '../Filters/BrandFilter';
 import { StandardFilter } from '../Filters/StandardFilter';
 import { DateFilter } from '../Filters/DateFilter';
 import { TestingCompanyFilter } from '../Filters/TestingCompanyFilter';
-import { State } from './State';
+import State from './State';
 
 interface INavBarProps {
   update: any;
@@ -16,7 +16,7 @@ function NavBar({ startDate, endDate, update, updated }: INavBarProps) {
   return (
     <div className="container-fluid rounded-bottom navbar-light mb-1">
       <div className="d-flex">
-        <State updated={updated} />
+        <State />
         <DateFilter startDate={startDate} endDate={endDate} update={update} />
 
         <div className="ml-auto d-flex justify-content-end align-items-center">

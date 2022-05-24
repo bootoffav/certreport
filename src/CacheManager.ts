@@ -5,13 +5,13 @@ class CacheManager {
   doUpdate = async () => {
     if (sessionStorage.getItem('updated') === null) {
       await ClientStorage.updateTasks();
-      const { tasks } = await this.getCache();
+      const { tasks } = await ClientStorage.getData();
       await ClientStorage.updateItems(tasks);
       sessionStorage.setItem('updated', '1');
     }
   };
 
-  getCache = async () => await ClientStorage.getData();
+  // getCache = async () => await ClientStorage.getData();
 
   static updateTask = (taskId: string) =>
     B24.getTask(taskId).then((task) => ClientStorage.writeData([task]));

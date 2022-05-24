@@ -1,36 +1,33 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 
-const quoteNoSlice = createSlice({
-  name: 'activeQuoteNo',
+const mainSlice = createSlice({
+  name: 'main',
   initialState: {
-    value: '',
+    activeQuoteNo: '',
+    updated: false,
+    totalPrice: '',
   },
   reducers: {
     changeActiveQuoteNo: (state, { payload }) => {
-      state.value = payload.value;
+      state.activeQuoteNo = payload.value;
     },
-  },
-});
-
-const totalPriceSlice = createSlice({
-  name: 'totalPrice',
-  initialState: {
-    value: '',
-  },
-  reducers: {
+    changeUpdated: (state, { payload }) => {
+      state.updated = payload;
+    },
     changeTotalPrice: (state, { payload }) => {
-      state.value = payload.value;
+      state.totalPrice = payload.value;
     },
   },
 });
 
 const store = configureStore({
   reducer: {
-    activeQuoteNo: quoteNoSlice.reducer,
-    totalPrice: totalPriceSlice.reducer,
+    main: mainSlice.reducer,
   },
 });
 
-export const { changeActiveQuoteNo } = quoteNoSlice.actions;
-export const { changeTotalPrice } = totalPriceSlice.actions;
-export { store };
+export const { changeActiveQuoteNo, changeTotalPrice, changeUpdated } =
+  mainSlice.actions;
+
+export type RootState = ReturnType<typeof store.getState>;
+export default store;

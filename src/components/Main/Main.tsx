@@ -13,8 +13,11 @@ import NavBar from './NavBar';
 import { StageShortNames } from '../StageShortNames/StageShortNames';
 import { ItemInCertifications } from '../ItemInCertifications/ItemInCertifications';
 import { isMainHeaderAllowed } from 'helpers';
+import { ClientStorage } from '../../ClientStorage/ClientStorage';
+import { changeUpdated } from '../../store';
+import { connect } from 'react-redux';
 
-class Main extends Component {
+class Main extends Component<any> {
   cache = new CacheManager();
   state = {
     stages: ['all'],
@@ -33,29 +36,23 @@ class Main extends Component {
 
   async componentDidMount() {
     if (isMainHeaderAllowed(window.location.pathname)) {
-      const applyUpdate = async ({ tasks, items }: any) => {
-        return await this.setState({
-          allTasks: tasks,
-          filteredTasks: tasks,
-          allItems: items,
-          filteredItems: items,
-        });
-      };
-
-      const markUpdated = () => this.setState({ updated: true });
-
-      await this.cache
-        .getCache()
-        .then(applyUpdate)
-        .then(this.filter.bind(this));
-
       await this.cache.doUpdate();
-      await this.cache.getCache().then(applyUpdate).then(markUpdated);
+      await ClientStorage.getData()
+        .then(({ tasks, items }: any) => {
+          this.setState({
+            allTasks: tasks,
+            filteredTasks: tasks,
+            allItems: items,
+            filteredItems: items,
+          });
+        })
+        .then(() => this.props.changeUpdated(true));
       this.filter();
     }
   }
 
   componentDidUpdate(_: any, prevState: any) {
+    console.log('main updated');
     if (
       prevState.startDate !== this.state.startDate ||
       prevState.endDate !== this.state.endDate ||
@@ -262,5 +259,5 @@ class Main extends Component {
     );
   }
 }
-
-export { Main };
+// @ts-ignore
+export default connect(null, { changeUpdated })(Main);

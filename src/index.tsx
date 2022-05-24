@@ -7,9 +7,9 @@ import 'bootstrap';
 import ReactDOM from 'react-dom';
 import netlifyIdentity from 'netlify-identity-widget';
 import { initApp } from './defaults';
-import { Main } from './components/Main/Main';
+import Main from './components/Main/Main';
 import { Provider } from 'react-redux';
-import { store } from './store';
+import store from './store';
 import React from 'react';
 
 initApp();
@@ -20,6 +20,7 @@ netlifyIdentity.on('login', () => {
   ReactDOM.render(
     <React.StrictMode>
       <Provider store={store}>
+        {/* @ts-ignore */}
         <Main />
       </Provider>
     </React.StrictMode>,
@@ -31,6 +32,7 @@ netlifyIdentity.currentUser()
   ? ReactDOM.render(
       <React.StrictMode>
         <Provider store={store}>
+          {/* @ts-ignore */}
           <Main />
         </Provider>
       </React.StrictMode>,
