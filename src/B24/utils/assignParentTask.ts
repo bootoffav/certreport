@@ -61,9 +61,7 @@ function assignParentTask(createdDate?: string, brand?: TaskState['brand']) {
     // @ts-ignore
     return taskId === undefined ? parentTasksMap[year].base : taskId; // case when brand has no corresponding task id
   } catch (e) {
-    // @ts-ignore
     return '';
-    // return parentTasksMap[year | currentYear].base;
   }
 }
 

@@ -44,11 +44,6 @@ class Main extends Component {
 
       const markUpdated = () => this.setState({ updated: true });
 
-      await this.cache
-        .getCache()
-        .then(applyUpdate)
-        .then(this.filter.bind(this));
-
       await this.cache.doUpdate();
       await this.cache.getCache().then(applyUpdate).then(markUpdated);
       this.filter();

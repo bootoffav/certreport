@@ -89,7 +89,7 @@ class CertificationList extends React.Component<
             desc: true,
           },
         ]}
-        noDataText="no rows found, or if it's first time loading please give it about 30 sec to finish"
+        noDataText="it takes 10 seconds to load, please wait"
         className="-highlight table"
         getTrProps={this.getTrProps}
         defaultPageSize={20}
