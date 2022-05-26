@@ -14,21 +14,21 @@ import { StageShortNames } from '../StageShortNames/StageShortNames';
 import { ItemInCertifications } from '../ItemInCertifications/ItemInCertifications';
 import { isMainHeaderAllowed } from 'helpers';
 import { ClientStorage } from '../../ClientStorage/ClientStorage';
-import { changeUpdated } from '../../store';
+import {
+  changeUpdated,
+  changeItems,
+  changeTasks,
+  RootState,
+} from '../../store';
 import { connect } from 'react-redux';
 
 class Main extends Component<any> {
   cache = new CacheManager();
   state = {
     stages: ['all'],
-    allTasks: [],
-    allItems: [],
     filteredTasks: [],
     filteredItems: [],
     updated: false,
-    startDate: undefined,
-    endDate: undefined,
-    activeBrands: ['XMT', 'XMS', 'XMF'],
     activeTestingCompanies: ['all'],
     activeStandards: ['All'],
     additionalStandardFilterTaskList: undefined,
@@ -37,26 +37,26 @@ class Main extends Component<any> {
   async componentDidMount() {
     if (isMainHeaderAllowed(window.location.pathname)) {
       await this.cache.doUpdate();
-      await ClientStorage.getData()
-        .then(({ tasks, items }: any) => {
-          this.setState({
-            allTasks: tasks,
-            filteredTasks: tasks,
-            allItems: items,
-            filteredItems: items,
-          });
-        })
-        .then(() => this.props.changeUpdated(true));
-      this.filter();
+      await ClientStorage.getData().then(({ tasks, items }: any) => {
+        this.props.changeTasks(tasks);
+        this.props.changeItems(items);
+        this.props.changeUpdated(true);
+        const { filteredItems, filteredTasks } = this.filter(tasks, items);
+        this.setState({
+          filteredTasks,
+          filteredItems,
+        });
+      });
     }
   }
 
-  componentDidUpdate(_: any, prevState: any) {
+  componentDidUpdate(prevProps: any, prevState: any) {
     console.log('main updated');
+    const { endDate, startDate, activeBrands } = this.props;
     if (
-      prevState.startDate !== this.state.startDate ||
-      prevState.endDate !== this.state.endDate ||
-      !isEqual(prevState.activeBrands, this.state.activeBrands) ||
+      prevProps.startDate !== startDate ||
+      prevProps.endDate !== endDate ||
+      prevProps.activeBrands !== activeBrands ||
       !isEqual(prevState.stages, this.state.stages) ||
       !isEqual(prevState.activeStandards, this.state.activeStandards) ||
       !isEqual(
@@ -68,27 +68,30 @@ class Main extends Component<any> {
         this.state.activeTestingCompanies
       )
     ) {
-      this.filter();
+      console.log('calling filter');
+      const { filteredItems, filteredTasks } = this.filter(
+        this.props.allTasks,
+        this.props.allItems
+      );
+      this.setState({
+        filteredTasks,
+        filteredItems,
+      });
     }
   }
 
-  filter() {
+  filter(tasks: any, items: any) {
     let {
-      allTasks,
-      allItems,
-      activeBrands,
       activeStandards,
-      startDate,
-      endDate,
       activeTestingCompanies,
       additionalStandardFilterTaskList,
     } = this.state;
 
-    function brandFilteringFunc({ brand }: any) {
-      return brand === '' && activeBrands.includes('No brand')
+    const brandFilteringFunc = ({ brand }: any) => {
+      return brand === '' && this.props.activeBrands.includes('No brand')
         ? true
-        : activeBrands.includes(brand);
-    }
+        : this.props.activeBrands.includes(brand);
+    };
 
     const testingCompanyFilteringFunc = ({ testingCompany }: any) => {
       testingCompany = testingCompany.split(' ')[0].toLowerCase();
@@ -96,12 +99,12 @@ class Main extends Component<any> {
     };
 
     // brandfiltering for Certification Tasks
-    let filteredTasks = allTasks.filter(({ state }: any) =>
-      brandFilteringFunc(state)
-    );
+    let filteredTasks = tasks.filter((task: any) => {
+      return brandFilteringFunc(task.state);
+    });
 
     // brandfiltering for Items
-    let filteredItems = allItems.filter(brandFilteringFunc);
+    let filteredItems = items.filter(brandFilteringFunc);
 
     if (activeTestingCompanies[0] !== 'all') {
       // testing company filtering for Certification Tasks
@@ -130,10 +133,11 @@ class Main extends Component<any> {
     // standardFiltering for Items
     if (activeStandards[0] !== 'All') {
       filteredItems = filteredItems.filter(
-        ({ standards }) => intersection(standards, activeStandards).length
+        ({ standards }: any) => intersection(standards, activeStandards).length
       );
     }
 
+    const { startDate, endDate } = this.props;
     // datefiltering
     if (startDate && endDate) {
       filteredTasks = filteredTasks.filter((task: any) => {
@@ -141,6 +145,7 @@ class Main extends Component<any> {
         // @ts-ignore
         return startDate < comparingDate && endDate > comparingDate;
       });
+      // debugger;
     }
 
     //stageFiltering
@@ -177,10 +182,10 @@ class Main extends Component<any> {
       }
     }
 
-    this.setState({
+    return {
       filteredTasks: filteredTaskswithStage,
       filteredItems,
-    });
+    };
   }
 
   render() {
@@ -188,8 +193,6 @@ class Main extends Component<any> {
       <Router>
         <div className="container-fluid">
           <NavBar
-            startDate={this.state.startDate}
-            endDate={this.state.endDate}
             update={this.setState.bind(this)}
             updated={this.state.updated}
           />
@@ -200,8 +203,8 @@ class Main extends Component<any> {
               render={() => (
                 <Dashboard
                   tasks={this.state.filteredTasks}
-                  startDate={this.state.startDate}
-                  endDate={this.state.endDate}
+                  // startDate={this.state.startDate}
+                  // endDate={this.state.endDate}
                 />
               )}
             />
@@ -259,5 +262,22 @@ class Main extends Component<any> {
     );
   }
 }
-// @ts-ignore
-export default connect(null, { changeUpdated })(Main);
+
+const mapStateToProps = ({ main }: RootState) => {
+  const startDate = main.startDate ? new Date(main.startDate) : undefined;
+  const endDate = main.endDate ? new Date(main.endDate) : null;
+  return {
+    allItems: main.allItems,
+    allTasks: main.allTasks,
+    activeBrands: main.activeBrands,
+    startDate,
+    endDate,
+  };
+};
+
+export default connect(mapStateToProps, {
+  changeUpdated,
+  changeTasks,
+  changeItems,
+  // @ts-ignore
+})(Main);

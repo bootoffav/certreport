@@ -1,40 +1,36 @@
-import { Component } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { changeActiveBrands, RootState } from 'store';
 
-class BrandFilter extends Component<{
-  update: any;
-}> {
-  state: {
-    [key: string]: boolean;
-  } = {
-    XMT: true,
-    XMS: true,
-    XMF: true,
-    'No brand': false,
+const BrandFilter = ({ update }: any) => {
+  const allBrands = ['XMT', 'XMS', 'XMF', 'No brand'];
+  const activeBrands = useSelector(
+    (state: RootState) => state.main.activeBrands
+  );
+
+  const dispatch = useDispatch();
+
+  const getActiveBrands = () =>
+    allBrands.filter((brand) => activeBrands.includes(brand));
+
+  const handleChange = ({
+    currentTarget: { value, checked },
+  }: React.BaseSyntheticEvent) => {
+    const ab = checked
+      ? [...getActiveBrands(), value]
+      : getActiveBrands().filter((brand) => brand !== value);
+    dispatch(changeActiveBrands(ab));
   };
 
-  getActiveBrands = () =>
-    Object.keys(this.state).filter((brand) => this.state[brand]);
-
-  handleChange = (e: any) => {
-    e.stopPropagation();
-    this.setState(
-      {
-        [e.currentTarget.value]: e.currentTarget.checked,
-      },
-      () => this.props.update({ activeBrands: this.getActiveBrands() })
-    );
-  };
-
-  render = () => (
+  return (
     <div className="d-flex align-items-start">
       <div className="btn-group" data-toggle="buttons">
-        {Object.keys(this.state).map((brand) => (
+        {allBrands.map((brand) => (
           <label className="btn btn-secondary" key={brand}>
             <input
               type="checkbox"
               value={brand}
-              checked={this.state[brand]}
-              onChange={this.handleChange}
+              checked={activeBrands.includes(brand)}
+              onChange={handleChange}
             />{' '}
             {brand}
           </label>
@@ -42,6 +38,6 @@ class BrandFilter extends Component<{
       </div>
     </div>
   );
-}
+};
 
 export { BrandFilter };
