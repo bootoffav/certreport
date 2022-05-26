@@ -1,13 +1,19 @@
 import { useContext } from 'react';
 import { StatsCard } from 'tabler-react';
 import { tasksInRange, StatCardsContext } from './Dashboard';
-import React from 'react';
 
 const CompletedCertifications = () => {
-  const { tasks, startDate, endDate }: any = useContext(StatCardsContext);
+  const {
+    tasks,
+  }: // startDate, endDate
+  any = useContext(StatCardsContext);
   const completedCerts = () => {
-    return tasksInRange(tasks, 'certReceivedOnRealDate', startDate, endDate)
-      .length;
+    return tasksInRange(
+      tasks,
+      'certReceivedOnRealDate'
+      // startDate,
+      // endDate
+    ).length;
   };
 
   const movement = () => {
@@ -32,7 +38,12 @@ const Products = () => {
   const amountOfUniqueProducts = () => {
     tasks =
       startDate || endDate
-        ? tasksInRange(tasks, 'CREATED_DATE', startDate, endDate)
+        ? tasksInRange(
+            tasks,
+            'CREATED_DATE'
+            //startDate,
+            //  endDate
+          )
         : tasks;
 
     return new Set(tasks.map(({ state: { article } }: any) => article)).size;
@@ -42,8 +53,8 @@ const Products = () => {
     const tasksBeforePeriod = tasksInRange(
       tasks,
       'CREATED_DATE',
-      new Date('December 17, 2010 03:24:00'),
-      startDate
+      new Date('December 17, 2010 03:24:00')
+      // startDate
     ).length;
 
     return Math.round((amountOfUniqueProducts() * 100) / tasksBeforePeriod);
@@ -62,14 +73,19 @@ const Products = () => {
 const AmountOfCertifications = () => {
   const { tasks, startDate, endDate }: any = useContext(StatCardsContext);
   const amountOfOngoingCerts = () =>
-    tasksInRange(tasks, 'CREATED_DATE', startDate, endDate).length;
+    tasksInRange(
+      tasks,
+      'CREATED_DATE'
+      // startDate,
+      // endDate
+    ).length;
 
   const movement = () => {
     const tasksBeforePeriod = tasksInRange(
       tasks,
       'CREATED_DATE',
-      new Date('December 17, 2010 03:24:00'),
-      startDate
+      new Date('December 17, 2010 03:24:00')
+      // startDate
     ).length;
     return Math.round((amountOfOngoingCerts() * 100) / tasksBeforePeriod);
   };

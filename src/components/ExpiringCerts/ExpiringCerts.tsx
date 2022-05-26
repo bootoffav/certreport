@@ -51,7 +51,7 @@ const TabContent = ({ months, tasks }: TabProps) => {
   useEffect(() => {
     (async () => {
       // filter certs by comparing existing task pool with expiring tasks
-      const certs = await getExpiringCertsTasks(months); //.then((certs) =>
+      const certs = await getExpiringCertsTasks(months);
       setExpiringCerts(certs);
     })();
   }, [months]);

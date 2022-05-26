@@ -1,9 +1,11 @@
 import { Grid, Card, Header } from 'tabler-react';
-import { Component } from 'react';
+import { Component, useEffect } from 'react';
 import dayjs from 'dayjs';
 import quarterOfYear from 'dayjs/plugin/quarterOfYear';
 import './QSpending.css';
 import { getTotalPriceHelper } from 'helpers';
+import { useSelector } from 'react-redux';
+import { RootState } from 'store';
 
 dayjs.extend(quarterOfYear);
 
@@ -14,40 +16,24 @@ interface ITotalQuarterSpent {
   active: boolean;
 }
 
-class QSpending extends Component<{
+interface QSpendingProps {
   updateQuarters: (quarters: any) => void;
   renderTable: (t: any[]) => void;
   tasks: any;
   startDate?: Date;
   endDate?: Date;
-}> {
-  state: {
-    total: ITotalQuarterSpent;
-    tasksByQuarters?: any;
-    quarters: any;
-  };
+}
 
-  constructor(props: any) {
-    super(props);
-    //найдем полные кварталы
-    let quarters = this.findQuarters(this.props.startDate, this.props.endDate);
-    //привяжем суммы трат
-    quarters = this.countQuarterSpendings(quarters);
+function QSpending(props: QSpendingProps) {
+  const startDate = useSelector(({ main }: RootState) => {
+    return main.startDate ? new Date(main.startDate) : undefined;
+  });
 
-    const { start, end } = this.getFirstLastTotalSpendingsMonths(quarters);
+  const endDate = useSelector(({ main }: RootState) => {
+    return main.endDate ? new Date(main.endDate) : undefined;
+  });
 
-    this.state = {
-      quarters,
-      total: {
-        start,
-        end,
-        amount: this.countTotalSpendings(quarters),
-        active: true,
-      },
-    };
-  }
-
-  findQuarter(howMany: number, startDate?: Date) {
+  const findQuarter = (howMany: number) => {
     let start = startDate ? dayjs(startDate) : dayjs().subtract(4, 'quarter');
     const q = start.add(howMany, 'quarter');
     return {
@@ -57,10 +43,10 @@ class QSpending extends Component<{
       tasks: [],
       active: false,
     };
-  }
+  };
 
   // находит целые кварталы
-  findQuarters(startDate?: Date, endDate?: Date) {
+  const findQuarters = () => {
     var quarters: any = [];
     if (startDate && endDate) {
       let i = 1;
@@ -79,7 +65,7 @@ class QSpending extends Component<{
       }
 
       while (start.add(i, 'quarter').endOf('quarter') < end) {
-        quarters.push(this.findQuarter(i++, startDate));
+        quarters.push(this.findQuarter(i++));
       }
 
       // checking if endDate is an end of its quarter
@@ -97,17 +83,12 @@ class QSpending extends Component<{
     }
 
     // last for 4 quarters from today
-    return [
-      this.findQuarter(0),
-      this.findQuarter(1),
-      this.findQuarter(2),
-      this.findQuarter(3),
-    ];
-  }
+    return [findQuarter(0), findQuarter(1), findQuarter(2), findQuarter(3)];
+  };
 
-  // считает траты целых кварталов
-  countQuarterSpendings(quarters: any) {
-    this.props.tasks.forEach((task: any) => {
+  // считает траты кварталов и привязываем задачи
+  const countQuarterSpendings = (quarters: any) => {
+    props.tasks.forEach((task: any) => {
       const { paymentDate1 } = task.state;
       Object.entries(quarters).forEach(([_, quarter]: any) => {
         if (
@@ -121,146 +102,115 @@ class QSpending extends Component<{
     });
 
     return quarters;
-  }
-
-  componentDidUpdate(prevProps: any) {
-    const {
-      startDate: prevStart,
-      endDate: prevEnd,
-      tasks: prevTasks,
-    } = prevProps;
-    const { startDate, endDate } = this.props;
-    if (
-      prevStart !== startDate ||
-      prevEnd !== endDate ||
-      prevTasks !== this.props.tasks
-    ) {
-      let quarters = this.findQuarters(startDate, endDate);
-      quarters = this.countQuarterSpendings(quarters);
-      const { start, end } = this.getFirstLastTotalSpendingsMonths(quarters);
-
-      this.setState(
-        {
-          quarters,
-          startDate,
-          endDate,
-          total: {
-            start,
-            end,
-            amount: this.countTotalSpendings(quarters),
-          },
-        },
-        () => {
-          this.props.updateQuarters({ quarters: this.state.quarters });
-        }
-      );
-    }
-  }
-
-  countTotalSpendings = (quarters: any) => {
-    return Math.round(
-      Object.values(quarters).reduce(
-        (acc: number, quarter: any) => acc + quarter.spent,
-        0
-      )
-    );
   };
 
-  getFirstLastTotalSpendingsMonths(quarters: any) {
-    // when date range is shorter than a quarter
-    if (quarters.length === 0) {
-      return { start: '', end: '' };
-    }
-    const start = `${quarters[0].start.format('MM.YYYY')}`;
-    const end = `${quarters[quarters.length - 1].end.format('MM.YYYY')}`;
+  // state: {
+  //   tasksByQuarters?: any;
+  //   quarters: any;
+  // };
 
-    return { start, end };
-  }
+  //найдем полные кварталы
+  let quarters = findQuarters();
+  //привяжем суммы трат
+  quarters = countQuarterSpendings(quarters);
+  // debugger;
 
-  render() {
-    const quarters = this.state.quarters.map((quarter: any, index: number) => {
-      return (
-        <Grid.Col key={quarter.start}>
-          <Card>
-            <Card.Header>
-              <div className="form-check form-check-inline">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  checked={quarter.active}
-                  onChange={({ currentTarget }) => {
-                    this.setState(
-                      (state: any) => {
-                        state.quarters[index].active = currentTarget.checked;
-                        return { quarters: state.quarters };
-                      },
-                      () => {
-                        this.props.updateQuarters({
-                          quarters: this.state.quarters,
-                        });
-                      }
-                    );
-                  }}
-                />
-              </div>
-              <div
-                className="mx-auto quarterHeader fix-quarter-label"
-                onClick={() => this.props.renderTable(quarter.tasks)}
-              >
-                {`Q${quarter.start.quarter()}-${quarter.start.format('YY')}`}
-              </div>
-            </Card.Header>
-            <Card.Body>
-              <Header.H3 className="text-center">
-                {`€${Math.round(quarter.spent).toLocaleString()}`}
-              </Header.H3>
-            </Card.Body>
-          </Card>
-        </Grid.Col>
-      );
-    });
-    const total = (
-      <Grid.Col width={3} key="total">
+  useEffect(() => {
+    console.log('QSpending updated');
+  });
+
+  // const { start, end } = this.getFirstLastTotalSpendingsMonths(quarters);
+
+  // this.state = {
+  //   quarters,
+  // };
+
+  // componentDidUpdate(prevProps: any) {
+  //   const {
+  //     startDate: prevStart,
+  //     endDate: prevEnd,
+  //     tasks: prevTasks,
+  //   } = prevProps;
+  //   const { startDate, endDate } = this.props;
+  //   if (
+  //     prevStart !== startDate ||
+  //     prevEnd !== endDate ||
+  //     prevTasks !== this.props.tasks
+  //   ) {
+  //     let quarters = this.findQuarters(startDate, endDate);
+  //     quarters = this.countQuarterSpendings(quarters);
+  //     const { start, end } = this.getFirstLastTotalSpendingsMonths(quarters);
+
+  //     this.setState(
+  //       {
+  //         quarters,
+  //         startDate,
+  //         endDate,
+  //         total: {
+  //           start,
+  //           end,
+  //           amount: this.countTotalSpendings(quarters),
+  //         },
+  //       },
+  //       () => {
+  //         this.props.updateQuarters({ quarters: this.state.quarters });
+  //       }
+  //     );
+  //   }
+  // }
+
+  // getFirstLastTotalSpendingsMonths(quarters: any) {
+  //   // when date range is shorter than a quarter
+  //   if (quarters.length === 0) {
+  //     return { start: '', end: '' };
+  //   }
+  //   const start = `${quarters[0].start.format('MM.YYYY')}`;
+  //   const end = `${quarters[quarters.length - 1].end.format('MM.YYYY')}`;
+
+  //   return { start, end };
+  // }
+
+  return quarters.map((quarter: any, index: number) => {
+    return (
+      <Grid.Col key={quarter.start}>
         <Card>
           <Card.Header>
             <div className="form-check form-check-inline">
               <input
                 className="form-check-input"
                 type="checkbox"
-                defaultChecked={this.state.total.active}
+                checked={quarter.active}
                 onChange={({ currentTarget }) => {
                   this.setState(
-                    {
-                      total: {
-                        ...this.state.total,
-                        active: currentTarget.checked,
-                      },
+                    (state: any) => {
+                      state.quarters[index].active = currentTarget.checked;
+                      return { quarters: state.quarters };
                     },
                     () => {
                       this.props.updateQuarters({
-                        allDataInChartsVisible: currentTarget.checked,
+                        quarters: this.state.quarters,
                       });
                     }
                   );
                 }}
               />
             </div>
-            <div className="mx-auto quarterHeader">
-              {this.state.total.start} - {this.state.total.end}
+            <div
+              className="mx-auto quarterHeader fix-quarter-label"
+              onClick={() => this.props.renderTable(quarter.tasks)}
+            >
+              {`Q${quarter.start.quarter()}-${quarter.start.format('YY')}`}
             </div>
           </Card.Header>
           <Card.Body>
             <Header.H3 className="text-center">
-              <div>TOTAL: €{this.state.total.amount.toLocaleString()}</div>
+              {`€${Math.round(quarter.spent).toLocaleString()}`}
             </Header.H3>
           </Card.Body>
         </Card>
       </Grid.Col>
     );
-
-    quarters.push(total);
-    return quarters;
-  }
+  });
 }
 
-export { QSpending };
+export default QSpending;

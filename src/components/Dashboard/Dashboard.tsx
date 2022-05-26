@@ -6,7 +6,7 @@ import { render, unmountComponentAtNode } from 'react-dom';
 import ReactTable from 'react-table';
 import { Grid, Card } from 'tabler-react';
 import { HorizontalBar } from 'react-chartjs-2';
-import { QSpending } from './QSpending/QSpending';
+import QSpending from './QSpending/QSpending';
 import { chartOptions } from './configs';
 import { byStages, byProducts } from './dataprocessing';
 import { AmountOfCertifications, CompletedCertifications } from './StatCards';
@@ -204,6 +204,6 @@ class Dashboard extends Component<any, IDashboard> {
   }
 }
 
-export { Dashboard };
+export default Dashboard;
 export const StatCardsContext = createContext({});
 export { tasksInRange };
