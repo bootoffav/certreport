@@ -4,9 +4,11 @@ import { getColumns } from './columns';
 import { StageFilter } from '../Filters/StageFilter';
 import { ColumnFilter } from '../Filters/ColumnFilter';
 import { ListExport } from 'components/Export/PDF/ListExport';
+import { connect } from 'react-redux';
 
 import './List.css';
 import { countTotalPrice } from 'helpers';
+import { RootState } from 'store';
 
 interface ICertificationListState {
   visibleData: any[];
@@ -98,4 +100,9 @@ class CertificationList extends React.Component<
   );
 }
 
-export { CertificationList };
+const mapStateToProps = ({ main }: RootState) => {
+  return { tasks: main.filteredTasks };
+};
+
+// @ts-ignore
+export default connect(mapStateToProps)(CertificationList);

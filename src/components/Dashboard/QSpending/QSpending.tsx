@@ -1,203 +1,145 @@
 import { Grid, Card, Header } from 'tabler-react';
-import { Component, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import quarterOfYear from 'dayjs/plugin/quarterOfYear';
 import './QSpending.css';
-import { getTotalPriceHelper } from 'helpers';
+// import { getTotalPriceHelper } from 'helpers';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store';
+import DB from 'backend/DBManager';
+import { query as q } from 'faunadb';
+import { Task } from 'Task/Task';
+import { Payment } from 'Task/Task.interface';
 
 dayjs.extend(quarterOfYear);
-
-interface ITotalQuarterSpent {
-  start: string;
-  end: string;
-  amount: number;
-  active: boolean;
-}
 
 interface QSpendingProps {
   updateQuarters: (quarters: any) => void;
   renderTable: (t: any[]) => void;
   tasks: any;
-  startDate?: Date;
-  endDate?: Date;
 }
 
-function QSpending(props: QSpendingProps) {
-  const startDate = useSelector(({ main }: RootState) => {
-    return main.startDate ? new Date(main.startDate) : undefined;
-  });
+interface Quarter {
+  start: dayjs.Dayjs;
+  end: dayjs.Dayjs;
+  spent: number;
+  tasks: Task[];
+}
 
-  const endDate = useSelector(({ main }: RootState) => {
-    return main.endDate ? new Date(main.endDate) : undefined;
-  });
+type Payments = {
+  [key: number]: Payment[];
+};
 
-  const findQuarter = (howMany: number) => {
-    let start = startDate ? dayjs(startDate) : dayjs().subtract(4, 'quarter');
-    const q = start.add(howMany, 'quarter');
-    return {
-      start: q.startOf('quarter'),
-      end: q.endOf('quarter'),
-      spent: 0,
-      tasks: [],
-      active: false,
-    };
-  };
+function QSpending({ tasks, ...props }: QSpendingProps) {
+  const startDate = useSelector(
+    ({ main: { startDate } }: RootState) => startDate
+  );
 
-  // находит целые кварталы
-  const findQuarters = () => {
-    var quarters: any = [];
-    if (startDate && endDate) {
-      let i = 1;
-      const start = dayjs(startDate);
-      const end = dayjs(endDate);
+  const endDate = useSelector(({ main: { endDate } }: RootState) => endDate);
 
-      // checking if startDate is a start of its quarter
-      if (start.isSame(start.startOf('quarter'), 'day')) {
-        quarters.push({
-          start: start.startOf('quarter'),
-          end: start.endOf('quarter'),
-          spent: 0,
-          tasks: [],
-          active: false,
-        });
-      }
-
-      while (start.add(i, 'quarter').endOf('quarter') < end) {
-        quarters.push(this.findQuarter(i++));
-      }
-
-      // checking if endDate is an end of its quarter
-      if (start.add(i, 'quarter').endOf('quarter').isSame(end, 'day')) {
-        quarters.push({
-          start: start.add(i, 'quarter').startOf('quarter'),
-          end: start.add(i, 'quarter').endOf('quarter'),
-          spent: 0,
-          tasks: [],
-          active: false,
-        });
-      }
-
-      return quarters;
-    }
-
-    // last for 4 quarters from today
-    return [findQuarter(0), findQuarter(1), findQuarter(2), findQuarter(3)];
-  };
-
-  // считает траты кварталов и привязываем задачи
-  const countQuarterSpendings = (quarters: any) => {
-    props.tasks.forEach((task: any) => {
-      const { paymentDate1 } = task.state;
-      Object.entries(quarters).forEach(([_, quarter]: any) => {
-        if (
-          quarter.start < dayjs(paymentDate1) &&
-          dayjs(paymentDate1) < quarter.end
-        ) {
-          quarter.spent += getTotalPriceHelper(task.state);
-          quarter.tasks.push(task);
-        }
-      });
-    });
-
-    return quarters;
-  };
-
-  // state: {
-  //   tasksByQuarters?: any;
-  //   quarters: any;
-  // };
-
-  //найдем полные кварталы
-  let quarters = findQuarters();
-  //привяжем суммы трат
-  quarters = countQuarterSpendings(quarters);
-  // debugger;
+  const [quarters, setQuarters] = useState(
+    [findQuarter(0), findQuarter(1), findQuarter(2), findQuarter(3)] // default last 4 quarters
+  );
+  const [payments, setPayments] = useState({});
 
   useEffect(() => {
-    console.log('QSpending updated');
-  });
+    if (startDate && endDate) {
+      const specificQuarters = findSpecificQuarters(startDate, endDate);
+      const newQ = applyPaymentsToQuartersAndPutAssociatedTasks(
+        specificQuarters,
+        payments,
+        tasks
+      );
+      setQuarters(newQ);
+    }
+  }, [startDate, endDate, payments, tasks]);
 
-  // const { start, end } = this.getFirstLastTotalSpendingsMonths(quarters);
+  // run once upon initial payments collection
+  useEffect(() => {
+    const newQ = applyPaymentsToQuartersAndPutAssociatedTasks(
+      quarters,
+      payments,
+      tasks
+    );
+    console.log(payments);
+    setQuarters(newQ);
+  }, [payments, quarters, tasks]);
 
-  // this.state = {
-  //   quarters,
-  // };
+  // set payments
+  useEffect(() => {
+    if (tasks.length) {
+      const payments: Payments = {};
+      (async () =>
+        await DB.client()
+          .query(
+            q.Map(
+              q.Paginate(q.Documents(q.Collection('payments'))),
+              q.Lambda('payment', q.Get(q.Var('payment')))
+            )
+          )
+          .then(({ data: paymentSet }: any) => {
+            for (const {
+              data: { payments: paymentsPerTask },
+              ref: {
+                value: { id },
+              },
+            } of paymentSet) {
+              payments[id] = paymentsPerTask;
+            }
+            setPayments(payments);
+          }))();
+    }
+  }, [tasks]);
 
-  // componentDidUpdate(prevProps: any) {
-  //   const {
-  //     startDate: prevStart,
-  //     endDate: prevEnd,
-  //     tasks: prevTasks,
-  //   } = prevProps;
-  //   const { startDate, endDate } = this.props;
-  //   if (
-  //     prevStart !== startDate ||
-  //     prevEnd !== endDate ||
-  //     prevTasks !== this.props.tasks
-  //   ) {
-  //     let quarters = this.findQuarters(startDate, endDate);
-  //     quarters = this.countQuarterSpendings(quarters);
-  //     const { start, end } = this.getFirstLastTotalSpendingsMonths(quarters);
+  // refactor ASAP
+  // useEffect(() => {
 
-  //     this.setState(
-  //       {
-  //         quarters,
-  //         startDate,
-  //         endDate,
-  //         total: {
-  //           start,
-  //           end,
-  //           amount: this.countTotalSpendings(quarters),
-  //         },
-  //       },
-  //       () => {
-  //         this.props.updateQuarters({ quarters: this.state.quarters });
-  //       }
-  //     );
-  //   }
+  //   const newQuarters: Quarter[] = quarters.map((quarter) => ({
+  //     ...quarter,
+  //     spent: 0,
+  //     tasks: [],
+  //   }));
+
+  // if (tasks.length) {
+  //   const payments: Payments = {};
+  //   (async () =>
+  //     await DB.client()
+  //       .query(
+  //         q.Map(
+  //           q.Paginate(q.Documents(q.Collection('payments'))),
+  //           q.Lambda('payment', q.Get(q.Var('payment')))
+  //         )
+  //       )
+  //       .then(({ data: paymentSet }: any) => {
+  //         for (const {
+  //           data: { payments: paymentsPerTask },
+  //           ref: {
+  //             value: { id },
+  //           },
+  //         } of paymentSet) {
+  //           payments[id] = paymentsPerTask;
+  //         }
+  // setQuarters(
+  //   applyPaymentsToQuartersAndPutAssociatedTasks(
+  //     newQuarters,
+  //     payments
+  //   )
+  // );
+  // }))();
+  // return;
   // }
 
-  // getFirstLastTotalSpendingsMonths(quarters: any) {
-  //   // when date range is shorter than a quarter
-  //   if (quarters.length === 0) {
-  //     return { start: '', end: '' };
-  //   }
-  //   const start = `${quarters[0].start.format('MM.YYYY')}`;
-  //   const end = `${quarters[quarters.length - 1].end.format('MM.YYYY')}`;
-
-  //   return { start, end };
-  // }
+  //   setQuarters(newQuarters);
+  // }, [tasks]); //eslint-disable-line
 
   return quarters.map((quarter: any, index: number) => {
     return (
       <Grid.Col key={quarter.start}>
         <Card>
           <Card.Header>
-            <div className="form-check form-check-inline">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                checked={quarter.active}
-                onChange={({ currentTarget }) => {
-                  this.setState(
-                    (state: any) => {
-                      state.quarters[index].active = currentTarget.checked;
-                      return { quarters: state.quarters };
-                    },
-                    () => {
-                      this.props.updateQuarters({
-                        quarters: this.state.quarters,
-                      });
-                    }
-                  );
-                }}
-              />
-            </div>
             <div
               className="mx-auto quarterHeader fix-quarter-label"
-              onClick={() => this.props.renderTable(quarter.tasks)}
+              onClick={() => props.renderTable(quarter.tasks)}
             >
               {`Q${quarter.start.quarter()}-${quarter.start.format('YY')}`}
             </div>
@@ -214,3 +156,75 @@ function QSpending(props: QSpendingProps) {
 }
 
 export default QSpending;
+
+const findQuarter = (howMany: number, sDate?: any): Quarter => {
+  let start = sDate ? dayjs(sDate) : dayjs().subtract(4, 'quarter');
+  const q = start.add(howMany, 'quarter');
+  return {
+    start: q.startOf('quarter'),
+    end: q.endOf('quarter'),
+    spent: 0,
+    tasks: [],
+  };
+};
+
+const findSpecificQuarters = (
+  startDate: string,
+  endDate: string
+): Quarter[] => {
+  let quarters: Quarter[] = [];
+  let i = 1;
+  const sDate = dayjs(startDate);
+  const eDate = dayjs(endDate);
+
+  // checking if startDate is a start of its quarter
+  if (sDate.isSame(sDate.startOf('quarter'), 'day')) {
+    quarters.push({
+      start: sDate.startOf('quarter'),
+      end: sDate.endOf('quarter'),
+      spent: 0,
+      tasks: [],
+    });
+  }
+
+  while (sDate.add(i, 'quarter').endOf('quarter') < eDate) {
+    quarters.push(findQuarter(i++, startDate));
+  }
+
+  // checking if endDate is an end of its quarter
+  if (sDate.add(i, 'quarter').endOf('quarter').isSame(eDate, 'day')) {
+    quarters.push({
+      start: sDate.add(i, 'quarter').startOf('quarter'),
+      end: sDate.add(i, 'quarter').endOf('quarter'),
+      spent: 0,
+      tasks: [],
+    });
+  }
+
+  return quarters;
+};
+
+function applyPaymentsToQuartersAndPutAssociatedTasks(
+  newQuarters: Quarter[],
+  payments: Payments,
+  tasks: any
+) {
+  for (const task of tasks) {
+    const paymentsPerTask = payments[task.id];
+    if (!paymentsPerTask) continue;
+    for (const { paymentDate, price } of paymentsPerTask) {
+      if (paymentDate) {
+        Object.entries(newQuarters).forEach(([_, quarter]) => {
+          if (
+            quarter.start < dayjs(paymentDate) &&
+            dayjs(paymentDate) < quarter.end
+          ) {
+            quarter.spent += Number(price);
+            quarter.tasks.push(task);
+          }
+        });
+      }
+    }
+  }
+  return newQuarters;
+}

@@ -55,4 +55,11 @@
 //   </Grid.Col>
 // );
 
+interface ITotalQuarterSpent {
+  start: string;
+  end: string;
+  amount: number;
+  active: boolean;
+}
+
 export {};

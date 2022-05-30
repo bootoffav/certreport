@@ -9,6 +9,8 @@ interface IInitialState {
   allTasks: [];
   allItems: [];
   activeBrands: string[];
+  filteredItems: [];
+  filteredTasks: [];
 }
 
 const initialState: IInitialState = {
@@ -20,6 +22,8 @@ const initialState: IInitialState = {
   activeBrands: ['XMT', 'XMS', 'XMF'],
   endDate: null,
   startDate: null,
+  filteredItems: [],
+  filteredTasks: [],
 };
 
 const mainSlice = createSlice({
@@ -56,6 +60,12 @@ const mainSlice = createSlice({
     ) => {
       state.endDate = payload;
     },
+    changeFilteredItems: (state, { payload }) => {
+      state.filteredItems = payload;
+    },
+    changeFilteredTasks: (state, { payload }) => {
+      state.filteredTasks = payload;
+    },
   },
 });
 
@@ -74,6 +84,8 @@ export const {
   changeActiveBrands,
   changeEndDate,
   changeStartDate,
+  changeFilteredItems,
+  changeFilteredTasks,
 } = mainSlice.actions;
 
 export type RootState = ReturnType<typeof store.getState>;

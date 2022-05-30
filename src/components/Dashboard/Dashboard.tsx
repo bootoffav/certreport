@@ -1,5 +1,5 @@
-// @ts-nocheck
 import { Component, createContext } from 'react';
+import { connect } from 'react-redux';
 import './Dashboard.css';
 import { BrowserRouter } from 'react-router-dom';
 import { render, unmountComponentAtNode } from 'react-dom';
@@ -13,11 +13,9 @@ import { AmountOfCertifications, CompletedCertifications } from './StatCards';
 
 import { getColumns } from '../Lists/Certification/columns';
 import { countTotalPrice, dashboardDataChartAdapter } from 'helpers';
+import { RootState } from 'store';
 
 interface IDashboard {
-  tasks: any;
-  startDate?: Date;
-  endDate?: Date;
   quarters: any;
   allDataInChartsVisible: boolean;
 }
@@ -45,23 +43,20 @@ function tasksInRange(
 
 class Dashboard extends Component<any, IDashboard> {
   state = {
-    tasks: this.props.tasks,
     totalSpendings: {
       start: '',
       end: '',
       amount: 0,
     },
-    startDate: undefined,
-    endDate: undefined,
     quarters: [],
     allDataInChartsVisible: true,
   };
 
   componentDidUpdate(prevProps: any) {
     if (prevProps.tasks !== this.props.tasks) {
-      this.setState({
-        tasks: this.props.tasks,
-      });
+      // this.setState({
+      //   tasks: this.props.tasks,
+      // });
 
       const tableSegment = document.getElementById('tableOfDiagramSegment');
       if (tableSegment) unmountComponentAtNode(tableSegment);
@@ -74,13 +69,12 @@ class Dashboard extends Component<any, IDashboard> {
         <Grid.Row width={12}>
           <Grid.Col>
             <Grid.Row deck>
+              {/* @ts-ignore */}
               <QSpending
                 renderTable={(tasks) =>
                   this.renderTableOfDiagramSegment('', '', tasks)
                 }
-                tasks={this.state.tasks}
-                startDate={this.props.startDate}
-                endDate={this.props.endDate}
+                tasks={this.props.tasks}
                 updateQuarters={this.setState.bind(this)}
               />
             </Grid.Row>
@@ -93,11 +87,12 @@ class Dashboard extends Component<any, IDashboard> {
                 <Card.Title>Task by stages</Card.Title>
               </Card.Header>
               <Card.Body>
+                {/* @ts-ignore */}
                 <HorizontalBar
                   data={byStages(
                     dashboardDataChartAdapter(
                       this.state.allDataInChartsVisible
-                        ? this.state.tasks
+                        ? this.props.tasks
                         : this.state.quarters
                     )
                   )}
@@ -116,11 +111,12 @@ class Dashboard extends Component<any, IDashboard> {
                 <Card.Title>Products</Card.Title>
               </Card.Header>
               <Card.Body>
+                {/* @ts-ignore */}
                 <HorizontalBar
                   data={byProducts(
                     dashboardDataChartAdapter(
                       this.state.allDataInChartsVisible
-                        ? this.state.tasks
+                        ? this.props.tasks
                         : this.state.quarters
                     )
                   )}
@@ -137,8 +133,6 @@ class Dashboard extends Component<any, IDashboard> {
             <StatCardsContext.Provider
               value={{
                 tasks: this.props.tasks,
-                startDate: this.state.startDate,
-                endDate: this.state.endDate,
               }}
             >
               <CompletedCertifications />
@@ -166,7 +160,7 @@ class Dashboard extends Component<any, IDashboard> {
         // passing specific tasks
         dashboardDataChartAdapter(
           this.state.allDataInChartsVisible
-            ? this.state.tasks
+            ? this.props.tasks
             : this.state.quarters
         )
       );
@@ -180,7 +174,7 @@ class Dashboard extends Component<any, IDashboard> {
   ) {
     if (['no product', 'no stage'].includes(checkedValue)) checkedValue = '';
 
-    tasks = (tasks || this.state.tasks).filter(
+    tasks = (tasks || this.props.tasks).filter(
       (t: any) => t.state[param] === checkedValue
     );
 
@@ -189,12 +183,13 @@ class Dashboard extends Component<any, IDashboard> {
       <BrowserRouter>
         <ReactTable
           data={tasks}
-          resolveData={(data: any, i = 1) =>
-            data.map((row: any) => {
-              row.position = i++;
-              return row;
-            })
-          }
+          // resolveData={(data: any, i = 1) =>
+          //   data.map((row: any) => {
+          //     // row.position = i++;
+          //     // debugger;
+          //     return row;
+          //   })
+          // }
           columns={getColumns(totalPrice, undefined)}
           defaultPageSize={10}
         />
@@ -204,6 +199,10 @@ class Dashboard extends Component<any, IDashboard> {
   }
 }
 
-export default Dashboard;
+export default connect(({ main }: RootState) => ({
+  tasks: main.filteredTasks,
+  // @ts-ignore
+}))(Dashboard);
+
 export const StatCardsContext = createContext({});
 export { tasksInRange };

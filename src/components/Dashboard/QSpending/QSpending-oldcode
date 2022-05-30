@@ -1,0 +1,55 @@
+// const { start, end } = this.getFirstLastTotalSpendingsMonths(quarters);
+
+// getFirstLastTotalSpendingsMonths(quarters: any) {
+//   // when date range is shorter than a quarter
+//   if (quarters.length === 0) {
+//     return { start: '', end: '' };
+//   }
+//   const start = `${quarters[0].start.format('MM.YYYY')}`;
+//   const end = `${quarters[quarters.length - 1].end.format('MM.YYYY')}`;
+
+//   return { start, end };
+// }
+
+// считает траты кварталов и привязываем задачи
+// const countQuarterSpendingsAndAssignTasks = (quarters: any) => {
+//   tasks.forEach((task: any) => {
+//     const { paymentDate1 } = task.state;
+//     Object.entries(quarters).forEach(([_, quarter]: any) => {
+//       if (
+//         quarter.start < dayjs(paymentDate1) &&
+//         dayjs(paymentDate1) < quarter.end
+//       ) {
+//         quarter.spent += getTotalPriceHelper(task.state);
+//         quarter.tasks.push(task);
+//       }
+//     });
+//   });
+
+//   return quarters;
+// };
+
+{
+  /* <div className="form-check form-check-inline"> */
+}
+{
+  /* <input
+                className="form-check-input"
+                type="checkbox"
+                // checked={quarter.active}
+                onChange={({ currentTarget }) => {
+                  this.setState(
+                    (state: any) => {
+                      state.quarters[index].active = currentTarget.checked;
+                      return { quarters: state.quarters };
+                    },
+                    () => {
+                      this.props.updateQuarters({
+                        quarters: this.state.quarters,
+                      });
+                    }
+                  );
+                }}
+              />
+            </div> */
+}

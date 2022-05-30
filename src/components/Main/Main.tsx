@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { intersection, isEqual } from 'lodash';
 import { Error404Page } from 'tabler-react';
 import CacheManager from 'CacheManager';
-import { CertificationList } from '../Lists/Certification/CertificationList';
+import CertificationList from '../Lists/Certification/CertificationList';
 import { ItemList } from '../Lists/ItemList/ItemList';
 import Form from '../Form/Form';
 import Dashboard from '../Dashboard/Dashboard';
@@ -18,6 +18,8 @@ import {
   changeUpdated,
   changeItems,
   changeTasks,
+  changeFilteredItems,
+  changeFilteredTasks,
   RootState,
 } from '../../store';
 import { connect } from 'react-redux';
@@ -26,8 +28,6 @@ class Main extends Component<any> {
   cache = new CacheManager();
   state = {
     stages: ['all'],
-    filteredTasks: [],
-    filteredItems: [],
     updated: false,
     activeTestingCompanies: ['all'],
     activeStandards: ['All'],
@@ -42,20 +42,17 @@ class Main extends Component<any> {
         this.props.changeItems(items);
         this.props.changeUpdated(true);
         const { filteredItems, filteredTasks } = this.filter(tasks, items);
-        this.setState({
-          filteredTasks,
-          filteredItems,
-        });
+        this.props.changeFilteredItems(filteredItems);
+        this.props.changeFilteredTasks(filteredTasks);
       });
     }
   }
 
   componentDidUpdate(prevProps: any, prevState: any) {
-    console.log('main updated');
-    const { endDate, startDate, activeBrands } = this.props;
+    const { endDate, startDate, activeBrands, allTasks, allItems } = this.props;
+
     if (
-      prevProps.startDate !== startDate ||
-      prevProps.endDate !== endDate ||
+      (prevProps.startDate === startDate && prevProps.endDate !== endDate) ||
       prevProps.activeBrands !== activeBrands ||
       !isEqual(prevState.stages, this.state.stages) ||
       !isEqual(prevState.activeStandards, this.state.activeStandards) ||
@@ -68,15 +65,9 @@ class Main extends Component<any> {
         this.state.activeTestingCompanies
       )
     ) {
-      console.log('calling filter');
-      const { filteredItems, filteredTasks } = this.filter(
-        this.props.allTasks,
-        this.props.allItems
-      );
-      this.setState({
-        filteredTasks,
-        filteredItems,
-      });
+      const { filteredItems, filteredTasks } = this.filter(allTasks, allItems);
+      this.props.changeFilteredItems(filteredItems);
+      this.props.changeFilteredTasks(filteredTasks);
     }
   }
 
@@ -140,12 +131,13 @@ class Main extends Component<any> {
     const { startDate, endDate } = this.props;
     // datefiltering
     if (startDate && endDate) {
+      const sDate = new Date(startDate);
+      const eDate = new Date(endDate);
       filteredTasks = filteredTasks.filter((task: any) => {
         const comparingDate = new Date(task.createdDate);
         // @ts-ignore
-        return startDate < comparingDate && endDate > comparingDate;
+        return sDate < comparingDate && eDate > comparingDate;
       });
-      // debugger;
     }
 
     //stageFiltering
@@ -201,11 +193,8 @@ class Main extends Component<any> {
               exact
               path="/dashboard"
               render={() => (
-                <Dashboard
-                  tasks={this.state.filteredTasks}
-                  // startDate={this.state.startDate}
-                  // endDate={this.state.endDate}
-                />
+                // @ts-ignore
+                <Dashboard />
               )}
             />
             <Route
@@ -214,8 +203,9 @@ class Main extends Component<any> {
               render={() => (
                 <>
                   <CertificationList
-                    tasks={this.state.filteredTasks}
+                    // @ts-ignore
                     update={this.setState.bind(this)}
+                    // @ts-ignore
                     stages={this.state.stages}
                   />
                   <StageShortNames />
@@ -225,13 +215,9 @@ class Main extends Component<any> {
             <Route
               exact
               path="/expiringcerts"
-              render={() => <ExpiringCerts tasks={this.state.filteredTasks} />}
+              render={() => <ExpiringCerts />}
             />
-            <Route
-              exact
-              path="/items"
-              render={() => <ItemList items={this.state.filteredItems} />}
-            />
+            <Route exact path="/items" render={() => <ItemList />} />
             <Route
               exact
               path="/item/:item"
@@ -264,8 +250,11 @@ class Main extends Component<any> {
 }
 
 const mapStateToProps = ({ main }: RootState) => {
-  const startDate = main.startDate ? new Date(main.startDate) : undefined;
-  const endDate = main.endDate ? new Date(main.endDate) : null;
+  // const startDate = main.startDate ? new Date(main.startDate) : undefined;
+  // const endDate = main.endDate ? new Date(main.endDate) : null;
+  const startDate = main.startDate;
+  const endDate = main.endDate;
+
   return {
     allItems: main.allItems,
     allTasks: main.allTasks,
@@ -279,5 +268,7 @@ export default connect(mapStateToProps, {
   changeUpdated,
   changeTasks,
   changeItems,
+  changeFilteredItems,
+  changeFilteredTasks,
   // @ts-ignore
 })(Main);
