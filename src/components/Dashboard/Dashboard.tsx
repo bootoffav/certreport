@@ -54,10 +54,6 @@ class Dashboard extends Component<any, IDashboard> {
 
   componentDidUpdate(prevProps: any) {
     if (prevProps.tasks !== this.props.tasks) {
-      // this.setState({
-      //   tasks: this.props.tasks,
-      // });
-
       const tableSegment = document.getElementById('tableOfDiagramSegment');
       if (tableSegment) unmountComponentAtNode(tableSegment);
     }
@@ -72,7 +68,7 @@ class Dashboard extends Component<any, IDashboard> {
               {/* @ts-ignore */}
               <QSpending
                 renderTable={(tasks) =>
-                  this.renderTableOfDiagramSegment('', '', tasks)
+                  this.renderTableOfDiagramSegment('', '', tasks, true)
                 }
                 tasks={this.props.tasks}
                 updateQuarters={this.setState.bind(this)}
@@ -170,26 +166,21 @@ class Dashboard extends Component<any, IDashboard> {
   renderTableOfDiagramSegment(
     checkedValue: string,
     param: string,
-    tasks?: any
+    tasks?: any,
+    skipFilter?: boolean
   ) {
     if (['no product', 'no stage'].includes(checkedValue)) checkedValue = '';
-
-    tasks = (tasks || this.props.tasks).filter(
-      (t: any) => t.state[param] === checkedValue
-    );
+    if (!skipFilter) {
+      tasks = (tasks || this.props.tasks).filter(
+        (t: any) => t.state[param] === checkedValue
+      );
+    }
 
     const totalPrice = countTotalPrice(tasks);
     render(
       <BrowserRouter>
         <ReactTable
           data={tasks}
-          // resolveData={(data: any, i = 1) =>
-          //   data.map((row: any) => {
-          //     // row.position = i++;
-          //     // debugger;
-          //     return row;
-          //   })
-          // }
           columns={getColumns(totalPrice, undefined)}
           defaultPageSize={10}
         />

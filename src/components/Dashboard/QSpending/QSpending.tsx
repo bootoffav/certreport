@@ -8,7 +8,6 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'store';
 import DB from 'backend/DBManager';
 import { query as q } from 'faunadb';
-import { Task } from 'Task/Task';
 import { Payment } from 'Task/Task.interface';
 
 dayjs.extend(quarterOfYear);
@@ -16,14 +15,14 @@ dayjs.extend(quarterOfYear);
 interface QSpendingProps {
   updateQuarters: (quarters: any) => void;
   renderTable: (t: any[]) => void;
-  tasks: any;
+  tasks: any[];
 }
 
 interface Quarter {
   start: dayjs.Dayjs;
   end: dayjs.Dayjs;
   spent: number;
-  tasks: Task[];
+  tasks: any[];
 }
 
 type Payments = {
@@ -56,19 +55,16 @@ function QSpending({ tasks, ...props }: QSpendingProps) {
 
   // run once upon initial payments collection
   useEffect(() => {
-    const newQ = applyPaymentsToQuartersAndPutAssociatedTasks(
-      quarters,
-      payments,
-      tasks
-    );
-    console.log(payments);
-    setQuarters(newQ);
-  }, [payments, quarters, tasks]);
+    if (Object.getOwnPropertyNames(payments).length) {
+      const quartersWithTasksAndPayments =
+        applyPaymentsToQuartersAndPutAssociatedTasks(quarters, payments, tasks);
+      setQuarters(quartersWithTasksAndPayments);
+    }
+  }, [payments]);
 
   // set payments
   useEffect(() => {
     if (tasks.length) {
-      const payments: Payments = {};
       (async () =>
         await DB.client()
           .query(
@@ -78,6 +74,7 @@ function QSpending({ tasks, ...props }: QSpendingProps) {
             )
           )
           .then(({ data: paymentSet }: any) => {
+            const payments: Payments = {};
             for (const {
               data: { payments: paymentsPerTask },
               ref: {
@@ -90,47 +87,6 @@ function QSpending({ tasks, ...props }: QSpendingProps) {
           }))();
     }
   }, [tasks]);
-
-  // refactor ASAP
-  // useEffect(() => {
-
-  //   const newQuarters: Quarter[] = quarters.map((quarter) => ({
-  //     ...quarter,
-  //     spent: 0,
-  //     tasks: [],
-  //   }));
-
-  // if (tasks.length) {
-  //   const payments: Payments = {};
-  //   (async () =>
-  //     await DB.client()
-  //       .query(
-  //         q.Map(
-  //           q.Paginate(q.Documents(q.Collection('payments'))),
-  //           q.Lambda('payment', q.Get(q.Var('payment')))
-  //         )
-  //       )
-  //       .then(({ data: paymentSet }: any) => {
-  //         for (const {
-  //           data: { payments: paymentsPerTask },
-  //           ref: {
-  //             value: { id },
-  //           },
-  //         } of paymentSet) {
-  //           payments[id] = paymentsPerTask;
-  //         }
-  // setQuarters(
-  //   applyPaymentsToQuartersAndPutAssociatedTasks(
-  //     newQuarters,
-  //     payments
-  //   )
-  // );
-  // }))();
-  // return;
-  // }
-
-  //   setQuarters(newQuarters);
-  // }, [tasks]); //eslint-disable-line
 
   return quarters.map((quarter: any, index: number) => {
     return (
@@ -205,10 +161,13 @@ const findSpecificQuarters = (
 };
 
 function applyPaymentsToQuartersAndPutAssociatedTasks(
-  newQuarters: Quarter[],
+  quarters: Quarter[],
   payments: Payments,
-  tasks: any
+  tasks: any[]
 ) {
+  const newQuarters = quarters.map(
+    (q): Quarter => ({ ...q, spent: 0, tasks: [] })
+  );
   for (const task of tasks) {
     const paymentsPerTask = payments[task.id];
     if (!paymentsPerTask) continue;
@@ -220,7 +179,11 @@ function applyPaymentsToQuartersAndPutAssociatedTasks(
             dayjs(paymentDate) < quarter.end
           ) {
             quarter.spent += Number(price);
-            quarter.tasks.push(task);
+            if (
+              quarter.tasks.find(({ id }: any) => id === task.id) === undefined
+            ) {
+              quarter.tasks.push(task);
+            }
           }
         });
       }
