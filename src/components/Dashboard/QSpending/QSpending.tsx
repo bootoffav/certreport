@@ -60,7 +60,7 @@ function QSpending({ tasks, ...props }: QSpendingProps) {
         applyPaymentsToQuartersAndPutAssociatedTasks(quarters, payments, tasks);
       setQuarters(quartersWithTasksAndPayments);
     }
-  }, [payments]);
+  }, [payments]); // eslint-disable-line
 
   // set payments
   useEffect(() => {

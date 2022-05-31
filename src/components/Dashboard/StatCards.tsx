@@ -71,7 +71,7 @@ const Products = () => {
 };
 
 const AmountOfCertifications = () => {
-  const { tasks, startDate, endDate }: any = useContext(StatCardsContext);
+  const { tasks, startDate, endDate }: any = useContext(StatCardsContext); //eslint-disable-line
   const amountOfOngoingCerts = () =>
     tasksInRange(
       tasks,
