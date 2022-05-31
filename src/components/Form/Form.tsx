@@ -20,7 +20,7 @@ import { renderStandards } from './Tabs/renderStandards';
 import { getShippingLabelFile } from '../Export/PDF/ShippingLabelFile';
 import { Payments } from './Payments';
 import { Tab, Dimmer } from 'tabler-react';
-import { changeActiveQuoteNo, changeTotalPrice } from 'store';
+import { changeActiveQuoteNo, changeTotalPrice, RootState } from 'store';
 
 interface IFormState extends TaskState {
   requestStatus: Status;
@@ -207,6 +207,11 @@ class Form extends React.Component {
           .then(this.successfullySubmitted)
           .catch(this.unsuccessfullySubmitted);
       }
+      DB.updateInstance(
+        taskId,
+        { factory: this.state.factory },
+        'certification'
+      );
     }
   }
 
@@ -322,7 +327,8 @@ class Form extends React.Component {
     });
 }
 
-const mapStateToProps = (state: any) => state;
+const mapStateToProps = ({ main }: RootState) => main;
+
 export default connect(mapStateToProps, {
   changeActiveQuoteNo,
   changeTotalPrice,

@@ -14,11 +14,13 @@ function BasicInfo({ taskId, setState, ...props }: any) {
 
   useEffect(() => {
     (async function () {
-      const factory = await DB.get(taskId, 'factory', 'certification');
-      setState({ factory });
-      setFactory(factory);
+      await DB.get(taskId, 'factory', 'certification')
+        .then((factory) => {
+          setState({ factory }, () => setFactory(factory));
+        })
+        .catch(() => setFactory(props.factory));
     })();
-  }, [taskId, setFactory]); // eslint-disable-line
+  }, [taskId, setFactory, props.factory]); // eslint-disable-line
 
   return (
     <Dimmer active={props.requestStatus !== Status.FillingForm} loader>
