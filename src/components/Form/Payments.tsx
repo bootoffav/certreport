@@ -1,5 +1,5 @@
 import { Icon } from 'tabler-react';
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import dayjs from 'dayjs';
 import { Price, Paid, QuoteNo, BaseInput } from './FormFields';
 import type { Payment } from 'Task/Task.interface';
@@ -46,9 +46,14 @@ function Payments({ taskId, ...props }: PaymentsProps) {
     })();
   }, [taskId, props.payments, dispatch]);
 
+  const getTotalPrice = useCallback(
+    () => payments.reduce((total, { price }) => total + Number(price), 0),
+    [payments]
+  );
+
   useEffect(() => {
     dispatch(changeTotalPrice(getTotalPrice()));
-  }, [payments]);
+  }, [payments, dispatch, getTotalPrice]);
 
   const genericSetter = (
     location: string,
@@ -159,9 +164,6 @@ function Payments({ taskId, ...props }: PaymentsProps) {
       </div>
     );
   };
-
-  const getTotalPrice = () =>
-    payments.reduce((total, { price }) => total + Number(price), 0);
 
   return (
     <>
