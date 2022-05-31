@@ -18,9 +18,10 @@ import { renderCommentsNews } from './Tabs/CommentsNews';
 import { renderFabricApplicationForm } from './Tabs/FabricApplicationForm';
 import { renderStandards } from './Tabs/renderStandards';
 import { getShippingLabelFile } from '../Export/PDF/ShippingLabelFile';
-import { Payments } from './Payments';
+import Payments from './Payments';
 import { Tab, Dimmer } from 'tabler-react';
 import { changeActiveQuoteNo, changeTotalPrice, RootState } from 'store';
+import type { Payment } from '../../Task/Task.interface';
 
 interface IFormState extends TaskState {
   requestStatus: Status;
@@ -73,17 +74,20 @@ class Form extends React.Component {
       );
 
       // put activeQuoteNo into react store
-      const payments = await DB.get(this.task_id, 'payments', 'payments').catch(
-        (e) => []
-      );
+      const payments: Payment[] = await DB.get(
+        this.task_id,
+        'payments',
+        'payments'
+      ).catch((e) => []);
 
       const totalPrice = payments.reduce(
-        (total: any, { price }: any) => total + Number(price),
+        (total, { price }) => total + Number(price),
         0
       );
+
       const found = payments.find((p: any) => p.activeQuoteNo);
       this.props.changeActiveQuoteNo({ value: found ? found.quoteNo : '' });
-      this.props.changeTotalPrice({ value: totalPrice });
+      this.props.changeTotalPrice(totalPrice);
 
       await B24.getTask(this.task_id)
         .then((r: any) => {
@@ -173,8 +177,8 @@ class Form extends React.Component {
         ? await B24.updateTask(
             {
               ...this.state,
-              activeQuoteNo: this.props.activeQuoteNo.value,
-              totalPrice: this.props.totalPrice.value,
+              activeQuoteNo: this.props.activeQuoteNo,
+              totalPrice: this.props.totalPrice,
             },
             this.task_id
           )
@@ -182,8 +186,8 @@ class Form extends React.Component {
             .catch(this.unsuccessfullySubmitted)
         : await B24.createTask({
             ...this.state,
-            activeQuoteNo: this.props.activeQuoteNo.value,
-            totalPrice: this.props.totalPrice.value,
+            activeQuoteNo: this.props.activeQuoteNo,
+            totalPrice: this.props.totalPrice,
           }).catch(this.unsuccessfullySubmitted);
 
       // update in indexedDB

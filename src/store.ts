@@ -5,7 +5,7 @@ interface IInitialState {
   endDate: string | null;
   activeQuoteNo: string;
   updated: boolean;
-  totalPrice: string;
+  totalPrice: number;
   allTasks: [];
   allItems: [];
   activeBrands: string[];
@@ -16,7 +16,7 @@ interface IInitialState {
 const initialState: IInitialState = {
   activeQuoteNo: '',
   updated: false,
-  totalPrice: '',
+  totalPrice: 0,
   allTasks: [],
   allItems: [],
   activeBrands: ['XMT', 'XMS', 'XMF'],
@@ -36,8 +36,8 @@ const mainSlice = createSlice({
     changeUpdated: (state, { payload }) => {
       state.updated = payload;
     },
-    changeTotalPrice: (state, { payload }) => {
-      state.totalPrice = payload.value;
+    changeTotalPrice: (state, { payload }: PayloadAction<number>) => {
+      state.totalPrice = payload;
     },
     changeTasks: (state, { payload }) => {
       state.allTasks = payload;

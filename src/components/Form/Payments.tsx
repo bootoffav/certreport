@@ -46,6 +46,10 @@ function Payments({ taskId, ...props }: PaymentsProps) {
     })();
   }, [taskId, props.payments, dispatch]);
 
+  useEffect(() => {
+    dispatch(changeTotalPrice(getTotalPrice()));
+  }, [payments]);
+
   const genericSetter = (
     location: string,
     value: string | boolean,
@@ -145,8 +149,8 @@ function Payments({ taskId, ...props }: PaymentsProps) {
         <RemovePayment
           doIt={(e) => {
             e.preventDefault();
-            payments.splice(index, 1);
             const newPayments = [...payments];
+            newPayments.splice(index, 1);
             setPayments(newPayments);
             taskId &&
               DB.updateInstance(taskId, { payments: newPayments }, 'payments');
@@ -156,15 +160,8 @@ function Payments({ taskId, ...props }: PaymentsProps) {
     );
   };
 
-  const totalPrice = payments.reduce(
-    (total, { price }) => total + Number(price),
-    0
-  );
-  dispatch(
-    changeTotalPrice({
-      value: totalPrice,
-    })
-  );
+  const getTotalPrice = () =>
+    payments.reduce((total, { price }) => total + Number(price), 0);
 
   return (
     <>
@@ -175,7 +172,7 @@ function Payments({ taskId, ...props }: PaymentsProps) {
           setPayments((payments) => [...payments, { ...emptyPayment }]);
         }}
       />
-      {renderTotal(totalPrice)}
+      {renderTotal(getTotalPrice())}
     </>
   );
 }
@@ -213,4 +210,4 @@ function renderTotal(total: number) {
   );
 }
 
-export { Payments };
+export default Payments;
