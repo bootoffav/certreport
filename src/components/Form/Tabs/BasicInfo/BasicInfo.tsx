@@ -18,7 +18,7 @@ function BasicInfo({ taskId, setState, ...props }: any) {
       setState({ factory });
       setFactory(factory);
     })();
-  }, [taskId, setFactory, props.factory]); // eslint-disable-line
+  }, [taskId, setFactory]); // eslint-disable-line
 
   return (
     <Dimmer active={props.requestStatus !== Status.FillingForm} loader>
@@ -263,8 +263,9 @@ function BasicInfo({ taskId, setState, ...props }: any) {
             setFactory((target as HTMLInputElement).value)
           }
           onBlur={() => {
-            setState({ factory });
-            DB.updateInstance(taskId, { factory }, 'certification');
+            setState({ factory }, () =>
+              DB.updateInstance(taskId, { factory }, 'certification')
+            );
           }}
         />
       </div>
