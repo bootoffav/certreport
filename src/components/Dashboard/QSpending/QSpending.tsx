@@ -9,6 +9,7 @@ import { RootState } from 'store';
 import DB from 'backend/DBManager';
 import { query as q } from 'faunadb';
 import { Payment } from 'Task/Task.interface';
+import TotalSpending from './TotalSpending';
 
 dayjs.extend(quarterOfYear);
 
@@ -18,7 +19,7 @@ interface QSpendingProps {
   tasks: any[];
 }
 
-interface Quarter {
+export interface Quarter {
   start: dayjs.Dayjs;
   end: dayjs.Dayjs;
   spent: number;
@@ -88,27 +89,32 @@ function QSpending({ tasks, ...props }: QSpendingProps) {
     }
   }, [tasks]);
 
-  return quarters.map((quarter: any, index: number) => {
-    return (
-      <Grid.Col key={quarter.start}>
-        <Card>
-          <Card.Header>
-            <div
-              className="mx-auto quarterHeader fix-quarter-label"
-              onClick={() => props.renderTable(quarter.tasks)}
-            >
-              {`Q${quarter.start.quarter()}-${quarter.start.format('YY')}`}
-            </div>
-          </Card.Header>
-          <Card.Body>
-            <Header.H3 className="text-center">
-              {`€${Math.round(quarter.spent).toLocaleString()}`}
-            </Header.H3>
-          </Card.Body>
-        </Card>
-      </Grid.Col>
-    );
-  });
+  return (
+    <>
+      {quarters.map((quarter: any, index: number) => {
+        return (
+          <Grid.Col key={quarter.start}>
+            <Card>
+              <Card.Header>
+                <div
+                  className="mx-auto quarterHeader fix-quarter-label"
+                  onClick={() => props.renderTable(quarter.tasks)}
+                >
+                  {`Q${quarter.start.quarter()}-${quarter.start.format('YY')}`}
+                </div>
+              </Card.Header>
+              <Card.Body>
+                <Header.H3 className="text-center">
+                  {`€${Math.round(quarter.spent).toLocaleString()}`}
+                </Header.H3>
+              </Card.Body>
+            </Card>
+          </Grid.Col>
+        );
+      })}
+      <TotalSpending quarters={quarters} />
+    </>
+  );
 }
 
 export default QSpending;
