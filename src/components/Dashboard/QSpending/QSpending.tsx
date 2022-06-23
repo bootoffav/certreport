@@ -14,7 +14,6 @@ import TotalSpending from './TotalSpending';
 dayjs.extend(quarterOfYear);
 
 interface QSpendingProps {
-  updateQuarters: (quarters: any) => void;
   renderTable: (t: any[]) => void;
   tasks: any[];
 }
@@ -31,11 +30,12 @@ type Payments = {
 };
 
 function QSpending({ tasks, ...props }: QSpendingProps) {
-  const startDate = useSelector(
-    ({ main: { startDate } }: RootState) => startDate
+  const { startDate, endDate } = useSelector(
+    ({ main: { startDate, endDate } }: RootState) => ({
+      startDate,
+      endDate,
+    })
   );
-
-  const endDate = useSelector(({ main: { endDate } }: RootState) => endDate);
 
   const [quarters, setQuarters] = useState(
     [findQuarter(0), findQuarter(1), findQuarter(2), findQuarter(3)] // default last 4 quarters

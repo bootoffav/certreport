@@ -1,18 +1,16 @@
-import { Component, createContext } from 'react';
+import { Component } from 'react';
 import { connect } from 'react-redux';
 import './Dashboard.css';
-import { BrowserRouter } from 'react-router-dom';
-import { render, unmountComponentAtNode } from 'react-dom';
-import ReactTable from 'react-table';
+import { unmountComponentAtNode } from 'react-dom';
 import { Grid, Card } from 'tabler-react';
 import { HorizontalBar } from 'react-chartjs-2';
 import QSpending from './QSpending/QSpending';
 import { chartOptions } from './configs';
 import { byStages, byProducts } from './dataprocessing';
-import { AmountOfCertifications, CompletedCertifications } from './StatCards';
+import { renderTableOfDiagramSegment } from './utils';
+import { CertificationsResultCard } from './StatCards';
 
-import { getColumns } from '../Lists/Certification/columns';
-import { countTotalPrice, dashboardDataChartAdapter } from 'helpers';
+import { dashboardDataChartAdapter } from 'helpers';
 import { RootState } from 'store';
 
 interface IDashboard {
@@ -68,10 +66,9 @@ class Dashboard extends Component<any, IDashboard> {
               {/* @ts-ignore */}
               <QSpending
                 renderTable={(tasks) =>
-                  this.renderTableOfDiagramSegment('', '', tasks, true)
+                  renderTableOfDiagramSegment('', '', tasks, true)
                 }
                 tasks={this.props.tasks}
-                updateQuarters={this.setState.bind(this)}
               />
             </Grid.Row>
           </Grid.Col>
@@ -126,14 +123,10 @@ class Dashboard extends Component<any, IDashboard> {
             </Card>
           </Grid.Col>
           <Grid.Col width={2}>
-            <StatCardsContext.Provider
-              value={{
-                tasks: this.props.tasks,
-              }}
-            >
-              <CompletedCertifications />
-              <AmountOfCertifications />
-            </StatCardsContext.Provider>
+            <CertificationsResultCard resume="pass" label="PASS" />
+            <CertificationsResultCard resume="partly" label="PASS (Partly)" />
+            <CertificationsResultCard resume="fail" label="FAIL" />
+            <CertificationsResultCard resume="" label="All" />
           </Grid.Col>
         </Grid.Row>
         <Grid.Row>
@@ -150,7 +143,7 @@ class Dashboard extends Component<any, IDashboard> {
       const {
         _model: { label },
       } = chartElement.pop();
-      this.renderTableOfDiagramSegment(
+      renderTableOfDiagramSegment(
         label,
         param,
         // passing specific tasks
@@ -162,32 +155,6 @@ class Dashboard extends Component<any, IDashboard> {
       );
     }
   };
-
-  renderTableOfDiagramSegment(
-    checkedValue: string,
-    param: string,
-    tasks?: any,
-    skipFilter?: boolean
-  ) {
-    if (['no product', 'no stage'].includes(checkedValue)) checkedValue = '';
-    if (!skipFilter) {
-      tasks = (tasks || this.props.tasks).filter(
-        (t: any) => t.state[param] === checkedValue
-      );
-    }
-
-    const totalPrice = countTotalPrice(tasks);
-    render(
-      <BrowserRouter>
-        <ReactTable
-          data={tasks}
-          columns={getColumns(totalPrice, undefined)}
-          defaultPageSize={10}
-        />
-      </BrowserRouter>,
-      document.getElementById('tableOfDiagramSegment')
-    );
-  }
 }
 
 export default connect(({ main }: RootState) => ({
@@ -195,5 +162,4 @@ export default connect(({ main }: RootState) => ({
   // @ts-ignore
 }))(Dashboard);
 
-export const StatCardsContext = createContext({});
 export { tasksInRange };

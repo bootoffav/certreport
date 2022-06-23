@@ -31,7 +31,7 @@ const mainSlice = createSlice({
   initialState,
   reducers: {
     changeActiveQuoteNo: (state, { payload }) => {
-      state.activeQuoteNo = payload.value;
+      state.activeQuoteNo = payload;
     },
     changeUpdated: (state, { payload }) => {
       state.updated = payload;

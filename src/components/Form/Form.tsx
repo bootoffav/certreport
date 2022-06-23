@@ -80,14 +80,14 @@ class Form extends React.Component {
         'payments'
       ).catch((e) => []);
 
-      const totalPrice = payments.reduce(
-        (total, { price }) => total + Number(price),
-        0
-      );
+      // const totalPrice = payments.reduce(
+      //   (total, { price }) => total + Number(price),
+      //   0
+      // );
 
       const found = payments.find((p: any) => p.activeQuoteNo);
-      this.props.changeActiveQuoteNo({ value: found ? found.quoteNo : '' });
-      this.props.changeTotalPrice(totalPrice);
+      this.props.changeActiveQuoteNo(found ? found.quoteNo : '');
+      // this.props.changeTotalPrice(totalPrice);
 
       await B24.getTask(this.task_id)
         .then((r: any) => {
@@ -265,7 +265,7 @@ class Form extends React.Component {
             e.preventDefault();
             getShippingLabelFile({
               ...this.state,
-              activeQuoteNo: this.props.activeQuoteNo.value,
+              activeQuoteNo: this.props.activeQuoteNo,
             });
           }}
         >

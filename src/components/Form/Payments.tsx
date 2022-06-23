@@ -108,7 +108,7 @@ function Payments({ taskId, ...props }: PaymentsProps) {
         <QuoteNo
           activeQuoteNo={payment.activeQuoteNo || false}
           handleActiveQuoteNoChange={() => {
-            dispatch(changeActiveQuoteNo({ value: payment.quoteNo }));
+            dispatch(changeActiveQuoteNo(payment.quoteNo));
             payments.forEach((p) => delete p.activeQuoteNo);
             const newPayments = [
               ...genericSetter('activeQuoteNo', true, index),

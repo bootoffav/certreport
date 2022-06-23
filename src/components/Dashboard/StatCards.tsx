@@ -1,50 +1,50 @@
-import { useContext } from 'react';
 import { StatsCard } from 'tabler-react';
-import { tasksInRange, StatCardsContext } from './Dashboard';
+import { tasksInRange } from './Dashboard';
+import { useSelector } from 'react-redux';
+import { RootState } from 'store';
+import { TaskState } from 'Task/Task.interface';
+import styles from './StatCards.module.css';
+import { renderTableOfDiagramSegment } from './utils';
 
-const CompletedCertifications = () => {
-  const {
-    tasks,
-  }: // startDate, endDate
-  any = useContext(StatCardsContext);
-  const completedCerts = () => {
-    return tasksInRange(
-      tasks,
-      'certReceivedOnRealDate'
-      // startDate,
-      // endDate
-    ).length;
-  };
-
-  const movement = () => {
-    const totalCerts = tasksInRange(tasks, 'certReceivedOnRealDate').length;
-
-    return Math.round((completedCerts() * 100) / totalCerts);
-  };
+type CertificationsResultCardProps = {
+  resume: TaskState['resume'] | '';
+  label: 'PASS' | 'PASS (Partly)' | 'FAIL' | 'All';
+};
+const CertificationsResultCard = ({
+  resume,
+  label,
+}: CertificationsResultCardProps) => {
+  const tasks: any[] = (
+    useSelector(({ main }: RootState) => main.filteredTasks) as TaskState[]
+  ).filter(({ state }) => resume === '' || state.resume === resume);
 
   return (
     <StatsCard
       layout={1}
-      movement={movement()}
-      total={<div className="display-5">{completedCerts()}</div>}
-      label="Completed certifications"
+      movement={''}
+      total={
+        <div
+          className={`display-5 ${styles.statCard}`}
+          onClick={() => renderTableOfDiagramSegment('', '', tasks, true)}
+        >
+          {tasks.length}
+        </div>
+      }
+      label={`${label} certifications`}
     />
   );
 };
 
 const Products = () => {
-  let { tasks, startDate, endDate }: any = useContext(StatCardsContext);
+  let { tasks, startDate, endDate } = useSelector(({ main }: RootState) => ({
+    tasks: main.filteredTasks,
+    startDate: main.startDate,
+    endDate: main.endDate,
+  }));
 
   const amountOfUniqueProducts = () => {
-    tasks =
-      startDate || endDate
-        ? tasksInRange(
-            tasks,
-            'CREATED_DATE'
-            //startDate,
-            //  endDate
-          )
-        : tasks;
+    (tasks as any) =
+      startDate || endDate ? tasksInRange(tasks, 'CREATED_DATE') : tasks;
 
     return new Set(tasks.map(({ state: { article } }: any) => article)).size;
   };
@@ -54,7 +54,6 @@ const Products = () => {
       tasks,
       'CREATED_DATE',
       new Date('December 17, 2010 03:24:00')
-      // startDate
     ).length;
 
     return Math.round((amountOfUniqueProducts() * 100) / tasksBeforePeriod);
@@ -70,34 +69,4 @@ const Products = () => {
   );
 };
 
-const AmountOfCertifications = () => {
-  const { tasks, startDate, endDate }: any = useContext(StatCardsContext); //eslint-disable-line
-  const amountOfOngoingCerts = () =>
-    tasksInRange(
-      tasks,
-      'CREATED_DATE'
-      // startDate,
-      // endDate
-    ).length;
-
-  const movement = () => {
-    const tasksBeforePeriod = tasksInRange(
-      tasks,
-      'CREATED_DATE',
-      new Date('December 17, 2010 03:24:00')
-      // startDate
-    ).length;
-    return Math.round((amountOfOngoingCerts() * 100) / tasksBeforePeriod);
-  };
-
-  return (
-    <StatsCard
-      layout={1}
-      movement={movement()}
-      total={<div className="display-5">{amountOfOngoingCerts()}</div>}
-      label={`${startDate ? 'New' : 'All'} Certifications`}
-    />
-  );
-};
-
-export { AmountOfCertifications, CompletedCertifications, Products };
+export { CertificationsResultCard, Products };
