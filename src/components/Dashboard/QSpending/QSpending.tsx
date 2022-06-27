@@ -70,7 +70,9 @@ function QSpending({ tasks, ...props }: QSpendingProps) {
         await DB.client()
           .query(
             q.Map(
-              q.Paginate(q.Documents(q.Collection('payments'))),
+              q.Paginate(q.Documents(q.Collection('payments')), {
+                size: 100000, // max for faunadb for a single query
+              }),
               q.Lambda('payment', q.Get(q.Var('payment')))
             )
           )
