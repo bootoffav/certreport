@@ -1,12 +1,12 @@
 .quarterHeader:hover {
   cursor: pointer;
 }
-.fix-quarter-label {
-  margin-top: 0.1rem;
+.quarterHeader {
+  font-size: larger;
 }
 .fix-quarter-label:hover {
   font-size: 1rem;
 }
-.form-check-label:hover {
+/* .form-check-label:hover {
   cursor: pointer;
-}
+} */

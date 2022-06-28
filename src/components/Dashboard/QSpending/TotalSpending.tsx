@@ -9,7 +9,9 @@ function TotalSpending({ quarters }: { quarters: Quarter[] }) {
           <div className="form-check form-check-inline"></div>
           <div className="mx-auto quarterHeader">
             {quarters[0]?.start.format('MM.YY')} -{' '}
-            {quarters.at(-1)?.end.format('MM.YY')}
+            {quarters.at(-1)?.end.format('MM.YY')} /{' '}
+            {quarters.reduce((acc, { tasks }) => acc + tasks.length, 0)}{' '}
+            certifications
           </div>
         </Card.Header>
         <Card.Body>

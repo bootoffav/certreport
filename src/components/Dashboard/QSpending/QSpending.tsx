@@ -102,7 +102,11 @@ function QSpending({ tasks, ...props }: QSpendingProps) {
                   className="mx-auto quarterHeader fix-quarter-label"
                   onClick={() => props.renderTable(quarter.tasks)}
                 >
-                  {`Q${quarter.start.quarter()}-${quarter.start.format('YY')}`}
+                  {/* <Header.H5> */}
+                  {`Q${quarter.start.quarter()}-${quarter.start.format(
+                    'YY'
+                  )} / ${quarter.tasks.length} certifications`}
+                  {/* </Header.H5> */}
                 </div>
               </Card.Header>
               <Card.Body>
@@ -118,8 +122,6 @@ function QSpending({ tasks, ...props }: QSpendingProps) {
     </>
   );
 }
-
-export default QSpending;
 
 const findQuarter = (howMany: number, sDate?: any): Quarter => {
   let start = sDate ? dayjs(sDate) : dayjs().subtract(4, 'quarter');
@@ -199,3 +201,5 @@ function applyPaymentsToQuartersAndPutAssociatedTasks(
   }
   return newQuarters;
 }
+
+export default QSpending;
