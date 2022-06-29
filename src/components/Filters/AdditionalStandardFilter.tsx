@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { useAppDispatch } from 'store/hooks';
+import { changeAdditionalStandardFilterList } from 'store/slices/mainSlice';
 import Loader from 'react-loader-spinner';
 import DB from 'backend/DBManager';
 import { standardParamMap } from 'defaults';
@@ -7,16 +9,14 @@ import type { StandardFilterState } from './StandardFilter';
 
 type AdditionalStandardFilterProps = {
   standard: keyof StandardFilterState & ('EN 469' | 'EN 20471');
-  update: any;
 };
 
-function AdditionalStandardFilter({
-  standard,
-  update,
-}: AdditionalStandardFilterProps) {
+function AdditionalStandardFilter({ standard }: AdditionalStandardFilterProps) {
+  const dispatch = useAppDispatch();
   const [state, setState] = useState({});
   const [loading, setLoading] = useState(false);
 
+  // @ts-ignore
   useEffect(() => {
     setState(
       standardParamMap[standard].reduce(
@@ -24,7 +24,7 @@ function AdditionalStandardFilter({
         {}
       )
     );
-    return () => update({ additionalStandardFilterTaskList: undefined });
+    return () => dispatch(changeAdditionalStandardFilterList(undefined));
     // eslint-disable-next-line
   }, [standard]);
 
@@ -62,7 +62,7 @@ function AdditionalStandardFilter({
             getActiveCheckboxes(state),
             standard
           );
-          update({ additionalStandardFilterTaskList: taskList });
+          dispatch(changeAdditionalStandardFilterList(taskList));
           setLoading(false);
         }}
       >

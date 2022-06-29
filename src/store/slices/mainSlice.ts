@@ -7,21 +7,24 @@ interface IInitialState {
   activeQuoteNo: string;
   updated: boolean;
   totalPrice: number;
-  allTasks: [];
-  allItems: [];
+  allTasks: any[];
+  allItems: any[];
   activeBrands: string[];
-  filteredItems: [];
-  filteredTasks: [];
+  filteredItems: any[];
+  filteredTasks: any[];
+  activeStandards: string[];
+  additionalStandardFilterTaskList?: string[];
 }
 
 const initialState: IInitialState = {
   activeTestingCompanies: ['all'],
+  activeBrands: ['XMT', 'XMS', 'XMF'],
+  activeStandards: ['all'],
   activeQuoteNo: '',
   updated: false,
   totalPrice: 0,
   allTasks: [],
   allItems: [],
-  activeBrands: ['XMT', 'XMS', 'XMF'],
   endDate: null,
   startDate: null,
   filteredItems: [],
@@ -71,6 +74,12 @@ const mainSlice = createSlice({
     changeFilteredTasks: (state, { payload }) => {
       state.filteredTasks = payload;
     },
+    changeActiveStandards: (state, { payload }) => {
+      state.activeStandards = payload;
+    },
+    changeAdditionalStandardFilterList: (state, { payload }) => {
+      state.additionalStandardFilterTaskList = payload;
+    },
   },
 });
 
@@ -86,6 +95,8 @@ export const {
   changeFilteredItems,
   changeFilteredTasks,
   changeActiveTestingCompanies,
+  changeActiveStandards,
+  changeAdditionalStandardFilterList,
 } = mainSlice.actions;
 
 export { mainSlice };

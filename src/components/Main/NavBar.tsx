@@ -5,11 +5,7 @@ import DateFilter from '../Filters/DateFilter';
 import { TestingCompanyFilter } from '../Filters/TestingCompanyFilter';
 import State from './State';
 
-interface INavBarProps {
-  update: any;
-}
-
-function NavBar({ update }: INavBarProps) {
+function NavBar() {
   return (
     <div className="container-fluid rounded-bottom navbar-light mb-1">
       <div className="d-flex">
@@ -51,7 +47,7 @@ function NavBar({ update }: INavBarProps) {
         </div>
 
         <div className="pl-1">
-          <StandardFilter update={update} />
+          <StandardFilter />
         </div>
       </div>
     </div>

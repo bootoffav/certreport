@@ -20,6 +20,7 @@ import {
   changeTasks,
   changeFilteredItems,
   changeFilteredTasks,
+  changeActiveStandards,
 } from 'store/slices/mainSlice';
 import type { RootState } from 'store/store';
 import { connect } from 'react-redux';
@@ -28,8 +29,6 @@ class Main extends Component<any> {
   cache = new CacheManager();
   state = {
     stages: ['all'],
-    activeStandards: ['All'],
-    additionalStandardFilterTaskList: undefined,
   };
 
   async componentDidMount() {
@@ -53,10 +52,10 @@ class Main extends Component<any> {
       (prevProps.startDate === startDate && prevProps.endDate !== endDate) ||
       prevProps.activeBrands !== activeBrands ||
       !isEqual(prevState.stages, this.state.stages) ||
-      !isEqual(prevState.activeStandards, this.state.activeStandards) ||
+      !isEqual(prevProps.activeStandards, this.props.activeStandards) ||
       !isEqual(
-        prevState.additionalStandardFilterTaskList,
-        this.state.additionalStandardFilterTaskList
+        prevProps.additionalStandardFilterTaskList,
+        this.props.additionalStandardFilterTaskList
       ) ||
       !isEqual(
         prevProps.activeTestingCompanies,
@@ -70,8 +69,11 @@ class Main extends Component<any> {
   }
 
   filter(tasks: any, items: any) {
-    let { activeStandards, additionalStandardFilterTaskList } = this.state;
-    let { activeTestingCompanies } = this.props;
+    let {
+      additionalStandardFilterTaskList,
+      activeTestingCompanies,
+      activeStandards,
+    } = this.props;
 
     const brandFilteringFunc = ({ brand }: any) => {
       return brand === '' && this.props.activeBrands.includes('No brand')
@@ -108,7 +110,7 @@ class Main extends Component<any> {
         additionalStandardFilterTaskList.includes(task.id)
       );
     } else {
-      if (activeStandards[0] !== 'All') {
+      if (activeStandards[0] !== 'all') {
         filteredTasks = filteredTasks.filter((task: any) => {
           const standards = task.state.standards.split(', ');
           return intersection(standards, activeStandards).length;
@@ -117,7 +119,7 @@ class Main extends Component<any> {
     }
 
     // standardFiltering for Items
-    if (activeStandards[0] !== 'All') {
+    if (activeStandards[0] !== 'all') {
       filteredItems = filteredItems.filter(
         ({ standards }: any) => intersection(standards, activeStandards).length
       );
@@ -179,7 +181,7 @@ class Main extends Component<any> {
     return (
       <Router>
         <div className="container-fluid">
-          <NavBar update={this.setState.bind(this)} />
+          <NavBar />
           <Switch>
             <Route
               exact
@@ -248,6 +250,8 @@ const mapStateToProps = ({ main }: RootState) => ({
   startDate: main.startDate,
   endDate: main.endDate,
   activeTestingCompanies: main.activeTestingCompanies,
+  activeStandards: main.activeStandards,
+  additionalStandardFilterTaskList: main.additionalStandardFilterTaskList,
 });
 
 export default connect(mapStateToProps, {
@@ -256,5 +260,6 @@ export default connect(mapStateToProps, {
   changeItems,
   changeFilteredItems,
   changeFilteredTasks,
+  changeActiveStandards,
   // @ts-ignore
 })(Main);

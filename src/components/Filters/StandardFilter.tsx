@@ -1,9 +1,7 @@
 import { useReducer, useEffect } from 'react';
+import { useAppDispatch } from 'store/hooks';
+import { changeActiveStandards } from 'store/slices/mainSlice';
 import { AdditionalStandardFilter } from './AdditionalStandardFilter';
-
-interface StandardFilterProps {
-  update: any;
-}
 
 type StandardFilterState = {
   'EN 11611': boolean;
@@ -12,7 +10,7 @@ type StandardFilterState = {
   'EN 20471': boolean;
   'EN 13034': boolean;
   'EN 61482-1-2': boolean;
-  All: boolean;
+  all: boolean;
 };
 
 const initialState: StandardFilterState = {
@@ -22,7 +20,7 @@ const initialState: StandardFilterState = {
   'EN 20471': false,
   'EN 13034': false,
   'EN 61482-1-2': false,
-  All: true,
+  all: true,
 };
 
 function standardFilterReducer(
@@ -33,23 +31,23 @@ function standardFilterReducer(
   }: { standard: keyof StandardFilterState; checked: boolean }
 ) {
   switch (standard) {
-    case 'All':
+    case 'all':
       state = { ...initialState };
-      state['All'] = checked;
+      state['all'] = checked;
       break;
     case 'EN 469':
       state = { ...initialState };
-      state['All'] = false;
+      state['all'] = false;
       state['EN 469'] = checked;
       break;
     case 'EN 20471':
       state = { ...initialState };
-      state['All'] = false;
+      state['all'] = false;
       state['EN 20471'] = checked;
       break;
     default:
       state = { ...state };
-      state['All'] = false;
+      state['all'] = false;
       state['EN 469'] = false;
       state['EN 20471'] = false;
       state[standard] = checked;
@@ -63,17 +61,13 @@ const getActiveCheckboxes = (checkboxPair: any) => {
     .map(([value, _]) => value);
 };
 
-function StandardFilter({ update }: StandardFilterProps) {
+function StandardFilter() {
+  const reduxDispatch = useAppDispatch();
   const [standards, dispatch] = useReducer(standardFilterReducer, initialState);
 
-  useEffect(
-    () =>
-      update({
-        activeStandards: getActiveCheckboxes(standards),
-      }),
-    // eslint-disable-next-line
-    [standards]
-  );
+  useEffect(() => {
+    reduxDispatch(changeActiveStandards(getActiveCheckboxes(standards)));
+  }, [standards, reduxDispatch]);
 
   return (
     <div className="d-flex flex-column">
@@ -97,7 +91,7 @@ function StandardFilter({ update }: StandardFilterProps) {
                 e.stopPropagation();
               }}
             />{' '}
-            {standard}
+            {standard.toUpperCase()}
           </label>
         ))}
       </div>
@@ -105,7 +99,6 @@ function StandardFilter({ update }: StandardFilterProps) {
         <AdditionalStandardFilter
           // @ts-ignore
           standard={getActiveCheckboxes(standards)[0]}
-          update={update}
         />
       ) : (
         ''
