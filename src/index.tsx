@@ -9,7 +9,7 @@ import netlifyIdentity from 'netlify-identity-widget';
 import { initApp } from './defaults';
 import Main from './components/Main/Main';
 import { Provider } from 'react-redux';
-import store from './store';
+import store from './store/store';
 import React from 'react';
 
 initApp();

@@ -5,8 +5,8 @@ import { Price, Paid, QuoteNo, BaseInput } from './FormFields';
 import type { Payment } from 'Task/Task.interface';
 import { localizePrice } from 'helpers';
 import DB from 'backend/DBManager';
-import { useDispatch } from 'react-redux';
-import { changeActiveQuoteNo, changeTotalPrice } from 'store';
+import { useAppDispatch } from 'store/hooks';
+import { changeActiveQuoteNo, changeTotalPrice } from 'store/slices/mainSlice';
 
 interface PaymentsProps {
   payments: Payment[];
@@ -24,7 +24,7 @@ const emptyPayment: Payment = {
 function Payments({ taskId, ...props }: PaymentsProps) {
   const [payments, setPayments] = useState([] as Payment[]);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   // gets payments from DB
   useEffect(() => {

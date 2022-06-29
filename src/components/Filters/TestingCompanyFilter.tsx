@@ -1,6 +1,6 @@
 import { useEffect, useReducer } from 'react';
-import { useDispatch } from 'react-redux';
-import { changeActiveTestingCompanies } from 'store';
+import { useAppDispatch } from 'store/hooks';
+import { changeActiveTestingCompanies } from 'store/slices/mainSlice';
 
 type TestingCompanyState = {
   aitex: boolean;
@@ -38,7 +38,7 @@ const testingCompanyFilterReducer = (
       };
 
 function TestingCompanyFilter() {
-  const reduxDispatch = useDispatch();
+  const reduxDispatch = useAppDispatch();
   const [state, dispatch] = useReducer(
     testingCompanyFilterReducer,
     initialState

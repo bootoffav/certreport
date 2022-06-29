@@ -1,4 +1,4 @@
-import { configureStore, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface IInitialState {
   activeTestingCompanies: string[];
@@ -74,12 +74,6 @@ const mainSlice = createSlice({
   },
 });
 
-const store = configureStore({
-  reducer: {
-    main: mainSlice.reducer,
-  },
-});
-
 export const {
   changeTasks,
   changeItems,
@@ -94,5 +88,4 @@ export const {
   changeActiveTestingCompanies,
 } = mainSlice.actions;
 
-export type RootState = ReturnType<typeof store.getState>;
-export default store;
+export { mainSlice };

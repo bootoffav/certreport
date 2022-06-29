@@ -20,8 +20,8 @@ import {
   changeTasks,
   changeFilteredItems,
   changeFilteredTasks,
-  RootState,
-} from '../../store';
+} from 'store/slices/mainSlice';
+import type { RootState } from 'store/store';
 import { connect } from 'react-redux';
 
 class Main extends Component<any> {

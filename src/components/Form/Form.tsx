@@ -20,7 +20,8 @@ import { renderStandards } from './Tabs/renderStandards';
 import { getShippingLabelFile } from '../Export/PDF/ShippingLabelFile';
 import Payments from './Payments';
 import { Tab, Dimmer } from 'tabler-react';
-import { changeActiveQuoteNo, changeTotalPrice, RootState } from 'store';
+import { changeActiveQuoteNo, changeTotalPrice } from 'store/slices/mainSlice';
+import type { RootState } from 'store/store';
 import type { Payment } from '../../Task/Task.interface';
 
 interface IFormState extends TaskState {

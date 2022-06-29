@@ -4,8 +4,7 @@ import dayjs from 'dayjs';
 import quarterOfYear from 'dayjs/plugin/quarterOfYear';
 import './QSpending.css';
 // import { getTotalPriceHelper } from 'helpers';
-import { useSelector } from 'react-redux';
-import { RootState } from 'store';
+import { useAppSelector } from 'store/hooks';
 import DB from 'backend/DBManager';
 import { query as q } from 'faunadb';
 import { Payment } from 'Task/Task.interface';
@@ -29,8 +28,8 @@ type Payments = {
 };
 
 function QSpending(props: QSpendingProps) {
-  const { startDate, endDate, tasks } = useSelector(
-    ({ main: { startDate, endDate, filteredTasks } }: RootState) => ({
+  const { startDate, endDate, tasks } = useAppSelector(
+    ({ main: { startDate, endDate, filteredTasks } }) => ({
       startDate,
       endDate,
       tasks: filteredTasks,
@@ -102,11 +101,9 @@ function QSpending(props: QSpendingProps) {
                   className="mx-auto quarterHeader fix-quarter-label"
                   onClick={() => props.renderTable(quarter.tasks)}
                 >
-                  {/* <Header.H5> */}
                   {`Q${quarter.start.quarter()}-${quarter.start.format(
                     'YY'
                   )} / ${quarter.tasks.length} certifications`}
-                  {/* </Header.H5> */}
                 </div>
               </Card.Header>
               <Card.Body>
@@ -175,28 +172,26 @@ function applyPaymentsToQuartersAndPutAssociatedTasks(
   payments: Payments,
   tasks: any[]
 ) {
-  const newQuarters = quarters.map(
-    (q): Quarter => ({ ...q, spent: 0, tasks: [] })
-  );
+  const newQuarters: Quarter[] = quarters.map((q) => ({
+    ...q,
+    spent: 0,
+    tasks: [],
+  }));
   for (const task of tasks) {
     const paymentsPerTask = payments[task.id];
     if (!paymentsPerTask) continue;
-    for (const { paymentDate, price } of paymentsPerTask) {
-      if (paymentDate) {
-        Object.entries(newQuarters).forEach(([_, quarter]) => {
-          if (
-            quarter.start < dayjs(paymentDate) &&
-            dayjs(paymentDate) < quarter.end
-          ) {
-            quarter.spent += Number(price);
-            if (
-              quarter.tasks.find(({ id }: any) => id === task.id) === undefined
-            ) {
-              quarter.tasks.push(task);
-            }
+    for (const { price } of paymentsPerTask) {
+      Object.values(newQuarters).forEach((q) => {
+        if (
+          q.start < dayjs(task.createdDate) &&
+          dayjs(task.createdDate) < q.end
+        ) {
+          q.spent += Number(price);
+          if (q.tasks.find(({ id }: any) => id === task.id) === undefined) {
+            q.tasks.push(task);
           }
-        });
-      }
+        }
+      });
     }
   }
   return newQuarters;

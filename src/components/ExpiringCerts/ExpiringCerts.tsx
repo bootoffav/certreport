@@ -5,8 +5,7 @@ import { useEffect, useState } from 'react';
 import type { TaskState } from 'Task/Task.interface';
 import './ExpiringCertsTab.css';
 import DB from 'backend/DBManager';
-import { useSelector } from 'react-redux';
-import { RootState } from 'store';
+import { useAppSelector } from 'store/hooks';
 
 export type TabProps = {
   tasks?: TaskState[];
@@ -141,7 +140,7 @@ async function getExpiringCertsTasks(
 }
 
 function ExpiringCerts() {
-  const tasks = useSelector(({ main }: RootState) => main.filteredTasks);
+  const tasks = useAppSelector(({ main }) => main.filteredTasks);
   const months: TabProps['months'][] = [12, 6, 3, 1, 0];
   return tasks.length ? (
     <div className="container">

@@ -1,9 +1,8 @@
 import Loader from 'react-loader-spinner';
-import { useSelector } from 'react-redux';
-import { RootState } from 'store';
+import { useAppSelector } from 'store/hooks';
 
 const State = () => {
-  const updated = useSelector(({ main }: RootState) => main.updated);
+  const updated = useAppSelector(({ main }) => main.updated);
   return updated ? (
     <></>
   ) : (

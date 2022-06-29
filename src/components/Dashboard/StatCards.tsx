@@ -1,7 +1,6 @@
 import { StatsCard } from 'tabler-react';
 import { tasksInRange } from './Dashboard';
-import { useSelector } from 'react-redux';
-import { RootState } from 'store';
+import { useAppSelector } from 'store/hooks';
 import { TaskState } from 'Task/Task.interface';
 import styles from './StatCards.module.css';
 import { renderTableOfDiagramSegment } from './utils';
@@ -15,7 +14,7 @@ const CertificationsResultCard = ({
   label,
 }: CertificationsResultCardProps) => {
   const tasks: any[] = (
-    useSelector(({ main }: RootState) => main.filteredTasks) as TaskState[]
+    useAppSelector(({ main }) => main.filteredTasks) as TaskState[]
   ).filter(({ state }) => resume === '' || state.resume === resume);
 
   return (
@@ -36,7 +35,7 @@ const CertificationsResultCard = ({
 };
 
 const Products = () => {
-  let { tasks, startDate, endDate } = useSelector(({ main }: RootState) => ({
+  let { tasks, startDate, endDate } = useAppSelector(({ main }) => ({
     tasks: main.filteredTasks,
     startDate: main.startDate,
     endDate: main.endDate,

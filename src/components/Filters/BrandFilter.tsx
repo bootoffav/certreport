@@ -1,13 +1,11 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { changeActiveBrands, RootState } from 'store';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
+import { changeActiveBrands } from 'store/slices/mainSlice';
 
 const BrandFilter = ({ update }: any) => {
   const allBrands = ['XMT', 'XMS', 'XMF', 'No brand'];
-  const activeBrands = useSelector(
-    (state: RootState) => state.main.activeBrands
-  );
+  const activeBrands = useAppSelector(({ main }) => main.activeBrands);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const getActiveBrands = () =>
     allBrands.filter((brand) => activeBrands.includes(brand));

@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 
 import './List.css';
 import { countTotalPrice } from 'helpers';
-import { RootState } from 'store';
+import { RootState } from 'store/store';
 
 interface ICertificationListState {
   visibleData: any[];

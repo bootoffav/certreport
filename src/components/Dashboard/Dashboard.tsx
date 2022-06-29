@@ -11,7 +11,7 @@ import { renderTableOfDiagramSegment } from './utils';
 import { CertificationsResultCard } from './StatCards';
 
 import { dashboardDataChartAdapter } from 'helpers';
-import { RootState } from 'store';
+import { RootState } from 'store/store';
 
 interface IDashboard {
   quarters: any;

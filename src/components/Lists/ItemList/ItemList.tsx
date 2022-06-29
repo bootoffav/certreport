@@ -3,8 +3,7 @@ import ReactTable, { CellInfo } from 'react-table';
 import { ColumnFilter } from '../Filters/ColumnFilter';
 import type { ItemType, taskOfItem } from 'Item/Item';
 import { Grid, Tooltip } from 'tabler-react';
-import { useSelector } from 'react-redux';
-import { RootState } from 'store';
+import { useAppSelector } from 'store/hooks';
 
 const columns = [
   {
@@ -70,7 +69,7 @@ const columns = [
 ];
 
 const ItemList = () => {
-  const items = useSelector(({ main }: RootState) => main.filteredItems);
+  const items = useAppSelector(({ main }) => main.filteredItems);
   const [visibleData, setVisibleData] = useState<ItemType[]>();
 
   useEffect(() => {
