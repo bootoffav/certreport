@@ -68,7 +68,6 @@ class Dashboard extends Component<any, IDashboard> {
                 renderTable={(tasks) =>
                   renderTableOfDiagramSegment('', '', tasks, true)
                 }
-                tasks={this.props.tasks}
               />
             </Grid.Row>
           </Grid.Col>

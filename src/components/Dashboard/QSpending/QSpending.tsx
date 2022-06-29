@@ -15,7 +15,6 @@ dayjs.extend(quarterOfYear);
 
 interface QSpendingProps {
   renderTable: (t: any[]) => void;
-  tasks: any[];
 }
 
 export interface Quarter {
@@ -29,11 +28,12 @@ type Payments = {
   [key: number]: Payment[];
 };
 
-function QSpending({ tasks, ...props }: QSpendingProps) {
-  const { startDate, endDate } = useSelector(
-    ({ main: { startDate, endDate } }: RootState) => ({
+function QSpending(props: QSpendingProps) {
+  const { startDate, endDate, tasks } = useSelector(
+    ({ main: { startDate, endDate, filteredTasks } }: RootState) => ({
       startDate,
       endDate,
+      tasks: filteredTasks,
     })
   );
 
