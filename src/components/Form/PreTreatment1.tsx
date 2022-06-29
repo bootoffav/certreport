@@ -1,7 +1,14 @@
 import { getTaskParamLabel } from 'Task/Task';
 import { Icon } from 'tabler-react';
 
-function PreTreatment1(props: any) {
+interface PreTreatment1Props {
+  pretreatment1: string;
+  result: string;
+  handleChange: (e: any) => void;
+  resultChange: (value: string) => void;
+}
+
+function PreTreatment1(props: PreTreatment1Props) {
   return (
     <>
       {getTaskParamLabel('pretreatment1')}

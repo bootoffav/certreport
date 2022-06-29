@@ -281,6 +281,7 @@ class Form extends React.Component {
               handleChange={this.handleChange}
               asSelectable={this.asSelectable}
               handleSelectChange={this.handleSelectChange}
+              handlePreTreatment1Change={this.handlePreTreatment1Change}
               taskId={this.task_id}
               setState={this.setState.bind(this)}
             ></BasicInfo>
