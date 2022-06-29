@@ -1,4 +1,6 @@
 import { useEffect, useReducer } from 'react';
+import { useDispatch } from 'react-redux';
+import { changeActiveTestingCompanies } from 'store';
 
 type TestingCompanyState = {
   aitex: boolean;
@@ -35,7 +37,8 @@ const testingCompanyFilterReducer = (
         [testingCompany]: checked,
       };
 
-function TestingCompanyFilter({ update }: any) {
+function TestingCompanyFilter() {
+  const reduxDispatch = useDispatch();
   const [state, dispatch] = useReducer(
     testingCompanyFilterReducer,
     initialState
@@ -50,7 +53,7 @@ function TestingCompanyFilter({ update }: any) {
   };
 
   useEffect(() => {
-    update({ activeTestingCompanies: getActiveCompanies(state) });
+    reduxDispatch(changeActiveTestingCompanies(getActiveCompanies(state)));
     // eslint-disable-next-line
   }, [state]);
 

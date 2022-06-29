@@ -7,7 +7,6 @@ import State from './State';
 
 interface INavBarProps {
   update: any;
-  updated: boolean;
 }
 
 function NavBar({ update }: INavBarProps) {
@@ -48,7 +47,7 @@ function NavBar({ update }: INavBarProps) {
         <BrandFilter />
 
         <div className="pl-1">
-          <TestingCompanyFilter update={update} />
+          <TestingCompanyFilter />
         </div>
 
         <div className="pl-1">

@@ -1,6 +1,7 @@
 import { configureStore, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface IInitialState {
+  activeTestingCompanies: string[];
   startDate: string | null;
   endDate: string | null;
   activeQuoteNo: string;
@@ -14,6 +15,7 @@ interface IInitialState {
 }
 
 const initialState: IInitialState = {
+  activeTestingCompanies: ['all'],
   activeQuoteNo: '',
   updated: false,
   totalPrice: 0,
@@ -30,6 +32,9 @@ const mainSlice = createSlice({
   name: 'main',
   initialState,
   reducers: {
+    changeActiveTestingCompanies: (state, { payload }) => {
+      state.activeTestingCompanies = payload;
+    },
     changeActiveQuoteNo: (state, { payload }) => {
       state.activeQuoteNo = payload;
     },
@@ -86,6 +91,7 @@ export const {
   changeStartDate,
   changeFilteredItems,
   changeFilteredTasks,
+  changeActiveTestingCompanies,
 } = mainSlice.actions;
 
 export type RootState = ReturnType<typeof store.getState>;

@@ -28,8 +28,6 @@ class Main extends Component<any> {
   cache = new CacheManager();
   state = {
     stages: ['all'],
-    updated: false,
-    activeTestingCompanies: ['all'],
     activeStandards: ['All'],
     additionalStandardFilterTaskList: undefined,
   };
@@ -61,8 +59,8 @@ class Main extends Component<any> {
         this.state.additionalStandardFilterTaskList
       ) ||
       !isEqual(
-        prevState.activeTestingCompanies,
-        this.state.activeTestingCompanies
+        prevProps.activeTestingCompanies,
+        this.props.activeTestingCompanies
       )
     ) {
       const { filteredItems, filteredTasks } = this.filter(allTasks, allItems);
@@ -72,11 +70,8 @@ class Main extends Component<any> {
   }
 
   filter(tasks: any, items: any) {
-    let {
-      activeStandards,
-      activeTestingCompanies,
-      additionalStandardFilterTaskList,
-    } = this.state;
+    let { activeStandards, additionalStandardFilterTaskList } = this.state;
+    let { activeTestingCompanies } = this.props;
 
     const brandFilteringFunc = ({ brand }: any) => {
       return brand === '' && this.props.activeBrands.includes('No brand')
@@ -184,10 +179,7 @@ class Main extends Component<any> {
     return (
       <Router>
         <div className="container-fluid">
-          <NavBar
-            update={this.setState.bind(this)}
-            updated={this.state.updated}
-          />
+          <NavBar update={this.setState.bind(this)} />
           <Switch>
             <Route
               exact
@@ -249,20 +241,14 @@ class Main extends Component<any> {
   }
 }
 
-const mapStateToProps = ({ main }: RootState) => {
-  // const startDate = main.startDate ? new Date(main.startDate) : undefined;
-  // const endDate = main.endDate ? new Date(main.endDate) : null;
-  const startDate = main.startDate;
-  const endDate = main.endDate;
-
-  return {
-    allItems: main.allItems,
-    allTasks: main.allTasks,
-    activeBrands: main.activeBrands,
-    startDate,
-    endDate,
-  };
-};
+const mapStateToProps = ({ main }: RootState) => ({
+  allItems: main.allItems,
+  allTasks: main.allTasks,
+  activeBrands: main.activeBrands,
+  startDate: main.startDate,
+  endDate: main.endDate,
+  activeTestingCompanies: main.activeTestingCompanies,
+});
 
 export default connect(mapStateToProps, {
   changeUpdated,

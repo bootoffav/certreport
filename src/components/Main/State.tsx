@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'store';
 
 const State = () => {
-  const updated = useSelector((state: RootState) => state.main.updated);
+  const updated = useSelector(({ main }: RootState) => main.updated);
   return updated ? (
     <></>
   ) : (
