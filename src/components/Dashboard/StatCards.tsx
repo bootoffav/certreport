@@ -13,9 +13,11 @@ const CertificationsResultCard = ({
   resume,
   label,
 }: CertificationsResultCardProps) => {
-  const tasks: any[] = (
-    useAppSelector(({ main }) => main.filteredTasks) as TaskState[]
-  ).filter(({ state }) => resume === '' || state.resume === resume);
+  let { tasks, payments } = useAppSelector(({ main }) => ({
+    tasks: main.filteredTasks,
+    payments: main.payments,
+  }));
+  tasks = tasks.filter(({ state }) => resume === '' || state.resume === resume);
 
   return (
     <StatsCard
@@ -24,7 +26,9 @@ const CertificationsResultCard = ({
       total={
         <div
           className={`display-5 ${styles.statCard}`}
-          onClick={() => renderTableOfDiagramSegment('', '', tasks, true)}
+          onClick={() =>
+            renderTableOfDiagramSegment('', '', payments, tasks, true)
+          }
         >
           {tasks.length}
         </div>

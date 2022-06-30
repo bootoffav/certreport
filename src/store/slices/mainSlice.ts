@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import type { Payments } from 'Task/Task.interface';
 
 interface IInitialState {
   activeTestingCompanies: string[];
@@ -14,9 +15,11 @@ interface IInitialState {
   filteredTasks: any[];
   activeStandards: string[];
   additionalStandardFilterTaskList?: string[];
+  payments: Payments;
 }
 
 const initialState: IInitialState = {
+  payments: {},
   activeTestingCompanies: ['all'],
   activeBrands: ['XMT', 'XMS', 'XMF'],
   activeStandards: ['all'],
@@ -80,10 +83,14 @@ const mainSlice = createSlice({
     changeAdditionalStandardFilterList: (state, { payload }) => {
       state.additionalStandardFilterTaskList = payload;
     },
+    setPayments: (state, { payload }) => {
+      state.payments = payload;
+    },
   },
 });
 
 export const {
+  setPayments,
   changeTasks,
   changeItems,
   changeActiveQuoteNo,

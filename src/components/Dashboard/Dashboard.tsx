@@ -41,11 +41,6 @@ function tasksInRange(
 
 class Dashboard extends Component<any, IDashboard> {
   state = {
-    totalSpendings: {
-      start: '',
-      end: '',
-      amount: 0,
-    },
     quarters: [],
     allDataInChartsVisible: true,
   };
@@ -63,10 +58,9 @@ class Dashboard extends Component<any, IDashboard> {
         <Grid.Row width={12}>
           <Grid.Col>
             <Grid.Row deck>
-              {/* @ts-ignore */}
               <QSpending
-                renderTable={(tasks) =>
-                  renderTableOfDiagramSegment('', '', tasks, true)
+                renderTable={(tasks, payments) =>
+                  renderTableOfDiagramSegment('', '', payments, tasks, true)
                 }
               />
             </Grid.Row>
@@ -145,12 +139,14 @@ class Dashboard extends Component<any, IDashboard> {
       renderTableOfDiagramSegment(
         label,
         param,
+        this.props.payments,
         // passing specific tasks
         dashboardDataChartAdapter(
           this.state.allDataInChartsVisible
             ? this.props.tasks
             : this.state.quarters
-        )
+        ),
+        false
       );
     }
   };
@@ -158,6 +154,7 @@ class Dashboard extends Component<any, IDashboard> {
 
 export default connect(({ main }: RootState) => ({
   tasks: main.filteredTasks,
+  payments: main.payments,
   // @ts-ignore
 }))(Dashboard);
 

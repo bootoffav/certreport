@@ -21,9 +21,13 @@ import {
   changeFilteredItems,
   changeFilteredTasks,
   changeActiveStandards,
+  setPayments,
 } from 'store/slices/mainSlice';
 import type { RootState } from 'store/store';
 import { connect } from 'react-redux';
+import DB from 'backend/DBManager';
+import { query as q } from 'faunadb';
+import { Payments } from 'Task/Task.interface';
 
 class Main extends Component<any> {
   cache = new CacheManager();
@@ -32,6 +36,28 @@ class Main extends Component<any> {
   };
 
   async componentDidMount() {
+    // set payments into redux store
+    DB.client()
+      .query(
+        q.Map(
+          q.Paginate(q.Documents(q.Collection('payments')), {
+            size: 100000, // max for faunadb for a single query
+          }),
+          q.Lambda('payment', q.Get(q.Var('payment')))
+        )
+      )
+      .then(({ data: paymentSet }: any) => {
+        const payments: Payments = {};
+        for (const {
+          data: { payments: paymentsPerTask },
+          ref: {
+            value: { id },
+          },
+        } of paymentSet) {
+          payments[id] = paymentsPerTask;
+        }
+        this.props.setPayments(payments);
+      });
     if (isMainHeaderAllowed(window.location.pathname)) {
       await this.cache.doUpdate();
       await ClientStorage.getData().then(({ tasks, items }: any) => {
@@ -47,7 +73,6 @@ class Main extends Component<any> {
 
   componentDidUpdate(prevProps: any, prevState: any) {
     const { endDate, startDate, activeBrands, allTasks, allItems } = this.props;
-
     if (
       (prevProps.startDate === startDate && prevProps.endDate !== endDate) ||
       prevProps.activeBrands !== activeBrands ||
@@ -261,5 +286,6 @@ export default connect(mapStateToProps, {
   changeFilteredItems,
   changeFilteredTasks,
   changeActiveStandards,
+  setPayments,
   // @ts-ignore
 })(Main);

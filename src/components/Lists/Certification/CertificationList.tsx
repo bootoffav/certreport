@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import './List.css';
 import { countTotalPrice } from 'helpers';
 import { RootState } from 'store/store';
+import { Payments } from 'Task/Task.interface';
 
 interface ICertificationListState {
   visibleData: any[];
@@ -21,6 +22,7 @@ interface ICertificationListProps {
   tasks: any;
   update: any;
   stages: any;
+  payments: Payments;
 }
 
 class CertificationList extends React.Component<
@@ -31,7 +33,7 @@ class CertificationList extends React.Component<
     super(props);
     this.state = {
       visibleData: this.props.tasks,
-      totalPrice: countTotalPrice(this.props.tasks),
+      totalPrice: countTotalPrice(this.props.tasks, []),
     };
   }
 
@@ -39,11 +41,15 @@ class CertificationList extends React.Component<
     return getColumns(this.state.totalPrice, this.props.stages[0]);
   }
 
-  componentDidUpdate(prevProps: any, prevState: any) {
+  componentDidUpdate(prevProps: any) {
     if (prevProps.tasks !== this.props.tasks) {
       this.setState({
         visibleData: this.props.tasks,
-        totalPrice: countTotalPrice(this.props.tasks),
+      });
+    }
+    if (prevProps.payments !== this.props.payments) {
+      this.setState({
+        totalPrice: countTotalPrice(this.props.tasks, this.props.payments),
       });
     }
   }
@@ -100,9 +106,10 @@ class CertificationList extends React.Component<
   );
 }
 
-const mapStateToProps = ({ main }: RootState) => {
-  return { tasks: main.filteredTasks };
-};
+const mapStateToProps = ({ main }: RootState) => ({
+  tasks: main.filteredTasks,
+  payments: main.payments,
+});
 
 // @ts-ignore
 export default connect(mapStateToProps)(CertificationList);

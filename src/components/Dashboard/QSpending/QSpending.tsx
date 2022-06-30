@@ -3,17 +3,14 @@ import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import quarterOfYear from 'dayjs/plugin/quarterOfYear';
 import './QSpending.css';
-// import { getTotalPriceHelper } from 'helpers';
 import { useAppSelector } from 'store/hooks';
-import DB from 'backend/DBManager';
-import { query as q } from 'faunadb';
-import { Payment } from 'Task/Task.interface';
+import { Payments } from 'Task/Task.interface';
 import TotalSpending from './TotalSpending';
 
 dayjs.extend(quarterOfYear);
 
 interface QSpendingProps {
-  renderTable: (t: any[]) => void;
+  renderTable: (t: any[], payments: Payments) => void;
 }
 
 export interface Quarter {
@@ -23,23 +20,19 @@ export interface Quarter {
   tasks: any[];
 }
 
-type Payments = {
-  [key: number]: Payment[];
-};
-
 function QSpending(props: QSpendingProps) {
-  const { startDate, endDate, tasks } = useAppSelector(
-    ({ main: { startDate, endDate, filteredTasks } }) => ({
+  const { startDate, endDate, tasks, payments } = useAppSelector(
+    ({ main: { startDate, endDate, filteredTasks, payments } }) => ({
       startDate,
       endDate,
       tasks: filteredTasks,
+      payments,
     })
   );
 
   const [quarters, setQuarters] = useState(
     [findQuarter(0), findQuarter(1), findQuarter(2), findQuarter(3)] // default last 4 quarters
   );
-  const [payments, setPayments] = useState({});
 
   useEffect(() => {
     if (startDate && endDate) {
@@ -53,7 +46,6 @@ function QSpending(props: QSpendingProps) {
     }
   }, [startDate, endDate, payments, tasks]);
 
-  // run once upon initial payments collection
   useEffect(() => {
     if (Object.getOwnPropertyNames(payments).length) {
       const quartersWithTasksAndPayments =
@@ -61,34 +53,6 @@ function QSpending(props: QSpendingProps) {
       setQuarters(quartersWithTasksAndPayments);
     }
   }, [payments]); // eslint-disable-line
-
-  // set payments
-  useEffect(() => {
-    if (tasks.length) {
-      (async () =>
-        await DB.client()
-          .query(
-            q.Map(
-              q.Paginate(q.Documents(q.Collection('payments')), {
-                size: 100000, // max for faunadb for a single query
-              }),
-              q.Lambda('payment', q.Get(q.Var('payment')))
-            )
-          )
-          .then(({ data: paymentSet }: any) => {
-            const payments: Payments = {};
-            for (const {
-              data: { payments: paymentsPerTask },
-              ref: {
-                value: { id },
-              },
-            } of paymentSet) {
-              payments[id] = paymentsPerTask;
-            }
-            setPayments(payments);
-          }))();
-    }
-  }, [tasks]);
 
   return (
     <>
@@ -99,7 +63,7 @@ function QSpending(props: QSpendingProps) {
               <Card.Header>
                 <div
                   className="mx-auto quarterHeader fix-quarter-label"
-                  onClick={() => props.renderTable(quarter.tasks)}
+                  onClick={() => props.renderTable(quarter.tasks, payments)}
                 >
                   {`Q${quarter.start.quarter()}-${quarter.start.format(
                     'YY'

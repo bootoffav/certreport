@@ -1,4 +1,4 @@
-import type { TaskState } from './Task/Task.interface';
+import type { TaskState, Payments } from './Task/Task.interface';
 
 /**
  * Converts strings that represent dates in the app.
@@ -55,13 +55,15 @@ function removeEmptyProps(obj: any) {
   return obj;
 }
 
-function countTotalPrice(tasks: any[]) {
-  return Math.round(
-    tasks.reduce(
-      (sum: number, task: any) => sum + getTotalPriceHelper(task.state),
-      0
-    )
-  );
+function countTotalPrice(tasks: any[], payments: Payments) {
+  let totalPrice = 0;
+  for (const { id } of tasks) {
+    if (!payments[id]) continue;
+    for (const { price } of payments[id]) {
+      totalPrice += Number(price);
+    }
+  }
+  return Math.round(totalPrice);
 }
 
 function getTotalPriceHelper(state: TaskState): number {
