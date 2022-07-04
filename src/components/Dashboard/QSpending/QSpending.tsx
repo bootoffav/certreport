@@ -9,8 +9,8 @@ import TotalSpending from './TotalSpending';
 
 dayjs.extend(quarterOfYear);
 
-interface QSpendingProps {
-  renderTable: (t: any[], payments: Payments) => void;
+export interface QSpendingProps {
+  renderTable: (t: any[]) => void;
 }
 
 export interface Quarter {
@@ -63,7 +63,7 @@ function QSpending(props: QSpendingProps) {
               <Card.Header>
                 <div
                   className="mx-auto quarterHeader fix-quarter-label"
-                  onClick={() => props.renderTable(quarter.tasks, payments)}
+                  onClick={() => props.renderTable(quarter.tasks)}
                 >
                   {`Q${quarter.start.quarter()}-${quarter.start.format(
                     'YY'
@@ -79,7 +79,7 @@ function QSpending(props: QSpendingProps) {
           </Grid.Col>
         );
       })}
-      <TotalSpending quarters={quarters} />
+      <TotalSpending quarters={quarters} renderTable={props.renderTable} />
     </>
   );
 }

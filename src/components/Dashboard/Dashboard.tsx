@@ -59,8 +59,14 @@ class Dashboard extends Component<any, IDashboard> {
           <Grid.Col>
             <Grid.Row deck>
               <QSpending
-                renderTable={(tasks, payments) =>
-                  renderTableOfDiagramSegment('', '', payments, tasks, true)
+                renderTable={(tasks) =>
+                  renderTableOfDiagramSegment(
+                    '',
+                    '',
+                    this.props.payments,
+                    tasks,
+                    true
+                  )
                 }
               />
             </Grid.Row>
