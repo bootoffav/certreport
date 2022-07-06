@@ -149,6 +149,13 @@ class DB {
       );
     }
 
+    const expirationTimeWindowMap = new Map([
+      [12, 180],
+      [6, 90],
+      [3, 30],
+      [1, 0],
+    ]); // [months, minimal days in range]
+
     return DB.client().query(
       q.Filter(
         q.Filter(
@@ -166,9 +173,15 @@ class DB {
         ),
         q.Lambda(
           ['ref', 'date'],
-          q.LTE(
-            q.TimeDiff(q.ToDate(q.Now()), q.Date(q.Var('date')), 'days'),
-            months * 30 // 6 months in days
+          q.And(
+            q.LTE(
+              q.TimeDiff(q.ToDate(q.Now()), q.Date(q.Var('date')), 'days'),
+              months * 30 // 6 months in days
+            ),
+            q.GTE(
+              q.TimeDiff(q.ToDate(q.Now()), q.Date(q.Var('date')), 'days'),
+              expirationTimeWindowMap.get(months) as Number
+            )
           )
         )
       )

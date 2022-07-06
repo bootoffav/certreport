@@ -134,9 +134,9 @@ const TabContent = ({ months, tasks }: TabProps) => {
 async function getExpiringCertsTasks(
   months: TabProps['months']
 ): Promise<Map<string, string>[]> {
-  return await DB.getExpiringCerts(months).then(({ data }: any) => {
-    return data.map((item: any) => [item[0].id, item[1]]);
-  });
+  return await DB.getExpiringCerts(months).then(({ data }: any) =>
+    data.map((item: any) => [item[0].id, item[1]])
+  );
 }
 
 function ExpiringCerts() {
