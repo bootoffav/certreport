@@ -1,5 +1,6 @@
 import { Grid, Card, Header } from 'tabler-react';
 import { QSpendingProps, Quarter } from './QSpending';
+import styles from './QSpending.module.css';
 
 function TotalSpending({
   quarters,
@@ -19,7 +20,7 @@ function TotalSpending({
           <Card.Header>
             <div className="form-check form-check-inline"></div>
             <div
-              className="mx-auto quarterHeader"
+              className={`mx-auto ${styles.quarterHeader}`}
               onClick={() => renderTable(allTasks)}
             >
               {quarters[0]?.start.format('MM.YY')} -{' '}

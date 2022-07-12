@@ -2,7 +2,7 @@ import { Grid, Card, Header } from 'tabler-react';
 import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import quarterOfYear from 'dayjs/plugin/quarterOfYear';
-import './QSpending.css';
+import styles from './QSpending.module.css';
 import { useAppSelector } from 'store/hooks';
 import { Payments } from 'Task/Task.interface';
 import TotalSpending from './TotalSpending';
@@ -62,7 +62,7 @@ function QSpending(props: QSpendingProps) {
             <Card>
               <Card.Header>
                 <div
-                  className="mx-auto quarterHeader fix-quarter-label"
+                  className={`mx-auto ${styles.quarterHeader}`}
                   onClick={() => props.renderTable(quarter.tasks)}
                 >
                   {`Q${quarter.start.quarter()}-${quarter.start.format(
