@@ -106,4 +106,4 @@ export const {
   changeAdditionalStandardFilterList,
 } = mainSlice.actions;
 
-export { mainSlice };
+export default mainSlice;

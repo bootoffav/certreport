@@ -3,9 +3,10 @@ import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import quarterOfYear from 'dayjs/plugin/quarterOfYear';
 import styles from './QSpending.module.css';
-import { useAppSelector } from 'store/hooks';
+import { useAppSelector, useAppDispatch } from 'store/hooks';
 import { Payments } from 'Task/Task.interface';
 import TotalSpending from './TotalSpending';
+import { changeActiveQuarterTasks } from 'store/slices/dashboardSlice';
 
 dayjs.extend(quarterOfYear);
 
@@ -22,6 +23,7 @@ export interface Quarter {
 }
 
 function QSpending(props: QSpendingProps) {
+  const dispatch = useAppDispatch();
   const { startDate, endDate, tasks, payments } = useAppSelector(
     ({ main: { startDate, endDate, filteredTasks, payments } }) => ({
       startDate,
@@ -46,6 +48,14 @@ function QSpending(props: QSpendingProps) {
       setQuarters(newQ);
     }
   }, [startDate, endDate, payments, tasks]);
+
+  useEffect(() => {
+    const tasksOfActiveQuarters = quarters
+      .filter((q) => q.active)
+      .reduce((acc, { tasks }) => [...acc, ...tasks], [] as any[]);
+    if (tasksOfActiveQuarters.length)
+      dispatch(changeActiveQuarterTasks(tasksOfActiveQuarters));
+  }, [dispatch, quarters]);
 
   useEffect(() => {
     if (Object.getOwnPropertyNames(payments).length) {

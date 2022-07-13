@@ -13,8 +13,8 @@ const CertificationsResultCard = ({
   resume,
   label,
 }: CertificationsResultCardProps) => {
-  let { tasks, payments } = useAppSelector(({ main }) => ({
-    tasks: main.filteredTasks,
+  let { tasks, payments } = useAppSelector(({ main, dashboard }) => ({
+    tasks: dashboard.tasksOfActiveQuarters,
     payments: main.payments,
   }));
   tasks = tasks.filter(({ state }) => resume === '' || state.resume === resume);
