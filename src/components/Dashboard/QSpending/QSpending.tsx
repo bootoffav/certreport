@@ -18,6 +18,7 @@ export interface Quarter {
   end: dayjs.Dayjs;
   spent: number;
   tasks: any[];
+  active: boolean;
 }
 
 function QSpending(props: QSpendingProps) {
@@ -66,6 +67,13 @@ function QSpending(props: QSpendingProps) {
                     className="align-middle mx-1"
                     type="checkbox"
                     value=""
+                    checked={quarter.active}
+                    onChange={({ currentTarget }) => {
+                      quarter.active = currentTarget.checked;
+                      const newQ = [...quarters];
+                      newQ[index] = quarter;
+                      setQuarters(newQ);
+                    }}
                   />
                 </div>
                 <div
@@ -99,6 +107,7 @@ const findQuarter = (howMany: number, sDate?: any): Quarter => {
     end: q.endOf('quarter'),
     spent: 0,
     tasks: [],
+    active: false,
   };
 };
 
@@ -118,6 +127,7 @@ const findSpecificQuarters = (
       end: sDate.endOf('quarter'),
       spent: 0,
       tasks: [],
+      active: false,
     });
   }
 
@@ -132,6 +142,7 @@ const findSpecificQuarters = (
       end: sDate.add(i, 'quarter').endOf('quarter'),
       spent: 0,
       tasks: [],
+      active: false,
     });
   }
 
