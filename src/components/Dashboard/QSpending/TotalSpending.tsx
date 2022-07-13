@@ -10,9 +10,11 @@ function TotalSpending({
   renderTable: QSpendingProps['renderTable'];
 }) {
   if (quarters.length) {
-    const allTasks = quarters
-      .filter((q) => q.active) // only those with checkbox ticked
-      .reduce((acc, { tasks }) => [...acc, ...tasks], [] as any[]);
+    const activeQuarters = quarters.filter((q) => q.active);
+    const tasks = activeQuarters.reduce(
+      (acc, { tasks }) => [...acc, ...tasks],
+      [] as any[]
+    );
     return (
       <Grid.Col width={3} key="total">
         <Card>
@@ -20,10 +22,10 @@ function TotalSpending({
             <div className="form-check form-check-inline"></div>
             <div
               className={`mx-auto ${styles.quarterHeader}`}
-              onClick={() => renderTable(allTasks)}
+              onClick={() => renderTable(tasks)}
             >
               {quarters[0]?.start.format('MM.YY')} -{' '}
-              {quarters.at(-1)?.end.format('MM.YY')} / {allTasks.length}{' '}
+              {quarters.at(-1)?.end.format('MM.YY')} / {tasks.length}{' '}
               certifications
             </div>
           </Card.Header>
@@ -32,7 +34,7 @@ function TotalSpending({
               <div>
                 TOTAL: €
                 {Math.round(
-                  quarters.reduce((acc, quarter) => acc + quarter.spent, 0)
+                  activeQuarters.reduce((acc, { spent }) => acc + spent, 0)
                 ).toLocaleString()}
               </div>
             </Header.H3>
