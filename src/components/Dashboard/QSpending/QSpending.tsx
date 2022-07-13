@@ -38,15 +38,13 @@ function QSpending(props: QSpendingProps) {
   );
 
   useEffect(() => {
-    if (startDate && endDate) {
-      const specificQuarters = findSpecificQuarters(startDate, endDate);
-      const newQ = applyPaymentsToQuartersAndPutAssociatedTasks(
-        specificQuarters,
-        payments,
-        tasks
-      );
-      setQuarters(newQ);
-    }
+    const quarters =
+      startDate && endDate
+        ? findSpecificQuarters(startDate, endDate)
+        : [findQuarter(0), findQuarter(1), findQuarter(2), findQuarter(3)];
+    const quartersWithTasksAndSpent =
+      applyPaymentsToQuartersAndPutAssociatedTasks(quarters, payments, tasks);
+    setQuarters(quartersWithTasksAndSpent);
   }, [startDate, endDate, payments, tasks]);
 
   useEffect(() => {
