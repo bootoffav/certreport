@@ -51,8 +51,7 @@ function QSpending(props: QSpendingProps) {
     const tasksOfActiveQuarters = quarters
       .filter((q) => q.active)
       .reduce((acc, { tasks }) => [...acc, ...tasks], [] as any[]);
-    if (tasksOfActiveQuarters.length)
-      dispatch(changeActiveQuarterTasks(tasksOfActiveQuarters));
+    dispatch(changeActiveQuarterTasks(tasksOfActiveQuarters));
   }, [dispatch, quarters]);
 
   useEffect(() => {
