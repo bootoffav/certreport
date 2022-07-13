@@ -107,7 +107,7 @@ const findQuarter = (howMany: number, sDate?: any): Quarter => {
     end: q.endOf('quarter'),
     spent: 0,
     tasks: [],
-    active: false,
+    active: true,
   };
 };
 
@@ -127,7 +127,7 @@ const findSpecificQuarters = (
       end: sDate.endOf('quarter'),
       spent: 0,
       tasks: [],
-      active: false,
+      active: true,
     });
   }
 
@@ -142,7 +142,7 @@ const findSpecificQuarters = (
       end: sDate.add(i, 'quarter').endOf('quarter'),
       spent: 0,
       tasks: [],
-      active: false,
+      active: true,
     });
   }
 

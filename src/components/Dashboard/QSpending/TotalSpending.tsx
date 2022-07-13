@@ -10,10 +10,9 @@ function TotalSpending({
   renderTable: QSpendingProps['renderTable'];
 }) {
   if (quarters.length) {
-    const allTasks = quarters.reduce(
-      (acc, { tasks }) => [...acc, ...tasks],
-      [] as any[]
-    );
+    const allTasks = quarters
+      .filter((q) => q.active) // only those with checkbox ticked
+      .reduce((acc, { tasks }) => [...acc, ...tasks], [] as any[]);
     return (
       <Grid.Col width={3} key="total">
         <Card>
