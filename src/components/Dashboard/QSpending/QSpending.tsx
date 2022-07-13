@@ -61,8 +61,15 @@ function QSpending(props: QSpendingProps) {
           <Grid.Col key={quarter.start}>
             <Card>
               <Card.Header>
+                <div className="col-1">
+                  <input
+                    className="align-middle mx-1"
+                    type="checkbox"
+                    value=""
+                  />
+                </div>
                 <div
-                  className={`mx-auto ${styles.quarterHeader}`}
+                  className={`col text-center ${styles.quarterHeader}`}
                   onClick={() => props.renderTable(quarter.tasks)}
                 >
                   {`Q${quarter.start.quarter()}-${quarter.start.format(

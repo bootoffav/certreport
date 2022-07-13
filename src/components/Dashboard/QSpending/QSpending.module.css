@@ -2,3 +2,6 @@
   font-size: larger;
   cursor: pointer;
 }
+.quarterHeaderRow {
+  flex-wrap: nowrap;
+}
