@@ -26,7 +26,7 @@ function PreDefinedDates() {
             dispatch(changeStartDate(sDate));
             dispatch(changeEndDate(eDate));
           }}
-          className="mx-1 btn btn-primary btn-sm"
+          className="ml-1 btn btn-primary btn-sm"
         >
           {period}
         </button>
@@ -66,6 +66,7 @@ function DateFilter() {
         placeholderText="from"
         maxDate={endDate}
       />
+      <span className="mx-1"></span>
       <DatePicker
         selected={endDate}
         dateFormat="dd.MM.yy"
@@ -83,6 +84,7 @@ function DateFilter() {
         }}
         placeholderText="to"
         minDate={startDate}
+        todayButton="Today"
       />
       <PreDefinedDates />
     </div>

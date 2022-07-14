@@ -73,9 +73,10 @@ class Main extends Component<any> {
 
   componentDidUpdate(prevProps: any, prevState: any) {
     const { endDate, startDate, activeBrands, allTasks, allItems } = this.props;
+    const { startDate: prevStartDate, endDate: prevEndDate } = prevProps;
     if (
-      (prevProps.startDate === startDate && prevProps.endDate !== endDate) ||
-      (prevProps.startDate !== startDate && prevProps.endDate !== endDate) || // PreDefinedDates case
+      prevEndDate !== endDate ||
+      prevStartDate !== startDate ||
       prevProps.activeBrands !== activeBrands ||
       !isEqual(prevState.stages, this.state.stages) ||
       !isEqual(prevProps.activeStandards, this.props.activeStandards) ||

@@ -5,53 +5,51 @@ import DateFilter from '../Filters/DateFilter';
 import { TestingCompanyFilter } from '../Filters/TestingCompanyFilter';
 import State from './State';
 
-function NavBar() {
-  return (
-    <div className="container-fluid rounded-bottom navbar-light mb-1">
-      <div className="d-flex">
-        <State />
+const NavBar = () => (
+  <>
+    <div className="d-flex">
+      <State />
+      <div className="my-auto">
         <DateFilter />
-
-        <div className="ml-auto d-flex justify-content-end align-items-center">
-          <NavLink className="navbar-link" exact to="/dashboard">
-            <p>Dashboard</p>
-          </NavLink>
-          <span className="vl"></span>
-
-          <NavLink className="navbar-link" to="/">
-            <p>Certification tasks</p>
-          </NavLink>
-          <span className="vl"></span>
-
-          <NavLink className="navbar-link" to="/expiringcerts">
-            <p>Expiring Certificates</p>
-          </NavLink>
-          <span className="vl"></span>
-
-          <NavLink className="navbar-link" to="/items">
-            <p>Items</p>
-          </NavLink>
-          <span className="vl"></span>
-
-          <NavLink exact to="/add">
-            <p>Add cert</p>
-          </NavLink>
-        </div>
       </div>
+      <div className="ml-auto d-flex">
+        <NavLink className="navbar-link" exact to="/dashboard">
+          <p>Dashboard</p>
+        </NavLink>
+        <span className="vl"></span>
 
-      <div className="d-flex justify-content-start">
-        <BrandFilter />
+        <NavLink className="navbar-link" to="/">
+          <p>Certification tasks</p>
+        </NavLink>
+        <span className="vl"></span>
 
-        <div className="pl-1">
-          <TestingCompanyFilter />
-        </div>
+        <NavLink className="navbar-link" to="/expiringcerts">
+          <p>Expiring Certificates</p>
+        </NavLink>
+        <span className="vl"></span>
 
-        <div className="pl-1">
-          <StandardFilter />
-        </div>
+        <NavLink className="navbar-link" to="/items">
+          <p>Items</p>
+        </NavLink>
+        <span className="vl"></span>
+
+        <NavLink to="/add">
+          <p>Add cert</p>
+        </NavLink>
       </div>
     </div>
-  );
-}
+    <div className="d-flex justify-content-start">
+      <BrandFilter />
+
+      <div className="pl-1">
+        <TestingCompanyFilter />
+      </div>
+
+      <div className="pl-1">
+        <StandardFilter />
+      </div>
+    </div>
+  </>
+);
 
 export default NavBar;
