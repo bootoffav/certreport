@@ -21,7 +21,7 @@ const BrandFilter = ({ update }: any) => {
 
   return (
     <div className="d-flex align-items-start">
-      <div className="btn-group" data-toggle="buttons">
+      <div className="btn-group btn-group-sm" data-toggle="buttons">
         {allBrands.map((brand) => (
           <label className="btn btn-secondary" key={brand}>
             <input

@@ -13,27 +13,23 @@ const NavBar = () => (
         <DateFilter />
       </div>
       <div className="ml-auto d-flex">
-        <NavLink className="navbar-link" exact to="/dashboard">
+        <NavLink className="ml-3 navbar-link" exact to="/dashboard">
           <p>Dashboard</p>
         </NavLink>
-        <span className="vl"></span>
 
-        <NavLink className="navbar-link" to="/">
+        <NavLink className="ml-3 navbar-link" to="/">
           <p>Certification tasks</p>
         </NavLink>
-        <span className="vl"></span>
 
-        <NavLink className="navbar-link" to="/expiringcerts">
+        <NavLink className="ml-3 navbar-link" to="/expiringcerts">
           <p>Expiring Certificates</p>
         </NavLink>
-        <span className="vl"></span>
 
-        <NavLink className="navbar-link" to="/items">
+        <NavLink className="ml-3 navbar-link" to="/items">
           <p>Items</p>
         </NavLink>
-        <span className="vl"></span>
 
-        <NavLink to="/add">
+        <NavLink className="ml-3" to="/add">
           <p>Add cert</p>
         </NavLink>
       </div>

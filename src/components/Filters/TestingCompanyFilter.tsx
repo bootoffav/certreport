@@ -59,7 +59,7 @@ function TestingCompanyFilter() {
 
   return (
     <div className="d-flex align-items-start">
-      <div className="btn-group" data-toggle="buttons">
+      <div className="btn-group btn-group-sm" data-toggle="buttons">
         {Object.keys(state).map((item) => (
           <label
             className={`btn btn-${item === 'all' ? 'info' : 'secondary'}`}

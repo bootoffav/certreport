@@ -71,7 +71,7 @@ function StandardFilter() {
 
   return (
     <div className="d-flex flex-column">
-      <div className="btn-group" data-toggle="buttons">
+      <div className="btn-group btn-group-sm" data-toggle="buttons">
         {Object.keys(standards).map((standard) => (
           <label
             className={`btn btn-${standard === 'All' ? 'info' : 'secondary'}`}
