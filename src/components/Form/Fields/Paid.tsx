@@ -16,7 +16,7 @@ const Paid = ({
 }: PaidProps) => {
   return (
     <div className="form-group mx-2">
-      Payment Date
+      Payment date
       <div className="input-group">
         <div className="input-group-prepend">
           <div className="input-group-text">

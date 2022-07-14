@@ -14,7 +14,7 @@ function BasicInfo({ taskId, setState, ...props }: any) {
 
   useEffect(() => {
     (async function () {
-      await DB.get(taskId, 'factory', 'certification')
+      await DB.get(taskId, ['data', 'factory'], 'certification')
         .then((factory) => {
           setState({ factory }, () => setFactory(factory));
         })

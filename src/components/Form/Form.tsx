@@ -77,7 +77,7 @@ class Form extends React.Component {
       // put activeQuoteNo into react store
       const payments: Payment[] = await DB.get(
         this.task_id,
-        'payments',
+        ['data', 'payments'],
         'payments'
       ).catch((e) => []);
 

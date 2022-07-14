@@ -3,8 +3,11 @@ import { emptyState } from 'Task/emptyState';
 import type { IRequirement } from 'components/Form/Tabs/Standards/Requirements';
 import type { TabProps } from 'components/ExpiringCerts/ExpiringCerts';
 
+type CollectionType = 'aitex' | 'payments' | 'certification' | 'standards';
+
 class DB {
-  static fdbCollection = process.env.REACT_APP_FAUNADB_CLASS || 'aitex';
+  static fdbCollection: CollectionType =
+    (process.env.REACT_APP_FAUNADB_CLASS as CollectionType) || 'aitex';
   static fdbIndex = process.env.REACT_APP_FAUNADB_INDEX || 'id';
 
   static client() {
@@ -62,14 +65,11 @@ class DB {
 
   static async get(
     ref: string,
-    property: string,
+    path: string[],
     fdbCollection = this.fdbCollection
   ): Promise<any> {
     return await DB.client().query(
-      q.Select(
-        ['data', property],
-        q.Get(q.Ref(q.Collection(fdbCollection), ref))
-      )
+      q.Select(path, q.Get(q.Ref(q.Collection(fdbCollection), ref)))
     );
   }
 
@@ -105,7 +105,7 @@ class DB {
   static async createInstance(
     taskId: string,
     state: any,
-    fdbCollection = this.fdbCollection
+    fdbCollection: CollectionType = this.fdbCollection
   ) {
     return DB.client().query(
       q.Create(q.Ref(q.Collection(fdbCollection), taskId), {
@@ -116,7 +116,11 @@ class DB {
     );
   }
 
-  static updateInstance(taskId: string, state: any, fdbCollection = 'aitex') {
+  static updateInstance(
+    taskId: string,
+    state: any,
+    fdbCollection: CollectionType = 'aitex'
+  ) {
     return DB.client()
       .query(
         q.Update(q.Ref(q.Collection(fdbCollection), taskId), {

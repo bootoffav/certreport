@@ -51,7 +51,7 @@ function StandardSelector(props: StandardSelectorProps) {
 
   useEffect(() => {
     if (props.taskId) {
-      DB.get(props.taskId, 'standardsForTitle', 'certification')
+      DB.get(props.taskId, ['data', 'standardsForTitle'], 'certification')
         .then((initState) => {
           dispatch({ payload: initState });
         })

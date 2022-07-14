@@ -7,6 +7,8 @@ import { localizePrice } from 'helpers';
 import DB from 'backend/DBManager';
 import { useAppDispatch } from 'store/hooks';
 import { changeActiveQuoteNo, changeTotalPrice } from 'store/slices/mainSlice';
+import Select from 'react-select';
+import { XMBranchOptions } from 'defaults';
 
 interface PaymentsProps {
   payments: Payment[];
@@ -23,6 +25,9 @@ const emptyPayment: Payment = {
 
 function Payments({ taskId, ...props }: PaymentsProps) {
   const [payments, setPayments] = useState([] as Payment[]);
+  const [branches, setBranches] = useState<typeof XMBranchOptions[number][]>(
+    []
+  );
 
   const dispatch = useAppDispatch();
 
@@ -30,7 +35,11 @@ function Payments({ taskId, ...props }: PaymentsProps) {
   useEffect(() => {
     (async function () {
       if (taskId) {
-        const payments = await DB.get(taskId, 'payments', 'payments');
+        const { payments, branches } = await DB.get(
+          taskId,
+          ['data'],
+          'payments'
+        );
         if (props.payments.length > 0) {
           // исключить повторные оплаты (сранивание по price)
           // возникают при получении данных из Б24 и faunaDB
@@ -42,6 +51,7 @@ function Payments({ taskId, ...props }: PaymentsProps) {
           });
         }
         setPayments([...props.payments, ...payments]);
+        setBranches(branches);
       }
     })();
   }, [taskId, props.payments, dispatch]);
@@ -67,7 +77,10 @@ function Payments({ taskId, ...props }: PaymentsProps) {
   const renderPayment = (payment: Payment, index: number): JSX.Element => {
     const paymentPosition = index + 1;
     return (
-      <div className="d-flex justify-content-center" key={paymentPosition}>
+      <div
+        className="d-flex justify-content-between align-items-center"
+        key={paymentPosition}
+      >
         <Price
           value={payment.price}
           label={`Payment #${paymentPosition}`}
@@ -137,7 +150,7 @@ function Payments({ taskId, ...props }: PaymentsProps) {
           required={false}
           value={payment.proformaInvoiceNo}
           id={`proformaInvoiceNo${paymentPosition}`}
-          label="PRO-FORMA INVOICE NO."
+          label="Pro-forma invoice no."
           handleChange={({ currentTarget }) => {
             const newPayments = [
               ...genericSetter(
@@ -151,6 +164,7 @@ function Payments({ taskId, ...props }: PaymentsProps) {
               DB.updateInstance(taskId, { payments: newPayments }, 'payments');
           }}
         />
+
         <RemovePayment
           doIt={(e) => {
             e.preventDefault();
@@ -167,6 +181,30 @@ function Payments({ taskId, ...props }: PaymentsProps) {
 
   return (
     <>
+      <div className="mb-3">
+        XM Branch:
+        <Select
+          options={XMBranchOptions.map((option) => ({
+            value: option,
+            label: option,
+          }))}
+          isMulti
+          value={branches.map((b) => ({ value: b, label: b }))}
+          onBlur={() => {
+            taskId &&
+              DB.updateInstance(
+                taskId,
+                {
+                  branches,
+                },
+                'payments'
+              );
+          }}
+          onChange={(chosenOptions) =>
+            setBranches(chosenOptions.map(({ value }) => value))
+          }
+        />
+      </div>
       {payments.map(renderPayment)}
       <AddPayment
         doIt={(e) => {

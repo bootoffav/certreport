@@ -31,18 +31,13 @@ function Dates(props: DatesProps) {
     useState<number>();
 
   useEffect(() => {
-    if (props.taskId) {
-      DB.get(props.taskId, 'expirationDate', 'certification')
-        .then((expirationDate: TaskState['expirationDate']) => {
+    props.taskId &&
+      DB.get(props.taskId, ['data'], 'certification').then(
+        ({ expirationDate, calendarExpirationEventId }) => {
           setExpirationDate(expirationDate);
-        })
-        .catch((e) => console.log(e));
-      DB.get(props.taskId, 'calendarExpirationEventId', 'certification')
-        .then((ExpirationEventId: number) =>
-          setCalendarExpirationEventId(ExpirationEventId)
-        )
-        .catch((e) => console.log(e));
-    }
+          setCalendarExpirationEventId(calendarExpirationEventId);
+        }
+      );
   }, [props.taskId]);
 
   const repeatedStages = stages[1].options.map((stage: any) => stage.label);
@@ -213,9 +208,9 @@ function RepeatDates({ taskId }: { taskId?: string }) {
 
   useEffect(() => {
     taskId &&
-      DB.get(taskId, 'repeatDates', 'certification').then((response) => {
-        setRepeatDates(response);
-      });
+      DB.get(taskId, ['data', 'repeatDates'], 'certification').then(
+        setRepeatDates
+      );
   }, [taskId]);
 
   const dateChanger = (field: keyof IRepeatDates & string, date: Date) => {
