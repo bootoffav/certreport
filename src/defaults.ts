@@ -93,6 +93,18 @@ let selectOptions: {
   articles: JSON.parse(localStorage.getItem('articles') || '[]'),
 };
 
+const XMBranchOptions = [
+  'XM Europe (Vilnius)',
+  'XM Romania',
+  'XM Spain',
+  'XM Poland',
+  'XM Italy',
+  'XM Hungary',
+  'XM Kazakhstan',
+  'XM Brazil',
+  'XM USA',
+] as const;
+
 const standardParamMap = {
   'EN 469': ['6.1 B.3.2 FR-New', '6.1 B.3.2 FR-Wash', '6.5 B.3.1 Heat-New'],
   'EN 20471': [
@@ -119,4 +131,4 @@ function initApp() {
   B24.get_standards().then((data) => saveAndApply(data, 'standards'));
 }
 
-export { selectOptions, standardParamMap, initApp, stages };
+export { selectOptions, standardParamMap, initApp, stages, XMBranchOptions };
