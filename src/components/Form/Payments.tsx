@@ -31,9 +31,6 @@ function Payments({ taskId, ...props }: PaymentsProps) {
 
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    taskId && DB.get(taskId, 'branches', 'payments').then(setBranches);
-  }, [taskId]);
   // gets payments from DB
   useEffect(() => {
     (async function () {
