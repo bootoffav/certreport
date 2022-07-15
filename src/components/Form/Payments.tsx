@@ -35,7 +35,7 @@ function Payments({ taskId, ...props }: PaymentsProps) {
   useEffect(() => {
     (async function () {
       if (taskId) {
-        const { payments, branches } = await DB.get(
+        const { payments = [], branches = [] } = await DB.get(
           taskId,
           ['data'],
           'payments'
