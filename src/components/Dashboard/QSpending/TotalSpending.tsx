@@ -1,6 +1,11 @@
 import { Grid, Card, Header } from 'tabler-react';
 import { SpendingBlocksProps, SpendingBlock } from './SpendingBlocks';
 import styles from './SpendingBlocks.module.css';
+import {
+  changeSpendingBlocksTimePeriod,
+  IDashboardSlice,
+} from 'store/slices/dashboardSlice';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
 
 function TotalSpending({
   spendingBlocks,
@@ -9,6 +14,11 @@ function TotalSpending({
   spendingBlocks: SpendingBlock[];
   renderTable: SpendingBlocksProps['renderTable'];
 }) {
+  const dispatch = useAppDispatch();
+  const timePeriod = useAppSelector(
+    ({ dashboard }) => dashboard.spendingBlocksTimePeriod
+  );
+
   if (spendingBlocks.length) {
     const activeBlocks = spendingBlocks.filter(({ active }) => active);
     const tasks = activeBlocks.reduce<SpendingBlock['tasks']>(
@@ -27,6 +37,26 @@ function TotalSpending({
               {spendingBlocks[0]?.start.format('MM.YY')} -{' '}
               {spendingBlocks.at(-1)?.end.format('MM.YY')} / {tasks.length}{' '}
               certifications
+            </div>
+            <div>
+              <div>Period of time</div>
+              <select
+                className="text-center"
+                value={timePeriod}
+                onChange={({ currentTarget: { value } }) => {
+                  dispatch(
+                    changeSpendingBlocksTimePeriod(
+                      value as IDashboardSlice['spendingBlocksTimePeriod']
+                    )
+                  );
+                }}
+              >
+                {['1 month', 'quarter', '6 months', '1 year'].map((range) => (
+                  <option key={range} value={range}>
+                    {range}
+                  </option>
+                ))}
+              </select>
             </div>
           </Card.Header>
           <Card.Body>
