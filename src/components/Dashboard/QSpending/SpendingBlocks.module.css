@@ -1,7 +1,7 @@
-.quarterHeader:hover {
+.spendingBlocksHeader:hover {
   font-size: larger;
   cursor: pointer;
 }
-.quarterHeaderRow {
+.spendingBlocksHeaderRow {
   flex-wrap: nowrap;
 }

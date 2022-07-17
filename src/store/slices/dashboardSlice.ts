@@ -1,16 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit';
+import type { TaskState } from 'Task/Task.interface';
+
+const initialState: { tasksOfActiveSpendingBlocks: TaskState[] } = {
+  tasksOfActiveSpendingBlocks: [],
+};
 
 const dashboardSlice = createSlice({
   name: 'dashboard',
-  initialState: {
-    tasksOfActiveQuarters: [] as any[],
-  },
+  initialState,
   reducers: {
-    changeActiveQuarterTasks: (state, { payload }) => {
-      state.tasksOfActiveQuarters = payload;
+    changeActiveSpendingBlocksTasks: (state, { payload }) => {
+      state.tasksOfActiveSpendingBlocks = payload;
     },
   },
 });
 
-export const { changeActiveQuarterTasks } = dashboardSlice.actions;
+export const { changeActiveSpendingBlocksTasks } = dashboardSlice.actions;
 export default dashboardSlice;

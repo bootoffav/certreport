@@ -4,7 +4,7 @@ import './Dashboard.css';
 import { unmountComponentAtNode } from 'react-dom';
 import { Grid, Card } from 'tabler-react';
 import { HorizontalBar } from 'react-chartjs-2';
-import QSpending from './QSpending/QSpending';
+import SpendingBlocks from './QSpending/SpendingBlocks';
 import { chartOptions } from './configs';
 import { byStages, byProducts } from './dataprocessing';
 import { renderTableOfDiagramSegment } from './utils';
@@ -58,7 +58,7 @@ class Dashboard extends Component<any, IDashboard> {
         <Grid.Row width={12}>
           <Grid.Col>
             <Grid.Row deck>
-              <QSpending
+              <SpendingBlocks
                 renderTable={(tasks) =>
                   renderTableOfDiagramSegment(
                     '',

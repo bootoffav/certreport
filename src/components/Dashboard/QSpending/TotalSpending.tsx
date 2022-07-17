@@ -1,19 +1,19 @@
 import { Grid, Card, Header } from 'tabler-react';
-import { QSpendingProps, Quarter } from './QSpending';
-import styles from './QSpending.module.css';
+import { SpendingBlocksProps, SpendingBlock } from './SpendingBlocks';
+import styles from './SpendingBlocks.module.css';
 
 function TotalSpending({
-  quarters,
+  spendingBlocks,
   renderTable,
 }: {
-  quarters: Quarter[];
-  renderTable: QSpendingProps['renderTable'];
+  spendingBlocks: SpendingBlock[];
+  renderTable: SpendingBlocksProps['renderTable'];
 }) {
-  if (quarters.length) {
-    const activeQuarters = quarters.filter((q) => q.active);
-    const tasks = activeQuarters.reduce(
-      (acc, { tasks }) => [...acc, ...tasks],
-      [] as any[]
+  if (spendingBlocks.length) {
+    const activeBlocks = spendingBlocks.filter(({ active }) => active);
+    const tasks = activeBlocks.reduce<SpendingBlock['tasks']>(
+      (acc, { tasks }) => acc.concat(tasks),
+      []
     );
     return (
       <Grid.Col width={3} key="total">
@@ -21,11 +21,11 @@ function TotalSpending({
           <Card.Header>
             <div className="form-check form-check-inline"></div>
             <div
-              className={`mx-auto ${styles.quarterHeader}`}
+              className={`mx-auto ${styles.spendingBlocksHeader}`}
               onClick={() => renderTable(tasks)}
             >
-              {quarters[0]?.start.format('MM.YY')} -{' '}
-              {quarters.at(-1)?.end.format('MM.YY')} / {tasks.length}{' '}
+              {spendingBlocks[0]?.start.format('MM.YY')} -{' '}
+              {spendingBlocks.at(-1)?.end.format('MM.YY')} / {tasks.length}{' '}
               certifications
             </div>
           </Card.Header>
@@ -34,7 +34,7 @@ function TotalSpending({
               <div>
                 TOTAL: €
                 {Math.round(
-                  activeQuarters.reduce((acc, { spent }) => acc + spent, 0)
+                  activeBlocks.reduce((acc, { spent }) => acc + spent, 0)
                 ).toLocaleString()}
               </div>
             </Header.H3>
