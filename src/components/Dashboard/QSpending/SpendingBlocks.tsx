@@ -158,7 +158,7 @@ const findRange = (
 ): SpendingBlock => {
   let start: dayjs.Dayjs;
 
-  start = sDate ? dayjs(sDate) : dayjs().subtract(4, unit);
+  start = sDate ? dayjs(sDate) : dayjs().subtract(3, unit);
   const block = start.add(howMany, unit);
   return {
     start: block.startOf(unit),
@@ -190,7 +190,7 @@ const findSpecificRanges = (
     });
   }
 
-  while (sDate.add(i, timePeriod).endOf(timePeriod) < eDate) {
+  while (sDate.add(i, timePeriod).startOf(timePeriod) < eDate) {
     ranges.push(findRange(i++, timePeriod, startDate));
   }
 
