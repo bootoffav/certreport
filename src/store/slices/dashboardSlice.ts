@@ -3,7 +3,7 @@ import type { TaskState } from 'Task/Task.interface';
 
 export interface IDashboardSlice {
   tasksOfActiveSpendingBlocks: TaskState[];
-  spendingBlocksTimePeriod: '1 month' | 'quarter' | '6 months' | '1 year';
+  spendingBlocksTimePeriod: 'month' | 'quarter' | 'year';
 }
 const initialState: IDashboardSlice = {
   tasksOfActiveSpendingBlocks: [],

@@ -6,7 +6,10 @@ import styles from './SpendingBlocks.module.css';
 import { useAppSelector, useAppDispatch } from 'store/hooks';
 import { Payments, TaskState } from 'Task/Task.interface';
 import TotalSpending from './TotalSpending';
-import { changeActiveSpendingBlocksTasks } from 'store/slices/dashboardSlice';
+import {
+  changeActiveSpendingBlocksTasks,
+  IDashboardSlice,
+} from 'store/slices/dashboardSlice';
 import { roundToCents } from './SpendingBlocksHelpers';
 
 dayjs.extend(quarterOfYear);
@@ -25,24 +28,35 @@ export interface SpendingBlock {
 
 function SpendingBlocks(props: SpendingBlocksProps) {
   const dispatch = useAppDispatch();
-  const { startDate, endDate, tasks, payments } = useAppSelector(
-    ({ main: { startDate, endDate, filteredTasks, payments } }) => ({
+  const { startDate, endDate, tasks, payments, timePeriod } = useAppSelector(
+    ({ main: { startDate, endDate, filteredTasks, payments }, dashboard }) => ({
       startDate,
       endDate,
       tasks: filteredTasks,
       payments,
+      timePeriod: dashboard.spendingBlocksTimePeriod,
     })
   );
 
   const [blocks, setBlocks] = useState(
-    [findRange(0), findRange(1), findRange(2), findRange(3)] // default last 4 blocks as quarters
+    [
+      findRange(0, timePeriod),
+      findRange(1, timePeriod),
+      findRange(2, timePeriod),
+      findRange(3, timePeriod),
+    ] // default last 4 blocks as quarters
   );
 
   useEffect(() => {
     const blocks =
       startDate && endDate
-        ? findSpecificRanges(startDate, endDate)
-        : [findRange(0), findRange(1), findRange(2), findRange(3)];
+        ? findSpecificRanges(startDate, endDate, timePeriod)
+        : [
+            findRange(0, timePeriod),
+            findRange(1, timePeriod),
+            findRange(2, timePeriod),
+            findRange(3, timePeriod),
+          ];
     const spendingBlocks = roundToCents(
       applyPaymentsToSpendingBlocksAndPutAssociatedTasks(
         blocks,
@@ -51,7 +65,7 @@ function SpendingBlocks(props: SpendingBlocksProps) {
       )
     );
     setBlocks(spendingBlocks);
-  }, [startDate, endDate, payments, tasks]);
+  }, [startDate, endDate, payments, tasks, timePeriod]);
 
   useEffect(() => {
     const tasksOfActiveSpendingBlocks = blocks
@@ -101,9 +115,7 @@ function SpendingBlocks(props: SpendingBlocksProps) {
                   className={`col text-center ${styles.spendingBlocksHeader}`}
                   onClick={() => props.renderTable(spendingBlock.tasks)}
                 >
-                  {`Q${spendingBlock.start.quarter()}-${spendingBlock.start.format(
-                    'YY'
-                  )} / ${spendingBlock.tasks.length} certifications`}
+                  {formatSpendingBlockHeader(spendingBlock, timePeriod)}
                 </div>
               </Card.Header>
               <Card.Body>
@@ -120,12 +132,37 @@ function SpendingBlocks(props: SpendingBlocksProps) {
   );
 }
 
-const findRange = (howMany: number, sDate?: any): SpendingBlock => {
-  let start = sDate ? dayjs(sDate) : dayjs().subtract(4, 'quarter');
-  const q = start.add(howMany, 'quarter');
+function formatSpendingBlockHeader(
+  { start, tasks }: SpendingBlock,
+  timePeriod: IDashboardSlice['spendingBlocksTimePeriod']
+): string {
+  let header: string;
+  switch (timePeriod) {
+    case 'month':
+      header = `${start.format('MM.YY')}`;
+      break;
+    case 'quarter':
+      header = `Q${start.quarter()}-${start.format('YY')}`;
+      break;
+    case 'year':
+      header = start.year().toString();
+      break;
+  }
+  return `${header} / ${tasks.length} certifications`;
+}
+
+const findRange = (
+  howMany: number,
+  unit: IDashboardSlice['spendingBlocksTimePeriod'],
+  sDate?: string
+): SpendingBlock => {
+  let start: dayjs.Dayjs;
+
+  start = sDate ? dayjs(sDate) : dayjs().subtract(4, unit);
+  const block = start.add(howMany, unit);
   return {
-    start: q.startOf('quarter'),
-    end: q.endOf('quarter'),
+    start: block.startOf(unit),
+    end: block.endOf(unit),
     spent: 0,
     tasks: [],
     active: true,
@@ -134,7 +171,8 @@ const findRange = (howMany: number, sDate?: any): SpendingBlock => {
 
 const findSpecificRanges = (
   startDate: string,
-  endDate: string
+  endDate: string,
+  timePeriod: IDashboardSlice['spendingBlocksTimePeriod']
 ): SpendingBlock[] => {
   let ranges: SpendingBlock[] = [];
   let i = 1;
@@ -142,25 +180,25 @@ const findSpecificRanges = (
   const eDate = dayjs(endDate);
 
   // checking if startDate is a start of its range
-  if (sDate.isSame(sDate.startOf('quarter'), 'day')) {
+  if (sDate.isSame(sDate.startOf(timePeriod), 'day')) {
     ranges.push({
-      start: sDate.startOf('quarter'),
-      end: sDate.endOf('quarter'),
+      start: sDate.startOf(timePeriod),
+      end: sDate.endOf(timePeriod),
       spent: 0,
       tasks: [],
       active: true,
     });
   }
 
-  while (sDate.add(i, 'quarter').endOf('quarter') < eDate) {
-    ranges.push(findRange(i++, startDate));
+  while (sDate.add(i, timePeriod).endOf(timePeriod) < eDate) {
+    ranges.push(findRange(i++, timePeriod, startDate));
   }
 
   // checking if endDate is an end of its range
-  if (sDate.add(i, 'quarter').endOf('quarter').isSame(eDate, 'day')) {
+  if (sDate.add(i, timePeriod).endOf(timePeriod).isSame(eDate, 'day')) {
     ranges.push({
-      start: sDate.add(i, 'quarter').startOf('quarter'),
-      end: sDate.add(i, 'quarter').endOf('quarter'),
+      start: sDate.add(i, timePeriod).startOf(timePeriod),
+      end: sDate.add(i, timePeriod).endOf(timePeriod),
       spent: 0,
       tasks: [],
       active: true,
@@ -173,7 +211,7 @@ const findSpecificRanges = (
 function applyPaymentsToSpendingBlocksAndPutAssociatedTasks(
   spendingBlocks: SpendingBlock[],
   payments: Payments,
-  tasks: any[]
+  tasks: TaskState[]
 ) {
   const newBlocks: SpendingBlock[] = spendingBlocks.map((spendingBlock) => ({
     ...spendingBlock,
@@ -181,22 +219,36 @@ function applyPaymentsToSpendingBlocksAndPutAssociatedTasks(
     tasks: [],
   }));
   for (const task of tasks) {
-    const paymentsPerTask = payments[task.id];
-    if (!paymentsPerTask) continue;
-    for (const { price } of paymentsPerTask) {
-      Object.values(newBlocks).forEach((spendingBlock) => {
-        if (
-          spendingBlock.start < dayjs(task.createdDate) &&
-          spendingBlock.end > dayjs(task.createdDate)
-        ) {
-          spendingBlock.spent += +price;
-          !spendingBlock.tasks.find(({ id }) => id === task.id) &&
-            spendingBlock.tasks.push(task);
-        }
-      });
-    }
+    const taskPayments = payments[task.id];
+    Object.values(newBlocks).forEach((spendingBlock) => {
+      if (
+        spendingBlock.start < dayjs(task.createdDate) &&
+        spendingBlock.end > dayjs(task.createdDate)
+      ) {
+        !spendingBlock.tasks.find(({ id }) => id === task.id) &&
+          spendingBlock.tasks.push(task); // Adds task to current spendingBlock task array
+        taskPayments?.forEach(({ price }) => (spendingBlock.spent += +price));
+      }
+    });
   }
   return newBlocks;
 }
 
 export default SpendingBlocks;
+
+// for (const task of tasks) {
+//   const paymentsPerTask = payments[task.id];
+//   if (!paymentsPerTask) continue;
+//   for (const { price } of paymentsPerTask) {
+//     Object.values(newBlocks).forEach((spendingBlock) => {
+//       if (
+//         spendingBlock.start < dayjs(task.createdDate) &&
+//         spendingBlock.end > dayjs(task.createdDate)
+//       ) {
+//         spendingBlock.spent += +price;
+//         !spendingBlock.tasks.find(({ id }) => id === task.id) &&
+//           spendingBlock.tasks.push(task);
+//       }
+//     });
+//   }
+// }

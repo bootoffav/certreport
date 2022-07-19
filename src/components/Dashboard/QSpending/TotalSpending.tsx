@@ -51,11 +51,9 @@ function TotalSpending({
                   );
                 }}
               >
-                {['1 month', 'quarter', '6 months', '1 year'].map((range) => (
-                  <option key={range} value={range}>
-                    {range}
-                  </option>
-                ))}
+                <option value="month">month</option>
+                <option value="quarter">quarter</option>
+                <option value="year">year</option>
               </select>
             </div>
           </Card.Header>
