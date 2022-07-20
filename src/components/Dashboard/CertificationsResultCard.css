@@ -1,0 +1,12 @@
+.certificationsResultCard:hover {
+  cursor: pointer;
+}
+.percentColorpass {
+  color: green;
+}
+.percentColorfail {
+  color: red;
+}
+.percentColorpartly {
+  color: orange;
+}

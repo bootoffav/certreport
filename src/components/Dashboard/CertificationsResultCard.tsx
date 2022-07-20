@@ -2,7 +2,7 @@ import { StatsCard, Card } from 'tabler-react';
 import { tasksInRange } from './Dashboard';
 import { useAppSelector } from 'store/hooks';
 import { TaskState, Payment } from 'Task/Task.interface';
-import styles from './StatCards.module.css';
+import './CertificationsResultCard.css';
 import { renderTableOfDiagramSegment } from './utils';
 
 type CertificationsResultCardProps = {
@@ -20,17 +20,24 @@ const CertificationsResultCard = ({
   const tasks = allTasks.filter(
     ({ state }) => resume === '' || state.resume === resume
   );
-  const sum = tasks.reduce((sum, { id }) => {
-    payments[id]?.map(({ price }: Payment) => (sum += +price));
-    return sum;
-  }, 0);
+  const sum = Math.round(
+    tasks.reduce((sum, { id }) => {
+      payments[id]?.map(({ price }: Payment) => (sum += +price));
+      return sum;
+    }, 0)
+  );
 
-  return label === 'All' ? (
+  return (
     <Card>
       <Card.Body>
+        {resume !== '' && (
+          <div className={`percentColor${resume} text-right`}>
+            {((tasks.length / allTasks.length) * 100).toFixed(1) || '0'}%
+          </div>
+        )}
         <div className="h1 m-0 text-center">
           <div
-            className={`display-5 ${styles.statCard}`}
+            className={`display-5 certificationsResultCard`}
             onClick={() =>
               renderTableOfDiagramSegment('', '', payments, tasks, true)
             }
@@ -38,25 +45,9 @@ const CertificationsResultCard = ({
             {tasks.length}
           </div>
         </div>
-        <div className="text-center">{`${label} certifications`}</div>
+        <div className="text-center">{`${label} certifications: €${sum.toLocaleString()}`}</div>
       </Card.Body>
     </Card>
-  ) : (
-    <StatsCard
-      layout={1}
-      movement={((tasks.length / allTasks.length) * 100).toFixed(1)}
-      total={
-        <div
-          className={`display-5 ${styles.statCard}`}
-          onClick={() =>
-            renderTableOfDiagramSegment('', '', payments, tasks, true)
-          }
-        >
-          {tasks.length}
-        </div>
-      }
-      label={`${label} certifications: €${sum.toLocaleString()}`}
-    />
   );
 };
 

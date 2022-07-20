@@ -8,7 +8,7 @@ import SpendingBlocks from './QSpending/SpendingBlocks';
 import { chartOptions } from './configs';
 import { byStages, byProducts } from './dataprocessing';
 import { renderTableOfDiagramSegment } from './utils';
-import { CertificationsResultCard } from './StatCards';
+import { CertificationsResultCard } from './CertificationsResultCard';
 
 import { dashboardDataChartAdapter } from 'helpers';
 import { RootState } from 'store/store';
