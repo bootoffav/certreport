@@ -12,7 +12,6 @@ import ErrorBoundary from 'ErrorBoundary';
 import NavBar from './NavBar';
 import { StageShortNames } from '../StageShortNames/StageShortNames';
 import { ItemInCertifications } from '../ItemInCertifications/ItemInCertifications';
-import { isMainHeaderAllowed } from 'helpers';
 import { ClientStorage } from '../../ClientStorage/ClientStorage';
 import {
   changeUpdated,
@@ -20,14 +19,10 @@ import {
   changeTasks,
   changeFilteredItems,
   changeFilteredTasks,
-  changeActiveStandards,
-  setPayments,
 } from 'store/slices/mainSlice';
 import type { RootState } from 'store/store';
 import { connect } from 'react-redux';
-import DB from 'backend/DBManager';
-import { query as q } from 'faunadb';
-import { Payments } from 'Task/Task.interface';
+import fetchPayments from 'store/slices/PaymentsThunk';
 
 class Main extends Component<any> {
   cache = new CacheManager();
@@ -36,39 +31,18 @@ class Main extends Component<any> {
   };
 
   async componentDidMount() {
-    // set payments into redux store
-    DB.client()
-      .query(
-        q.Map(
-          q.Paginate(q.Documents(q.Collection('payments')), {
-            size: 100000, // max for faunadb for a single query
-          }),
-          q.Lambda('payment', q.Get(q.Var('payment')))
-        )
-      )
-      .then(({ data: paymentSet }: any) => {
-        const payments: Payments = {};
-        for (const {
-          data: { payments: paymentsPerTask },
-          ref: {
-            value: { id },
-          },
-        } of paymentSet) {
-          payments[id] = paymentsPerTask;
-        }
-        this.props.setPayments(payments);
-      });
-    if (isMainHeaderAllowed(window.location.pathname)) {
-      await this.cache.doUpdate();
-      await ClientStorage.getData().then(({ tasks, items }: any) => {
-        this.props.changeTasks(tasks);
-        this.props.changeItems(items);
-        this.props.changeUpdated(true);
-        const { filteredItems, filteredTasks } = this.filter(tasks, items);
-        this.props.changeFilteredItems(filteredItems);
-        this.props.changeFilteredTasks(filteredTasks);
-      });
-    }
+    const { dispatch } = this.props;
+    dispatch(fetchPayments());
+
+    await this.cache.doUpdate();
+    await ClientStorage.getData().then(({ tasks, items }: any) => {
+      dispatch(changeTasks(tasks));
+      dispatch(changeItems(items));
+      dispatch(changeUpdated(true));
+      const { filteredItems, filteredTasks } = this.filter(tasks, items);
+      dispatch(changeFilteredItems(filteredItems));
+      dispatch(changeFilteredTasks(filteredTasks));
+    });
   }
 
   componentDidUpdate(prevProps: any, prevState: any) {
@@ -90,8 +64,8 @@ class Main extends Component<any> {
       )
     ) {
       const { filteredItems, filteredTasks } = this.filter(allTasks, allItems);
-      this.props.changeFilteredItems(filteredItems);
-      this.props.changeFilteredTasks(filteredTasks);
+      this.props.dispatch(changeFilteredItems(filteredItems));
+      this.props.dispatch(changeFilteredTasks(filteredTasks));
     }
   }
 
@@ -281,13 +255,5 @@ const mapStateToProps = ({ main }: RootState) => ({
   additionalStandardFilterTaskList: main.additionalStandardFilterTaskList,
 });
 
-export default connect(mapStateToProps, {
-  changeUpdated,
-  changeTasks,
-  changeItems,
-  changeFilteredItems,
-  changeFilteredTasks,
-  changeActiveStandards,
-  setPayments,
-  // @ts-ignore
-})(Main);
+// @ts-ignore
+export default connect(mapStateToProps)(Main);

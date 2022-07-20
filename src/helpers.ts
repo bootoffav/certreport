@@ -119,18 +119,6 @@ function shortenTitle(title: string) {
   return index === -1 ? title : title.substring(0, index);
 }
 
-function isMainHeaderAllowed(pathname: string): boolean {
-  const locations = ['/', '/dashboard', '/articles', '/article'];
-
-  for (const location of locations) {
-    if (pathname.includes(location)) {
-      return true;
-    }
-  }
-
-  return false;
-}
-
 function localizePrice(number: number | ''): string {
   return number.toLocaleString('ru-RU', {
     style: 'currency',
@@ -169,7 +157,6 @@ export {
   countTotalPrice,
   printStage,
   shortenTitle,
-  isMainHeaderAllowed,
   localizePrice,
   dateConverter,
   removeEmptyProps,
