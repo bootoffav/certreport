@@ -1,7 +1,7 @@
-import { StatsCard } from 'tabler-react';
+import { StatsCard, Card } from 'tabler-react';
 import { tasksInRange } from './Dashboard';
 import { useAppSelector } from 'store/hooks';
-import { TaskState } from 'Task/Task.interface';
+import { TaskState, Payment } from 'Task/Task.interface';
 import styles from './StatCards.module.css';
 import { renderTableOfDiagramSegment } from './utils';
 
@@ -13,16 +13,38 @@ const CertificationsResultCard = ({
   resume,
   label,
 }: CertificationsResultCardProps) => {
-  let { tasks, payments } = useAppSelector(({ main, dashboard }) => ({
+  let { tasks: allTasks, payments } = useAppSelector(({ main, dashboard }) => ({
     tasks: dashboard.tasksOfActiveSpendingBlocks,
     payments: main.payments,
   }));
-  tasks = tasks.filter(({ state }) => resume === '' || state.resume === resume);
+  const tasks = allTasks.filter(
+    ({ state }) => resume === '' || state.resume === resume
+  );
+  const sum = tasks.reduce((sum, { id }) => {
+    payments[id]?.map(({ price }: Payment) => (sum += +price));
+    return sum;
+  }, 0);
 
-  return (
+  return label === 'All' ? (
+    <Card>
+      <Card.Body>
+        <div className="h1 m-0 text-center">
+          <div
+            className={`display-5 ${styles.statCard}`}
+            onClick={() =>
+              renderTableOfDiagramSegment('', '', payments, tasks, true)
+            }
+          >
+            {tasks.length}
+          </div>
+        </div>
+        <div className="text-center">{`${label} certifications`}</div>
+      </Card.Body>
+    </Card>
+  ) : (
     <StatsCard
       layout={1}
-      movement={''}
+      movement={((tasks.length / allTasks.length) * 100).toFixed(1)}
       total={
         <div
           className={`display-5 ${styles.statCard}`}
@@ -33,7 +55,7 @@ const CertificationsResultCard = ({
           {tasks.length}
         </div>
       }
-      label={`${label} certifications`}
+      label={`${label} certifications: €${sum.toLocaleString()}`}
     />
   );
 };
