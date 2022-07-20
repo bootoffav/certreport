@@ -32,7 +32,7 @@ const CertificationsResultCard = ({
       <Card.Body>
         {resume !== '' && (
           <div className={`percentColor${resume} text-right`}>
-            {((tasks.length / allTasks.length) * 100).toFixed(1) || '0'}%
+            {((tasks.length / allTasks.length) * 100 || 0).toFixed(1)}%
           </div>
         )}
         <div className="h1 m-0 text-center">
