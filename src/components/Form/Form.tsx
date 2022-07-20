@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { Component } from 'react';
 import swal from 'sweetalert';
 import 'react-datepicker/dist/react-datepicker.css';
 import dayjs from 'dayjs';
@@ -21,7 +21,6 @@ import { getShippingLabelFile } from '../Export/PDF/ShippingLabelFile';
 import Payments from './Payments';
 import { Tab, Dimmer } from 'tabler-react';
 import { changeActiveQuoteNo, changeTotalPrice } from 'store/slices/mainSlice';
-import type { RootState } from 'store/store';
 import type { Payment } from '../../Task/Task.interface';
 
 interface IFormState extends TaskState {
@@ -30,7 +29,7 @@ interface IFormState extends TaskState {
   existsInDB?: boolean;
 }
 
-class Form extends React.Component {
+class Form extends Component {
   task_id: `${number}` | undefined;
   state: IFormState;
   // @ts-expect-error
@@ -81,14 +80,8 @@ class Form extends React.Component {
         'payments'
       ).catch((e) => []);
 
-      // const totalPrice = payments.reduce(
-      //   (total, { price }) => total + Number(price),
-      //   0
-      // );
-
       const found = payments.find((p: any) => p.activeQuoteNo);
       this.props.changeActiveQuoteNo(found ? found.quoteNo : '');
-      // this.props.changeTotalPrice(totalPrice);
 
       await B24.getTask(this.task_id)
         .then((r: any) => {
@@ -333,9 +326,7 @@ class Form extends React.Component {
     });
 }
 
-const mapStateToProps = ({ main }: RootState) => main;
-
-export default connect(mapStateToProps, {
+export default connect(null, {
   changeActiveQuoteNo,
   changeTotalPrice,
   // @ts-ignore
