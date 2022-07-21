@@ -13,26 +13,20 @@ const step = (json: any) => {
   return json.result;
 };
 
-function rawTaskProcessor(rawTasks: any) {
-  const tasks: any = [];
-
-  for (let i = 0; i < rawTasks.length; i++) {
-    const task = {
+function rawTaskProcessor(tasks: any[]) {
+  return tasks.map(
+    ({ description, ufCrmTask, id, title, createdDate, accomplices }) => ({
       ...new Task({
-        description: rawTasks[i].description,
-        ufCrmTask: rawTasks[i].ufCrmTask,
+        description,
+        ufCrmTask,
       }),
-      id: rawTasks[i].id,
-      title: rawTasks[i].title,
-      createdDate: rawTasks[i].createdDate,
-      accomplices: rawTasks[i].accomplices,
+      id,
+      title,
+      createdDate,
+      accomplices,
       ufTaskWebdavFiles: [],
-    };
-
-    tasks.push(task);
-  }
-
-  return tasks;
+    })
+  );
 }
 
 export async function getTasks() {
