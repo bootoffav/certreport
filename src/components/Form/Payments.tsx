@@ -5,15 +5,14 @@ import { Price, Paid, QuoteNo, BaseInput } from './FormFields';
 import type { Payment } from 'Task/Task.interface';
 import { localizePrice } from 'helpers';
 import DB from 'backend/DBManager';
-import { useAppDispatch } from 'store/hooks';
-import { changeActiveQuoteNo, changeTotalPrice } from 'store/slices/mainSlice';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
+import {
+  changeActiveQuoteNo,
+  changeTotalPrice,
+  changePaymentsOfTask,
+} from 'store/slices/mainSlice';
 import Select from 'react-select';
 import { XMBranchOptions } from 'defaults';
-
-interface PaymentsProps {
-  payments: Payment[];
-  taskId?: string;
-}
 
 const emptyPayment: Payment = {
   price: '',
@@ -23,38 +22,20 @@ const emptyPayment: Payment = {
   proformaInvoiceNo: '',
 };
 
-function Payments({ taskId, ...props }: PaymentsProps) {
-  const [payments, setPayments] = useState([] as Payment[]);
+function Payments({ taskId }: { taskId?: `${number}` }) {
+  const [payments, setPayments] = useState<Payment[]>(
+    useAppSelector(({ main: { allTasks } }) => {
+      const { state } = allTasks.find((t) => t.id === taskId);
+      return (state.payments as Payment[]).map((payment) =>
+        Object.assign({}, payment)
+      );
+    })
+  );
   const [branches, setBranches] = useState<typeof XMBranchOptions[number][]>(
     []
   );
 
   const dispatch = useAppDispatch();
-
-  // gets payments from DB
-  useEffect(() => {
-    (async function () {
-      if (taskId) {
-        const { payments = [], branches = [] } = await DB.get(
-          taskId,
-          ['data'],
-          'payments'
-        );
-        if (props.payments.length > 0) {
-          // исключить повторные оплаты (сранивание по price)
-          // возникают при получении данных из Б24 и faunaDB
-          props.payments.forEach(({ price }) => {
-            const index = payments.findIndex((p: Payment) => p.price === price);
-            if (index !== -1) {
-              payments.splice(index, 1);
-            }
-          });
-        }
-        setPayments([...props.payments, ...payments]);
-        setBranches(branches);
-      }
-    })();
-  }, [taskId, props.payments, dispatch]);
 
   const getTotalPrice = useCallback(
     () => payments.reduce((total, { price }) => total + Number(price), 0),
@@ -63,7 +44,13 @@ function Payments({ taskId, ...props }: PaymentsProps) {
 
   useEffect(() => {
     dispatch(changeTotalPrice(getTotalPrice()));
-  }, [payments, dispatch, getTotalPrice]);
+  }, [payments, taskId, dispatch, getTotalPrice]);
+
+  useEffect(
+    () => () => dispatch(changePaymentsOfTask({ taskId, payments }) as any),
+    // eslint-disable-next-line
+    []
+  );
 
   const genericSetter = (
     location: string,

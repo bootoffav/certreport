@@ -84,10 +84,22 @@ const mainSlice = createSlice({
     changeAdditionalStandardFilterList: (state, { payload }) => {
       state.additionalStandardFilterTaskList = payload;
     },
+    changePaymentsOfTask: (state, { payload: { taskId, payments } }) => {
+      const task = state.allTasks.find((task) => task.id === taskId);
+      task.state.payments = payments;
+    },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchPayments.fulfilled, (state, { payload }) => {
-      state.payments = payload;
+    builder.addCase(fetchPayments.fulfilled, (state, { payload: payments }) => {
+      state.payments = payments;
+      // put payments into state
+      state.allTasks = state.allTasks.map((task) => ({
+        ...task,
+        state: {
+          ...task.state,
+          payments: payments[task.id] || [],
+        },
+      }));
     });
   },
 });
@@ -106,6 +118,7 @@ export const {
   changeActiveTestingCompanies,
   changeActiveStandards,
   changeAdditionalStandardFilterList,
+  changePaymentsOfTask,
 } = mainSlice.actions;
 
 export default mainSlice;

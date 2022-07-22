@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import * as B24 from 'B24/B24';
 import Notification, { Status } from '../Notification/Notification';
 import { emptyState } from 'Task/emptyState';
-import type { TaskState } from 'Task/Task.interface';
+import type { Payment, TaskState } from 'Task/Task.interface';
 import DB from 'backend/DBManager';
 import { TabbedCard, Button, Icon } from 'tabler-react';
 import CacheManager from 'CacheManager';
@@ -21,7 +21,7 @@ import { getShippingLabelFile } from '../Export/PDF/ShippingLabelFile';
 import Payments from './Payments';
 import { Tab, Dimmer } from 'tabler-react';
 import { changeActiveQuoteNo, changeTotalPrice } from 'store/slices/mainSlice';
-import type { Payment } from '../../Task/Task.interface';
+import { RootState } from 'store/store';
 
 interface IFormState extends TaskState {
   requestStatus: Status;
@@ -32,6 +32,7 @@ interface IFormState extends TaskState {
 class Form extends Component {
   task_id: `${number}` | undefined;
   state: IFormState;
+  quoteNo?: Payment['quoteNo'];
   // @ts-expect-error
   props: any;
 
@@ -45,6 +46,16 @@ class Form extends Component {
   }
 
   componentDidUpdate = () => {
+    const taskFromStore = this.props.allTasks.find(
+      (t: any) => t.id === this.task_id
+    );
+    if (taskFromStore) {
+      this.quoteNo = (taskFromStore.state.payments as Payment[]).find(
+        (payment) => payment.quoteNo
+      )?.quoteNo;
+    }
+
+    this.props.changeActiveQuoteNo(this.quoteNo || '');
     if (this.state.hasError) throw new Error('Task not found');
   };
 
@@ -73,15 +84,8 @@ class Form extends Component {
         })
       );
 
-      // put activeQuoteNo into react store
-      const payments: Payment[] = await DB.get(
-        this.task_id,
-        ['data', 'payments'],
-        'payments'
-      ).catch((e) => []);
-
-      const found = payments.find((p: any) => p.activeQuoteNo);
-      this.props.changeActiveQuoteNo(found ? found.quoteNo : '');
+      // const found = payments.find((p: any) => p.activeQuoteNo);
+      // this.props.changeActiveQuoteNo(found ? found.quoteNo : '');
 
       await B24.getTask(this.task_id)
         .then((r: any) => {
@@ -97,26 +101,6 @@ class Form extends Component {
             requestStatus: Status.FillingForm,
             pretreatment2Active: Boolean(r.state.pretreatment2),
           });
-          if (this.state.payments.length > 0) {
-            this.setState((state: TaskState) => {
-              const payments = [];
-              payments.push({
-                ...state.payments[0],
-                quoteNo: dataFromDB.quoteNo1,
-                proformaInvoiceNo: dataFromDB.proformaInvoiceNo1,
-              });
-              if (this.state.payments.length > 1) {
-                payments.push({
-                  ...state.payments[1],
-                  quoteNo: dataFromDB.quoteNo2,
-                  proformaInvoiceNo: dataFromDB.proformaInvoiceNo2,
-                });
-              }
-              return {
-                payments,
-              };
-            });
-          }
         })
         .catch((e) => this.setState({ hasError: true }));
     }
@@ -303,7 +287,7 @@ class Form extends Component {
               active={this.state.requestStatus !== Status.FillingForm}
               loader
             >
-              <Payments payments={this.state.payments} taskId={this.task_id} />
+              <Payments taskId={this.task_id} />
             </Dimmer>
           </Tab>
           {renderStandards.call(this)}
@@ -326,8 +310,11 @@ class Form extends Component {
     });
 }
 
-export default connect(null, {
-  changeActiveQuoteNo,
-  changeTotalPrice,
+export default connect(
+  ({ main }: RootState) => ({ allTasks: main.allTasks }),
+  {
+    changeActiveQuoteNo,
+    changeTotalPrice,
+  }
   // @ts-ignore
-})(Form);
+)(Form);
