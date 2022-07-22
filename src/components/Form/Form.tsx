@@ -14,7 +14,7 @@ import { GoBackOrHomeButton } from '../NaviButton';
 import Dates from './Tabs/Dates';
 import BasicInfo from './Tabs/BasicInfo/BasicInfo';
 import { renderFiles } from './Tabs/Files';
-import { renderCommentsNews } from './Tabs/CommentsNews';
+import CommentsNews from './Tabs/CommentsNews';
 import { renderFabricApplicationForm } from './Tabs/FabricApplicationForm';
 import { renderStandards } from './Tabs/renderStandards';
 import { getShippingLabelFile } from '../Export/PDF/ShippingLabelFile';
@@ -83,9 +83,6 @@ class Form extends Component {
           exists,
         })
       );
-
-      // const found = payments.find((p: any) => p.activeQuoteNo);
-      // this.props.changeActiveQuoteNo(found ? found.quoteNo : '');
 
       await B24.getTask(this.task_id)
         .then((r: any) => {
@@ -292,7 +289,14 @@ class Form extends Component {
           </Tab>
           {renderStandards.call(this)}
           {renderFabricApplicationForm.call(this)}
-          {renderCommentsNews.call(this)}
+          <Tab title="Comments & News">
+            <CommentsNews
+              comments={this.state.comments}
+              news={this.state.news}
+              handleChange={this.handleChange}
+              requestStatus={this.state.requestStatus}
+            />
+          </Tab>
           {this.task_id && renderFiles.call(this)}
         </TabbedCard>
         <div className="d-flex justify-content-around">
