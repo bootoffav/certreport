@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import ReactTable, { CellInfo } from 'react-table';
-import { ColumnFilter } from '../Filters/ColumnFilter';
+import ColumnFilter from '../Filters/ColumnFilter';
 import type { ItemType, taskOfItem } from 'Item/Item';
 import { Grid, Tooltip } from 'tabler-react';
 import { useAppSelector } from 'store/hooks';
@@ -70,10 +70,10 @@ const columns = [
 
 const ItemList = () => {
   const items = useAppSelector(({ main }) => main.filteredItems);
-  const [visibleData, setVisibleData] = useState<ItemType[]>();
+  const [visibleTasks, setVisibleTasks] = useState<ItemType[]>();
 
   useEffect(() => {
-    setVisibleData(items);
+    setVisibleTasks(items);
   }, [items]);
 
   return (
@@ -81,11 +81,11 @@ const ItemList = () => {
       <Grid.Col>
         <ColumnFilter
           dataToFilter={items}
-          update={setVisibleData}
-          filteringDataType="items"
+          update={({ visibleTasks }: any) => setVisibleTasks(visibleTasks)}
+          dataType="items"
         />
         <ReactTable
-          data={visibleData}
+          data={visibleTasks}
           columns={columns}
           resolveData={(data: ItemType[], i = 1) =>
             data.map((row) => ({ ...row, position: i++ }))

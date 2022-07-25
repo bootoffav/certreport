@@ -60,4 +60,4 @@ const StageFilter: React.FunctionComponent<{
   );
 };
 
-export { StageFilter };
+export default StageFilter;

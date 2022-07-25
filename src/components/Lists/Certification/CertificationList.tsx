@@ -1,9 +1,8 @@
 import * as React from 'react';
 import ReactTable from 'react-table';
 import { getColumns } from './columns';
-import { StageFilter } from '../Filters/StageFilter';
-import { ColumnFilter } from '../Filters/ColumnFilter';
-import { ListExport } from 'components/Export/PDF/ListExport';
+import StageFilter from '../Filters/StageFilter';
+import ColumnFilter from '../Filters/ColumnFilter';
 import { connect } from 'react-redux';
 
 import './List.css';
@@ -12,7 +11,7 @@ import { RootState } from 'store/store';
 import { Payments } from 'Task/Task.interface';
 
 interface ICertificationListState {
-  visibleData: any[];
+  visibleTasks: any[];
   totalPrice: number;
   startDate?: Date;
   endDate?: Date;
@@ -20,6 +19,7 @@ interface ICertificationListState {
 
 interface ICertificationListProps {
   tasks: any;
+  visibleTasks: any[];
   update: any;
   stages: any;
   payments: Payments;
@@ -32,8 +32,8 @@ class CertificationList extends React.Component<
   constructor(props: any) {
     super(props);
     this.state = {
-      visibleData: this.props.tasks,
       totalPrice: countTotalPrice(this.props.tasks, []),
+      visibleTasks: this.props.tasks,
     };
   }
 
@@ -43,9 +43,7 @@ class CertificationList extends React.Component<
 
   componentDidUpdate(prevProps: any) {
     if (prevProps.tasks !== this.props.tasks) {
-      this.setState({
-        visibleData: this.props.tasks,
-      });
+      this.setState({ visibleTasks: this.props.tasks });
     }
     if (prevProps.payments !== this.props.payments) {
       this.setState({
@@ -70,26 +68,13 @@ class CertificationList extends React.Component<
           </div>
           <ColumnFilter
             dataToFilter={this.props.tasks}
-            filteringDataType="tasks"
-            update={(visibleData: any) => {
-              this.setState({
-                visibleData,
-              });
-            }}
-          />
-        </div>
-        <div className="d-flex">
-          <ListExport
-            tasks={this.state.visibleData}
-            columns={this.columns}
-            stage={this.props.stages[0]}
-            startDate={this.state.startDate}
-            endDate={this.state.endDate}
+            dataType="tasks"
+            update={this.setState.bind(this)}
           />
         </div>
       </div>
       <ReactTable
-        data={this.state.visibleData}
+        data={this.state.visibleTasks}
         columns={this.columns}
         defaultSorted={[
           {
@@ -97,8 +82,8 @@ class CertificationList extends React.Component<
             desc: true,
           },
         ]}
-        noDataText="no rows found, or if it's first time loading please give it about 30 sec to finish"
-        className="-highlight table"
+        noDataText="data is loading"
+        className="table"
         getTrProps={this.getTrProps}
         defaultPageSize={20}
       />
