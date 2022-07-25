@@ -3,12 +3,10 @@ import ReactTable from 'react-table';
 import { getColumns } from '../Lists/Certification/columns';
 import { countTotalPrice } from 'helpers';
 import { render } from 'react-dom';
-import type { Payments } from 'Task/Task.interface';
 
 function renderTableOfDiagramSegment(
   checkedValue: string,
   param: string,
-  payments: Payments,
   tasks?: any,
   skipFilter?: boolean
 ) {
@@ -19,7 +17,7 @@ function renderTableOfDiagramSegment(
     );
   }
 
-  const totalPrice = countTotalPrice(tasks, payments);
+  const totalPrice = countTotalPrice(tasks);
   render(
     <BrowserRouter>
       <ReactTable

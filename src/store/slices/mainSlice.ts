@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import type { Payments } from 'Task/Task.interface';
 import fetchPayments from './PaymentsThunk';
 
 interface IInitialState {
@@ -16,11 +15,9 @@ interface IInitialState {
   filteredTasks: any[];
   activeStandards: string[];
   additionalStandardFilterTaskList?: string[];
-  payments: Payments;
 }
 
 const initialState: IInitialState = {
-  payments: {},
   activeTestingCompanies: ['all'],
   activeBrands: ['XMT', 'XMS', 'XMF'],
   activeStandards: ['all'],
@@ -91,7 +88,6 @@ const mainSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchPayments.fulfilled, (state, { payload: payments }) => {
-      state.payments = payments;
       // put payments into state
       state.allTasks = state.allTasks.map((task) => ({
         ...task,

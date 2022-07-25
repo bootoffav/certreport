@@ -13,16 +13,15 @@ const CertificationsResultCard = ({
   resume,
   label,
 }: CertificationsResultCardProps) => {
-  let { tasks: allTasks, payments } = useAppSelector(({ main, dashboard }) => ({
+  const { tasks: allTasks } = useAppSelector(({ dashboard }) => ({
     tasks: dashboard.tasksOfActiveSpendingBlocks,
-    payments: main.payments,
   }));
   const tasks = allTasks.filter(
     ({ state }) => resume === '' || state.resume === resume
   );
   const sum = Math.round(
-    tasks.reduce((sum, { id }) => {
-      payments[id]?.map(({ price }: Payment) => (sum += +price));
+    tasks.reduce((sum, { state }) => {
+      state.payments?.map(({ price }: Payment) => (sum += +price));
       return sum;
     }, 0)
   );
@@ -38,9 +37,7 @@ const CertificationsResultCard = ({
         <div className="h1 m-0 text-center">
           <div
             className={`display-5 certificationsResultCard`}
-            onClick={() =>
-              renderTableOfDiagramSegment('', '', payments, tasks, true)
-            }
+            onClick={() => renderTableOfDiagramSegment('', '', tasks, true)}
           >
             {tasks.length}
           </div>

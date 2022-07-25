@@ -61,7 +61,8 @@ class Main extends Component<any> {
       !isEqual(
         prevProps.activeTestingCompanies,
         this.props.activeTestingCompanies
-      )
+      ) ||
+      !isEqual(prevProps.allTasks, this.props.allTasks) // case when payments added to allTasks in redux-store
     ) {
       const { filteredItems, filteredTasks } = this.filter(allTasks, allItems);
       this.props.dispatch(changeFilteredItems(filteredItems));

@@ -8,7 +8,6 @@ import { connect } from 'react-redux';
 import './List.css';
 import { countTotalPrice } from 'helpers';
 import { RootState } from 'store/store';
-import { Payments } from 'Task/Task.interface';
 
 interface ICertificationListState {
   visibleTasks: any[];
@@ -22,7 +21,6 @@ interface ICertificationListProps {
   visibleTasks: any[];
   update: any;
   stages: any;
-  payments: Payments;
 }
 
 class CertificationList extends React.Component<
@@ -32,7 +30,7 @@ class CertificationList extends React.Component<
   constructor(props: any) {
     super(props);
     this.state = {
-      totalPrice: countTotalPrice(this.props.tasks, []),
+      totalPrice: countTotalPrice(this.props.tasks),
       visibleTasks: this.props.tasks,
     };
   }
@@ -43,11 +41,9 @@ class CertificationList extends React.Component<
 
   componentDidUpdate(prevProps: any) {
     if (prevProps.tasks !== this.props.tasks) {
-      this.setState({ visibleTasks: this.props.tasks });
-    }
-    if (prevProps.payments !== this.props.payments) {
       this.setState({
-        totalPrice: countTotalPrice(this.props.tasks, this.props.payments),
+        visibleTasks: this.props.tasks,
+        totalPrice: countTotalPrice(this.props.tasks),
       });
     }
   }
@@ -93,7 +89,6 @@ class CertificationList extends React.Component<
 
 const mapStateToProps = ({ main }: RootState) => ({
   tasks: main.filteredTasks,
-  payments: main.payments,
 });
 
 // @ts-ignore

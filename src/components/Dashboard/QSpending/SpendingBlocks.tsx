@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import quarterOfYear from 'dayjs/plugin/quarterOfYear';
 import styles from './SpendingBlocks.module.css';
 import { useAppSelector, useAppDispatch } from 'store/hooks';
-import { Payments, TaskState } from 'Task/Task.interface';
+import { TaskState, Payment } from 'Task/Task.interface';
 import TotalSpending from './TotalSpending';
 import {
   changeActiveSpendingBlocksTasks,
@@ -28,12 +28,11 @@ export interface SpendingBlock {
 
 function SpendingBlocks(props: SpendingBlocksProps) {
   const dispatch = useAppDispatch();
-  const { startDate, endDate, tasks, payments, timePeriod } = useAppSelector(
-    ({ main: { startDate, endDate, filteredTasks, payments }, dashboard }) => ({
+  const { startDate, endDate, tasks, timePeriod } = useAppSelector(
+    ({ main: { startDate, endDate, filteredTasks }, dashboard }) => ({
       startDate,
       endDate,
       tasks: filteredTasks,
-      payments,
       timePeriod: dashboard.spendingBlocksTimePeriod,
     })
   );
@@ -58,14 +57,10 @@ function SpendingBlocks(props: SpendingBlocksProps) {
             findRange(3, timePeriod),
           ];
     const spendingBlocks = roundToCents(
-      applyPaymentsToSpendingBlocksAndPutAssociatedTasks(
-        blocks,
-        payments,
-        tasks
-      )
+      applyPaymentsToSpendingBlocksAndPutAssociatedTasks(blocks, tasks)
     );
     setBlocks(spendingBlocks);
-  }, [startDate, endDate, payments, tasks, timePeriod]);
+  }, [startDate, endDate, tasks, timePeriod]);
 
   useEffect(() => {
     const tasksOfActiveSpendingBlocks = blocks
@@ -76,19 +71,6 @@ function SpendingBlocks(props: SpendingBlocksProps) {
       );
     dispatch(changeActiveSpendingBlocksTasks(tasksOfActiveSpendingBlocks));
   }, [dispatch, blocks]);
-
-  useEffect(() => {
-    if (Object.getOwnPropertyNames(payments).length) {
-      const spendingBlocks = roundToCents(
-        applyPaymentsToSpendingBlocksAndPutAssociatedTasks(
-          blocks,
-          payments,
-          tasks
-        )
-      );
-      setBlocks(spendingBlocks);
-    }
-  }, [payments]); // eslint-disable-line
 
   return (
     <>
@@ -210,7 +192,6 @@ const findSpecificRanges = (
 
 function applyPaymentsToSpendingBlocksAndPutAssociatedTasks(
   spendingBlocks: SpendingBlock[],
-  payments: Payments,
   tasks: TaskState[]
 ) {
   const newBlocks: SpendingBlock[] = spendingBlocks.map((spendingBlock) => ({
@@ -219,7 +200,6 @@ function applyPaymentsToSpendingBlocksAndPutAssociatedTasks(
     tasks: [],
   }));
   for (const task of tasks) {
-    const taskPayments = payments[task.id];
     Object.values(newBlocks).forEach((spendingBlock) => {
       if (
         spendingBlock.start < dayjs(task.createdDate) &&
@@ -227,7 +207,9 @@ function applyPaymentsToSpendingBlocksAndPutAssociatedTasks(
       ) {
         !spendingBlock.tasks.find(({ id }) => id === task.id) &&
           spendingBlock.tasks.push(task); // Adds task to current spendingBlock task array
-        taskPayments?.forEach(({ price }) => (spendingBlock.spent += +price));
+        (task.state.payments as Payment[])?.forEach(
+          ({ price }) => (spendingBlock.spent += +price)
+        );
       }
     });
   }
@@ -235,20 +217,3 @@ function applyPaymentsToSpendingBlocksAndPutAssociatedTasks(
 }
 
 export default SpendingBlocks;
-
-// for (const task of tasks) {
-//   const paymentsPerTask = payments[task.id];
-//   if (!paymentsPerTask) continue;
-//   for (const { price } of paymentsPerTask) {
-//     Object.values(newBlocks).forEach((spendingBlock) => {
-//       if (
-//         spendingBlock.start < dayjs(task.createdDate) &&
-//         spendingBlock.end > dayjs(task.createdDate)
-//       ) {
-//         spendingBlock.spent += +price;
-//         !spendingBlock.tasks.find(({ id }) => id === task.id) &&
-//           spendingBlock.tasks.push(task);
-//       }
-//     });
-//   }
-// }

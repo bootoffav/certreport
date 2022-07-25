@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import { vfs } from './vfs_fonts.js';
 import * as tableStructures from './columns';
 import { tableLayout, fonts } from './settings';
-import { getTotalPriceHelper } from 'helpers';
+import { getTaskTotalPriceHelper } from 'helpers';
 
 class ListExport extends Component<{
   tasks: any;
@@ -140,13 +140,13 @@ class ListExport extends Component<{
             row.push(results);
             break;
           case 'state.price':
-            this.totalPrice += Number(getTotalPriceHelper(tasks[i].state));
+            this.totalPrice += Number(getTaskTotalPriceHelper(tasks[i].state));
             row.push({
               alignment: 'right',
               text:
                 tasks[i].state.price === ''
                   ? '€ 0'
-                  : `€${Math.round(getTotalPriceHelper(tasks[i].state))
+                  : `€${Math.round(getTaskTotalPriceHelper(tasks[i].state))
                       .toLocaleString()
                       .replace(/,/g, ' ')}`,
             });

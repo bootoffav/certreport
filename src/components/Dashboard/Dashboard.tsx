@@ -60,13 +60,7 @@ class Dashboard extends Component<any, IDashboard> {
             <Grid.Row deck>
               <SpendingBlocks
                 renderTable={(tasks) =>
-                  renderTableOfDiagramSegment(
-                    '',
-                    '',
-                    this.props.payments,
-                    tasks,
-                    true
-                  )
+                  renderTableOfDiagramSegment('', '', tasks, true)
                 }
               />
             </Grid.Row>
@@ -145,7 +139,6 @@ class Dashboard extends Component<any, IDashboard> {
       renderTableOfDiagramSegment(
         label,
         param,
-        this.props.payments,
         // passing specific tasks
         dashboardDataChartAdapter(
           this.state.allDataInChartsVisible
@@ -160,7 +153,6 @@ class Dashboard extends Component<any, IDashboard> {
 
 export default connect(({ main }: RootState) => ({
   tasks: main.filteredTasks,
-  payments: main.payments,
   // @ts-ignore
 }))(Dashboard);
 

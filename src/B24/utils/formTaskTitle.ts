@@ -1,4 +1,4 @@
-import { formatArticle, getTotalPriceHelper } from 'helpers';
+import { formatArticle, getTaskTotalPriceHelper } from 'helpers';
 import DB from 'backend/DBManager';
 
 const convertPriceToStr = (price: number) => {
@@ -33,7 +33,7 @@ async function formTaskTitle(
     `(send ${state.sentOn} - plan ${
       state.testFinishedOnPlanDate
     }) = ${convertPriceToStr(
-      getTotalPriceHelper(state)
+      getTaskTotalPriceHelper(state)
     )} | ${stAd.getStageForTitle()}${stAd.getNADForTitle()}`
   );
 }

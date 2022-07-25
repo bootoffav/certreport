@@ -1,13 +1,14 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import DB from 'backend/DBManager';
 import { query as q } from 'faunadb';
-import { RootState } from 'store/store';
-import { Payments } from 'Task/Task.interface';
+import { Payment } from 'Task/Task.interface';
 
 const fetchPayments = createAsyncThunk(
   'common/fetchPayments',
   async (): Promise<any> => {
-    const payments: Payments = {};
+    let payments: {
+      [key: number]: Payment[];
+    } = {};
     const { data: paymentSet } = (await DB.client().query(
       q.Map(
         q.Paginate(q.Documents(q.Collection('payments')), {
@@ -27,11 +28,6 @@ const fetchPayments = createAsyncThunk(
     }
 
     return payments;
-  },
-  {
-    condition: (_, { getState }) =>
-      Object.getOwnPropertyNames((getState() as RootState).main.payments)
-        .length === 0,
   }
 );
 

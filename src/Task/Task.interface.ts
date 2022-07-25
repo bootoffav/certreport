@@ -96,9 +96,5 @@ interface Payment {
   [key: string]: string | boolean | undefined;
 }
 
-export type Payments = {
-  [key: number]: Payment[];
-};
-
 export { Stage };
 export type { TaskState, Payment };

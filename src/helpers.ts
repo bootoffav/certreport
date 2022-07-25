@@ -1,4 +1,4 @@
-import type { TaskState, Payments } from './Task/Task.interface';
+import type { TaskState } from './Task/Task.interface';
 
 /**
  * Converts strings that represent dates in the app.
@@ -55,23 +55,14 @@ function removeEmptyProps(obj: any) {
   return obj;
 }
 
-function countTotalPrice(tasks: any[], payments: Payments) {
-  let totalPrice = 0;
-  for (const { id } of tasks) {
-    if (!payments[id]) continue;
-    for (const { price } of payments[id]) {
-      totalPrice += Number(price);
-    }
-  }
-  return Math.round(totalPrice);
+function countTotalPrice(tasks: any[]): number {
+  return Math.round(
+    tasks.reduce((acc, task) => acc + getTaskTotalPriceHelper(task.state), 0)
+  );
 }
 
-function getTotalPriceHelper(state: TaskState): number {
-  if (state.totalPrice) {
-    return +state.totalPrice;
-  }
-
-  return (+state.price1 || 0) + (+state.price2 || 0);
+function getTaskTotalPriceHelper({ payments }: TaskState): number {
+  return payments.reduce((acc, { price }) => acc + +price, 0);
 }
 
 const StageShortNames: {
@@ -160,7 +151,7 @@ export {
   localizePrice,
   dateConverter,
   removeEmptyProps,
-  getTotalPriceHelper,
+  getTaskTotalPriceHelper,
   dashboardDataChartAdapter,
   formatArticle,
 };
