@@ -32,11 +32,11 @@ class Main extends Component<any> {
 
   async componentDidMount() {
     const { dispatch } = this.props;
-    dispatch(fetchPayments());
 
     await this.cache.doUpdate();
     await ClientStorage.getData().then(({ tasks, items }: any) => {
       dispatch(changeTasks(tasks));
+      dispatch(fetchPayments());
       dispatch(changeItems(items));
       dispatch(changeUpdated(true));
       const { filteredItems, filteredTasks } = this.filter(tasks, items);
@@ -44,7 +44,6 @@ class Main extends Component<any> {
       dispatch(changeFilteredTasks(filteredTasks));
     });
   }
-
   componentDidUpdate(prevProps: any, prevState: any) {
     const { endDate, startDate, activeBrands, allTasks, allItems } = this.props;
     const { startDate: prevStartDate, endDate: prevEndDate } = prevProps;
