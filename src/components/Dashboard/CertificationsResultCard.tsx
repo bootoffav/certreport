@@ -6,8 +6,14 @@ import './CertificationsResultCard.css';
 import { renderTableOfDiagramSegment } from './utils';
 
 type CertificationsResultCardProps = {
-  resume: TaskState['resume'] | '';
-  label: 'PASS' | 'PASS (Partly)' | 'FAIL' | 'All';
+  resume: TaskState['resume'] | '' | 'allWithResults';
+  label:
+    | 'PASS'
+    | 'PASS (Partly)'
+    | 'FAIL'
+    | 'All with results'
+    | 'All'
+    | 'No Sample';
 };
 const CertificationsResultCard = ({
   resume,
@@ -16,9 +22,16 @@ const CertificationsResultCard = ({
   const { tasks: allTasks } = useAppSelector(({ dashboard }) => ({
     tasks: dashboard.tasksOfActiveSpendingBlocks,
   }));
-  const tasks = allTasks.filter(
-    ({ state }) => resume === '' || state.resume === resume
+  const tasksWithResume = allTasks.filter(({ state }) =>
+    ['fail', 'pass', 'partly'].includes(state.resume)
   );
+
+  const tasks = allTasks.filter(({ state }) =>
+    resume === 'allWithResults'
+      ? ['fail', 'pass', 'partly'].includes(state.resume)
+      : state.resume === resume
+  );
+
   const sum = Math.round(
     tasks.reduce((sum, { state }) => {
       state.payments?.map(({ price }: Payment) => (sum += +price));
@@ -29,9 +42,9 @@ const CertificationsResultCard = ({
   return (
     <Card>
       <Card.Body>
-        {resume !== '' && (
+        {resume !== 'allWithResults' && (
           <div className={`percentColor${resume} text-right`}>
-            {((tasks.length / allTasks.length) * 100 || 0).toFixed(1)}%
+            {((tasks.length / tasksWithResume.length) * 100 || 0).toFixed(1)}%
           </div>
         )}
         <div className="h1 m-0 text-center">

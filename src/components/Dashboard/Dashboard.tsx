@@ -119,7 +119,11 @@ class Dashboard extends Component<any, IDashboard> {
             <CertificationsResultCard resume="pass" label="PASS" />
             <CertificationsResultCard resume="partly" label="PASS (Partly)" />
             <CertificationsResultCard resume="fail" label="FAIL" />
-            <CertificationsResultCard resume="" label="All" />
+            <CertificationsResultCard resume="no sample" label="No Sample" />
+            <CertificationsResultCard
+              resume="allWithResults"
+              label="All with results"
+            />
           </Grid.Col>
         </Grid.Row>
         <Grid.Row>
