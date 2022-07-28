@@ -12,13 +12,10 @@ import { RootState } from 'store/store';
 interface ICertificationListState {
   visibleTasks: any[];
   totalPrice: number;
-  startDate?: Date;
-  endDate?: Date;
 }
 
 interface ICertificationListProps {
   tasks: any;
-  visibleTasks: any[];
   update: any;
   stages: any;
 }
@@ -60,7 +57,7 @@ class CertificationList extends React.Component<
       <div className="d-flex mb-1">
         <div className="d-flex w-100">
           <div className="mr-2">
-            <StageFilter {...this.props} />
+            <StageFilter />
           </div>
           <ColumnFilter
             dataToFilter={this.props.tasks}
@@ -89,6 +86,7 @@ class CertificationList extends React.Component<
 
 const mapStateToProps = ({ main }: RootState) => ({
   tasks: main.filteredTasks,
+  stages: main.stages,
 });
 
 // @ts-ignore

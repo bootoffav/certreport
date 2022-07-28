@@ -1,13 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import fetchPayments from './PaymentsThunk';
+import { baseStages, repeatStages, testingCompanies } from 'defaults';
 
 interface IInitialState {
-  activeTestingCompanies: string[];
+  activeTestingCompanies: (typeof testingCompanies[number] | 'all')[];
   startDate: string | null;
   endDate: string | null;
   activeQuoteNo: string;
   updated: boolean;
   totalPrice: number;
+  stages: (typeof baseStages[number] | typeof repeatStages[number] | 'all')[];
   allTasks: any[];
   allItems: any[];
   activeBrands: string[];
@@ -18,6 +20,7 @@ interface IInitialState {
 }
 
 const initialState: IInitialState = {
+  stages: ['all'],
   activeTestingCompanies: ['all'],
   activeBrands: ['XMT', 'XMS', 'XMF'],
   activeStandards: ['all'],
@@ -36,6 +39,9 @@ const mainSlice = createSlice({
   name: 'main',
   initialState,
   reducers: {
+    changeStages: (state, { payload }) => {
+      state.stages = payload;
+    },
     changeActiveTestingCompanies: (state, { payload }) => {
       state.activeTestingCompanies = payload;
     },
@@ -115,6 +121,7 @@ export const {
   changeActiveStandards,
   changeAdditionalStandardFilterList,
   changePaymentsOfTask,
+  changeStages,
 } = mainSlice.actions;
 
 export default mainSlice;

@@ -26,9 +26,6 @@ import fetchPayments from 'store/slices/PaymentsThunk';
 
 class Main extends Component<any> {
   cache = new CacheManager();
-  state = {
-    stages: ['all'],
-  };
 
   async componentDidMount() {
     const { dispatch } = this.props;
@@ -51,7 +48,7 @@ class Main extends Component<any> {
       prevEndDate !== endDate ||
       prevStartDate !== startDate ||
       prevProps.activeBrands !== activeBrands ||
-      !isEqual(prevState.stages, this.state.stages) ||
+      !isEqual(prevProps.stages, this.props.stages) ||
       !isEqual(prevProps.activeStandards, this.props.activeStandards) ||
       !isEqual(
         prevProps.additionalStandardFilterTaskList,
@@ -140,7 +137,7 @@ class Main extends Component<any> {
 
     //stageFiltering
     let filteredTaskswithStage: any = [];
-    const searchingStages = [...this.state.stages];
+    const searchingStages = [...this.props.stages];
 
     while (searchingStages.length) {
       let curStage = searchingStages.shift();
@@ -201,7 +198,6 @@ class Main extends Component<any> {
                     // @ts-ignore
                     update={this.setState.bind(this)}
                     // @ts-ignore
-                    stages={this.state.stages}
                   />
                   <StageShortNames />
                 </>
@@ -245,6 +241,7 @@ class Main extends Component<any> {
 }
 
 const mapStateToProps = ({ main }: RootState) => ({
+  stages: main.stages,
   allItems: main.allItems,
   allTasks: main.allTasks,
   activeBrands: main.activeBrands,

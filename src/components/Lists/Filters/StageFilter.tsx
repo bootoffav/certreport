@@ -1,5 +1,7 @@
 import Select from 'react-select';
 import { stages as stagesOptionsDefault } from 'defaults';
+import { useAppSelector, useAppDispatch } from 'store/hooks';
+import { changeStages } from 'store/slices/mainSlice';
 
 type SelectItem = {
   value?: string;
@@ -7,11 +9,9 @@ type SelectItem = {
   label: string;
 };
 
-const StageFilter: React.FunctionComponent<{
-  update: any;
-  tasks: any;
-  stages: any;
-}> = ({ tasks, update, stages }) => {
+const StageFilter = () => {
+  const dispatch = useAppDispatch();
+  const stages = useAppSelector(({ main: { stages } }) => stages);
   const stagesOptions: any[] = [
     ...stagesOptionsDefault,
     {
@@ -34,7 +34,7 @@ const StageFilter: React.FunctionComponent<{
           : stages.filter((s) => s !== 'all');
     }
 
-    update({ stages });
+    dispatch(changeStages(stages));
   };
 
   const getCurrentSelectValues = () => {
