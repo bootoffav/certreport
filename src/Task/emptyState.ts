@@ -2,7 +2,7 @@ import { TaskState } from './Task.interface';
 
 const emptyState: TaskState = {
   standardsResult: {},
-  DBState: {
+  FabricAppForm: {
     testRequirement: [[], [], [], [], [], [], [], [], []],
     washPreTreatment: [[], []],
     footer: [[], []],

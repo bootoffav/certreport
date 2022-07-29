@@ -73,31 +73,27 @@ class DB {
     );
   }
 
-  static async getData(taskId: string) {
+  static async getFabricAppFormState(taskId: string) {
     const data = await DB.client()
-      .query(
-        q.Select(
-          ['data'],
-          q.Get(q.Ref(q.Collection(this.fdbCollection), taskId))
-        )
-      )
+      .query(q.Select(['data'], q.Get(q.Ref(q.Collection('aitex'), taskId))))
       .then((res: any) => ({
         ...res,
         exists: true,
       }))
       .catch(async (error) => {
         return {
-          ...emptyState.DBState,
+          ...emptyState.FabricAppForm,
           exists: false,
         };
       });
     const props = Object.getOwnPropertyNames(data);
 
     if (!props.includes('testRequirement'))
-      data.testRequirement = emptyState.DBState.testRequirement;
+      data.testRequirement = emptyState.FabricAppForm.testRequirement;
     if (!props.includes('washPreTreatment'))
-      data.washPreTreatment = emptyState.DBState.washPreTreatment;
-    if (!props.includes('footer')) data.footer = emptyState.DBState.footer;
+      data.washPreTreatment = emptyState.FabricAppForm.washPreTreatment;
+    if (!props.includes('footer'))
+      data.footer = emptyState.FabricAppForm.footer;
 
     return data;
   }

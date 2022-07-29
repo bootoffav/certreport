@@ -18,12 +18,24 @@ enum Stage {
   '11. Repeat Test-report ready',
 }
 
+type FabricAppForm = {
+  testRequirement: any[];
+  washPreTreatment: any[];
+  footer: ['EUR' | 'USD' | 'RMB'[], 'NO' | 'Required'[]];
+  cycles: string[];
+  washTemp: `${number}`;
+  otherStandard1: string;
+  otherStandard2: string;
+  rem?: string;
+  [key: string]: any;
+};
+
 interface TaskState {
   standardsResult: {
     [key: string]: 'pass' | 'fail';
   };
   attachedFiles: any;
-  DBState: any;
+  FabricAppForm: FabricAppForm;
   link: string;
   news: string;
   testingTime: string;
@@ -32,16 +44,9 @@ interface TaskState {
   testingCompany: string;
   stage: Stage | string;
   standards: string;
-  price1: string;
-  paid: boolean;
-  paymentDate1: string;
-  proformaReceived: string;
   proforma: string;
   proformaReceivedDate: string;
   proformaNumber: string;
-  price2: string;
-  paid2: boolean;
-  paymentDate2: string;
   proformaReceived2: string;
   proformaReceivedDate2: string;
   proformaNumber2: string;
@@ -97,4 +102,4 @@ interface Payment {
 }
 
 export { Stage };
-export type { TaskState, Payment };
+export type { TaskState, Payment, FabricAppForm };

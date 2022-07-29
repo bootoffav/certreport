@@ -2,6 +2,7 @@
 
 # backup
 /backup
+/faunadb/backups
 
 # dependencies
 /node_modules

@@ -15,13 +15,14 @@ import Dates from './Tabs/Dates';
 import BasicInfo from './Tabs/BasicInfo/BasicInfo';
 import { renderFiles } from './Tabs/Files';
 import CommentsNews from './Tabs/CommentsNews';
-import { renderFabricApplicationForm } from './Tabs/FabricApplicationForm';
+import FabricApplicationForm from './FabricAppForm/FabricApplicationForm';
 import { renderStandards } from './Tabs/renderStandards';
 import { getShippingLabelFile } from '../Export/PDF/ShippingLabelFile';
 import Payments from './Payments';
 import { Tab, Dimmer } from 'tabler-react';
 import { changeActiveQuoteNo, changeTotalPrice } from 'store/slices/mainSlice';
 import { RootState } from 'store/store';
+import { isEqual } from 'lodash';
 
 interface IFormState extends TaskState {
   requestStatus: Status;
@@ -45,62 +46,50 @@ class Form extends Component {
     };
   }
 
-  componentDidUpdate = () => {
+  componentDidUpdate = (prevProps: any) => {
+    // if (!isEqual(prevProps.allTasks, this.props.allTasks)) {
+    //   const taskFromStore = this.props.allTasks.find(
+    //     (t: any) => t.id === this.task_id
+    //   );
+    //   this.setState({
+    //     ...taskFromStore.state,
+    //   });
+    // }
+    // if (taskFromStore) {
+    //   this.quoteNo = (taskFromStore.state.payments as Payment[]).find(
+    //     (payment) => payment.quoteNo
+    //   )?.quoteNo;
+    // }
+    // this.props.changeActiveQuoteNo(this.quoteNo || '');
+    // if (this.state.hasError) throw new Error('Task not found');
+  };
+
+  async componentDidMount() {
     const taskFromStore = this.props.allTasks.find(
       (t: any) => t.id === this.task_id
     );
     if (taskFromStore) {
-      this.quoteNo = (taskFromStore.state.payments as Payment[]).find(
-        (payment) => payment.quoteNo
-      )?.quoteNo;
-    }
-
-    this.props.changeActiveQuoteNo(this.quoteNo || '');
-    if (this.state.hasError) throw new Error('Task not found');
-  };
-
-  async componentDidMount() {
-    if (this.task_id) {
       this.setState({
-        requestStatus: Status.Loading,
+        ...taskFromStore.state,
+        createdDate: taskFromStore.createdDate,
+        accomplices: taskFromStore.accomplices,
+        attachedFiles: taskFromStore.ufTaskWebdavFiles,
+        link: `[URL=certreport.xmtextiles.com/edit/${this.task_id}/]this task[/URL]`,
       });
-      const dataFromDB = await DB.getData(this.task_id).then(
-        ({
-          exists,
-          rem,
-          quoteNo1,
-          quoteNo2,
-          proformaInvoiceNo1,
-          proformaInvoiceNo2,
-          ...DBState
-        }: any) => ({
-          DBState,
-          quoteNo1,
-          quoteNo2,
-          proformaInvoiceNo1,
-          proformaInvoiceNo2,
-          rem,
-          exists,
-        })
-      );
-
-      await B24.getTask(this.task_id)
-        .then((r: any) => {
-          this.setState({
-            ...r.state,
-            createdDate: r.createdDate,
-            accomplices: r.accomplices,
-            attachedFiles: r.ufTaskWebdavFiles,
-            link: `[URL=certreport.xmtextiles.com/edit/${this.task_id}/]this task[/URL]`,
-            DBState: dataFromDB.DBState,
-            existsInDB: dataFromDB.exists,
-            rem: dataFromDB.rem || emptyState.rem,
-            requestStatus: Status.FillingForm,
-            pretreatment2Active: Boolean(r.state.pretreatment2),
-          });
-        })
-        .catch((e) => this.setState({ hasError: true }));
     }
+    // if (this.task_id) {
+    //   DB.getData(this.task_id)
+    //     .then(({ exists, rem, ...FabricAppForm }: any) => {
+    //       this.setState({
+    //         FabricAppForm: { ...FabricAppForm },
+    //         existsInDB: exists,
+    //         rem: rem || emptyState.rem,
+    //         requestStatus: Status.FillingForm,
+    //         pretreatment2Active: Boolean(taskFromStore.state.pretreatment2),
+    //       });
+    //     })
+    //     .catch((e) => this.setState({ hasError: true }));
+    // }
   }
 
   handleDateChange = (date: Date | null, prop: string): void =>
@@ -177,12 +166,12 @@ class Form extends Component {
           activeQuoteNo: this.state.activeQuoteNo,
           proformaInvoiceNo1: this.state.proformaInvoiceNo1,
           proformaInvoiceNo2: this.state.proformaInvoiceNo2,
-          ...this.state.DBState,
+          ...this.state.FabricAppForm,
         })
           .then(this.successfullySubmitted)
           .catch(this.unsuccessfullySubmitted);
       } else {
-        DB.createInstance(taskId, this.state.DBState)
+        DB.createInstance(taskId, this.state.FabricAppForm)
           .then(this.successfullySubmitted)
           .catch(this.unsuccessfullySubmitted);
       }
@@ -249,7 +238,7 @@ class Form extends Component {
       )}
       <Notification status={this.state.requestStatus} />
       <form onSubmit={(e) => this.handleCert(e)}>
-        <TabbedCard initialTab="Basic Info">
+        <TabbedCard initialTab="Fabric Application Form">
           <Tab title="Basic Info">
             <BasicInfo
               {...this.state}
@@ -288,7 +277,20 @@ class Form extends Component {
             </Dimmer>
           </Tab>
           {renderStandards.call(this)}
-          {renderFabricApplicationForm.call(this)}
+          <Tab title="Fabric Application Form">
+            <Dimmer
+              active={this.state.requestStatus !== Status.FillingForm}
+              loader
+            >
+              <FabricApplicationForm
+                // baseState={this.state.FabricAppForm}
+                // appForm={this.state}
+                updateParent={(FabricAppForm: any) => {
+                  this.setState({ FabricAppForm });
+                }}
+              />
+            </Dimmer>
+          </Tab>
           <Tab title="Comments & News">
             <CommentsNews
               comments={this.state.comments}

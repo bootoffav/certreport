@@ -25,7 +25,9 @@ class AppFormExport {
   docDefinition: any;
 
   renderProperSquare = (table: string, row: number, item: string) =>
-    this.state.DBState[table][row].includes(item) ? checkedSquare : emptySquare;
+    this.state.FabricAppForm[table][row].includes(item)
+      ? checkedSquare
+      : emptySquare;
 
   constructor(state: any) {
     this.state = { ...state };
@@ -438,10 +440,10 @@ class AppFormExport {
               ],
             },
             {
-              text: this.state.DBState.testRequirement[7].includes(
+              text: this.state.FabricAppForm.testRequirement[7].includes(
                 'Other Standard 1'
               )
-                ? this.state.DBState.otherStandard1
+                ? this.state.FabricAppForm.otherStandard1
                 : 'According to Standard Mandotory Test Requirement',
               colSpan: 7,
             },
@@ -465,10 +467,10 @@ class AppFormExport {
               ],
             },
             {
-              text: this.state.DBState.testRequirement[8].includes(
+              text: this.state.FabricAppForm.testRequirement[8].includes(
                 'Other Standard 2'
               )
-                ? this.state.DBState.otherStandard2
+                ? this.state.FabricAppForm.otherStandard2
                 : 'According to Standard Mandotory Test Requirement',
               colSpan: 7,
             },
@@ -589,12 +591,12 @@ class AppFormExport {
           [
             'Domestic Wash(ISO 6330)',
             {
-              text: this.state.DBState.cycles[0],
+              text: this.state.FabricAppForm.cycles[0],
               fillColor: '#FFFF08',
               alignment: 'center',
             },
             {
-              text: `${this.state.DBState.washTemp}C`,
+              text: `${this.state.FabricAppForm.washTemp}C`,
               fillColor: '#FFFF08',
               alignment: 'center',
             },
@@ -626,7 +628,7 @@ class AppFormExport {
           [
             'Industrial Wash (ISO 15797)',
             {
-              text: this.state.DBState.cycles[1],
+              text: this.state.FabricAppForm.cycles[1],
               fillColor: '#FFFF08',
               alignment: 'center',
             },

@@ -39,7 +39,6 @@ const ColumnFilter = ({
       type="text"
       className="form-control"
       placeholder="search by title"
-      autoFocus
       value={searchFor}
       onChange={({ currentTarget: { value } }) => {
         const visibleTasks = filter(value, dataToFilter, dataType);

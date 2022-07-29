@@ -6,7 +6,7 @@ import { StateAdapter } from 'StateAdapter';
 
 const state = {
   standardsResult: {},
-  DBState: {
+  FabricAppForm: {
     testRequirement: [[], [], [], [], [], [], [], [], []],
     washPreTreatment: [[], []],
     footer: [[], []],
