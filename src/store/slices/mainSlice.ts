@@ -88,8 +88,8 @@ const mainSlice = createSlice({
       state.additionalStandardFilterTaskList = payload;
     },
     changePaymentsOfTask: (state, { payload: { taskId, payments } }) => {
-      const task = state.allTasks.find((task) => task.id === taskId);
-      task.state.payments = payments;
+      const idx = state.allTasks.findIndex((task) => task.id === taskId);
+      state.allTasks[idx].state.payments = payments;
     },
   },
   extraReducers: (builder) => {

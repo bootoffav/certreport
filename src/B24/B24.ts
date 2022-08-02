@@ -95,10 +95,10 @@ async function formTaskFields(state: any, taskId?: string) {
       `${
         state.standards && `[B]Standard:[/B] ${stAd.standardsWithResults}\n`
       }` +
-      (() =>
-        state.totalPrice !== 0
-          ? `[B]Total Price:[/B] ${state.totalPrice}\n`
-          : '')() +
+      // (() =>
+      //   state.totalPrice !== 0
+      //     ? `[B]Total Price:[/B] ${state.totalPrice}\n`
+      //     : '')() +
       `${
         state.testingCompany &&
         `[B]Testing company:[/B] ${state.testingCompany}\n`

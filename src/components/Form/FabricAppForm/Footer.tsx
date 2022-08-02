@@ -18,7 +18,6 @@ const Footer = ({ dispatch, state }: any) => {
                 area="footer"
                 row={0}
                 label={item}
-                dispatch={dispatch}
                 checked={state[0].includes(item)}
               >
                 /&nbsp;&nbsp;&nbsp;
@@ -36,7 +35,6 @@ const Footer = ({ dispatch, state }: any) => {
                 area="footer"
                 row={1}
                 label={item}
-                dispatch={dispatch}
                 checked={state[1].includes(item)}
               >
                 /

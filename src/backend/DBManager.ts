@@ -1,5 +1,5 @@
 import faunadb, { query as q } from 'faunadb';
-import { emptyState } from 'Task/emptyState';
+import { emptyState, fabricAppFormInitState } from 'Task/emptyState';
 import type { IRequirement } from 'components/Form/Tabs/Standards/Requirements';
 import type { TabProps } from 'components/ExpiringCerts/ExpiringCerts';
 
@@ -76,24 +76,17 @@ class DB {
   static async getFabricAppFormState(taskId: string) {
     const data = await DB.client()
       .query(q.Select(['data'], q.Get(q.Ref(q.Collection('aitex'), taskId))))
-      .then((res: any) => ({
-        ...res,
-        exists: true,
-      }))
-      .catch(async (error) => {
-        return {
-          ...emptyState.FabricAppForm,
-          exists: false,
-        };
-      });
+      .then((res: any) => res)
+      .catch((error) => ({
+        ...emptyState.FabricAppForm,
+      }));
     const props = Object.getOwnPropertyNames(data);
 
     if (!props.includes('testRequirement'))
-      data.testRequirement = emptyState.FabricAppForm.testRequirement;
+      data.testRequirement = fabricAppFormInitState.testRequirement;
     if (!props.includes('washPreTreatment'))
-      data.washPreTreatment = emptyState.FabricAppForm.washPreTreatment;
-    if (!props.includes('footer'))
-      data.footer = emptyState.FabricAppForm.footer;
+      data.washPreTreatment = fabricAppFormInitState.washPreTreatment;
+    if (!props.includes('footer')) data.footer = fabricAppFormInitState.footer;
 
     return data;
   }

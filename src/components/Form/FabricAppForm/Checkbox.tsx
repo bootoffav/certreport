@@ -1,15 +1,16 @@
+import { useContext } from 'react';
+import { DispatchContext } from './FabricApplicationForm';
+
 type CheckboxProps = {
   label: string;
-  area: 'footer' | 'testRequirement' | 'washPretreatment';
+  area: 'footer' | 'testRequirement' | 'washPreTreatment';
   row: number;
   checked?: boolean;
-  dispatch?: any;
-  // onChange?: (table: string, row: number, label: string) => void;
-  // onChange: any;
   children?: any;
 };
 
 const CheckBox = (props: CheckboxProps) => {
+  const dispatch = useContext(DispatchContext);
   const area = props.area || 'testRequirement';
   const row = props.row ? props.row + '_' : '';
   const labelConverted = `${area}_${row}${props.label.replace(/ /g, '-')}`;
@@ -24,8 +25,7 @@ const CheckBox = (props: CheckboxProps) => {
         // name={labelConverted}
         // @ts-ignore
         onChange={({ currentTarget: { checked } }) => {
-          // debugger;
-          props.dispatch({
+          dispatch({
             type: props.area,
             payload: {
               checked,

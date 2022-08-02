@@ -1,5 +1,5 @@
 import { Icon } from 'tabler-react';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import dayjs from 'dayjs';
 import { Price, Paid, QuoteNo, BaseInput } from './FormFields';
 import type { Payment } from 'Task/Task.interface';
@@ -23,33 +23,21 @@ const emptyPayment: Payment = {
 };
 
 function Payments({ taskId }: { taskId?: `${number}` }) {
-  const [payments, setPayments] = useState<Payment[]>(
-    useAppSelector(({ main: { allTasks } }) => {
-      const { state } = allTasks.find((t) => t.id === taskId);
-      return (state.payments as Payment[]).map((payment) =>
-        Object.assign({}, payment)
-      );
-    })
-  );
+  const dispatch = useAppDispatch();
+  const payments = useAppSelector<Payment[]>(({ main: { allTasks } }) => {
+    const payments = allTasks
+      .find(({ id }) => id === taskId)
+      ?.state.payments.map((p: Payment) => ({ ...p }));
+    return payments || [];
+  });
+
   const [branches, setBranches] = useState<typeof XMBranchOptions[number][]>(
     []
   );
 
-  const dispatch = useAppDispatch();
-
   const getTotalPrice = useCallback(
     () => payments.reduce((total, { price }) => total + Number(price), 0),
     [payments]
-  );
-
-  useEffect(() => {
-    dispatch(changeTotalPrice(getTotalPrice()));
-  }, [payments, taskId, dispatch, getTotalPrice]);
-
-  useEffect(
-    () => () => dispatch(changePaymentsOfTask({ taskId, payments }) as any),
-    // eslint-disable-next-line
-    []
   );
 
   const genericSetter = (
@@ -72,10 +60,12 @@ function Payments({ taskId }: { taskId?: `${number}` }) {
           value={payment.price}
           label={`Payment #${paymentPosition}`}
           handleChange={(value) => {
-            const newPayments = [...genericSetter('price', value, index)];
-            setPayments(newPayments);
-            taskId &&
-              DB.updateInstance(taskId, { payments: newPayments }, 'payments');
+            dispatch(
+              changePaymentsOfTask({
+                taskId,
+                payments: [...genericSetter('price', value, index)],
+              })
+            );
           }}
         />
         <Paid
@@ -84,25 +74,27 @@ function Payments({ taskId }: { taskId?: `${number}` }) {
             if (!target.checked) {
               payments[index].paymentDate = '';
             }
-            const newPayments = [
-              ...genericSetter('paid', target.checked, index),
-            ];
-            setPayments(newPayments);
-            taskId &&
-              DB.updateInstance(taskId, { payments: newPayments }, 'payments');
+            dispatch(
+              changePaymentsOfTask({
+                taskId,
+                payments: [...genericSetter('paid', target.checked, index)],
+              })
+            );
           }}
           paymentDate={payment.paymentDate}
           paymentDateChange={(date) => {
-            const newPayments = [
-              ...genericSetter(
-                'paymentDate',
-                dayjs(date).format('DDMMMYYYY'),
-                index
-              ),
-            ];
-            setPayments(newPayments);
-            taskId &&
-              DB.updateInstance(taskId, { payments: newPayments }, 'payments');
+            dispatch(
+              changePaymentsOfTask({
+                taskId,
+                payments: [
+                  ...genericSetter(
+                    'paymentDate',
+                    dayjs(date).format('DDMMMYYYY'),
+                    index
+                  ),
+                ],
+              })
+            );
           }}
         />
         <QuoteNo
@@ -110,26 +102,28 @@ function Payments({ taskId }: { taskId?: `${number}` }) {
           handleActiveQuoteNoChange={() => {
             dispatch(changeActiveQuoteNo(payment.quoteNo));
             payments.forEach((p) => delete p.activeQuoteNo);
-            const newPayments = [
-              ...genericSetter('activeQuoteNo', true, index),
-            ];
-            setPayments(newPayments);
-            taskId &&
-              DB.updateInstance(taskId, { payments: newPayments }, 'payments');
+            dispatch(
+              changePaymentsOfTask({
+                taskId,
+                payments: [...genericSetter('activeQuoteNo', true, index)],
+              })
+            );
           }}
           value={payment.quoteNo}
           label="Quote No."
           onChange={({ currentTarget }) => {
-            const newPayments = [
-              ...genericSetter(
-                'quoteNo',
-                (currentTarget as HTMLInputElement).value,
-                index
-              ),
-            ];
-            setPayments(newPayments);
-            taskId &&
-              DB.updateInstance(taskId, { payments: newPayments }, 'payments');
+            dispatch(
+              changePaymentsOfTask({
+                taskId,
+                payments: [
+                  ...genericSetter(
+                    'quoteNo',
+                    (currentTarget as HTMLInputElement).value,
+                    index
+                  ),
+                ],
+              })
+            );
           }}
         />
         <BaseInput
@@ -139,25 +133,31 @@ function Payments({ taskId }: { taskId?: `${number}` }) {
           id={`proformaInvoiceNo${paymentPosition}`}
           label="Pro-forma invoice no."
           handleChange={({ currentTarget }) => {
-            const newPayments = [
-              ...genericSetter(
-                'proformaInvoiceNo',
-                (currentTarget as HTMLInputElement).value,
-                index
-              ),
-            ];
-            setPayments(newPayments);
-            taskId &&
-              DB.updateInstance(taskId, { payments: newPayments }, 'payments');
+            dispatch(
+              changePaymentsOfTask({
+                taskId,
+                payments: [
+                  ...genericSetter(
+                    'proformaInvoiceNo',
+                    (currentTarget as HTMLInputElement).value,
+                    index
+                  ),
+                ],
+              })
+            );
           }}
         />
 
         <RemovePayment
           doIt={(e) => {
-            e.preventDefault();
             const newPayments = [...payments];
             newPayments.splice(index, 1);
-            setPayments(newPayments);
+            dispatch(
+              changePaymentsOfTask({
+                taskId,
+                payments: newPayments,
+              })
+            );
             taskId &&
               DB.updateInstance(taskId, { payments: newPayments }, 'payments');
           }}
@@ -167,7 +167,14 @@ function Payments({ taskId }: { taskId?: `${number}` }) {
   };
 
   return (
-    <>
+    <div
+      onBlur={(e) => {
+        setTimeout(() => {
+          dispatch(changeTotalPrice(getTotalPrice()));
+          taskId && DB.updateInstance(taskId, { payments }, 'payments');
+        }, 1000);
+      }}
+    >
       <div className="mb-3">
         XM Branch:
         <Select
@@ -196,11 +203,16 @@ function Payments({ taskId }: { taskId?: `${number}` }) {
       <AddPayment
         doIt={(e) => {
           e.preventDefault();
-          setPayments((payments) => [...payments, { ...emptyPayment }]);
+          dispatch(
+            changePaymentsOfTask({
+              taskId,
+              payments: [...payments, { ...emptyPayment }],
+            })
+          );
         }}
       />
       {renderTotal(getTotalPrice())}
-    </>
+    </div>
   );
 }
 

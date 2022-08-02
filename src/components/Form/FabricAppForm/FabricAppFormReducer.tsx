@@ -1,5 +1,3 @@
-import { FabricAppForm } from 'Task/Task.interface';
-
 function FabricAppFormReducer(state: any, action: any) {
   // @ts-ignore
   const { type, payload } = action;
@@ -24,6 +22,18 @@ function FabricAppFormReducer(state: any, action: any) {
       return {
         ...state,
         otherStandard2: payload.value,
+      };
+    case 'cycles':
+      const cycles = state.cycles;
+      cycles[payload.position] = payload.value;
+      return {
+        ...state,
+        cycles,
+      };
+    case 'washTemp':
+      return {
+        ...state,
+        washTemp: payload.value,
       };
     default:
       return {

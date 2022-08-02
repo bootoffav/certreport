@@ -35,7 +35,7 @@ interface TaskState {
     [key: string]: 'pass' | 'fail';
   };
   attachedFiles: any;
-  FabricAppForm: FabricAppForm;
+  FabricAppForm?: FabricAppForm;
   link: string;
   news: string;
   testingTime: string;

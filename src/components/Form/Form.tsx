@@ -23,6 +23,8 @@ import { Tab, Dimmer } from 'tabler-react';
 import { changeActiveQuoteNo, changeTotalPrice } from 'store/slices/mainSlice';
 import { RootState } from 'store/store';
 import { isEqual } from 'lodash';
+import { AppFormExport } from '../Export/PDF/AppFormExport';
+import { getTaskTotalPriceHelper } from 'helpers';
 
 interface IFormState extends TaskState {
   requestStatus: Status;
@@ -47,21 +49,23 @@ class Form extends Component {
   }
 
   componentDidUpdate = (prevProps: any) => {
-    // if (!isEqual(prevProps.allTasks, this.props.allTasks)) {
-    //   const taskFromStore = this.props.allTasks.find(
-    //     (t: any) => t.id === this.task_id
-    //   );
-    //   this.setState({
-    //     ...taskFromStore.state,
-    //   });
-    // }
+    if (!isEqual(prevProps.allTasks, this.props.allTasks)) {
+      const taskFromStore = this.props.allTasks.find(
+        (t: any) => t.id === this.task_id
+      );
+      this.props.changeTotalPrice(getTaskTotalPriceHelper(taskFromStore.state));
+      // @ts-ignore
+      const { rem, ...state } = { ...taskFromStore.state };
+      this.setState({
+        ...state,
+      });
+    }
     // if (taskFromStore) {
     //   this.quoteNo = (taskFromStore.state.payments as Payment[]).find(
     //     (payment) => payment.quoteNo
     //   )?.quoteNo;
     // }
     // this.props.changeActiveQuoteNo(this.quoteNo || '');
-    // if (this.state.hasError) throw new Error('Task not found');
   };
 
   async componentDidMount() {
@@ -69,6 +73,7 @@ class Form extends Component {
       (t: any) => t.id === this.task_id
     );
     if (taskFromStore) {
+      this.props.changeTotalPrice(getTaskTotalPriceHelper(taskFromStore.state));
       this.setState({
         ...taskFromStore.state,
         createdDate: taskFromStore.createdDate,
@@ -77,19 +82,14 @@ class Form extends Component {
         link: `[URL=certreport.xmtextiles.com/edit/${this.task_id}/]this task[/URL]`,
       });
     }
-    // if (this.task_id) {
-    //   DB.getData(this.task_id)
-    //     .then(({ exists, rem, ...FabricAppForm }: any) => {
-    //       this.setState({
-    //         FabricAppForm: { ...FabricAppForm },
-    //         existsInDB: exists,
-    //         rem: rem || emptyState.rem,
-    //         requestStatus: Status.FillingForm,
-    //         pretreatment2Active: Boolean(taskFromStore.state.pretreatment2),
-    //       });
-    //     })
-    //     .catch((e) => this.setState({ hasError: true }));
-    // }
+
+    if (this.task_id) {
+      const { rem, ...data } = await DB.getFabricAppFormState(this.task_id);
+      this.setState({
+        FabricAppForm: data,
+        rem,
+      });
+    }
   }
 
   handleDateChange = (date: Date | null, prop: string): void =>
@@ -158,23 +158,24 @@ class Form extends Component {
       await CacheManager.updateTask(taskId);
 
       // update in FaunaDB
-      if (this.state.existsInDB) {
-        DB.updateInstance(taskId, {
-          rem: this.state.rem,
-          quoteNo1: this.state.quoteNo1,
-          quoteNo2: this.state.quoteNo2,
-          activeQuoteNo: this.state.activeQuoteNo,
-          proformaInvoiceNo1: this.state.proformaInvoiceNo1,
-          proformaInvoiceNo2: this.state.proformaInvoiceNo2,
-          ...this.state.FabricAppForm,
-        })
-          .then(this.successfullySubmitted)
-          .catch(this.unsuccessfullySubmitted);
-      } else {
-        DB.createInstance(taskId, this.state.FabricAppForm)
-          .then(this.successfullySubmitted)
-          .catch(this.unsuccessfullySubmitted);
-      }
+      DB.createInstance(taskId, this.state.FabricAppForm)
+        .then(this.successfullySubmitted)
+        .catch((error: any) => {
+          if (error.message === 'instance already exists') {
+            DB.updateInstance(taskId, {
+              rem: this.state.rem,
+              quoteNo1: this.state.quoteNo1,
+              quoteNo2: this.state.quoteNo2,
+              activeQuoteNo: this.state.activeQuoteNo,
+              proformaInvoiceNo1: this.state.proformaInvoiceNo1,
+              proformaInvoiceNo2: this.state.proformaInvoiceNo2,
+              ...this.state.FabricAppForm,
+            })
+              .then(this.successfullySubmitted)
+              .catch(this.unsuccessfullySubmitted);
+          }
+        });
+
       DB.updateInstance(
         taskId,
         { factory: this.state.factory },
@@ -197,7 +198,7 @@ class Form extends Component {
     setTimeout(() => this.props.history.goBack(), 1000);
   };
 
-  unsuccessfullySubmitted = (error: any) => {
+  unsuccessfullySubmitted = (error: unknown) => {
     console.log(error);
     this.setState({ requestStatus: Status.Failure });
     setTimeout(
@@ -236,9 +237,21 @@ class Form extends Component {
           Shipping label <Icon prefix="fe" name="download" />
         </Button>
       )}
+      {this.state.FabricAppForm && (
+        <Button
+          className="float-right"
+          link
+          onClick={(e: any) => {
+            e.preventDefault();
+            new AppFormExport(this.state).save();
+          }}
+        >
+          Fabric Application Form <Icon prefix="fe" name="download" />
+        </Button>
+      )}
       <Notification status={this.state.requestStatus} />
       <form onSubmit={(e) => this.handleCert(e)}>
-        <TabbedCard initialTab="Fabric Application Form">
+        <TabbedCard initialTab="Basic Info">
           <Tab title="Basic Info">
             <BasicInfo
               {...this.state}
@@ -283,8 +296,7 @@ class Form extends Component {
               loader
             >
               <FabricApplicationForm
-                // baseState={this.state.FabricAppForm}
-                // appForm={this.state}
+                baseState={this.state.FabricAppForm}
                 updateParent={(FabricAppForm: any) => {
                   this.setState({ FabricAppForm });
                 }}
