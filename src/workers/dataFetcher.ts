@@ -50,6 +50,7 @@ export async function getTasks() {
               'TITLE',
               'DESCRIPTION',
               'UF_CRM_TASK',
+              'ACCOMPLICES',
               'CREATED_DATE',
             ],
             start,

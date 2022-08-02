@@ -44,6 +44,9 @@ async function get_products() {
         .then(step);
       start = next;
       productsInSection = productsInSection.concat(result);
+      const delay = async (ms = 600) =>
+        await new Promise((res) => setTimeout(res, Number(ms)));
+      await delay();
     } while (start !== undefined);
     productsInSection = productsInSection.map((product) => ({
       value: product.ID,

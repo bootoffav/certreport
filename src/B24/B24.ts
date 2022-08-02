@@ -377,38 +377,3 @@ export {
   removeFileFromDisk,
   formTaskFields,
 };
-
-/**
- * @param  {string} id task ID
- * @param  {any} state
- * @todo Eject handling fetch to bitrix from func, code repeats in handle functions.
- */
-// async function handleApplicationForm(id: string, state: any): Promise<void> {
-//   const fileNamePrefix = 'Fabric Test Application Form_';
-
-//   // look for old appForm and remove it from task
-//   const attachedFiles = await getAttachedFiles(id);
-//   attachedFiles.forEach(({ NAME, FILE_ID, ATTACHMENT_ID }: any) => {
-//     if (NAME.startsWith(fileNamePrefix)) {
-//       detachFileFromTask(id, ATTACHMENT_ID);
-//       removeFileFromDisk(FILE_ID);
-//     }
-//   });
-
-//   const pdf = await new AppFormExport(state).create();
-
-//   return new Promise((res) => {
-//     pdf.getBase64((base64: string) => {
-//       fetch(`${mainUrl}/${creatorId}/${webhookKey}/task.item.addfile/`, {
-//         method: 'post',
-//         body: qs.stringify({
-//           TASK_ID: id,
-//           FILE: {
-//             NAME: `${fileNamePrefix}${state.serialNumber}_${state.article}.pdf`,
-//             CONTENT: base64,
-//           },
-//         }),
-//       }).then(() => res());
-//     });
-//   });
-// }
