@@ -13,7 +13,6 @@ import CacheManager from 'CacheManager';
 import { GoBackOrHomeButton } from '../NaviButton';
 import Dates from './Tabs/Dates';
 import BasicInfo from './Tabs/BasicInfo/BasicInfo';
-import { renderFiles } from './Tabs/Files';
 import CommentsNews from './Tabs/CommentsNews';
 import FabricApplicationForm from './FabricAppForm/FabricApplicationForm';
 import { renderStandards } from './Tabs/renderStandards';
@@ -25,6 +24,8 @@ import { RootState } from 'store/store';
 import { isEqual } from 'lodash';
 import { AppFormExport } from '../Export/PDF/AppFormExport';
 import { getTaskTotalPriceHelper } from 'helpers';
+
+import { FileManagement } from 'components/FileManagement/FileManagement';
 
 interface IFormState extends TaskState {
   requestStatus: Status;
@@ -311,7 +312,16 @@ class Form extends Component {
               requestStatus={this.state.requestStatus}
             />
           </Tab>
-          {this.task_id && renderFiles.call(this)}
+          {this.task_id && (
+            <Tab title="Files">
+              <Dimmer
+                active={this.state.requestStatus !== Status.FillingForm}
+                loader
+              >
+                <FileManagement taskId={this.task_id} />
+              </Dimmer>
+            </Tab>
+          )}
         </TabbedCard>
         <div className="d-flex justify-content-around">
           <button type="submit" className="col-2 btn btn-primary">

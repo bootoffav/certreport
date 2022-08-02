@@ -6,6 +6,7 @@ import { OtherFilesList } from './OtherFilesList';
 import { UploadFile } from './UploadFile';
 import type { AttachedFile } from 'Task/types';
 import { SpecificFile } from './SpecificFile/SpecificFile';
+import { getAttachedFiles } from 'B24/B24';
 
 const creator_id = process.env.REACT_APP_B24_USER_ID;
 const webhook_key = process.env.REACT_APP_B24_WEBHOOK_KEY;
@@ -28,38 +29,40 @@ const pullSpecificFiles = (
   return [files, specificFiles];
 };
 
-function FileManagement(props: {
-  taskId: string;
-  attachedFiles: AttachedFile[];
-  updateAttachedFiles: () => void;
-}) {
-  let files = props.attachedFiles;
+function FileManagement(props: { taskId: string }) {
+  let [files, setFiles] = useState<AttachedFile[]>([]);
   let testReportFiles;
   let certificateFiles;
 
   const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
-    setUploading(false);
-  }, [props.attachedFiles]);
+    (async () => {
+      if (!uploading) {
+        let files = await getAttachedFiles(props.taskId);
+        setFiles(files);
+      }
+    })();
+  }, [props.taskId, uploading]);
 
   const upload = (e: any, filePrefix: string = '') => {
     setUploading(true);
     for (let file of e.target.files) {
-      B24.fileUpload(props.taskId, `${filePrefix}${file.name}`, file).then(
-        props.updateAttachedFiles
+      B24.fileUpload(props.taskId, `${filePrefix}${file.name}`, file).then(() =>
+        setUploading(false)
       );
     }
   };
 
   const renameFile = (id: string, newName: string) => {
+    setUploading(true);
     fetch(
       `${main_url}/${creator_id}/${webhook_key}/disk.file.rename?` +
         qs.stringify({
           id,
           newName,
         })
-    ).then(props.updateAttachedFiles);
+    ).then(() => setUploading(false));
   };
 
   const deleteFile = (file: AttachedFile) => {
@@ -76,7 +79,7 @@ function FileManagement(props: {
         `${main_url}/${creator_id}/${webhook_key}/disk.file.delete?` +
           qs.stringify({ id: file.FILE_ID })
       ),
-    ]).then(props.updateAttachedFiles);
+    ]).then(() => setUploading(false));
   };
 
   [files, testReportFiles] = pullSpecificFiles(files, 'Test Report');
