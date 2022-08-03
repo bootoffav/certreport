@@ -1,9 +1,10 @@
 import { StatsCard, Card } from 'tabler-react';
 import { tasksInRange } from './Dashboard';
-import { useAppSelector } from 'store/hooks';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { TaskState, Payment } from 'Task/Task.interface';
 import './CertificationsResultCard.css';
 import { renderTableOfDiagramSegment } from './utils';
+import { changeResume } from 'store/slices/dashboardSlice';
 
 type CertificationsResultCardProps = {
   resume: TaskState['resume'] | '' | 'allWithResults';
@@ -19,6 +20,7 @@ const CertificationsResultCard = ({
   resume,
   label,
 }: CertificationsResultCardProps) => {
+  const dispatch = useAppDispatch();
   const { tasks: allTasks } = useAppSelector(({ dashboard }) => ({
     tasks: dashboard.tasksOfActiveSpendingBlocks,
   }));
@@ -50,7 +52,10 @@ const CertificationsResultCard = ({
         <div className="h1 m-0 text-center">
           <div
             className={`display-5 certificationsResultCard`}
-            onClick={() => renderTableOfDiagramSegment('', '', tasks, true)}
+            onClick={() => {
+              dispatch(changeResume(resume));
+              renderTableOfDiagramSegment('', '', tasks, true);
+            }}
           >
             {tasks.length}
           </div>

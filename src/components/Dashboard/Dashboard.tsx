@@ -3,9 +3,8 @@ import { connect } from 'react-redux';
 import './Dashboard.css';
 import { unmountComponentAtNode } from 'react-dom';
 import { Grid } from 'tabler-react';
-// import BranchChart from './BrandCharts/BrandChart';
+import BranchChart from './BrandCharts/BrandChart';
 import SpendingBlocks from './SpendingBlocks/SpendingBlocks';
-// import { chartOptions } from './configs';
 import { renderTableOfDiagramSegment } from './utils';
 import { CertificationsResultCard } from './CertificationsResultCard';
 
@@ -62,9 +61,15 @@ class Dashboard extends Component<any, IDashboard> {
           />
         </Grid.Row>
         <Grid.Row>
-          <Grid.Col>{/* <BranchChart brand="XMT" /> */}</Grid.Col>
-          <Grid.Col>{/* <BranchChart brand="XMS" /> */}</Grid.Col>
-          <Grid.Col>{/* <BranchChart brand="XMF" /> */}</Grid.Col>
+          <Grid.Col>
+            <BranchChart brand="XMT" />
+          </Grid.Col>
+          <Grid.Col>
+            <BranchChart brand="XMS" />
+          </Grid.Col>
+          <Grid.Col>
+            <BranchChart brand="XMF" />
+          </Grid.Col>
           <Grid.Col width={1}>
             <CertificationsResultCard resume="pass" label="PASS" />
             <CertificationsResultCard resume="partly" label="PASS (Partly)" />

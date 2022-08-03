@@ -8,6 +8,7 @@ import {
   Legend,
 } from 'chart.js';
 import { useMemo } from 'react';
+import { useAppSelector } from 'store/hooks';
 import { Bar } from 'react-chartjs-2';
 
 type BrandChartProps = {
@@ -53,20 +54,37 @@ function getRandomColors(amount: number) {
   return colors;
 }
 
-const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+function BranchChart({ brand }: BrandChartProps) {
+  const { tasks, chartResume } = useAppSelector(
+    ({ dashboard: { tasksOfActiveSpendingBlocks: tasks, chartResume } }) => {
+      tasks = tasks.filter(({ state }) => {
+        if (state.brand === brand) {
+          return chartResume === 'allWithResults' || chartResume === ''
+            ? ['pass', 'partly', 'fail'].includes(state.resume)
+            : state.resume === chartResume;
+        }
+        return false;
+      });
+      return { tasks, chartResume };
+    }
+  );
+  const articles = tasks.map(({ state }) => state.article);
+  const articlesAmount = articles.map((article) => {
+    return tasks.reduce((acc, task) => {
+      return task.state.article === article ? acc + 1 : acc;
+    }, 0);
+  });
 
-const data1 = [516, 19, 555, 316, 816, 816, 539];
-
-function BranchChart(props: BrandChartProps) {
-  const colors = useMemo(() => getRandomColors(6), [props.brand]);
+  const colors = useMemo(() => getRandomColors(6), []);
 
   const data = {
-    labels,
+    labels: articles,
     datasets: [
       {
-        label: 'Products',
-        data: data1,
-        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        label:
+          `${brand} Products ` + (chartResume !== '' ? `(${chartResume})` : ''),
+        data: articlesAmount,
+        backgroundColor: colors,
       },
     ],
   };
@@ -76,10 +94,6 @@ function BranchChart(props: BrandChartProps) {
     plugins: {
       legend: {
         position: 'top' as const,
-      },
-      title: {
-        display: true,
-        text: `${props.brand} Products`,
       },
     },
   };
