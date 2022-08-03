@@ -2,11 +2,10 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import './Dashboard.css';
 import { unmountComponentAtNode } from 'react-dom';
-import { Grid, Card } from 'tabler-react';
-import { HorizontalBar } from 'react-chartjs-2';
-import SpendingBlocks from './QSpending/SpendingBlocks';
-import { chartOptions } from './configs';
-import { byStages, byProducts } from './dataprocessing';
+import { Grid } from 'tabler-react';
+// import BranchChart from './BrandCharts/BrandChart';
+import SpendingBlocks from './SpendingBlocks/SpendingBlocks';
+// import { chartOptions } from './configs';
 import { renderTableOfDiagramSegment } from './utils';
 import { CertificationsResultCard } from './CertificationsResultCard';
 
@@ -55,67 +54,18 @@ class Dashboard extends Component<any, IDashboard> {
   render() {
     return (
       <>
-        <Grid.Row width={12}>
-          <Grid.Col>
-            <Grid.Row deck>
-              <SpendingBlocks
-                renderTable={(tasks) =>
-                  renderTableOfDiagramSegment('', '', tasks, true)
-                }
-              />
-            </Grid.Row>
-          </Grid.Col>
+        <Grid.Row deck>
+          <SpendingBlocks
+            renderTable={(tasks) =>
+              renderTableOfDiagramSegment('', '', tasks, true)
+            }
+          />
         </Grid.Row>
         <Grid.Row>
-          <Grid.Col width={5}>
-            <Card isCollapsible>
-              <Card.Header>
-                <Card.Title>Task by stages</Card.Title>
-              </Card.Header>
-              <Card.Body>
-                {/* @ts-ignore */}
-                <HorizontalBar
-                  data={byStages(
-                    dashboardDataChartAdapter(
-                      this.state.allDataInChartsVisible
-                        ? this.props.tasks
-                        : this.state.quarters
-                    )
-                  )}
-                  options={{
-                    ...chartOptions,
-                    onClick: (_: PointerEvent, chartElement: any) =>
-                      this.onClickChartHandler(chartElement, 'stage'),
-                  }}
-                />
-              </Card.Body>
-            </Card>
-          </Grid.Col>
-          <Grid.Col width={5}>
-            <Card isCollapsible>
-              <Card.Header>
-                <Card.Title>Products</Card.Title>
-              </Card.Header>
-              <Card.Body>
-                {/* @ts-ignore */}
-                <HorizontalBar
-                  data={byProducts(
-                    dashboardDataChartAdapter(
-                      this.state.allDataInChartsVisible
-                        ? this.props.tasks
-                        : this.state.quarters
-                    )
-                  )}
-                  options={{
-                    ...chartOptions,
-                    onClick: (_: PointerEvent, chartElement: any) =>
-                      this.onClickChartHandler(chartElement, 'article'),
-                  }}
-                />
-              </Card.Body>
-            </Card>
-          </Grid.Col>
-          <Grid.Col width={2}>
+          <Grid.Col>{/* <BranchChart brand="XMT" /> */}</Grid.Col>
+          <Grid.Col>{/* <BranchChart brand="XMS" /> */}</Grid.Col>
+          <Grid.Col>{/* <BranchChart brand="XMF" /> */}</Grid.Col>
+          <Grid.Col width={1}>
             <CertificationsResultCard resume="pass" label="PASS" />
             <CertificationsResultCard resume="partly" label="PASS (Partly)" />
             <CertificationsResultCard resume="fail" label="FAIL" />

@@ -1,4 +1,3 @@
-import * as B24 from './B24/B24';
 import { ClientStorage } from './ClientStorage/ClientStorage';
 
 class CacheManager {

@@ -9,7 +9,6 @@ import { emptyState } from 'Task/emptyState';
 import type { Payment, TaskState } from 'Task/Task.interface';
 import DB from 'backend/DBManager';
 import { TabbedCard, Button, Icon } from 'tabler-react';
-import CacheManager from 'CacheManager';
 import { GoBackOrHomeButton } from '../NaviButton';
 import Dates from './Tabs/Dates';
 import BasicInfo from './Tabs/BasicInfo/BasicInfo';
