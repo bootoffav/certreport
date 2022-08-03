@@ -60,6 +60,10 @@ const mainSlice = createSlice({
     changeItems: (state, { payload }) => {
       state.allItems = payload;
     },
+    changeTask: (state, { payload }) => {
+      const idx = state.allTasks.findIndex((task) => task.id === payload.id);
+      state.allTasks[idx] = payload.task;
+    },
     changeActiveBrands: (state, { payload }) => {
       state.activeBrands = payload;
     },
@@ -122,6 +126,7 @@ export const {
   changeAdditionalStandardFilterList,
   changePaymentsOfTask,
   changeStages,
+  changeTask,
 } = mainSlice.actions;
 
 export default mainSlice;

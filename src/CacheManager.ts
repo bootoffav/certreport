@@ -11,10 +11,7 @@ class CacheManager {
     }
   };
 
-  // getCache = async () => await ClientStorage.getData();
-
-  static updateTask = (taskId: string) =>
-    B24.getTask(taskId).then((task) => ClientStorage.writeData([task]));
+  static updateTask = (task: any) => ClientStorage.writeData([task]);
 
   static updateItem = (items: any[]) =>
     ClientStorage.writeData(items, 'products');

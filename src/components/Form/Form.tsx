@@ -19,7 +19,11 @@ import { renderStandards } from './Tabs/renderStandards';
 import { getShippingLabelFile } from '../Export/PDF/ShippingLabelFile';
 import Payments from './Payments';
 import { Tab, Dimmer } from 'tabler-react';
-import { changeActiveQuoteNo, changeTotalPrice } from 'store/slices/mainSlice';
+import {
+  changeActiveQuoteNo,
+  changeTotalPrice,
+  changeTask,
+} from 'store/slices/mainSlice';
 import { RootState } from 'store/store';
 import { isEqual } from 'lodash';
 import { AppFormExport } from '../Export/PDF/AppFormExport';
@@ -155,8 +159,9 @@ class Form extends Component {
             totalPrice: this.props.totalPrice,
           }).catch(this.unsuccessfullySubmitted);
 
-      // update in indexedDB
-      await CacheManager.updateTask(taskId);
+      // update in redux
+      const task = await B24.getTask(taskId);
+      this.props.changeTask({ id: taskId, task });
 
       // update in FaunaDB
       DB.createInstance(taskId, this.state.FabricAppForm)
@@ -341,6 +346,7 @@ class Form extends Component {
 export default connect(
   ({ main }: RootState) => ({ allTasks: main.allTasks }),
   {
+    changeTask,
     changeActiveQuoteNo,
     changeTotalPrice,
   }
