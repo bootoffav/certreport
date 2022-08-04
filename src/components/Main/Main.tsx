@@ -2,7 +2,6 @@ import { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { intersection, isEqual } from 'lodash';
 import { Error404Page } from 'tabler-react';
-import CacheManager from 'CacheManager';
 import CertificationList from '../Lists/Certification/CertificationList';
 import { ItemList } from '../Lists/ItemList/ItemList';
 import Form from '../Form/Form';
@@ -12,7 +11,7 @@ import ErrorBoundary from 'ErrorBoundary';
 import NavBar from './NavBar';
 import { StageShortNames } from '../StageShortNames/StageShortNames';
 import { ItemInCertifications } from '../ItemInCertifications/ItemInCertifications';
-import { ClientStorage } from '../../ClientStorage/ClientStorage';
+import ClientStorage from '../../ClientStorage/ClientStorage';
 import {
   changeUpdated,
   changeItems,
@@ -23,23 +22,22 @@ import {
 import type { RootState } from 'store/store';
 import { connect } from 'react-redux';
 import fetchPayments from 'store/slices/PaymentsThunk';
+import { Items } from 'Item/Item';
 
 class Main extends Component<any> {
-  cache = new CacheManager();
-
   async componentDidMount() {
     const { dispatch } = this.props;
 
-    await this.cache.doUpdate();
-    await ClientStorage.getData().then(({ tasks, items }: any) => {
-      dispatch(changeTasks(tasks));
-      dispatch(fetchPayments());
-      dispatch(changeItems(items));
-      dispatch(changeUpdated(true));
-      const { filteredItems, filteredTasks } = this.filter(tasks, items);
-      dispatch(changeFilteredItems(filteredItems));
-      dispatch(changeFilteredTasks(filteredTasks));
-    });
+    const tasks = await ClientStorage.getTasks();
+    const items = Items(tasks);
+    dispatch(changeTasks(tasks));
+    dispatch(fetchPayments());
+    dispatch(changeItems(items));
+    dispatch(changeUpdated(true));
+    const { filteredItems, filteredTasks } = this.filter(tasks, items);
+    dispatch(changeFilteredItems(filteredItems));
+    dispatch(changeFilteredTasks(filteredTasks));
+    sessionStorage.setItem('updated', '1');
   }
   componentDidUpdate(prevProps: any, prevState: any) {
     const { endDate, startDate, activeBrands, allTasks, allItems } = this.props;

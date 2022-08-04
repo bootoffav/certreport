@@ -1,4 +1,3 @@
-import React from 'react';
 import { useState, useEffect } from 'react';
 import Loader from 'react-loader-spinner';
 import { Grid, Icon } from 'tabler-react';
@@ -7,7 +6,6 @@ import { getTaskParamLabel } from 'Task/Task';
 import './ItemInCertifications.css';
 import { GoBackOrHomeButton } from '../NaviButton';
 import { pullSpecificFiles } from '../FileManagement/FileManagement';
-import CacheManager from 'CacheManager';
 import { Items } from 'Item/Item';
 import { getTaskTotalPriceHelper } from 'helpers';
 
@@ -32,10 +30,9 @@ function ItemInCertifications({ item }: IItemProps) {
 
   useEffect(() => {
     getItemAssociatedTasks(item).then((tasks) => {
-      const { items } = Items(tasks);
+      const items = Items(tasks);
       setTasks(items[0].tasks);
       setIsUpdated(true);
-      CacheManager.updateItem(items);
     });
   }, [item]);
 

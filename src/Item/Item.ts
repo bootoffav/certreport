@@ -13,9 +13,9 @@ type ItemType = {
   tasks: taskOfItem[];
 };
 
-function Items(tasks: any[]) {
+function Items(tasks: any[]): ItemType[] {
   // get unique products
-  var items: ItemType[] = [];
+  const items: ItemType[] = [];
 
   tasks.forEach((t) => {
     if (t.state && t.state.article) {
@@ -48,7 +48,7 @@ function Items(tasks: any[]) {
     }
   });
 
-  return { tasks, items };
+  return items;
 }
 
 export { Items };

@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import ReactTable, { CellInfo } from 'react-table';
 import ColumnFilter from '../Filters/ColumnFilter';
@@ -19,9 +20,9 @@ const columns = [
     id: 'item',
     Cell: ({ original }: CellInfo) => (
       <Tooltip content="Item's relevant certs" placement="right">
-        <a href={`/item/${encodeURIComponent(original.article)}/`}>
+        <Link to={`/item/${encodeURIComponent(original.article)}/`}>
           {original.article}
-        </a>
+        </Link>
       </Tooltip>
     ),
     width: 150,
