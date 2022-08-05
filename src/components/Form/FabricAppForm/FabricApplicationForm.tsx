@@ -12,7 +12,6 @@ import DB from 'backend/DBManager';
 import { fabricAppFormInitState } from 'Task/emptyState';
 
 type FabricAppFormProps = {
-  // appForm: any;
   updateParent: any;
   baseState: any;
 };
@@ -22,10 +21,10 @@ function FabricApplicationForm({
   baseState,
   updateParent,
 }: FabricAppFormProps) {
-  const [state, dispatch] = useReducer(FabricAppFormReducer, {
-    ...fabricAppFormInitState,
-  });
-
+  const [state, dispatch] = useReducer(
+    FabricAppFormReducer,
+    fabricAppFormInitState
+  );
   const { id: taskId } = useParams<{ id: string }>();
   useEffect(() => {
     if (!baseState) {

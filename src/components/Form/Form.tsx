@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 import { connect } from 'react-redux';
 import * as B24 from 'B24/B24';
 import Notification, { Status } from '../Notification/Notification';
-import { emptyState } from 'Task/emptyState';
+import { emptyState, fabricAppFormInitState } from 'Task/emptyState';
 import type { Payment, TaskState } from 'Task/Task.interface';
 import DB from 'backend/DBManager';
 import { TabbedCard, Button, Icon } from 'tabler-react';
@@ -88,7 +88,8 @@ class Form extends Component {
     }
 
     if (this.task_id) {
-      const { rem, ...data } = await DB.getFabricAppFormState(this.task_id);
+      let { rem, ...data } = await DB.getFabricAppFormState(this.task_id);
+      data = { ...fabricAppFormInitState, ...data };
       this.setState({
         FabricAppForm: data,
       });
