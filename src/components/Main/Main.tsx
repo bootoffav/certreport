@@ -11,7 +11,6 @@ import ErrorBoundary from 'ErrorBoundary';
 import NavBar from './NavBar';
 import { StageShortNames } from '../StageShortNames/StageShortNames';
 import { ItemInCertifications } from '../ItemInCertifications/ItemInCertifications';
-import ClientStorage from '../../ClientStorage/ClientStorage';
 import {
   changeUpdated,
   changeItems,
@@ -23,12 +22,27 @@ import type { RootState } from 'store/store';
 import { connect } from 'react-redux';
 import fetchPayments from 'store/slices/PaymentsThunk';
 import { Items } from 'Item/Item';
+/* eslint-disable import/no-webpack-loader-syntax */
+// @ts-ignore
+import dataFetcher from 'workerize-loader!../../workers/dataFetcher';
+
+const worker = dataFetcher();
+
+const getTasks = async () =>
+  new Promise<any[]>((resolve) => {
+    worker.onmessage = ({ data }: MessageEvent) => {
+      if (Array.isArray(data)) {
+        return resolve(data);
+      }
+    };
+    worker.getTasks();
+  });
 
 class Main extends Component<any> {
   async componentDidMount() {
     const { dispatch } = this.props;
 
-    const tasks = await ClientStorage.getTasks();
+    const tasks = await getTasks();
     const items = Items(tasks);
     dispatch(changeTasks(tasks));
     dispatch(fetchPayments());
@@ -37,7 +51,6 @@ class Main extends Component<any> {
     const { filteredItems, filteredTasks } = this.filter(tasks, items);
     dispatch(changeFilteredItems(filteredItems));
     dispatch(changeFilteredTasks(filteredTasks));
-    sessionStorage.setItem('updated', '1');
   }
   componentDidUpdate(prevProps: any, prevState: any) {
     const { endDate, startDate, activeBrands, allTasks, allItems } = this.props;

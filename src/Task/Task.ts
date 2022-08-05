@@ -48,14 +48,12 @@ const taskPropMap: {
   'tests to be started on': 'startedOn',
   'tests to be finished on': 'testFinishedOn',
   'results to be received on': 'certReceivedOn',
-  REM: 'rem',
   Resume: 'resume',
   Stage: 'stage',
   News: 'news',
   Comments: 'comments',
   Edit: 'link',
   'Second payment': 'secondPayment',
-  'Total Price': 'totalPrice',
 };
 
 class Task {

@@ -86,7 +86,8 @@
     "not dead"
   ],
   "volta": {
-    "node": "16.13.2"
+    "node": "16.16.0",
+    "yarn": "1.22.19"
   },
   "resolutions": {
     "styled-components": "^5"

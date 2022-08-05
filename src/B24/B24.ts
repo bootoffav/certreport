@@ -95,10 +95,6 @@ async function formTaskFields(state: any, taskId?: string) {
       `${
         state.standards && `[B]Standard:[/B] ${stAd.standardsWithResults}\n`
       }` +
-      // (() =>
-      //   state.totalPrice !== 0
-      //     ? `[B]Total Price:[/B] ${state.totalPrice}\n`
-      //     : '')() +
       `${
         state.testingCompany &&
         `[B]Testing company:[/B] ${state.testingCompany}\n`
@@ -148,12 +144,13 @@ async function formTaskFields(state: any, taskId?: string) {
         `[B]results to be received on:[/B] ${stAd.certReceivedOn}\n`
       }` +
       `${state.stage && `[B]Stage:[/B] ${state.stage}\n`}` +
+      //
       `${state.news && `[B]News:[/B] ${state.news}\n`}` +
-      `${state.rem && `[B]REM:[/B] ${state.rem}\n`}` +
       `${
         state.resume === undefined ? '' : `[B]Resume:[/B] ${state.resume}\n`
       }` +
       `${state.comments && `[B]Comments:[/B] ${state.comments}\n`}` +
+      //
       `${state.link && `[B]Edit:[/B] ${state.link}\n`}` +
       `${dataSeparator}\n` +
       (state.otherTextInDescription || ''),

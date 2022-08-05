@@ -11,16 +11,20 @@ import DB from 'backend/DBManager';
 
 function BasicInfo({ taskId, setState, ...props }: any) {
   const [factory, setFactory] = useState('');
+  const [rem, setRem] = useState('');
 
   useEffect(() => {
     (async function () {
-      await DB.get(taskId, ['data', 'factory'], 'certification')
+      DB.get(taskId, ['data', 'factory'], 'certification')
         .then((factory) => {
           setState({ factory }, () => setFactory(factory));
         })
         .catch(() => setFactory(props.factory));
+      DB.getFabricAppFormState(taskId).then(({ rem }) => {
+        rem && setRem(rem);
+      });
     })();
-  }, [taskId, setFactory, props.factory]); // eslint-disable-line
+  }, [taskId, setRem, setFactory, props.factory]); // eslint-disable-line
 
   return (
     <Dimmer active={props.requestStatus !== Status.FillingForm} loader>
@@ -290,12 +294,17 @@ function BasicInfo({ taskId, setState, ...props }: any) {
         />
       </div>
       <BaseInput
-        value={props.rem}
+        value={rem}
         className="w-100"
         id="rem"
         required={false}
         label="REM"
-        handleChange={props.handleChange}
+        handleChange={({ target }) =>
+          setRem((target as HTMLInputElement).value)
+        }
+        onBlur={() => {
+          setState({ rem }, () => DB.updateInstance(taskId, { rem }, 'aitex'));
+        }}
       />
     </Dimmer>
   );

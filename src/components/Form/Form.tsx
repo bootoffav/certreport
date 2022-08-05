@@ -57,19 +57,19 @@ class Form extends Component {
       const taskFromStore = this.props.allTasks.find(
         (t: any) => t.id === this.task_id
       );
-      this.props.changeTotalPrice(getTaskTotalPriceHelper(taskFromStore.state));
-      // @ts-ignore
-      const { rem, ...state } = { ...taskFromStore.state };
-      this.setState({
-        ...state,
-      });
+      if (taskFromStore) {
+        this.setState({
+          ...taskFromStore.state,
+          createdDate: taskFromStore.createdDate,
+          accomplices: taskFromStore.accomplices,
+          attachedFiles: taskFromStore.ufTaskWebdavFiles,
+          link: `[URL=certreport.xmtextiles.com/edit/${this.task_id}/]this task[/URL]`,
+        });
+        this.props.changeTotalPrice(
+          getTaskTotalPriceHelper(taskFromStore.state)
+        );
+      }
     }
-    // if (taskFromStore) {
-    //   this.quoteNo = (taskFromStore.state.payments as Payment[]).find(
-    //     (payment) => payment.quoteNo
-    //   )?.quoteNo;
-    // }
-    // this.props.changeActiveQuoteNo(this.quoteNo || '');
   };
 
   async componentDidMount() {
@@ -91,7 +91,6 @@ class Form extends Component {
       const { rem, ...data } = await DB.getFabricAppFormState(this.task_id);
       this.setState({
         FabricAppForm: data,
-        rem,
       });
     }
   }
