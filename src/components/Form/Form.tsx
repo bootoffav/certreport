@@ -93,6 +93,10 @@ class Form extends Component {
       this.setState({
         FabricAppForm: data,
       });
+    } else {
+      this.setState({
+        FabricAppForm: { ...fabricAppFormInitState },
+      });
     }
   }
 
