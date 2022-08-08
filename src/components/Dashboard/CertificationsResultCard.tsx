@@ -59,7 +59,7 @@ const CertificationsResultCard = ({
             {tasks.length}
           </div>
         </div>
-        <div className="text-center">{`${label} certifications: €${sum.toLocaleString()}`}</div>
+        <div className="text-center">{`${label}: €${sum.toLocaleString()}`}</div>
       </Card.Body>
     </Card>
   );

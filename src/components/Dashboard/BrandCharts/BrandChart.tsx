@@ -69,7 +69,7 @@ function BranchChart({ brand }: BrandChartProps) {
       return { tasks, chartResume };
     }
   );
-  const articles = tasks.map(({ state }) => state.article);
+  const articles = Array.from(new Set(tasks.map(({ state }) => state.article)));
   const articlesAmount = articles.map((article) => {
     return tasks.reduce((acc, task) => {
       return task.state.article === article ? acc + 1 : acc;
