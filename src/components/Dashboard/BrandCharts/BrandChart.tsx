@@ -90,6 +90,13 @@ function BranchChart({ brand }: BrandChartProps) {
   };
 
   const options = {
+    scales: {
+      y: {
+        ticks: {
+          stepSize: 1,
+        },
+      },
+    },
     responsive: true,
     plugins: {
       legend: {
