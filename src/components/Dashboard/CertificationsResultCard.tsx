@@ -1,5 +1,4 @@
-import { StatsCard, Card } from 'tabler-react';
-import { tasksInRange } from './Dashboard';
+import { Card } from 'tabler-react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { TaskState, Payment } from 'Task/Task.interface';
 import './CertificationsResultCard.css';
@@ -66,38 +65,4 @@ const CertificationsResultCard = ({
   );
 };
 
-const Products = () => {
-  let { tasks, startDate, endDate } = useAppSelector(({ main }) => ({
-    tasks: main.filteredTasks,
-    startDate: main.startDate,
-    endDate: main.endDate,
-  }));
-
-  const amountOfUniqueProducts = () => {
-    (tasks as any) =
-      startDate || endDate ? tasksInRange(tasks, 'CREATED_DATE') : tasks;
-
-    return new Set(tasks.map(({ state: { article } }: any) => article)).size;
-  };
-
-  const movement = () => {
-    const tasksBeforePeriod = tasksInRange(
-      tasks,
-      'CREATED_DATE',
-      new Date('December 17, 2010 03:24:00')
-    ).length;
-
-    return Math.round((amountOfUniqueProducts() * 100) / tasksBeforePeriod);
-  };
-
-  return (
-    <StatsCard
-      layout={1}
-      movement={movement()}
-      total={<div className="display-5">{amountOfUniqueProducts()}</div>}
-      label="Products"
-    />
-  );
-};
-
-export { CertificationsResultCard, Products };
+export default CertificationsResultCard;

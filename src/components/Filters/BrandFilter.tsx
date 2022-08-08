@@ -1,8 +1,13 @@
 import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { changeActiveBrands } from 'store/slices/mainSlice';
+import { changeActiveBrands, IInitialState } from 'store/slices/mainSlice';
 
 const BrandFilter = ({ update }: any) => {
-  const allBrands = ['XMT', 'XMS', 'XMF', 'No brand'];
+  const allBrands: IInitialState['activeBrands'] = [
+    'XMT',
+    'XMS',
+    'XMF',
+    'No brand',
+  ];
   const activeBrands = useAppSelector(({ main }) => main.activeBrands);
 
   const dispatch = useAppDispatch();

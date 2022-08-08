@@ -119,20 +119,6 @@ function localizePrice(number: number | ''): string {
   });
 }
 
-function dashboardDataChartAdapter(data: any) {
-  if (data === undefined || data.length === 0) return [];
-
-  if (data[0].hasOwnProperty('end') && data[0].hasOwnProperty('start')) {
-    return data.reduce((tasks: [], quarter: any) => {
-      // @ts-expect-error
-      quarter.active && tasks.push(...quarter.tasks);
-      return tasks;
-    }, []);
-  }
-
-  return data;
-}
-
 /**
  * Remove everything after Article name, so
  * OXFORD-160 (Oxford-160, 100% poly, 160gsm, PU600, Green #21-08) becomes OXFORD-160
@@ -152,6 +138,5 @@ export {
   dateConverter,
   removeEmptyProps,
   getTaskTotalPriceHelper,
-  dashboardDataChartAdapter,
   formatArticle,
 };

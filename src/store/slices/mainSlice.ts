@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import fetchPayments from './PaymentsThunk';
 import { baseStages, repeatStages, testingCompanies } from 'defaults';
 
-interface IInitialState {
+export interface IInitialState {
   activeTestingCompanies: (typeof testingCompanies[number] | 'all')[];
   startDate: string | null;
   endDate: string | null;
@@ -12,7 +12,7 @@ interface IInitialState {
   stages: (typeof baseStages[number] | typeof repeatStages[number] | 'all')[];
   allTasks: any[];
   allItems: any[];
-  activeBrands: string[];
+  activeBrands: ('XMS' | 'XMF' | 'XMT' | 'No brand')[];
   filteredItems: any[];
   filteredTasks: any[];
   activeStandards: string[];

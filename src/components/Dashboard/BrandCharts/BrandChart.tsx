@@ -10,9 +10,10 @@ import {
 import { useMemo } from 'react';
 import { useAppSelector } from 'store/hooks';
 import { Bar } from 'react-chartjs-2';
+import { IInitialState } from 'store/slices/mainSlice';
 
 type BrandChartProps = {
-  brand: 'XMT' | 'XMS' | 'XMF';
+  brand: IInitialState['activeBrands'][number];
 };
 
 ChartJS.register(
@@ -96,7 +97,11 @@ function BranchChart({ brand }: BrandChartProps) {
           stepSize: 1,
         },
       },
+      x: {
+        display: false,
+      },
     },
+    maintainAspectRatio: false,
     responsive: true,
     plugins: {
       legend: {
