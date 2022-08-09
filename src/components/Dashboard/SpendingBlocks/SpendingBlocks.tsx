@@ -11,12 +11,9 @@ import {
   IDashboardSlice,
 } from 'store/slices/dashboardSlice';
 import { roundToCents } from './SpendingBlocksHelpers';
+import { renderTable } from '../utils';
 
 dayjs.extend(quarterOfYear);
-
-export interface SpendingBlocksProps {
-  renderTable: (t: any[]) => void;
-}
 
 export interface SpendingBlock {
   start: dayjs.Dayjs;
@@ -26,7 +23,7 @@ export interface SpendingBlock {
   active: boolean;
 }
 
-function SpendingBlocks(props: SpendingBlocksProps) {
+function SpendingBlocks() {
   const dispatch = useAppDispatch();
   const { startDate, endDate, tasks, timePeriod } = useAppSelector(
     ({ main: { startDate, endDate, filteredTasks }, dashboard }) => ({
@@ -95,7 +92,7 @@ function SpendingBlocks(props: SpendingBlocksProps) {
                 </div>
                 <div
                   className={`col text-center ${styles.spendingBlocksHeader}`}
-                  onClick={() => props.renderTable(spendingBlock.tasks)}
+                  onClick={() => renderTable(spendingBlock.tasks)}
                 >
                   {formatSpendingBlockHeader(spendingBlock, timePeriod)}
                 </div>
@@ -109,7 +106,7 @@ function SpendingBlocks(props: SpendingBlocksProps) {
           </Grid.Col>
         );
       })}
-      <TotalSpending spendingBlocks={blocks} renderTable={props.renderTable} />
+      <TotalSpending spendingBlocks={blocks} />
     </>
   );
 }

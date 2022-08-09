@@ -2,7 +2,7 @@ import { Card } from 'tabler-react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { TaskState, Payment } from 'Task/Task.interface';
 import './CertificationsResultCard.css';
-import { renderTableOfDiagramSegment } from './utils';
+import { renderTable } from './utils';
 import { changeResume } from 'store/slices/dashboardSlice';
 
 type CertificationsResultCardProps = {
@@ -53,7 +53,7 @@ const CertificationsResultCard = ({
             className={`display-5 certificationsResultCard`}
             onClick={() => {
               dispatch(changeResume(resume));
-              renderTableOfDiagramSegment('', '', tasks, true);
+              renderTable(tasks);
             }}
           >
             {tasks.length}

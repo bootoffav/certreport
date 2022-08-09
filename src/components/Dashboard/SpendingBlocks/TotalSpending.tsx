@@ -1,18 +1,17 @@
 import { Grid, Card, Header } from 'tabler-react';
-import { SpendingBlocksProps, SpendingBlock } from './SpendingBlocks';
+import { SpendingBlock } from './SpendingBlocks';
 import styles from './SpendingBlocks.module.css';
 import {
   changeSpendingBlocksTimePeriod,
   IDashboardSlice,
 } from 'store/slices/dashboardSlice';
+import { renderTable } from '../utils';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 
 function TotalSpending({
   spendingBlocks,
-  renderTable,
 }: {
   spendingBlocks: SpendingBlock[];
-  renderTable: SpendingBlocksProps['renderTable'];
 }) {
   const dispatch = useAppDispatch();
   const timePeriod = useAppSelector(

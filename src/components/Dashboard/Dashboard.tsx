@@ -2,7 +2,6 @@ import './Dashboard.css';
 import { Grid } from 'tabler-react';
 import BrandChart from './BrandCharts/BrandChart';
 import SpendingBlocks from './SpendingBlocks/SpendingBlocks';
-import { renderTableOfDiagramSegment } from './utils';
 import CertificationsResultCard from './CertificationsResultCard';
 import { useAppSelector } from 'store/hooks';
 import { useEffect } from 'react';
@@ -37,11 +36,7 @@ function Dashboard() {
         </Grid.Col>
       </Grid.Row>
       <Grid.Row deck>
-        <SpendingBlocks
-          renderTable={(tasks) =>
-            renderTableOfDiagramSegment('', '', tasks, true)
-          }
-        />
+        <SpendingBlocks />
       </Grid.Row>
       <Grid.Row>
         {activeBrands.map((brand) => (
