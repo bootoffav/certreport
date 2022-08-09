@@ -2,8 +2,7 @@ import { Card } from 'tabler-react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { TaskState, Payment } from 'Task/Task.interface';
 import './CertificationsResultCard.css';
-import { renderTable } from './utils';
-import { changeResume } from 'store/slices/dashboardSlice';
+import { changeResume, changeTableTasks } from 'store/slices/dashboardSlice';
 
 type CertificationsResultCardProps = {
   resume: TaskState['resume'] | '' | 'allWithResults';
@@ -53,7 +52,7 @@ const CertificationsResultCard = ({
             className={`display-5 certificationsResultCard`}
             onClick={() => {
               dispatch(changeResume(resume));
-              renderTable(tasks);
+              dispatch(changeTableTasks(tasks));
             }}
           >
             {tasks.length}

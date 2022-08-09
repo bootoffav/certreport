@@ -9,9 +9,9 @@ import TotalSpending from './TotalSpending';
 import {
   changeActiveSpendingBlocksTasks,
   IDashboardSlice,
+  changeTableTasks,
 } from 'store/slices/dashboardSlice';
 import { roundToCents } from './SpendingBlocksHelpers';
-import { renderTable } from '../utils';
 
 dayjs.extend(quarterOfYear);
 
@@ -92,7 +92,9 @@ function SpendingBlocks() {
                 </div>
                 <div
                   className={`col text-center ${styles.spendingBlocksHeader}`}
-                  onClick={() => renderTable(spendingBlock.tasks)}
+                  onClick={() =>
+                    dispatch(changeTableTasks(spendingBlock.tasks))
+                  }
                 >
                   {formatSpendingBlockHeader(spendingBlock, timePeriod)}
                 </div>

@@ -4,8 +4,8 @@ import styles from './SpendingBlocks.module.css';
 import {
   changeSpendingBlocksTimePeriod,
   IDashboardSlice,
+  changeTableTasks,
 } from 'store/slices/dashboardSlice';
-import { renderTable } from '../utils';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 
 function TotalSpending({
@@ -31,7 +31,7 @@ function TotalSpending({
             <div className="form-check form-check-inline"></div>
             <div
               className={`mx-auto ${styles.spendingBlocksHeader}`}
-              onClick={() => renderTable(tasks)}
+              onClick={() => dispatch(changeTableTasks(tasks))}
             >
               {spendingBlocks[0]?.start.format('MM.YY')} -{' '}
               {spendingBlocks.at(-1)?.end.format('MM.YY')} / {tasks.length}{' '}

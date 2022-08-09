@@ -4,14 +4,17 @@ import BrandChart from './BrandCharts/BrandChart';
 import SpendingBlocks from './SpendingBlocks/SpendingBlocks';
 import CertificationsResultCard from './CertificationsResultCard';
 import { useAppSelector } from 'store/hooks';
-import { useEffect } from 'react';
+import ReactTable from 'react-table';
+import { countTotalPrice } from 'helpers';
+import { getColumns } from '../Lists/Certification/columns';
 
 function Dashboard() {
-  const activeBrands = useAppSelector(({ main }) => main.activeBrands);
-
-  useEffect(() => {
-    return () => console.log('changed');
-  }, [activeBrands]);
+  const { activeBrands, tableTasks } = useAppSelector(
+    ({ main, dashboard }) => ({
+      activeBrands: main.activeBrands,
+      tableTasks: dashboard.tableTasks,
+    })
+  );
 
   return (
     <>
@@ -47,7 +50,15 @@ function Dashboard() {
       </Grid.Row>
       <Grid.Row>
         <Grid.Col>
-          <div id="tableOfDiagramSegment"></div>
+          {tableTasks.length ? (
+            <ReactTable
+              data={tableTasks}
+              columns={getColumns(countTotalPrice(tableTasks), undefined)}
+              defaultPageSize={18}
+            />
+          ) : (
+            ''
+          )}
         </Grid.Col>
       </Grid.Row>
     </>
