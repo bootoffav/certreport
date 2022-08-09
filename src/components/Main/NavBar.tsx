@@ -3,12 +3,10 @@ import { BrandFilter } from '../Filters/BrandFilter';
 import { StandardFilter } from '../Filters/StandardFilter';
 import DateFilter from '../Filters/DateFilter';
 import { TestingCompanyFilter } from '../Filters/TestingCompanyFilter';
-import State from './State';
 
 const NavBar = () => (
   <>
     <div className="d-flex">
-      <State />
       <div className="my-auto">
         <DateFilter />
       </div>

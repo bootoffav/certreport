@@ -199,12 +199,7 @@ function Payments({ taskId }: { taskId?: `${number}` }) {
           }
         />
       </div>
-      {payments.length === 0 ? (
-        <h3 className="text-center">Payments are loading</h3>
-      ) : (
-        payments.map(renderPayment)
-      )}
-
+      {payments.map(renderPayment)}
       <AddPayment
         doIt={(e) => {
           e.preventDefault();

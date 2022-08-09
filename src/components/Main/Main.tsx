@@ -25,6 +25,7 @@ import { Items } from 'Item/Item';
 /* eslint-disable import/no-webpack-loader-syntax */
 // @ts-ignore
 import dataFetcher from 'workerize-loader!../../workers/dataFetcher';
+import AppLoaderUI from 'components/AppLoaderUI';
 
 const worker = dataFetcher();
 
@@ -47,11 +48,12 @@ class Main extends Component<any> {
     dispatch(changeTasks(tasks));
     dispatch(fetchPayments());
     dispatch(changeItems(items));
-    dispatch(changeUpdated(true));
     const { filteredItems, filteredTasks } = this.filter(tasks, items);
     dispatch(changeFilteredItems(filteredItems));
     dispatch(changeFilteredTasks(filteredTasks));
+    dispatch(changeUpdated(true));
   }
+
   componentDidUpdate(prevProps: any, prevState: any) {
     const { endDate, startDate, activeBrands, allTasks, allItems } = this.props;
     const { startDate: prevStartDate, endDate: prevEndDate } = prevProps;
@@ -187,7 +189,7 @@ class Main extends Component<any> {
   }
 
   render() {
-    return (
+    return this.props.updated ? (
       <Router>
         <div className="container-fluid">
           <NavBar />
@@ -247,6 +249,8 @@ class Main extends Component<any> {
           </Switch>
         </div>
       </Router>
+    ) : (
+      <AppLoaderUI />
     );
   }
 }
@@ -261,6 +265,7 @@ const mapStateToProps = ({ main }: RootState) => ({
   activeTestingCompanies: main.activeTestingCompanies,
   activeStandards: main.activeStandards,
   additionalStandardFilterTaskList: main.additionalStandardFilterTaskList,
+  updated: main.updated,
 });
 
 // @ts-ignore
