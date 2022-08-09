@@ -1,4 +1,3 @@
-import './Dashboard.css';
 import { Grid } from 'tabler-react';
 import BrandChart from './BrandCharts/BrandChart';
 import SpendingBlocks from './SpendingBlocks/SpendingBlocks';
