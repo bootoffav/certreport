@@ -58,7 +58,6 @@ const taskPropMap: {
 
 class Task {
   state: any;
-  position?: number;
   overdue: boolean;
   lastActionDate: string | undefined;
   nextActionDate: string;

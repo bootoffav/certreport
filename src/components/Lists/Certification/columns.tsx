@@ -22,12 +22,9 @@ function getColumns(totalPrice: number, stage?: string) {
     {
       // 0
       Header: '#',
-      id: 'position',
       sortable: false,
-      Cell: (row: any) => {
-        return row.viewIndex + 1;
-      },
-      width: 30,
+      Cell: ({ index }: any) => index + 1,
+      width: 35,
     },
     {
       // 1

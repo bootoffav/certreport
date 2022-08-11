@@ -53,7 +53,7 @@ function Dashboard() {
             <ReactTable
               data={tableTasks}
               columns={getColumns(countTotalPrice(tableTasks), undefined)}
-              defaultPageSize={18}
+              defaultPageSize={20}
             />
           ) : (
             ''

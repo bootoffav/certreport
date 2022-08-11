@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import Loader from 'react-loader-spinner';
 import { Grid, Icon } from 'tabler-react';
 import { getItemAssociatedTasks } from 'B24/B24';
@@ -82,7 +83,7 @@ function ItemInCertifications({ item }: IItemProps) {
               {tasks.map((task: any, index: number) => (
                 <th key={index}>
                   <div className="d-flex justify-content-start">
-                    <a href={`/edit/${task.id}`}>{task.title} </a>
+                    <Link to={`/edit/${task.id}`}>{task.title} </Link>
                     &nbsp;|&nbsp;
                     <a
                       href={`${process.env.REACT_APP_B24_HOST}/company/personal/user/460/tasks/task/view/${task.id}/`}
