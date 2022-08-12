@@ -229,19 +229,11 @@ class Main extends Component<any> {
                 return <ItemInCertifications {...match.params} />;
               }}
             />
-            <Route
-              exact
-              path="/add"
-              render={(props) => (
-                // @ts-expect-error
-                <Form {...props} />
-              )}
-            />
+            <Route exact path="/add" render={(props) => <Form {...props} />} />
             <Route
               exact
               path="/edit/:taskId"
               render={(props) => (
-                // @ts-expect-error
                 <ErrorBoundary children={<Form {...props} />} />
               )}
             />

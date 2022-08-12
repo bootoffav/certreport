@@ -1,27 +1,22 @@
-import React from 'react';
-import { Component } from 'react';
+import { Component, ReactNode } from 'react';
 import { Error400Page } from 'tabler-react';
 
-class ErrorBoundary extends Component {
-  subtitles: {
-    [k: string]: string;
-  } = {
-    'Task not found':
-      'Приложение не смогло отпарсить задачу по указанному task',
-  };
+interface State {
+  hasError: boolean;
+}
 
+class ErrorBoundary extends Component<{ children?: ReactNode }, State> {
   state = {
     hasError: false,
-    message: '',
   };
 
-  static getDerivedStateFromError = ({ message }: any) => {
-    return { hasError: true, message };
+  static getDerivedStateFromError = (_: Error): State => {
+    return { hasError: true };
   };
 
   render = () =>
     this.state.hasError ? (
-      <Error400Page subtitle={this.subtitles[this.state.message]} />
+      <Error400Page subtitle="Application found bad syntax" />
     ) : (
       this.props.children
     );
