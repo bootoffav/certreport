@@ -8,21 +8,25 @@ import { selectOptions } from 'defaults';
 import { StageSelect } from './StageSelect';
 import StandardSelector from './StandardSelector/StandardSelector';
 import DB from 'backend/DBManager';
+import { useParams } from 'react-router-dom';
 
-function BasicInfo({ taskId, setState, ...props }: any) {
+function BasicInfo({ setState, ...props }: any) {
   const [factory, setFactory] = useState('');
   const [rem, setRem] = useState('');
+  const { taskId } = useParams<{ taskId?: string }>();
 
   useEffect(() => {
     (async function () {
-      DB.get(taskId, ['data', 'factory'], 'certification')
-        .then((factory) => {
-          setState({ factory }, () => setFactory(factory));
-        })
-        .catch(() => setFactory(props.factory));
-      DB.getFabricAppFormState(taskId).then(({ rem }) => {
-        rem && setRem(rem);
-      });
+      if (taskId) {
+        DB.get(taskId, ['data', 'factory'], 'certification')
+          .then((factory) => {
+            setState({ factory }, () => setFactory(factory));
+          })
+          .catch(() => setFactory(props.factory));
+        DB.getFabricAppFormState(taskId).then(({ rem }) => {
+          rem && setRem(rem);
+        });
+      }
     })();
   }, [taskId, setRem, setFactory, props.factory]); // eslint-disable-line
 
@@ -53,6 +57,7 @@ function BasicInfo({ taskId, setState, ...props }: any) {
           <div className="form-group">
             Standards
             <StandardSelector
+              // @ts-ignore
               taskId={taskId}
               asSelectable={props.asSelectable}
               chosenStandards={props.standards}
@@ -269,8 +274,11 @@ function BasicInfo({ taskId, setState, ...props }: any) {
             setFactory((target as HTMLInputElement).value)
           }
           onBlur={() => {
-            setState({ factory }, () =>
-              DB.updateInstance(taskId, { factory }, 'certification')
+            setState(
+              { factory },
+              () =>
+                taskId &&
+                DB.updateInstance(taskId, { factory }, 'certification')
             );
           }}
         />
@@ -303,7 +311,10 @@ function BasicInfo({ taskId, setState, ...props }: any) {
           setRem((target as HTMLInputElement).value)
         }
         onBlur={() => {
-          setState({ rem }, () => DB.updateInstance(taskId, { rem }, 'aitex'));
+          setState(
+            { rem },
+            () => taskId && DB.updateInstance(taskId, { rem }, 'aitex')
+          );
         }}
       />
     </Dimmer>

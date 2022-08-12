@@ -37,7 +37,6 @@ interface IFormState extends TaskState {
 }
 
 class Form extends Component {
-  task_id: `${number}` | undefined;
   state: IFormState;
   quoteNo?: Payment['quoteNo'];
   // @ts-expect-error
@@ -45,7 +44,6 @@ class Form extends Component {
 
   constructor(props: any) {
     super(props);
-    this.task_id = props.match.params.id;
     this.state = {
       ...emptyState,
       requestStatus: Status.FillingForm,
@@ -55,7 +53,7 @@ class Form extends Component {
   componentDidUpdate = (prevProps: any) => {
     if (!isEqual(prevProps.allTasks, this.props.allTasks)) {
       const taskFromStore = this.props.allTasks.find(
-        (t: any) => t.id === this.task_id
+        (t: any) => t.id === this.props.match.params.taskId
       );
       if (taskFromStore) {
         this.setState({
@@ -63,7 +61,7 @@ class Form extends Component {
           createdDate: taskFromStore.createdDate,
           accomplices: taskFromStore.accomplices,
           attachedFiles: taskFromStore.ufTaskWebdavFiles,
-          link: `[URL=certreport.xmtextiles.com/edit/${this.task_id}/]this task[/URL]`,
+          link: `[URL=certreport.xmtextiles.com/edit/${this.props.match.params.taskId}/]this task[/URL]`,
         });
         this.props.changeTotalPrice(
           getTaskTotalPriceHelper(taskFromStore.state)
@@ -74,7 +72,7 @@ class Form extends Component {
 
   async componentDidMount() {
     const taskFromStore = this.props.allTasks.find(
-      (t: any) => t.id === this.task_id
+      (t: any) => t.id === this.props.match.params.taskId
     );
     if (taskFromStore) {
       this.props.changeTotalPrice(getTaskTotalPriceHelper(taskFromStore.state));
@@ -83,12 +81,14 @@ class Form extends Component {
         createdDate: taskFromStore.createdDate,
         accomplices: taskFromStore.accomplices,
         attachedFiles: taskFromStore.ufTaskWebdavFiles,
-        link: `[URL=certreport.xmtextiles.com/edit/${this.task_id}/]this task[/URL]`,
+        link: `[URL=certreport.xmtextiles.com/edit/${this.props.match.params.taskId}/]this task[/URL]`,
       });
     }
 
-    if (this.task_id) {
-      let { rem, ...data } = await DB.getFabricAppFormState(this.task_id);
+    if (this.props.match.params.taskId) {
+      let { rem, ...data } = await DB.getFabricAppFormState(
+        this.props.match.params.taskId
+      );
       data = { ...fabricAppFormInitState, ...data };
       this.setState({
         FabricAppForm: data,
@@ -134,7 +134,7 @@ class Form extends Component {
   handlePreTreatment1Change = (value: string) =>
     this.setState({ pretreatment1Result: value });
 
-  async handleCert(e: any) {
+  async handleCert(e: React.SyntheticEvent) {
     e.preventDefault();
     const OK = await swal({
       title: 'Are you sure?',
@@ -145,16 +145,16 @@ class Form extends Component {
     if (OK) {
       this.setState({ requestStatus: Status.Loading });
       // update in Bitrix
-      const taskId = this.task_id
+      const taskId = this.props.match.params.taskId
         ? await B24.updateTask(
             {
               ...this.state,
               activeQuoteNo: this.props.activeQuoteNo,
               totalPrice: this.props.totalPrice,
             },
-            this.task_id
+            this.props.match.params.taskId
           )
-            .then((_) => this.task_id)
+            .then((_) => this.props.match.params.taskId)
             .catch(this.unsuccessfullySubmitted)
         : await B24.createTask({
             ...this.state,
@@ -223,7 +223,7 @@ class Form extends Component {
     <div className="container mt-2">
       <Button
         RootComponent="a"
-        href={`${process.env.REACT_APP_B24_HOST}/company/personal/user/460/tasks/task/view/${this.task_id}/`}
+        href={`${process.env.REACT_APP_B24_HOST}/company/personal/user/460/tasks/task/view/${this.props.match.taskId}/`}
         target="_blank"
         rel="noopener noreferrer"
         link
@@ -259,7 +259,7 @@ class Form extends Component {
         </Button>
       )}
       <Notification status={this.state.requestStatus} />
-      <form onSubmit={(e) => this.handleCert(e)}>
+      <form onSubmit={this.handleCert.bind(this)}>
         <TabbedCard initialTab="Basic Info">
           <Tab title="Basic Info">
             <BasicInfo
@@ -268,14 +268,14 @@ class Form extends Component {
               asSelectable={this.asSelectable}
               handleSelectChange={this.handleSelectChange}
               handlePreTreatment1Change={this.handlePreTreatment1Change}
-              taskId={this.task_id}
+              taskId={this.props.match.params.taskId}
               setState={this.setState.bind(this)}
             ></BasicInfo>
           </Tab>
           <Tab title="Dates">
             <Dates
               calendarEventName={`${this.state.serialNumber}_${this.state.testingCompany}`}
-              taskId={this.task_id}
+              taskId={this.props.match.params.taskId}
               pausedUntil={this.state.pausedUntil}
               requestStatus={this.state.requestStatus}
               readyOn={this.state.readyOn}
@@ -320,13 +320,13 @@ class Form extends Component {
               requestStatus={this.state.requestStatus}
             />
           </Tab>
-          {this.task_id && (
+          {this.props.match.taskId && (
             <Tab title="Files">
               <Dimmer
                 active={this.state.requestStatus !== Status.FillingForm}
                 loader
               >
-                <FileManagement taskId={this.task_id} />
+                <FileManagement taskId={this.props.match.params.taskId} />
               </Dimmer>
             </Tab>
           )}
@@ -341,7 +341,7 @@ class Form extends Component {
     </div>
   );
   updateAttachedFiles = () =>
-    B24.getAttachedFiles(this.task_id as string).then((r: []) => {
+    B24.getAttachedFiles(this.props.match.taskId as string).then((r: []) => {
       this.setState({ attachedFiles: r });
     });
 }

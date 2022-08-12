@@ -25,7 +25,7 @@ function FabricApplicationForm({
     FabricAppFormReducer,
     fabricAppFormInitState
   );
-  const { id: taskId } = useParams<{ id: string }>();
+  const { taskId } = useParams<{ taskId: string }>();
   useEffect(() => {
     if (!baseState) {
       (async () => {

@@ -9,7 +9,7 @@ function XMBranch() {
     []
   );
 
-  const { id: taskId } = useParams<{ id: string }>();
+  const { taskId } = useParams<{ taskId: string }>();
 
   useEffect(() => {
     DB.get(taskId, ['data', 'branches'], 'payments').then(setBranches);

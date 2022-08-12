@@ -23,7 +23,7 @@ const emptyPayment: Payment = {
 };
 
 function Payments() {
-  const { id: taskId } = useParams<{ id?: `${number}` }>();
+  const { taskId } = useParams<{ taskId?: string }>();
   const dispatch = useAppDispatch();
 
   const payments = useAppSelector<Payment[]>(({ main: { allTasks } }) =>

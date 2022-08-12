@@ -239,7 +239,7 @@ class Main extends Component<any> {
             />
             <Route
               exact
-              path="/edit/:id"
+              path="/edit/:taskId"
               render={(props) => (
                 // @ts-expect-error
                 <ErrorBoundary children={<Form {...props} />} />
