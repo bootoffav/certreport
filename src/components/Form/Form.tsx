@@ -268,14 +268,12 @@ class Form extends Component {
               asSelectable={this.asSelectable}
               handleSelectChange={this.handleSelectChange}
               handlePreTreatment1Change={this.handlePreTreatment1Change}
-              taskId={this.props.match.params.taskId}
               setState={this.setState.bind(this)}
             ></BasicInfo>
           </Tab>
           <Tab title="Dates">
             <Dates
               calendarEventName={`${this.state.serialNumber}_${this.state.testingCompany}`}
-              taskId={this.props.match.params.taskId}
               pausedUntil={this.state.pausedUntil}
               requestStatus={this.state.requestStatus}
               readyOn={this.state.readyOn}
@@ -320,16 +318,9 @@ class Form extends Component {
               requestStatus={this.state.requestStatus}
             />
           </Tab>
-          {this.props.match.taskId && (
-            <Tab title="Files">
-              <Dimmer
-                active={this.state.requestStatus !== Status.FillingForm}
-                loader
-              >
-                <FileManagement taskId={this.props.match.params.taskId} />
-              </Dimmer>
-            </Tab>
-          )}
+          <Tab title="Files">
+            <FileManagement />
+          </Tab>
         </TabbedCard>
         <div className="d-flex justify-content-around">
           <button type="submit" className="col-2 btn btn-primary">

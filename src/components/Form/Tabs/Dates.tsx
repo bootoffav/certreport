@@ -7,6 +7,8 @@ import DB from 'backend/DBManager';
 import type { Stage, TaskState } from 'Task/Task.interface';
 import { useEffect, useState } from 'react';
 import { addEvent, deleteEvent } from 'B24/CalendarMethods';
+import { useParams } from 'react-router-dom';
+import RepeatDates from './RepeatDates';
 
 type DatesProps = {
   calendarEventName: string;
@@ -21,24 +23,24 @@ type DatesProps = {
   certReceivedOnPlanDate: TaskState['certReceivedOnPlanDate'];
   certReceivedOnRealDate: TaskState['certReceivedOnRealDate'];
   stage: Stage | string;
-  taskId?: `${number}`;
   handleDateChange: any;
 };
 
 function Dates(props: DatesProps) {
+  const { taskId } = useParams<{ taskId?: string }>();
   const [expirationDate, setExpirationDate] = useState('');
   const [calendarExpirationEventId, setCalendarExpirationEventId] =
     useState<number>();
 
   useEffect(() => {
-    props.taskId &&
-      DB.get(props.taskId, ['data'], 'certification').then(
+    taskId &&
+      DB.get(taskId, ['data'], 'certification').then(
         ({ expirationDate, calendarExpirationEventId }) => {
           setExpirationDate(expirationDate);
           setCalendarExpirationEventId(calendarExpirationEventId);
         }
       );
-  }, [props.taskId]);
+  }, [taskId]);
 
   const repeatedStages = stages[1].options.map((stage: any) => stage.label);
   return (
@@ -97,37 +99,7 @@ function Dates(props: DatesProps) {
           date={props.certReceivedOnPlanDate}
           label="ETD (Certificate)"
           handleChange={async (date: Date) => {
-            // console.log(ETDCertificateEventId);
             props.handleDateChange(date, 'certReceivedOnPlanDate');
-            // ETDCertificateEventId && deleteEvent(ETDCertificateEventId);
-            // clear
-            // if (date === null) {
-            //   DB.updateInstance(
-            //     props.taskId as string,
-            //     {
-            //       calendarETDCertificateEventId: null,
-            //     },
-            //     'certification'
-            //   );
-            //   return;
-            // }
-
-            // const newETDCertificateEventId = await addEvent({
-            //   date,
-            //   description: 'test',
-            //   name: `ETD (Certificate) ${props.calendarEventName}`,
-            //   section: 682,
-            // })
-            //   .then((res) => res.json())
-            //   .then(({ result }) => result);
-            // setETDCertificateEventId(newETDCertificateEventId);
-            // DB.updateInstance(
-            //   props.taskId as string,
-            //   {
-            //     calendarETDCertificateEventId: newETDCertificateEventId,
-            //   },
-            //   'certification'
-            // );
           }}
         />
         <PickDate
@@ -140,6 +112,7 @@ function Dates(props: DatesProps) {
         <PickDate
           date={expirationDate}
           label="Expiration Date:"
+          disabled={!taskId}
           handleChange={async (rawDate: Date) => {
             const newExpirationDate =
               rawDate === null ? '' : dayjs(rawDate).format('YYYY-MM-DD');
@@ -152,13 +125,16 @@ function Dates(props: DatesProps) {
             }
 
             if (expirationDate === '') {
-              return DB.updateInstance(
-                props.taskId as string,
-                {
-                  expirationDate: null,
-                  calendarExpirationEventId: null,
-                },
-                'certification'
+              return (
+                taskId &&
+                DB.updateInstance(
+                  taskId,
+                  {
+                    expirationDate: null,
+                    calendarExpirationEventId: null,
+                  },
+                  'certification'
+                )
               );
             }
 
@@ -166,122 +142,27 @@ function Dates(props: DatesProps) {
             const newCalendarExpirationEventId = await addEvent({
               section: 680,
               date: expirationDate,
-              description: `${process.env.REACT_APP_B24_HOST}/company/personal/user/${process.env.REACT_APP_B24_USER_ID}/tasks/task/view/${props.taskId}/`,
+              description: `${process.env.REACT_APP_B24_HOST}/company/personal/user/${process.env.REACT_APP_B24_USER_ID}/tasks/task/view/${taskId}/`,
               name: `Expiration of ${props.calendarEventName}`,
             })
               .then((res) => res.json())
               .then(({ result }) => result);
             setCalendarExpirationEventId(newCalendarExpirationEventId);
             // update fauna instance, add new Event Id
-            DB.updateInstance(
-              props.taskId as string,
-              {
-                expirationDate,
-                calendarExpirationEventId: newCalendarExpirationEventId,
-              },
-              'certification'
-            );
+            taskId &&
+              DB.updateInstance(
+                taskId,
+                {
+                  expirationDate,
+                  calendarExpirationEventId: newCalendarExpirationEventId,
+                },
+                'certification'
+              );
           }}
         />
       </div>
-      {repeatedStages.includes(props.stage) &&
-        RepeatDates({
-          taskId: props.taskId,
-        })}
+      {repeatedStages.includes(props.stage) && <RepeatDates />}
     </Dimmer>
-  );
-}
-
-type ISODate = `${number}-${number}-${number}`;
-
-interface IRepeatDates {
-  repeatReceivedOn?: ISODate;
-  repeatStartedOn?: ISODate;
-  repeatTestFinishedOnPlanDate?: ISODate;
-  repeatTestFinishedOnRealDate?: ISODate;
-  repeatCertReceivedOnPlanDate?: ISODate;
-  repeatCertReceivedOnRealDate?: ISODate;
-}
-
-function RepeatDates({ taskId }: { taskId?: string }) {
-  const [repeatDates, setRepeatDates] = useState<IRepeatDates>();
-
-  useEffect(() => {
-    taskId &&
-      DB.get(taskId, ['data', 'repeatDates'], 'certification').then(
-        setRepeatDates
-      );
-  }, [taskId]);
-
-  const dateChanger = (field: keyof IRepeatDates & string, date: Date) => {
-    const newDate = date ? (dayjs(date).format('YYYY-MM-DD') as ISODate) : null;
-    // 1. change UI state
-    setRepeatDates((state) => ({
-      ...state,
-      [field]: newDate,
-    }));
-
-    // 2. change value in DB
-    DB.updateInstance(
-      taskId as string,
-      {
-        repeatDates: {
-          [field]: newDate,
-        },
-      },
-      'certification'
-    );
-  };
-
-  return (
-    <>
-      <hr />
-      <div className="d-flex justify-content-center">
-        <h5>Repeat testing is started dates:</h5>
-      </div>
-      <div className="d-flex justify-content-center">
-        <PickDate
-          date={repeatDates?.repeatReceivedOn || ''}
-          label="R* - Sample has received by lab:"
-          handleChange={(date: Date) => dateChanger('repeatReceivedOn', date)}
-        />
-        <PickDate
-          date={repeatDates?.repeatStartedOn || ''}
-          label="R* - Test is started:"
-          handleChange={(date: Date) => dateChanger('repeatStartedOn', date)}
-        />
-        <PickDate
-          date={repeatDates?.repeatTestFinishedOnPlanDate || ''}
-          label="R* - ETD (Test-report)"
-          handleChange={(date: Date) =>
-            dateChanger('repeatTestFinishedOnPlanDate', date)
-          }
-        />
-      </div>
-      <div className="d-flex justify-content-center">
-        <PickDate
-          date={repeatDates?.repeatTestFinishedOnRealDate || ''}
-          label="R* - Test really finished on:"
-          handleChange={(date: Date) =>
-            dateChanger('repeatTestFinishedOnRealDate', date)
-          }
-        />
-        <PickDate
-          date={repeatDates?.repeatCertReceivedOnPlanDate || ''}
-          label="R* - ETD (Certificate)"
-          handleChange={(date: Date) =>
-            dateChanger('repeatCertReceivedOnPlanDate', date)
-          }
-        />
-        <PickDate
-          date={repeatDates?.repeatCertReceivedOnRealDate || ''}
-          label="R* - Certificate really received on:"
-          handleChange={(date: Date) =>
-            dateChanger('repeatCertReceivedOnRealDate', date)
-          }
-        />
-      </div>
-    </>
   );
 }
 

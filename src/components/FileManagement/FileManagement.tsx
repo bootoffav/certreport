@@ -7,6 +7,7 @@ import { UploadFile } from './UploadFile';
 import type { AttachedFile } from 'Task/types';
 import { SpecificFile } from './SpecificFile/SpecificFile';
 import { getAttachedFiles } from 'B24/B24';
+import { useParams } from 'react-router';
 
 const creator_id = process.env.REACT_APP_B24_USER_ID;
 const webhook_key = process.env.REACT_APP_B24_WEBHOOK_KEY;
@@ -29,7 +30,8 @@ const pullSpecificFiles = (
   return [files, specificFiles];
 };
 
-function FileManagement(props: { taskId: string }) {
+function FileManagement() {
+  const { taskId } = useParams<{ taskId?: string }>();
   let [files, setFiles] = useState<AttachedFile[]>([]);
   let testReportFiles;
   let certificateFiles;
@@ -38,19 +40,20 @@ function FileManagement(props: { taskId: string }) {
 
   useEffect(() => {
     (async () => {
-      if (!uploading) {
-        let files = await getAttachedFiles(props.taskId);
+      if (!uploading && taskId) {
+        let files = await getAttachedFiles(taskId);
         setFiles(files);
       }
     })();
-  }, [props.taskId, uploading]);
+  }, [taskId, uploading]);
 
   const upload = (e: any, filePrefix: string = '') => {
     setUploading(true);
     for (let file of e.target.files) {
-      B24.fileUpload(props.taskId, `${filePrefix}${file.name}`, file).then(() =>
-        setUploading(false)
-      );
+      taskId &&
+        B24.fileUpload(taskId, `${filePrefix}${file.name}`, file).then(() =>
+          setUploading(false)
+        );
     }
   };
 
@@ -71,7 +74,7 @@ function FileManagement(props: { taskId: string }) {
       fetch(
         `${main_url}/${creator_id}/${webhook_key}/task.item.deletefile?` +
           qs.stringify({
-            TASK_ID: props.taskId,
+            TASK_ID: taskId,
             ATTACHMENT_ID: file.ATTACHMENT_ID,
           })
       ),
@@ -85,7 +88,11 @@ function FileManagement(props: { taskId: string }) {
   [files, testReportFiles] = pullSpecificFiles(files, 'Test Report');
   [files, certificateFiles] = pullSpecificFiles(files, 'Certificate');
 
-  return uploading ? (
+  return !taskId ? (
+    <>
+      this pane manages files when it's in task editing mode, please save first
+    </>
+  ) : uploading ? (
     <Dimmer active loader></Dimmer>
   ) : (
     <>
