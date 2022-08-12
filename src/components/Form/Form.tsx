@@ -223,7 +223,7 @@ class Form extends Component {
     <div className="container mt-2">
       <Button
         RootComponent="a"
-        href={`${process.env.REACT_APP_B24_HOST}/company/personal/user/460/tasks/task/view/${this.props.match.taskId}/`}
+        href={`${process.env.REACT_APP_B24_HOST}/company/personal/user/460/tasks/task/view/${this.props.match.params.taskId}/`}
         target="_blank"
         rel="noopener noreferrer"
         link
