@@ -1,5 +1,5 @@
 import { Icon } from 'tabler-react';
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 import dayjs from 'dayjs';
 import { Price, Paid, QuoteNo, BaseInput } from './FormFields';
 import type { Payment } from 'Task/Task.interface';
@@ -11,8 +11,7 @@ import {
   changeTotalPrice,
   changePaymentsOfTask,
 } from 'store/slices/mainSlice';
-import Select from 'react-select';
-import { XMBranchOptions } from 'defaults';
+import XMBranch from './XMBranch';
 
 const emptyPayment: Payment = {
   price: '',
@@ -30,10 +29,6 @@ function Payments({ taskId }: { taskId?: `${number}` }) {
       ?.state.payments.map((p: Payment) => ({ ...p }));
     return payments || [];
   });
-
-  const [branches, setBranches] = useState<typeof XMBranchOptions[number][]>(
-    []
-  );
 
   const getTotalPrice = useCallback(
     () => payments.reduce((total, { price }) => total + Number(price), 0),
@@ -175,30 +170,7 @@ function Payments({ taskId }: { taskId?: `${number}` }) {
         }, 1000);
       }}
     >
-      <div className="mb-3">
-        XM Branch:
-        <Select
-          options={XMBranchOptions.map((option) => ({
-            value: option,
-            label: option,
-          }))}
-          isMulti
-          value={branches.map((b) => ({ value: b, label: b }))}
-          onBlur={() => {
-            taskId &&
-              DB.updateInstance(
-                taskId,
-                {
-                  branches,
-                },
-                'payments'
-              );
-          }}
-          onChange={(chosenOptions) =>
-            setBranches(chosenOptions.map(({ value }) => value))
-          }
-        />
-      </div>
+      <XMBranch />
       {payments.map(renderPayment)}
       <AddPayment
         doIt={(e) => {
