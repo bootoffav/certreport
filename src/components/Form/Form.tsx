@@ -295,7 +295,7 @@ class Form extends Component {
               active={this.state.requestStatus !== Status.FillingForm}
               loader
             >
-              <Payments taskId={this.task_id} />
+              <Payments />
             </Dimmer>
           </Tab>
           {renderStandards.call(this)}

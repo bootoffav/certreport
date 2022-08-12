@@ -12,6 +12,7 @@ import {
   changePaymentsOfTask,
 } from 'store/slices/mainSlice';
 import XMBranch from './XMBranch';
+import { useParams } from 'react-router';
 
 const emptyPayment: Payment = {
   price: '',
@@ -21,14 +22,17 @@ const emptyPayment: Payment = {
   proformaInvoiceNo: '',
 };
 
-function Payments({ taskId }: { taskId?: `${number}` }) {
+function Payments() {
+  const { id: taskId } = useParams<{ id?: `${number}` }>();
   const dispatch = useAppDispatch();
-  const payments = useAppSelector<Payment[]>(({ main: { allTasks } }) => {
-    const payments = allTasks
-      .find(({ id }) => id === taskId)
-      ?.state.payments.map((p: Payment) => ({ ...p }));
-    return payments || [];
-  });
+
+  const payments = useAppSelector<Payment[]>(({ main: { allTasks } }) =>
+    taskId
+      ? allTasks
+          .find(({ id }) => id === taskId)
+          ?.state.payments.map((p: Payment) => ({ ...p })) || []
+      : []
+  );
 
   const getTotalPrice = useCallback(
     () => payments.reduce((total, { price }) => total + Number(price), 0),
@@ -161,12 +165,12 @@ function Payments({ taskId }: { taskId?: `${number}` }) {
     );
   };
 
-  return (
+  return taskId ? (
     <div
       onBlur={(e) => {
         setTimeout(() => {
           dispatch(changeTotalPrice(getTotalPrice()));
-          taskId && DB.updateInstance(taskId, { payments }, 'payments');
+          DB.updateInstance(taskId, { payments }, 'payments');
         }, 1000);
       }}
     >
@@ -185,6 +189,8 @@ function Payments({ taskId }: { taskId?: `${number}` }) {
       />
       {renderTotal(getTotalPrice())}
     </div>
+  ) : (
+    <>Task has not been saved yet. To input payments info save task first.</>
   );
 }
 
