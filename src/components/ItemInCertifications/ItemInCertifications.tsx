@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Loader from 'react-loader-spinner';
 import { Grid, Icon } from 'tabler-react';
@@ -10,10 +11,6 @@ import { pullSpecificFiles } from '../FileManagement/FileManagement';
 import { Items } from 'Item/Item';
 import { getTaskTotalPriceHelper } from 'helpers';
 
-interface IItemProps {
-  item: string;
-}
-
 const resume: {
   [key: string]: any;
 } = {
@@ -24,8 +21,8 @@ const resume: {
   ),
 };
 
-function ItemInCertifications({ item }: IItemProps) {
-  item = decodeURIComponent(item);
+function ItemInCertifications() {
+  const { item } = useParams<{ item: string }>();
   const [tasks, setTasks] = useState<any>([]);
   const [isUpdated, setIsUpdated] = useState(false);
 

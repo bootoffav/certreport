@@ -194,24 +194,13 @@ class Main extends Component<any> {
         <div className="container-fluid">
           <NavBar />
           <Switch>
-            <Route
-              exact
-              path="/dashboard"
-              render={() => (
-                // @ts-ignore
-                <Dashboard />
-              )}
-            />
+            <Route exact path="/dashboard" component={Dashboard} />
             <Route
               exact
               path="/"
               render={() => (
                 <>
-                  <CertificationList
-                    // @ts-ignore
-                    update={this.setState.bind(this)}
-                    // @ts-ignore
-                  />
+                  <CertificationList update={this.setState.bind(this)} />
                   <StageShortNames />
                 </>
               )}
@@ -221,20 +210,16 @@ class Main extends Component<any> {
               path="/expiringcerts"
               render={() => <ExpiringCerts />}
             />
-            <Route exact path="/items" render={() => <ItemList />} />
-            <Route
-              exact
-              path="/item/:item"
-              render={({ match }) => {
-                return <ItemInCertifications {...match.params} />;
-              }}
-            />
-            <Route exact path="/add" render={(props) => <Form {...props} />} />
+            <Route exact path="/items" component={ItemList} />
+            <Route exact path="/item/:item" component={ItemInCertifications} />
+            <Route exact path="/add" component={Form} />
             <Route
               exact
               path="/edit/:taskId"
-              render={(props) => (
-                <ErrorBoundary children={<Form {...props} />} />
+              render={({ match }) => (
+                <ErrorBoundary
+                  children={<Form taskId={match.params.taskId} />}
+                />
               )}
             />
             <Route path="*" component={Error404Page} />

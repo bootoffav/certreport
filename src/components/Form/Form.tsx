@@ -36,11 +36,9 @@ interface IFormState extends TaskState {
   existsInDB?: boolean;
 }
 
-class Form extends Component {
+class Form extends Component<any> {
   state: IFormState;
   quoteNo?: Payment['quoteNo'];
-  // @ts-expect-error
-  props: any;
 
   constructor(props: any) {
     super(props);
@@ -53,7 +51,7 @@ class Form extends Component {
   componentDidUpdate = (prevProps: any) => {
     if (!isEqual(prevProps.allTasks, this.props.allTasks)) {
       const taskFromStore = this.props.allTasks.find(
-        (t: any) => t.id === this.props.match.params.taskId
+        (t: any) => t.id === this.props.taskId
       );
       if (taskFromStore) {
         this.setState({
@@ -61,7 +59,7 @@ class Form extends Component {
           createdDate: taskFromStore.createdDate,
           accomplices: taskFromStore.accomplices,
           attachedFiles: taskFromStore.ufTaskWebdavFiles,
-          link: `[URL=certreport.xmtextiles.com/edit/${this.props.match.params.taskId}/]this task[/URL]`,
+          link: `[URL=certreport.xmtextiles.com/edit/${this.props.taskId}/]this task[/URL]`,
         });
         this.props.changeTotalPrice(
           getTaskTotalPriceHelper(taskFromStore.state)
@@ -72,7 +70,7 @@ class Form extends Component {
 
   async componentDidMount() {
     const taskFromStore = this.props.allTasks.find(
-      (t: any) => t.id === this.props.match.params.taskId
+      (t: any) => t.id === this.props.taskId
     );
     if (taskFromStore) {
       this.props.changeTotalPrice(getTaskTotalPriceHelper(taskFromStore.state));
@@ -81,14 +79,12 @@ class Form extends Component {
         createdDate: taskFromStore.createdDate,
         accomplices: taskFromStore.accomplices,
         attachedFiles: taskFromStore.ufTaskWebdavFiles,
-        link: `[URL=certreport.xmtextiles.com/edit/${this.props.match.params.taskId}/]this task[/URL]`,
+        link: `[URL=certreport.xmtextiles.com/edit/${this.props.taskId}/]this task[/URL]`,
       });
     }
 
-    if (this.props.match.params.taskId) {
-      let { rem, ...data } = await DB.getFabricAppFormState(
-        this.props.match.params.taskId
-      );
+    if (this.props.taskId) {
+      let { rem, ...data } = await DB.getFabricAppFormState(this.props.taskId);
       data = { ...fabricAppFormInitState, ...data };
       this.setState({
         FabricAppForm: data,
@@ -145,16 +141,16 @@ class Form extends Component {
     if (OK) {
       this.setState({ requestStatus: Status.Loading });
       // update in Bitrix
-      const taskId = this.props.match.params.taskId
+      const taskId = this.props.taskId
         ? await B24.updateTask(
             {
               ...this.state,
               activeQuoteNo: this.props.activeQuoteNo,
               totalPrice: this.props.totalPrice,
             },
-            this.props.match.params.taskId
+            this.props.taskId
           )
-            .then((_) => this.props.match.params.taskId)
+            .then((_) => this.props.taskId)
             .catch(this.unsuccessfullySubmitted)
         : await B24.createTask({
             ...this.state,
@@ -223,7 +219,7 @@ class Form extends Component {
     <div className="container mt-2">
       <Button
         RootComponent="a"
-        href={`${process.env.REACT_APP_B24_HOST}/company/personal/user/460/tasks/task/view/${this.props.match.params.taskId}/`}
+        href={`${process.env.REACT_APP_B24_HOST}/company/personal/user/460/tasks/task/view/${this.props.taskId}/`}
         target="_blank"
         rel="noopener noreferrer"
         link
@@ -332,7 +328,7 @@ class Form extends Component {
     </div>
   );
   updateAttachedFiles = () =>
-    B24.getAttachedFiles(this.props.match.taskId as string).then((r: []) => {
+    B24.getAttachedFiles(this.props.taskId).then((r: []) => {
       this.setState({ attachedFiles: r });
     });
 }

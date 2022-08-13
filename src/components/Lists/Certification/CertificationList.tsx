@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { Component } from 'react';
 import ReactTable from 'react-table';
 import { getColumns } from './columns';
 import StageFilter from '../Filters/StageFilter';
@@ -20,7 +20,7 @@ interface ICertificationListProps {
   stages: any;
 }
 
-class CertificationList extends React.Component<
+class CertificationList extends Component<
   ICertificationListProps,
   ICertificationListState
 > {
