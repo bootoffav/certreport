@@ -1,58 +1,32 @@
-import { Component } from 'react';
+import { useEffect, useState } from 'react';
+import { useAppSelector } from 'store/hooks';
 import ReactTable from 'react-table';
 import { getColumns } from './columns';
 import StageFilter from '../Filters/StageFilter';
 import ColumnFilter from '../Filters/ColumnFilter';
-import { connect } from 'react-redux';
-
 import './List.css';
 import { countTotalPrice } from 'helpers';
-import { RootState } from 'store/store';
 
-interface ICertificationListState {
-  visibleTasks: any[];
-  totalPrice: number;
-}
+function CertificationList({ update }: any) {
+  const { tasks, stages } = useAppSelector(({ main }) => ({
+    tasks: main.filteredTasks,
+    stages: main.stages,
+  }));
 
-interface ICertificationListProps {
-  tasks: any;
-  update: any;
-  stages: any;
-}
+  const [visibleTasks, setVisibleTasks] = useState(tasks);
 
-class CertificationList extends Component<
-  ICertificationListProps,
-  ICertificationListState
-> {
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      totalPrice: countTotalPrice(this.props.tasks),
-      visibleTasks: this.props.tasks,
-    };
-  }
+  useEffect(() => {
+    setVisibleTasks(tasks);
+  }, [tasks]);
 
-  get columns() {
-    return getColumns(this.state.totalPrice, this.props.stages[0]);
-  }
-
-  componentDidUpdate(prevProps: any) {
-    if (prevProps.tasks !== this.props.tasks) {
-      this.setState({
-        visibleTasks: this.props.tasks,
-        totalPrice: countTotalPrice(this.props.tasks),
-      });
-    }
-  }
-
-  getTrProps(state: any, rowInfo: any, column: any) {
+  const getTrProps = (_: any, rowInfo: any) => {
     if (rowInfo === undefined) {
       return {};
     }
     return rowInfo.original.overdue ? { className: 'missedDeadline' } : {};
-  }
+  };
 
-  render = (): JSX.Element => (
+  return (
     <>
       <div className="d-flex mb-1">
         <div className="d-flex w-100">
@@ -60,15 +34,14 @@ class CertificationList extends Component<
             <StageFilter />
           </div>
           <ColumnFilter
-            dataToFilter={this.props.tasks}
             dataType="tasks"
-            update={this.setState.bind(this)}
+            update={(vt: any) => setVisibleTasks(vt)}
           />
         </div>
       </div>
       <ReactTable
-        data={this.state.visibleTasks}
-        columns={this.columns}
+        data={visibleTasks}
+        columns={getColumns(countTotalPrice(visibleTasks), stages[0])}
         defaultSorted={[
           {
             id: 'createdDate',
@@ -77,17 +50,11 @@ class CertificationList extends Component<
         ]}
         noDataText="data is loading"
         className="table"
-        getTrProps={this.getTrProps}
+        getTrProps={getTrProps}
         defaultPageSize={20}
       />
     </>
   );
 }
 
-const mapStateToProps = ({ main }: RootState) => ({
-  tasks: main.filteredTasks,
-  stages: main.stages,
-});
-
-// @ts-ignore
-export default connect(mapStateToProps)(CertificationList);
+export default CertificationList;

@@ -1,8 +1,7 @@
-import React from 'react';
 import { useState } from 'react';
+import { useAppSelector } from 'store/hooks';
 
 interface IColumnFilterProps {
-  dataToFilter: any; // tasks or items
   dataType: 'tasks' | 'items';
   update: any;
 }
@@ -27,12 +26,11 @@ function filter(
     : dataToFilter.filter(filterTasks);
 }
 
-const ColumnFilter = ({
-  dataType,
-  dataToFilter,
-  update,
-}: IColumnFilterProps) => {
+const ColumnFilter = ({ dataType, update }: IColumnFilterProps) => {
   const [searchFor, setSearchFor] = useState('');
+  const dataToFilter = useAppSelector(({ main }) =>
+    dataType === 'tasks' ? main.filteredTasks : main.filteredItems
+  );
 
   return (
     <input
@@ -43,7 +41,7 @@ const ColumnFilter = ({
       onChange={({ currentTarget: { value } }) => {
         const visibleTasks = filter(value, dataToFilter, dataType);
         setSearchFor(value);
-        update({ visibleTasks });
+        update(visibleTasks);
       }}
     />
   );

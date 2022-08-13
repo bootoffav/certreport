@@ -81,8 +81,7 @@ const ItemList = () => {
     <Grid.Row>
       <Grid.Col>
         <ColumnFilter
-          dataToFilter={items}
-          update={({ visibleTasks }: any) => setVisibleTasks(visibleTasks)}
+          update={(visibleTasks: any) => setVisibleTasks(visibleTasks)}
           dataType="items"
         />
         <ReactTable
