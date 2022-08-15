@@ -7,7 +7,7 @@ import ColumnFilter from '../Filters/ColumnFilter';
 import './List.css';
 import { countTotalPrice } from 'helpers';
 
-function CertificationList({ update }: any) {
+function CertificationList() {
   const { tasks, stages } = useAppSelector(({ main }) => ({
     tasks: main.filteredTasks,
     stages: main.stages,

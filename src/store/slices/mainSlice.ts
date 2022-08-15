@@ -9,7 +9,13 @@ export interface IInitialState {
   activeQuoteNo: string;
   updated: boolean;
   totalPrice: number;
-  stages: (typeof baseStages[number] | typeof repeatStages[number] | 'all')[];
+  stages: (
+    | typeof baseStages[number]
+    | typeof repeatStages[number]
+    | 'all'
+    | 'overdue'
+    | 'ongoing'
+  )[];
   allTasks: any[];
   allItems: any[];
   activeBrands: ('XMS' | 'XMF' | 'XMT' | 'No brand')[];

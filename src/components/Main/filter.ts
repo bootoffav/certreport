@@ -1,37 +1,37 @@
 import { intersection } from 'lodash';
+import { TaskState } from 'Task/Task.interface';
+import { IInitialState } from 'store/slices/mainSlice';
 
-function filter(tasks: any, items: any, props: any) {
+function filter(tasks: TaskState[], items: any, props: any) {
   let {
     additionalStandardFilterTaskList,
     activeTestingCompanies,
     activeStandards,
+    activeBrands,
+    stages,
+    startDate,
+    endDate,
   } = props;
 
-  const brandFilteringFunc = ({ brand }: any) => {
-    return brand === '' && props.activeBrands.includes('No brand')
-      ? true
-      : props.activeBrands.includes(brand);
-  };
+  const brandFilteringFunc = ({ brand }: TaskState) =>
+    (brand === '' && activeBrands.includes('No brand')) ||
+    activeBrands.includes(brand);
 
-  const testingCompanyFilteringFunc = ({ testingCompany }: any) => {
+  const testingCompanyFilteringFunc = ({ testingCompany }: TaskState) => {
     testingCompany = testingCompany.split(' ')[0].toLowerCase();
     return activeTestingCompanies.includes(testingCompany);
   };
 
   // brandfiltering for Certification Tasks
-  let filteredTasks = tasks.filter((task: any) => {
-    return brandFilteringFunc(task.state);
-  });
+  let filteredTasks = tasks.filter((task) => brandFilteringFunc(task.state));
 
   // brandfiltering for Items
   let filteredItems = items.filter(brandFilteringFunc);
 
   if (activeTestingCompanies[0] !== 'all') {
-    // testing company filtering for Certification Tasks
-    filteredTasks = filteredTasks.filter(({ state }: any) =>
-      testingCompanyFilteringFunc(state)
+    filteredTasks = filteredTasks.filter((task) =>
+      testingCompanyFilteringFunc(task.state)
     );
-    // testing company filtering for Items
     filteredItems = filteredItems.filter(testingCompanyFilteringFunc);
   }
 
@@ -57,7 +57,6 @@ function filter(tasks: any, items: any, props: any) {
     );
   }
 
-  const { startDate, endDate } = props;
   // datefiltering
   if (startDate && endDate) {
     const sDate = new Date(startDate);
@@ -70,12 +69,18 @@ function filter(tasks: any, items: any, props: any) {
   }
 
   //stageFiltering
-  let filteredTaskswithStage: any = [];
-  const searchingStages = [...props.stages];
+  filteredTasks = filterByStages(stages, filteredTasks);
 
-  while (searchingStages.length) {
-    let curStage = searchingStages.shift();
-    switch (curStage) {
+  return {
+    filteredTasks,
+    filteredItems,
+  };
+}
+
+function filterByStages(stages: IInitialState['stages'], filteredTasks: any) {
+  let filteredTaskswithStage: any = [];
+  stages.forEach((stage) => {
+    switch (stage) {
       case 'all':
         filteredTaskswithStage = [...filteredTasks];
         break;
@@ -87,13 +92,13 @@ function filter(tasks: any, items: any, props: any) {
       case 'ongoing':
         filteredTaskswithStage = filteredTaskswithStage.concat(
           filteredTasks.filter(
-            (t: any) => t.state.stage.match(/^(10|[0-8]\.)/) // all stages starting 0. - 8. and 10.
+            ({ state }: TaskState) => state.stage.match(/^(10|[0-8]\.)/) // all stages starting 0. - 8. and 10.
           )
         );
         break;
       default:
         const filteredTasksByCurrentStage = filteredTasks.filter(
-          (t: any) => t.state.stage === curStage
+          ({ state }: TaskState) => state.stage === stage
         );
 
         filteredTaskswithStage = [
@@ -101,12 +106,9 @@ function filter(tasks: any, items: any, props: any) {
           ...filteredTasksByCurrentStage,
         ];
     }
-  }
+  });
 
-  return {
-    filteredTasks: filteredTaskswithStage,
-    filteredItems,
-  };
+  return filteredTaskswithStage;
 }
 
 export default filter;

@@ -44,12 +44,6 @@ interface TaskState {
   testingCompany: string;
   stage: Stage | string;
   standards: string;
-  proforma: string;
-  proformaReceivedDate: string;
-  proformaNumber: string;
-  proformaReceived2: string;
-  proformaReceivedDate2: string;
-  proformaNumber2: string;
   article: string;
   product: string;
   code: string;
@@ -81,8 +75,6 @@ interface TaskState {
   otherTextInDescription: string | null;
   resume: undefined | 'fail' | 'pass' | 'no sample' | 'partly';
   rem?: string;
-  quoteNo1?: string;
-  quoteNo2?: string;
   activeQuoteNo?: string;
   proformaInvoiceNo1?: string;
   proformaInvoiceNo2?: string;

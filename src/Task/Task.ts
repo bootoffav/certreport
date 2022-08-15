@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import { emptyState, brand } from './emptyState';
+import { TaskState } from './Task.interface';
 
 const dataSeparator = '-------------------------------------------------';
 
@@ -80,7 +81,7 @@ class Task {
       .trim(),
   });
 
-  parse(description: string, ufCrmTask: string[]) {
+  parse(description: string, ufCrmTask: any): TaskState {
     if (!Task.parseable_description(description)) {
       return {
         ...emptyState,
@@ -92,9 +93,7 @@ class Task {
     let { unParsedTaskState, otherTextInDescription } =
       Task.separateParseableDataAndOtherTextOfDescription(description);
 
-    let parsedState: {
-      [k: string]: any;
-    } = { ...emptyState };
+    let parsedState = { ...emptyState };
 
     unParsedTaskState = unParsedTaskState.replace(/:/g, '');
 
@@ -115,36 +114,6 @@ class Task {
     if (parsedState.standards) {
       [parsedState.standards, parsedState.standardsResult] =
         this.parseStandardResults(parsedState.standards.split(', '));
-    }
-
-    parsedState.price1 = parsedState.price1
-      ? parsedState.price1.split(' ')[0]
-      : '';
-    parsedState.paid = parsedState.paymentDate1 ? true : false;
-
-    if (parsedState.secondPayment) {
-      const [price2, paymentDate2, proformaReceivedDate2, proformaNumber2] =
-        parsedState.secondPayment.split(', ');
-
-      parsedState.price2 = price2 ? price2.split(' ')[0] : '';
-      parsedState.paymentDate2 = paymentDate2 || '';
-      parsedState.paid2 = Boolean(paymentDate2);
-      parsedState.proformaReceivedDate2 = proformaReceivedDate2 || '';
-
-      try {
-        parsedState.proformaNumber2 =
-          proformaNumber2 +
-            parsedState.secondPayment.substr(
-              parsedState.secondPayment.indexOf(proformaNumber2) +
-                proformaNumber2.length
-            ) || '';
-      } catch {
-        parsedState.proformaNumber2 = '';
-      }
-
-      parsedState.proformaReceived2 = Boolean(proformaReceivedDate2);
-
-      delete parsedState.secondPayment;
     }
 
     if (parsedState.news) {
@@ -229,17 +198,8 @@ class Task {
     if (this.state.readyOn && !this.state.sentOn)
       return '0. Sample to be prepared';
     if (this.state.sentOn && !this.state.receivedOn) return '1. Sample Sent';
-    if (!this.state.proformaReceived && !this.state.paid && this.state.resume)
-      return '8. Certificate ready';
-    if (
-      this.state.receivedOn &&
-      !this.state.proformaReceived &&
-      !this.state.startedOn
-    )
+    if (this.state.receivedOn && !this.state.startedOn)
       return '2. Sample Arrived';
-    if (this.state.proformaReceived && !this.state.paid) return '3. PI Issued';
-    if (this.state.paid && !this.state.testFinishedOnPlanDate)
-      return '4. Payment Done';
     if (this.state.testFinishedOnPlanDate && !this.state.testFinishedOnRealDate)
       return '5. Testing is started';
     if (this.state.testFinishedOnRealDate && !this.state.certReceivedOnRealDate)
@@ -255,8 +215,6 @@ class Task {
         return this.state['sentOn'] || 'No date';
       case '1. Sample Sent':
         return this.state['receivedOn'] || 'No date';
-      case '2. Sample Arrived':
-        return this.state['proformaReceivedDate'] || 'No date';
       case '3. PI Issued':
         return this.state['paymentDate1'] || 'No date';
       case '4. Payment Done':
@@ -289,16 +247,6 @@ class Task {
         return [
           dayjs(this.state['receivedOn']).add(2, 'day') < today,
           this.state['receivedOn'],
-        ];
-      case '3. PI Issued':
-        return [
-          dayjs(this.state['proformaReceivedDate']).add(2, 'day') < today,
-          this.state['proformaReceivedDate'],
-        ];
-      case '4. Payment Done':
-        return [
-          dayjs(this.state['paymentDate1']).add(2, 'day') < today,
-          this.state['paymentDate1'],
         ];
       case '5. Testing is started':
         return [
