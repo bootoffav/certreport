@@ -41,6 +41,7 @@ const getTasks = async () =>
   });
 
 function Main() {
+  console.log('main');
   const dispatch = useAppDispatch();
   const {
     stages,
