@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { intersection, isEqual } from 'lodash';
+import { isEqual } from 'lodash';
 import { Error404Page } from 'tabler-react';
 import CertificationList from '../Lists/Certification/CertificationList';
 import { ItemList } from '../Lists/ItemList/ItemList';
@@ -26,6 +26,7 @@ import { Items } from 'Item/Item';
 // @ts-ignore
 import dataFetcher from 'workerize-loader!../../workers/dataFetcher';
 import AppLoaderUI from 'components/AppLoaderUI';
+import filter from './filter';
 
 const worker = dataFetcher();
 
@@ -48,7 +49,7 @@ class Main extends Component<any> {
     dispatch(changeTasks(tasks));
     dispatch(fetchPayments());
     dispatch(changeItems(items));
-    const { filteredItems, filteredTasks } = this.filter(tasks, items);
+    const { filteredItems, filteredTasks } = filter(tasks, items, this.props);
     dispatch(changeFilteredItems(filteredItems));
     dispatch(changeFilteredTasks(filteredTasks));
     dispatch(changeUpdated(true));
@@ -73,119 +74,14 @@ class Main extends Component<any> {
       ) ||
       !isEqual(prevProps.allTasks, this.props.allTasks) // case when payments added to allTasks in redux-store
     ) {
-      const { filteredItems, filteredTasks } = this.filter(allTasks, allItems);
+      const { filteredItems, filteredTasks } = filter(
+        allTasks,
+        allItems,
+        this.props
+      );
       this.props.dispatch(changeFilteredItems(filteredItems));
       this.props.dispatch(changeFilteredTasks(filteredTasks));
     }
-  }
-
-  filter(tasks: any, items: any) {
-    let {
-      additionalStandardFilterTaskList,
-      activeTestingCompanies,
-      activeStandards,
-    } = this.props;
-
-    const brandFilteringFunc = ({ brand }: any) => {
-      return brand === '' && this.props.activeBrands.includes('No brand')
-        ? true
-        : this.props.activeBrands.includes(brand);
-    };
-
-    const testingCompanyFilteringFunc = ({ testingCompany }: any) => {
-      testingCompany = testingCompany.split(' ')[0].toLowerCase();
-      return activeTestingCompanies.includes(testingCompany);
-    };
-
-    // brandfiltering for Certification Tasks
-    let filteredTasks = tasks.filter((task: any) => {
-      return brandFilteringFunc(task.state);
-    });
-
-    // brandfiltering for Items
-    let filteredItems = items.filter(brandFilteringFunc);
-
-    if (activeTestingCompanies[0] !== 'all') {
-      // testing company filtering for Certification Tasks
-      filteredTasks = filteredTasks.filter(({ state }: any) =>
-        testingCompanyFilteringFunc(state)
-      );
-      // testing company filtering for Items
-      filteredItems = filteredItems.filter(testingCompanyFilteringFunc);
-    }
-
-    // standardfiltering for Certification Tasks
-    if (additionalStandardFilterTaskList) {
-      filteredTasks = filteredTasks.filter((task: any) =>
-        // @ts-ignore
-        additionalStandardFilterTaskList.includes(task.id)
-      );
-    } else {
-      if (activeStandards[0] !== 'all') {
-        filteredTasks = filteredTasks.filter((task: any) => {
-          const standards = task.state.standards.split(', ');
-          return intersection(standards, activeStandards).length;
-        });
-      }
-    }
-
-    // standardFiltering for Items
-    if (activeStandards[0] !== 'all') {
-      filteredItems = filteredItems.filter(
-        ({ standards }: any) => intersection(standards, activeStandards).length
-      );
-    }
-
-    const { startDate, endDate } = this.props;
-    // datefiltering
-    if (startDate && endDate) {
-      const sDate = new Date(startDate);
-      const eDate = new Date(endDate);
-      filteredTasks = filteredTasks.filter((task: any) => {
-        const comparingDate = new Date(task.createdDate);
-        // @ts-ignore
-        return sDate < comparingDate && eDate > comparingDate;
-      });
-    }
-
-    //stageFiltering
-    let filteredTaskswithStage: any = [];
-    const searchingStages = [...this.props.stages];
-
-    while (searchingStages.length) {
-      let curStage = searchingStages.shift();
-      switch (curStage) {
-        case 'all':
-          filteredTaskswithStage = [...filteredTasks];
-          break;
-        case 'overdue':
-          filteredTaskswithStage = filteredTaskswithStage.concat(
-            filteredTasks.filter((t: any) => t.overdue)
-          );
-          break;
-        case 'ongoing':
-          filteredTaskswithStage = filteredTaskswithStage.concat(
-            filteredTasks.filter(
-              (t: any) => t.state.stage.match(/^(10|[0-8]\.)/) // all stages starting 0. - 8. and 10.
-            )
-          );
-          break;
-        default:
-          const filteredTasksByCurrentStage = filteredTasks.filter(
-            (t: any) => t.state.stage === curStage
-          );
-
-          filteredTaskswithStage = [
-            ...filteredTaskswithStage,
-            ...filteredTasksByCurrentStage,
-          ];
-      }
-    }
-
-    return {
-      filteredTasks: filteredTaskswithStage,
-      filteredItems,
-    };
   }
 
   render() {
