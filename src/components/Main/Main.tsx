@@ -4,6 +4,7 @@ import { Error404Page } from 'tabler-react';
 import CertificationList from '../Lists/Certification/CertificationList';
 import { ItemList } from '../Lists/ItemList/ItemList';
 import Form from '../Form/Form';
+import Animated from 'components/Animated';
 import Dashboard from '../Dashboard/Dashboard';
 import ExpiringCerts from '../ExpiringCerts/ExpiringCerts';
 import ErrorBoundary from 'ErrorBoundary';
@@ -118,26 +119,54 @@ function Main() {
       <div className="container-fluid">
         <NavBar />
         <Switch>
-          <Route exact path="/dashboard" component={Dashboard} />
+          <Route
+            exact
+            path="/dashboard"
+            render={() => <Animated children={<Dashboard />} />}
+          />
           <Route
             exact
             path="/"
             render={() => (
-              <>
-                <CertificationList />
-                <StageShortNames />
-              </>
+              <Animated
+                children={[
+                  <CertificationList key={0} />,
+                  <StageShortNames key={1} />,
+                ]}
+              />
             )}
           />
-          <Route exact path="/expiringcerts" render={() => <ExpiringCerts />} />
-          <Route exact path="/items" component={ItemList} />
-          <Route exact path="/item/:item" component={ItemInCertifications} />
-          <Route exact path="/add" component={Form} />
+          <Route
+            exact
+            path="/expiringcerts"
+            render={() => <Animated children={<ExpiringCerts />} />}
+          />
+          <Route
+            exact
+            path="/items"
+            render={() => <Animated children={<ItemList />} />}
+          />
+          <Route
+            exact
+            path="/item/:item"
+            render={() => <Animated children={<ItemInCertifications />} />}
+          />
+          <Route
+            exact
+            path="/add"
+            render={() => <Animated children={<Form />} />}
+          />
           <Route
             exact
             path="/edit/:taskId"
             render={({ match }) => (
-              <ErrorBoundary children={<Form taskId={match.params.taskId} />} />
+              <ErrorBoundary
+                children={
+                  <Animated>
+                    <Form taskId={match.params.taskId} />
+                  </Animated>
+                }
+              />
             )}
           />
           <Route path="*" component={Error404Page} />

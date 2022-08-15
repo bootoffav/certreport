@@ -25,7 +25,6 @@ function run() {
   createRoot(document.getElementById('app')!).render(
     <StrictMode>
       <Provider store={store}>
-        {/* @ts-ignore */}
         <Main />
       </Provider>
     </StrictMode>
