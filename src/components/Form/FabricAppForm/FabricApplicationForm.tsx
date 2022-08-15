@@ -29,9 +29,11 @@ function FabricApplicationForm({
   useEffect(() => {
     if (!baseState) {
       (async () => {
-        const data = await DB.getFabricAppFormState(taskId);
-        updateParent(data);
-        dispatch({ type: 'fromDB', payload: data });
+        if (taskId) {
+          const data = await DB.getFabricAppFormState(taskId);
+          updateParent(data);
+          dispatch({ type: 'fromDB', payload: data });
+        }
       })();
     } else {
       dispatch({ type: 'fromDB', payload: baseState });

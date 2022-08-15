@@ -1,14 +1,14 @@
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Button } from 'tabler-react';
 
 const GoBackOrHomeButton = () => {
-  const history = useHistory();
-  const label = history.length === 2 ? 'Main Page' : 'Back';
+  const navigate = useNavigate();
+  const label = navigate.length === 2 ? 'Main Page' : 'Back';
   return (
     <Button
-      onClick={(e: any) => {
+      onClick={(e: React.SyntheticEvent) => {
         e.preventDefault();
-        history.length === 2 ? history.push('/') : history.goBack();
+        navigate.length === 2 ? navigate('/') : navigate(-1);
       }}
       color="azure"
       icon={label === 'Back' ? 'fe fe-arrow-left' : ''}

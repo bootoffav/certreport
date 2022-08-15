@@ -1,15 +1,14 @@
 import { useEffect } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Error404Page } from 'tabler-react';
 import CertificationList from '../Lists/Certification/CertificationList';
-import { ItemList } from '../Lists/ItemList/ItemList';
+import ItemList from '../Lists/ItemList/ItemList';
 import Form from '../Form/Form';
 import Animated from 'components/Animated';
 import Dashboard from '../Dashboard/Dashboard';
 import ExpiringCerts from '../ExpiringCerts/ExpiringCerts';
 import ErrorBoundary from 'ErrorBoundary';
 import NavBar from './NavBar';
-import { StageShortNames } from '../StageShortNames/StageShortNames';
 import { ItemInCertifications } from '../ItemInCertifications/ItemInCertifications';
 import {
   changeFilteredItems,
@@ -19,7 +18,6 @@ import filter from './filter';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 
 function Main() {
-  console.log('main');
   const dispatch = useAppDispatch();
   const {
     stages,
@@ -45,17 +43,17 @@ function Main() {
 
   useEffect(() => {
     console.log('main useEffect');
-    // const { filteredItems, filteredTasks } = filter(allTasks, allItems, {
-    //   additionalStandardFilterTaskList,
-    //   activeTestingCompanies,
-    //   activeStandards,
-    //   activeBrands,
-    //   stages,
-    //   startDate,
-    //   endDate,
-    // });
-    // dispatch(changeFilteredItems(filteredItems));
-    // dispatch(changeFilteredTasks(filteredTasks));
+    const { filteredItems, filteredTasks } = filter(allTasks, allItems, {
+      additionalStandardFilterTaskList,
+      activeTestingCompanies,
+      activeStandards,
+      activeBrands,
+      stages,
+      startDate,
+      endDate,
+    });
+    dispatch(changeFilteredItems(filteredItems));
+    dispatch(changeFilteredTasks(filteredTasks));
   }, [
     additionalStandardFilterTaskList,
     activeTestingCompanies,
@@ -70,64 +68,44 @@ function Main() {
   ]);
 
   return (
-    <Router>
+    <BrowserRouter>
       <div className="container-fluid">
         <NavBar />
-        <Switch>
+        <Routes>
           <Route
-            exact
             path="/dashboard"
-            render={() => <Animated children={<Dashboard />} />}
+            element={<Animated children={<Dashboard />} />}
           />
           <Route
-            exact
             path="/"
-            render={() => (
-              <Animated
-                children={[
-                  <CertificationList />,
-                  // <StageShortNames key={1} />,
-                ]}
-              />
-            )}
+            element={<Animated children={<CertificationList />} />}
           />
           <Route
-            exact
             path="/expiringcerts"
-            render={() => <Animated children={<ExpiringCerts />} />}
+            element={<Animated children={<ExpiringCerts />} />}
           />
+          <Route path="/items" element={<Animated children={<ItemList />} />} />
           <Route
-            exact
-            path="/items"
-            render={() => <Animated children={<ItemList />} />}
-          />
-          <Route
-            exact
             path="/item/:item"
-            render={() => <Animated children={<ItemInCertifications />} />}
+            element={<Animated children={<ItemInCertifications />} />}
           />
+          <Route path="/add" element={<Animated children={<Form />} />} />
           <Route
-            exact
-            path="/add"
-            render={() => <Animated children={<Form />} />}
-          />
-          <Route
-            exact
             path="/edit/:taskId"
-            render={({ match }) => (
+            element={
               <ErrorBoundary
                 children={
                   <Animated>
-                    <Form taskId={match.params.taskId} />
+                    <Form />
                   </Animated>
                 }
               />
-            )}
+            }
           />
-          <Route path="*" component={Error404Page} />
-        </Switch>
+          <Route path="*" element={Error404Page} />
+        </Routes>
       </div>
-    </Router>
+    </BrowserRouter>
   );
 }
 

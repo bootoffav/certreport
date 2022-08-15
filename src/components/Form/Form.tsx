@@ -1,3 +1,4 @@
+import { useParams, useNavigate } from 'react-router-dom';
 import { Component } from 'react';
 import swal from 'sweetalert';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -200,7 +201,7 @@ class Form extends Component<any> {
 
   successfullySubmitted = () => {
     this.setState({ requestStatus: Status.Success });
-    setTimeout(() => this.props.history.goBack(), 1000);
+    setTimeout(() => this.props.navigate(-1), 1000);
   };
 
   unsuccessfullySubmitted = (error: unknown) => {
@@ -333,12 +334,18 @@ class Form extends Component<any> {
     });
 }
 
-export default connect(
-  ({ main }: RootState) => ({ allTasks: main.allTasks }),
-  {
+export default withRouter(
+  connect(({ main }: RootState) => ({ allTasks: main.allTasks }), {
     changeTask,
     changeActiveQuoteNo,
     changeTotalPrice,
-  }
-  // @ts-ignore
-)(Form);
+  })(Form)
+);
+
+export function withRouter(Children: any) {
+  return (props: any) => {
+    const { taskId } = useParams<{ taskId: string }>();
+    const navigate = useNavigate();
+    return <Children {...props} taskId={taskId} navigate={navigate} />;
+  };
+}

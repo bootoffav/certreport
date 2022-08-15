@@ -8,7 +8,7 @@ import { getTaskParamLabel } from 'Task/Task';
 import './ItemInCertifications.css';
 import { GoBackOrHomeButton } from '../NaviButton';
 import { pullSpecificFiles } from '../FileManagement/FileManagement';
-import { Items } from 'Item/Item';
+import Items from 'Item/Item';
 import { getTaskTotalPriceHelper } from 'helpers';
 
 const resume: {
@@ -27,11 +27,12 @@ function ItemInCertifications() {
   const [isUpdated, setIsUpdated] = useState(false);
 
   useEffect(() => {
-    getItemAssociatedTasks(item).then((tasks) => {
-      const items = Items(tasks);
-      setTasks(items[0].tasks);
-      setIsUpdated(true);
-    });
+    item &&
+      getItemAssociatedTasks(item).then((tasks) => {
+        const items = Items(tasks);
+        setTasks(items[0].tasks);
+        setIsUpdated(true);
+      });
   }, [item]);
 
   const parameters = [

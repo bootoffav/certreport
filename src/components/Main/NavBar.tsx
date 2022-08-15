@@ -11,7 +11,7 @@ const NavBar = () => (
         <DateFilter />
       </div>
       <div className="ml-auto d-flex">
-        <NavLink className="ml-3 navbar-link" exact to="/dashboard">
+        <NavLink className="ml-3 navbar-link" to="/dashboard">
           <p>Dashboard</p>
         </NavLink>
 

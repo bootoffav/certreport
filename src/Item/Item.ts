@@ -51,5 +51,5 @@ function Items(tasks: any[]): ItemType[] {
   return items;
 }
 
-export { Items };
+export default Items;
 export type { ItemType, taskOfItem };

@@ -69,7 +69,7 @@ const columns = [
   },
 ];
 
-const ItemList = () => {
+function ItemList() {
   const items = useAppSelector(({ main }) => main.filteredItems);
   const [visibleTasks, setVisibleTasks] = useState<ItemType[]>();
 
@@ -96,6 +96,6 @@ const ItemList = () => {
       </Grid.Col>
     </Grid.Row>
   );
-};
+}
 
-export { ItemList };
+export default ItemList;

@@ -12,7 +12,8 @@ function XMBranch() {
   const { taskId } = useParams<{ taskId: string }>();
 
   useEffect(() => {
-    DB.get(taskId, ['data', 'branches'], 'payments').then(setBranches);
+    taskId &&
+      DB.get(taskId, ['data', 'branches'], 'payments').then(setBranches);
   }, [taskId]);
 
   return (
@@ -26,13 +27,14 @@ function XMBranch() {
         isMulti
         value={branches.map((b) => ({ value: b, label: b }))}
         onBlur={() => {
-          DB.updateInstance(
-            taskId,
-            {
-              branches,
-            },
-            'payments'
-          );
+          taskId &&
+            DB.updateInstance(
+              taskId,
+              {
+                branches,
+              },
+              'payments'
+            );
         }}
         onChange={(chosenOptions) =>
           setBranches(chosenOptions.map(({ value }) => value))

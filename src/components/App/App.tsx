@@ -6,7 +6,7 @@ import { TaskState } from 'Task/Task.interface';
 // @ts-ignore
 import dataFetcher from 'workerize-loader!../../workers/dataFetcher';
 import { useEffect } from 'react';
-import { Items } from 'Item/Item';
+import Items from 'Item/Item';
 import {
   changeUpdated,
   changeItems,
@@ -31,14 +31,13 @@ function App() {
   useEffect(() => {
     (async () => {
       const tasks = await getTasks();
-      // dispatch(changeTasks(tasks));
+      dispatch(changeTasks(tasks));
+      dispatch(fetchPayments());
 
-      // const items = Items(tasks);
-      // dispatch(changeItems(items));
+      const items = Items(tasks);
+      dispatch(changeItems(items));
 
-      // dispatch(fetchPayments());
-
-      // dispatch(changeUpdated(true));
+      dispatch(changeUpdated(true));
     })();
   }, [dispatch]);
 
