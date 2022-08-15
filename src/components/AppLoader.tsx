@@ -1,6 +1,6 @@
 import Loader from 'react-loader-spinner';
 
-function AppLoaderUI() {
+function AppLoader() {
   return (
     <div
       className="d-flex justify-content-center align-items-center"
@@ -11,4 +11,4 @@ function AppLoaderUI() {
   );
 }
 
-export default AppLoaderUI;
+export default AppLoader;

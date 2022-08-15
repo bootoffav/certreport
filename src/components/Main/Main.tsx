@@ -12,33 +12,11 @@ import NavBar from './NavBar';
 import { StageShortNames } from '../StageShortNames/StageShortNames';
 import { ItemInCertifications } from '../ItemInCertifications/ItemInCertifications';
 import {
-  changeUpdated,
-  changeItems,
-  changeTasks,
   changeFilteredItems,
   changeFilteredTasks,
 } from 'store/slices/mainSlice';
-import fetchPayments from 'store/slices/PaymentsThunk';
-import { Items } from 'Item/Item';
-/* eslint-disable import/no-webpack-loader-syntax */
-// @ts-ignore
-import dataFetcher from 'workerize-loader!../../workers/dataFetcher';
-import AppLoaderUI from 'components/AppLoaderUI';
 import filter from './filter';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { TaskState } from 'Task/Task.interface';
-
-const worker = dataFetcher();
-
-const getTasks = async () =>
-  new Promise<TaskState[]>((res) => {
-    worker.onmessage = ({ data }: MessageEvent) => {
-      if (Array.isArray(data)) {
-        return res(data);
-      }
-    };
-    worker.getTasks();
-  });
 
 function Main() {
   console.log('main');
@@ -53,7 +31,6 @@ function Main() {
     activeTestingCompanies,
     activeStandards,
     additionalStandardFilterTaskList,
-    updated,
   } = useAppSelector(({ main }) => ({
     stages: main.stages,
     allItems: main.allItems,
@@ -64,58 +41,35 @@ function Main() {
     activeTestingCompanies: main.activeTestingCompanies,
     activeStandards: main.activeStandards,
     additionalStandardFilterTaskList: main.additionalStandardFilterTaskList,
-    updated: main.updated,
   }));
 
   useEffect(() => {
-    (async () => {
-      const tasks = await getTasks();
-      const items = Items(tasks);
-      dispatch(changeTasks(tasks));
-      dispatch(fetchPayments());
-      dispatch(changeItems(items));
-      const { filteredItems, filteredTasks } = filter(tasks, items, {
-        additionalStandardFilterTaskList,
-        activeTestingCompanies,
-        activeStandards,
-        activeBrands,
-        stages,
-        startDate,
-        endDate,
-      });
-      dispatch(changeFilteredItems(filteredItems));
-      dispatch(changeFilteredTasks(filteredTasks));
-      dispatch(changeUpdated(true));
-    })();
-    // eslint-disable-next-line
-  }, []);
-
-  useEffect(() => {
-    const { filteredItems, filteredTasks } = filter(allTasks, allItems, {
-      additionalStandardFilterTaskList,
-      activeTestingCompanies,
-      activeStandards,
-      activeBrands,
-      stages,
-      startDate,
-      endDate,
-    });
-    dispatch(changeFilteredItems(filteredItems));
-    dispatch(changeFilteredTasks(filteredTasks));
+    console.log('main useEffect');
+    // const { filteredItems, filteredTasks } = filter(allTasks, allItems, {
+    //   additionalStandardFilterTaskList,
+    //   activeTestingCompanies,
+    //   activeStandards,
+    //   activeBrands,
+    //   stages,
+    //   startDate,
+    //   endDate,
+    // });
+    // dispatch(changeFilteredItems(filteredItems));
+    // dispatch(changeFilteredTasks(filteredTasks));
   }, [
-    endDate,
-    startDate,
-    activeBrands,
-    stages,
-    activeStandards,
     additionalStandardFilterTaskList,
     activeTestingCompanies,
+    activeStandards,
+    activeBrands,
+    stages,
+    startDate,
+    endDate,
     allTasks,
     dispatch,
     allItems,
   ]);
 
-  return updated ? (
+  return (
     <Router>
       <div className="container-fluid">
         <NavBar />
@@ -131,8 +85,8 @@ function Main() {
             render={() => (
               <Animated
                 children={[
-                  <CertificationList key={0} />,
-                  <StageShortNames key={1} />,
+                  <CertificationList />,
+                  // <StageShortNames key={1} />,
                 ]}
               />
             )}
@@ -174,8 +128,6 @@ function Main() {
         </Switch>
       </div>
     </Router>
-  ) : (
-    <AppLoaderUI />
   );
 }
 

@@ -5,11 +5,11 @@ import './css/style.css';
 import 'bootstrap';
 import netlifyIdentity from 'netlify-identity-widget';
 import { initApp } from './defaults';
-import Main from './components/Main/Main';
 import { Provider } from 'react-redux';
 import store from './store/store';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import App from 'components/App/App';
 
 initApp();
 
@@ -25,7 +25,7 @@ function run() {
   createRoot(document.getElementById('app')!).render(
     <StrictMode>
       <Provider store={store}>
-        <Main />
+        <App />
       </Provider>
     </StrictMode>
   );
