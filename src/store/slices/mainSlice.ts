@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import fetchPayments from './PaymentsThunk';
-import { baseStages, repeatStages, testingCompanies } from 'defaults';
+import { baseStages, repeatStages } from 'defaults';
 
 type ActiveStandardsType = (
   | 'EN 11611'
@@ -151,18 +150,6 @@ const mainSlice = createSlice({
       const idx = state.allTasks.findIndex((task) => task.id === taskId);
       state.allTasks[idx].state.payments = payments;
     },
-  },
-  extraReducers: (builder) => {
-    builder.addCase(fetchPayments.fulfilled, (state, { payload: payments }) => {
-      // put payments into state
-      state.allTasks = state.allTasks.map((task) => ({
-        ...task,
-        state: {
-          ...task.state,
-          payments: payments[task.id] || [],
-        },
-      }));
-    });
   },
 });
 

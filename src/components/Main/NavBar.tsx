@@ -11,25 +11,7 @@ const NavBar = () => (
         <DateFilter />
       </div>
       <div className="ml-auto d-flex">
-        <NavLink className="ml-3 navbar-link" to="/dashboard">
-          <p>Dashboard</p>
-        </NavLink>
-
-        <NavLink className="ml-3 navbar-link" to="/">
-          <p>Certification tasks</p>
-        </NavLink>
-
-        <NavLink className="ml-3 navbar-link" to="/expiringcerts">
-          <p>Expiring Certificates</p>
-        </NavLink>
-
-        <NavLink className="ml-3 navbar-link" to="/items">
-          <p>Items</p>
-        </NavLink>
-
-        <NavLink className="ml-3" to="/add">
-          <p>Add cert</p>
-        </NavLink>
+        <MainNavigation />
       </div>
     </div>
     <div className="d-flex justify-content-start">
@@ -46,4 +28,24 @@ const NavBar = () => (
   </>
 );
 
+function MainNavigation() {
+  const addresses = [
+    ['/dashboard', 'Dashboard'],
+    ['/', 'Certification tasks'],
+    ['/expiringcerts', 'Expiring Certificates'],
+    ['/items', 'Items'],
+    ['/add', 'Add cert'],
+  ];
+  return (
+    <>
+      {addresses.map(([to, LinkText]) => (
+        <NavLink className="p-1" to={to} key={to}>
+          {({ isActive }) => (
+            <p style={isActive ? { fontWeight: 'bolder' } : {}}>{LinkText}</p>
+          )}
+        </NavLink>
+      ))}
+    </>
+  );
+}
 export default NavBar;

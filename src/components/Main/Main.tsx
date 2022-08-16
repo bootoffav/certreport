@@ -15,7 +15,6 @@ import {
   changeFilteredTasks,
 } from 'store/slices/mainSlice';
 import filter from './filter';
-// import { shallowEqual } from 'react-redux';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { isEqual } from 'lodash';
 
@@ -47,7 +46,6 @@ function Main() {
   );
 
   useEffect(() => {
-    console.log('main useEffect');
     const { filteredItems, filteredTasks } = filter(allTasks, allItems, {
       additionalStandardFilterTaskList,
       activeTestingCompanies,
@@ -57,7 +55,7 @@ function Main() {
       startDate,
       endDate,
     });
-    // dispatch(changeFilteredItems(filteredItems));
+    dispatch(changeFilteredItems(filteredItems));
     dispatch(changeFilteredTasks(filteredTasks));
   }, [
     additionalStandardFilterTaskList,

@@ -29,7 +29,7 @@ function rawTaskProcessor(tasks: any[]) {
   );
 }
 
-export async function getTasks() {
+async function getTasks() {
   let rawTasks: {
     id: string;
     title: string;
@@ -62,7 +62,8 @@ export async function getTasks() {
   } while (start !== undefined);
 
   const tasks = rawTaskProcessor(rawTasks);
-  postMessage(tasks);
+  return tasks;
 }
 
+export default getTasks;
 export { rawTaskProcessor };

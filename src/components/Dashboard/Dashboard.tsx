@@ -6,13 +6,15 @@ import { useAppSelector } from 'store/hooks';
 import ReactTable from 'react-table';
 import { countTotalPrice } from 'helpers';
 import { getColumns } from '../Lists/Certification/columns';
+import { isEqual } from 'lodash';
 
 function Dashboard() {
   const { activeBrands, tableTasks } = useAppSelector(
     ({ main, dashboard }) => ({
       activeBrands: main.activeBrands,
       tableTasks: dashboard.tableTasks,
-    })
+    }),
+    (l, f) => isEqual(l, f)
   );
 
   return (

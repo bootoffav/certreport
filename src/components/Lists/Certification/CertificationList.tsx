@@ -6,12 +6,16 @@ import StageFilter from '../Filters/StageFilter';
 import ColumnFilter from '../Filters/ColumnFilter';
 import './List.css';
 import { countTotalPrice } from 'helpers';
+import { isEqual } from 'lodash';
 
 function CertificationList() {
-  const { tasks, stages } = useAppSelector(({ main }) => ({
-    tasks: main.filteredTasks,
-    stages: main.stages,
-  }));
+  const { tasks, stages } = useAppSelector(
+    ({ main }) => ({
+      tasks: main.filteredTasks,
+      stages: main.stages,
+    }),
+    (l, r) => isEqual(l, r)
+  );
 
   const [visibleTasks, setVisibleTasks] = useState(tasks);
 
@@ -48,7 +52,7 @@ function CertificationList() {
             desc: true,
           },
         ]}
-        noDataText="data is loading"
+        noDataText="no tasks matching your criteria"
         className="table"
         getTrProps={getTrProps}
         defaultPageSize={20}
