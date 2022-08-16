@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { BrandFilter } from '../Filters/BrandFilter';
-import { StandardFilter } from '../Filters/StandardFilter';
+import StandardFilter from '../Filters/StandardFilter';
 import DateFilter from '../Filters/DateFilter';
 import TestingCompanyFilter from '../Filters/TestingCompanyFilter';
 

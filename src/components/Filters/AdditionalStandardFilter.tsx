@@ -1,46 +1,46 @@
 import { useState, useEffect } from 'react';
-import { useAppDispatch } from 'store/hooks';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { changeAdditionalStandardFilterList } from 'store/slices/mainSlice';
 import Loader from 'react-loader-spinner';
 import DB from 'backend/DBManager';
 import { standardParamMap } from 'defaults';
-import { getActiveCheckboxes } from './StandardFilter';
-import type { StandardFilterState } from './StandardFilter';
+import { shallowEqual } from 'react-redux';
 
-type AdditionalStandardFilterProps = {
-  standard: keyof StandardFilterState & ('EN 469' | 'EN 20471');
-};
-
-function AdditionalStandardFilter({ standard }: AdditionalStandardFilterProps) {
+function AdditionalStandardFilter() {
   const dispatch = useAppDispatch();
-  const [state, setState] = useState({});
+  const standard = useAppSelector(
+    ({ main }) => main.activeStandards as unknown as 'EN 469' | 'EN 20471',
+    shallowEqual
+  );
   const [loading, setLoading] = useState(false);
+  const [paramList, setParamList] = useState<
+    | typeof standardParamMap['EN 469'][number][]
+    | typeof standardParamMap['EN 20471'][number][]
+  >([]);
 
-  // @ts-ignore
-  useEffect(() => {
-    setState(
-      standardParamMap[standard].reduce(
-        (o, key) => ({ ...o, [key]: false }),
-        {}
-      )
+  useEffect(() => setParamList([]), [standard]);
+
+  const onChange = ({ target }: React.SyntheticEvent) => {
+    const { value, checked } = target as unknown as {
+      value: typeof paramList[number];
+      checked: boolean;
+    };
+    // @ts-ignore // TO-DO
+    setParamList((state) =>
+      checked
+        ? [...state, value]
+        : [...state].filter((param) => param !== value)
     );
-    return () => dispatch(changeAdditionalStandardFilterList(undefined));
-    // eslint-disable-next-line
-  }, [standard]);
+  };
 
-  const jsx = Object.keys(state).map((param) => (
+  const standardParams = standardParamMap[standard].map((param) => (
     <label className="btn btn-secondary" key={param}>
       <input
         type="checkbox"
         value={param}
         // @ts-ignore
-        checked={state[param]}
-        onChange={({ target }) => {
-          setState((state) => ({
-            ...state,
-            [target.value]: target.checked,
-          }));
-        }}
+        checked={paramList.includes(param)}
+        onChange={onChange}
       />{' '}
       {param}
     </label>
@@ -49,7 +49,7 @@ function AdditionalStandardFilter({ standard }: AdditionalStandardFilterProps) {
   return (
     <div className="d-flex justify-content-center align-items-baseline">
       <div className="btn-group" data-toggle="buttons">
-        {jsx}
+        {standardParams}
       </div>
       <button
         className="btn btn-success ml-1"
@@ -57,10 +57,9 @@ function AdditionalStandardFilter({ standard }: AdditionalStandardFilterProps) {
         disabled={loading}
         onClick={async (e) => {
           setLoading(true);
-          e.preventDefault();
           const taskList = await fetchTaskIdsFromDB(
-            getActiveCheckboxes(state),
-            standard
+            paramList,
+            standard[0] as keyof typeof standardParamMap
           );
           dispatch(changeAdditionalStandardFilterList(taskList));
           setLoading(false);
@@ -76,7 +75,7 @@ function AdditionalStandardFilter({ standard }: AdditionalStandardFilterProps) {
   );
 }
 
-function buildIndex(param: string, standard: string) {
+function buildIndex(param: string, standard: keyof typeof standardParamMap) {
   return (
     `aitex_${standard.replace(/\s/g, '')}Detail` +
     `${param.replace(/\s|\./g, '')}`
@@ -85,7 +84,7 @@ function buildIndex(param: string, standard: string) {
 
 const fetchTaskIdsFromDB = async (
   activeCheckboxes: string[],
-  standard: string
+  standard: keyof typeof standardParamMap
 ): Promise<string[]> => {
   const indexes = activeCheckboxes.map((param) => buildIndex(param, standard));
 
@@ -100,4 +99,4 @@ const fetchTaskIdsFromDB = async (
   return [...new Set(taskList)]; // remove duplicates
 };
 
-export { AdditionalStandardFilter };
+export default AdditionalStandardFilter;

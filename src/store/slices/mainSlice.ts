@@ -2,6 +2,15 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import fetchPayments from './PaymentsThunk';
 import { baseStages, repeatStages, testingCompanies } from 'defaults';
 
+type ActiveStandardsType = (
+  | 'EN 11611'
+  | 'EN 11612'
+  | 'EN 469'
+  | 'EN 20471'
+  | 'EN 13034'
+  | 'EN 61482-1-2'
+  | 'all'
+)[];
 export interface IInitialState {
   activeTestingCompanies: ('satra' | 'bttg' | 'aitex' | 'all')[];
   startDate: string | null;
@@ -21,7 +30,7 @@ export interface IInitialState {
   activeBrands: ('XMS' | 'XMF' | 'XMT' | 'No brand')[];
   filteredItems: any[];
   filteredTasks: any[];
-  activeStandards: string[];
+  activeStandards: ActiveStandardsType;
   additionalStandardFilterTaskList?: string[];
 }
 
@@ -67,7 +76,25 @@ const mainSlice = createSlice({
           )
         : state.activeTestingCompanies.filter((tc) => tc !== testingCompany);
     },
-
+    changeActiveStandards: (
+      state: IInitialState,
+      {
+        payload: { checked, standard },
+      }: PayloadAction<{
+        standard: IInitialState['activeStandards'][number];
+        checked: boolean;
+      }>
+    ) => {
+      if (['all', 'EN 469', 'EN 20471'].includes(standard)) {
+        state.activeStandards = [standard];
+        return;
+      }
+      state.activeStandards = checked
+        ? [...state.activeStandards, standard].filter(
+            (st) => !['all', 'EN 469', 'EN 20471'].includes(st)
+          )
+        : state.activeStandards.filter((tc) => tc !== standard);
+    },
     changeActiveQuoteNo: (state: IInitialState, { payload }) => {
       state.activeQuoteNo = payload;
     },
@@ -111,10 +138,10 @@ const mainSlice = createSlice({
     changeFilteredTasks: (state: IInitialState, { payload }) => {
       state.filteredTasks = payload;
     },
-    changeActiveStandards: (state: IInitialState, { payload }) => {
-      state.activeStandards = payload;
-    },
-    changeAdditionalStandardFilterList: (state: IInitialState, { payload }) => {
+    changeAdditionalStandardFilterList: (
+      state: IInitialState,
+      { payload }: PayloadAction<string[]>
+    ) => {
       state.additionalStandardFilterTaskList = payload;
     },
     changePaymentsOfTask: (

@@ -92,7 +92,7 @@ const standardParamMap = {
     '7.5.2 R-Wash',
     '7.5.3 R-Dry',
   ],
-};
+} as const;
 
 function initApp() {
   const saveAndApply = (data: any[], item: string) => {

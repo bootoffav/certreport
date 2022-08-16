@@ -31,11 +31,11 @@ function App() {
   useEffect(() => {
     (async () => {
       const tasks = await getTasks();
-      dispatch(changeTasks(tasks));
+      // dispatch(changeTasks(tasks));
       dispatch(fetchPayments());
 
-      const items = Items(tasks);
-      dispatch(changeItems(items));
+      // const items = Items(tasks);
+      // dispatch(changeItems(items));
 
       dispatch(changeUpdated(true));
     })();

@@ -1,105 +1,52 @@
-import { useReducer, useEffect } from 'react';
-import { useAppDispatch } from 'store/hooks';
-import { changeActiveStandards } from 'store/slices/mainSlice';
-import { AdditionalStandardFilter } from './AdditionalStandardFilter';
-
-type StandardFilterState = {
-  'EN 11611': boolean;
-  'EN 11612': boolean;
-  'EN 469': boolean;
-  'EN 20471': boolean;
-  'EN 13034': boolean;
-  'EN 61482-1-2': boolean;
-  all: boolean;
-};
-
-const initialState: StandardFilterState = {
-  'EN 11611': false,
-  'EN 11612': false,
-  'EN 469': false,
-  'EN 20471': false,
-  'EN 13034': false,
-  'EN 61482-1-2': false,
-  all: true,
-};
-
-function standardFilterReducer(
-  state: StandardFilterState,
-  {
-    standard,
-    checked,
-  }: { standard: keyof StandardFilterState; checked: boolean }
-) {
-  switch (standard) {
-    case 'all':
-      state = { ...initialState };
-      state['all'] = checked;
-      break;
-    case 'EN 469':
-      state = { ...initialState };
-      state['all'] = false;
-      state['EN 469'] = checked;
-      break;
-    case 'EN 20471':
-      state = { ...initialState };
-      state['all'] = false;
-      state['EN 20471'] = checked;
-      break;
-    default:
-      state = { ...state };
-      state['all'] = false;
-      state['EN 469'] = false;
-      state['EN 20471'] = false;
-      state[standard] = checked;
-  }
-  return state;
-}
-
-const getActiveCheckboxes = (checkboxPair: any) => {
-  return Object.entries(checkboxPair)
-    .filter(([_, active]) => active)
-    .map(([value, _]) => value);
-};
+import { useAppDispatch, useAppSelector } from 'store/hooks';
+import { changeActiveStandards, IInitialState } from 'store/slices/mainSlice';
+import AdditionalStandardFilter from './AdditionalStandardFilter';
 
 function StandardFilter() {
-  const reduxDispatch = useAppDispatch();
-  const [standards, dispatch] = useReducer(standardFilterReducer, initialState);
-
-  useEffect(() => {
-    reduxDispatch(changeActiveStandards(getActiveCheckboxes(standards)));
-  }, [standards, reduxDispatch]);
+  const dispatch = useAppDispatch();
+  const activeStandards = useAppSelector(({ main }) => main.activeStandards);
 
   return (
     <div className="d-flex flex-column">
       <div className="btn-group btn-group-sm" data-toggle="buttons">
-        {Object.keys(standards).map((standard) => (
+        {(
+          [
+            'EN 11611',
+            'EN 11612',
+            'EN 469',
+            'EN 20471',
+            'EN 13034',
+            'EN 61482-1-2',
+            'all',
+          ] as const
+        ).map((standard) => (
           <label
-            className={`btn btn-${standard === 'All' ? 'info' : 'secondary'}`}
+            className={`btn btn-${standard === 'all' ? 'info' : 'secondary'}`}
             key={standard}
           >
             <input
               type="checkbox"
               value={standard}
-              // @ts-expect-error
-              checked={standards[standard]}
-              onChange={(e) => {
-                dispatch({
-                  // @ts-ignore
-                  standard: e.currentTarget.value,
-                  checked: e.currentTarget.checked,
-                });
-                e.stopPropagation();
+              checked={activeStandards.includes(standard)}
+              onChange={({ target }) => {
+                const { value: standard, checked } = target as unknown as {
+                  value: IInitialState['activeStandards'][number];
+                  checked: boolean;
+                };
+                dispatch(
+                  changeActiveStandards({
+                    standard,
+                    checked,
+                  })
+                );
               }}
             />{' '}
             {standard.toUpperCase()}
           </label>
         ))}
       </div>
-      {standards['EN 469'] || standards['EN 20471'] ? (
-        <AdditionalStandardFilter
-          // @ts-ignore
-          standard={getActiveCheckboxes(standards)[0]}
-        />
+      {['EN 469', 'EN 20471'].includes(activeStandards[0]) ? (
+        <AdditionalStandardFilter />
       ) : (
         ''
       )}
@@ -107,5 +54,4 @@ function StandardFilter() {
   );
 }
 
-export { StandardFilter, getActiveCheckboxes };
-export type { StandardFilterState };
+export default StandardFilter;
