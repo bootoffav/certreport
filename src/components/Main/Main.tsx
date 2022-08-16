@@ -15,57 +15,64 @@ import {
   changeFilteredTasks,
 } from 'store/slices/mainSlice';
 import filter from './filter';
+import { shallowEqual } from 'react-redux';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 
 function Main() {
   const dispatch = useAppDispatch();
-  const {
-    stages,
-    allItems,
-    allTasks,
-    activeBrands,
-    startDate,
-    endDate,
-    activeTestingCompanies,
-    activeStandards,
-    additionalStandardFilterTaskList,
-  } = useAppSelector(({ main }) => ({
-    stages: main.stages,
-    allItems: main.allItems,
-    allTasks: main.allTasks,
-    activeBrands: main.activeBrands,
-    startDate: main.startDate,
-    endDate: main.endDate,
-    activeTestingCompanies: main.activeTestingCompanies,
-    activeStandards: main.activeStandards,
-    additionalStandardFilterTaskList: main.additionalStandardFilterTaskList,
-  }));
+  // const {
+  //   stages,
+  //   allItems,
+  //   allTasks,
+  //   activeBrands,
+  //   startDate,
+  //   endDate,
+  //   activeTestingCompanies,
+  //   activeStandards,
+  //   additionalStandardFilterTaskList,
+  // } = useAppSelector(
+  //   ({ main }) => ({
+  //     stages: main.stages,
+  //     allItems: main.allItems,
+  //     allTasks: main.allTasks,
+  //     activeBrands: main.activeBrands,
+  //     startDate: main.startDate,
+  //     endDate: main.endDate,
+  //     activeTestingCompanies: main.activeTestingCompanies,
+  //     activeStandards: main.activeStandards,
+  //     additionalStandardFilterTaskList: main.additionalStandardFilterTaskList,
+  //   }),
+  //   shallowEqual
+  // );
 
-  useEffect(() => {
-    console.log('main useEffect');
-    const { filteredItems, filteredTasks } = filter(allTasks, allItems, {
-      additionalStandardFilterTaskList,
-      activeTestingCompanies,
-      activeStandards,
-      activeBrands,
-      stages,
-      startDate,
-      endDate,
-    });
-    dispatch(changeFilteredItems(filteredItems));
-    dispatch(changeFilteredTasks(filteredTasks));
-  }, [
-    additionalStandardFilterTaskList,
-    activeTestingCompanies,
-    activeStandards,
-    activeBrands,
-    stages,
-    startDate,
-    endDate,
-    allTasks,
-    dispatch,
-    allItems,
-  ]);
+  useEffect(
+    () => {
+      console.log('main useEffect');
+      //   const { filteredItems, filteredTasks } = filter(allTasks, allItems, {
+      //     additionalStandardFilterTaskList,
+      //     activeTestingCompanies,
+      //     activeStandards,
+      //     activeBrands,
+      //     stages,
+      //     startDate,
+      //     endDate,
+      //   });
+      //   dispatch(changeFilteredItems(filteredItems));
+      //   dispatch(changeFilteredTasks(filteredTasks));
+    },
+    [
+      //   additionalStandardFilterTaskList,
+      //   activeTestingCompanies,
+      //   activeStandards,
+      //   activeBrands,
+      //   stages,
+      //   startDate,
+      //   endDate,
+      //   allTasks,
+      //   dispatch,
+      //   allItems,
+    ]
+  );
 
   return (
     <BrowserRouter>

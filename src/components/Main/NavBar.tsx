@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom';
 import { BrandFilter } from '../Filters/BrandFilter';
 import { StandardFilter } from '../Filters/StandardFilter';
 import DateFilter from '../Filters/DateFilter';
-import { TestingCompanyFilter } from '../Filters/TestingCompanyFilter';
+import TestingCompanyFilter from '../Filters/TestingCompanyFilter';
 
 const NavBar = () => (
   <>

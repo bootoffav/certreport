@@ -3,7 +3,7 @@ import fetchPayments from './PaymentsThunk';
 import { baseStages, repeatStages, testingCompanies } from 'defaults';
 
 export interface IInitialState {
-  activeTestingCompanies: (typeof testingCompanies[number] | 'all')[];
+  activeTestingCompanies: ('satra' | 'bttg' | 'aitex' | 'all')[];
   startDate: string | null;
   endDate: string | null;
   activeQuoteNo: string;
@@ -45,59 +45,82 @@ const mainSlice = createSlice({
   name: 'main',
   initialState,
   reducers: {
-    changeStages: (state, { payload }) => {
+    changeStages: (state: IInitialState, { payload }) => {
       state.stages = payload;
     },
-    changeActiveTestingCompanies: (state, { payload }) => {
-      state.activeTestingCompanies = payload;
+    changeActiveTestingCompanies: (
+      state: IInitialState,
+      {
+        payload: { checked, testingCompany },
+      }: PayloadAction<{
+        testingCompany: IInitialState['activeTestingCompanies'][number];
+        checked: boolean;
+      }>
+    ) => {
+      if (testingCompany === 'all') {
+        state.activeTestingCompanies = ['all'];
+        return;
+      }
+      state.activeTestingCompanies = checked
+        ? [...state.activeTestingCompanies, testingCompany].filter(
+            (tc) => tc !== 'all'
+          )
+        : state.activeTestingCompanies.filter((tc) => tc !== testingCompany);
     },
-    changeActiveQuoteNo: (state, { payload }) => {
+
+    changeActiveQuoteNo: (state: IInitialState, { payload }) => {
       state.activeQuoteNo = payload;
     },
-    changeUpdated: (state, { payload }) => {
+    changeUpdated: (state: IInitialState, { payload }) => {
       state.updated = payload;
     },
-    changeTotalPrice: (state, { payload }: PayloadAction<number>) => {
+    changeTotalPrice: (
+      state: IInitialState,
+      { payload }: PayloadAction<number>
+    ) => {
       state.totalPrice = payload;
     },
-    changeTasks: (state, { payload }) => {
+    changeTasks: (state: IInitialState, { payload }) => {
       state.allTasks = payload;
     },
-    changeItems: (state, { payload }) => {
+    changeItems: (state: IInitialState, { payload }) => {
       state.allItems = payload;
     },
-    changeTask: (state, { payload }) => {
+    changeTask: (state: IInitialState, { payload }) => {
       const idx = state.allTasks.findIndex((task) => task.id === payload.id);
       state.allTasks[idx] = payload.task;
     },
-    changeActiveBrands: (state, { payload }) => {
+    changeActiveBrands: (state: IInitialState, { payload }) => {
       state.activeBrands = payload;
     },
     changeStartDate: (
-      state,
+      state: IInitialState,
       { payload }: PayloadAction<IInitialState['startDate']>
     ) => {
       state.startDate = payload;
     },
     changeEndDate: (
-      state,
+      state: IInitialState,
       { payload }: PayloadAction<IInitialState['endDate']>
     ) => {
       state.endDate = payload;
     },
-    changeFilteredItems: (state, { payload }) => {
+    changeFilteredItems: (state: IInitialState, { payload }) => {
       state.filteredItems = payload;
     },
-    changeFilteredTasks: (state, { payload }) => {
+    changeFilteredTasks: (state: IInitialState, { payload }) => {
       state.filteredTasks = payload;
     },
-    changeActiveStandards: (state, { payload }) => {
+    changeActiveStandards: (state: IInitialState, { payload }) => {
       state.activeStandards = payload;
     },
-    changeAdditionalStandardFilterList: (state, { payload }) => {
+    changeAdditionalStandardFilterList: (state: IInitialState, { payload }) => {
       state.additionalStandardFilterTaskList = payload;
     },
-    changePaymentsOfTask: (state, { payload: { taskId, payments } }) => {
+    changePaymentsOfTask: (
+      state: IInitialState,
+      { payload: { taskId, payments } }
+    ) => {
       const idx = state.allTasks.findIndex((task) => task.id === taskId);
       state.allTasks[idx].state.payments = payments;
     },
