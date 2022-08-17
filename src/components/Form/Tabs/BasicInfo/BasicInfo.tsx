@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Dimmer } from 'tabler-react';
 import Select from 'react-select';
-import { Status } from 'components/Notification/Notification';
 import { BaseInput, Article, SerialNumber } from 'components/Form/FormFields';
 import { PreTreatment1 } from 'components/Form/PreTreatment1';
 import { selectOptions } from 'defaults';
@@ -31,7 +29,7 @@ function BasicInfo({ setState, ...props }: any) {
   }, [taskId, setRem, setFactory, props.factory]); // eslint-disable-line
 
   return (
-    <Dimmer active={props.requestStatus !== Status.FillingForm} loader>
+    <>
       <div className="d-flex">
         <BaseInput
           className="w-50"
@@ -317,7 +315,7 @@ function BasicInfo({ setState, ...props }: any) {
           );
         }}
       />
-    </Dimmer>
+    </>
   );
 }
 

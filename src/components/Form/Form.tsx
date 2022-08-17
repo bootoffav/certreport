@@ -9,7 +9,7 @@ import Notification, { Status } from '../Notification/Notification';
 import { emptyState, fabricAppFormInitState } from 'Task/emptyState';
 import type { Payment, TaskState } from 'Task/Task.interface';
 import DB from 'backend/DBManager';
-import { TabbedCard, Button, Icon } from 'tabler-react';
+import { TabbedCard, Button, Icon, Tab } from 'tabler-react';
 import { GoBackOrHomeButton } from '../NaviButton';
 import Dates from './Tabs/Dates';
 import BasicInfo from './Tabs/BasicInfo/BasicInfo';
@@ -18,7 +18,6 @@ import FabricApplicationForm from './FabricAppForm/FabricApplicationForm';
 import { renderStandards } from './Tabs/renderStandards';
 import { getShippingLabelFile } from '../Export/PDF/ShippingLabelFile';
 import Payments from './Payments';
-import { Tab, Dimmer } from 'tabler-react';
 import {
   changeActiveQuoteNo,
   changeTotalPrice,
@@ -45,7 +44,7 @@ class Form extends Component<any> {
     super(props);
     this.state = {
       ...emptyState,
-      requestStatus: Status.FillingForm,
+      requestStatus: Status.Idle,
     };
   }
 
@@ -210,124 +209,117 @@ class Form extends Component<any> {
     setTimeout(
       () =>
         this.setState({
-          requestStatus: Status.FillingForm,
+          requestStatus: Status.Idle,
         }),
       1500
     );
   };
 
-  render = () => (
-    <div className="container mt-2">
-      <Button
-        RootComponent="a"
-        href={`${process.env.REACT_APP_B24_HOST}/company/personal/user/460/tasks/task/view/${this.props.taskId}/`}
-        target="_blank"
-        rel="noopener noreferrer"
-        link
-        className="float-right"
-      >
-        Task in B24
-      </Button>
-      {this.state.requestStatus === Status.FillingForm && (
+  render = () => {
+    return (
+      <div className="container mt-2">
         <Button
-          className="float-right"
+          RootComponent="a"
+          href={`${process.env.REACT_APP_B24_HOST}/company/personal/user/460/tasks/task/view/${this.props.taskId}/`}
+          target="_blank"
+          rel="noopener noreferrer"
           link
-          onClick={(e: any) => {
-            e.preventDefault();
-            getShippingLabelFile({
-              ...this.state,
-              activeQuoteNo: this.props.activeQuoteNo,
-            });
-          }}
-        >
-          Shipping label <Icon prefix="fe" name="download" />
-        </Button>
-      )}
-      {this.state.FabricAppForm && (
-        <Button
           className="float-right"
-          link
-          onClick={(e: any) => {
-            e.preventDefault();
-            new AppFormExport(this.state).save();
-          }}
         >
-          Fabric Application Form <Icon prefix="fe" name="download" />
+          Task in B24
         </Button>
-      )}
-      <Notification status={this.state.requestStatus} />
-      <form onSubmit={this.handleCert.bind(this)}>
-        <TabbedCard initialTab="Basic Info">
-          <Tab title="Basic Info">
-            <BasicInfo
-              {...this.state}
-              handleChange={this.handleChange}
-              asSelectable={this.asSelectable}
-              handleSelectChange={this.handleSelectChange}
-              handlePreTreatment1Change={this.handlePreTreatment1Change}
-              setState={this.setState.bind(this)}
-            ></BasicInfo>
-          </Tab>
-          <Tab title="Dates">
-            <Dates
-              calendarEventName={`${this.state.serialNumber}_${this.state.testingCompany}`}
-              pausedUntil={this.state.pausedUntil}
-              requestStatus={this.state.requestStatus}
-              readyOn={this.state.readyOn}
-              sentOn={this.state.sentOn}
-              receivedOn={this.state.receivedOn}
-              startedOn={this.state.startedOn}
-              testFinishedOnPlanDate={this.state.testFinishedOnPlanDate}
-              testFinishedOnRealDate={this.state.testFinishedOnRealDate}
-              certReceivedOnPlanDate={this.state.certReceivedOnPlanDate}
-              certReceivedOnRealDate={this.state.certReceivedOnRealDate}
-              stage={this.state.stage}
-              handleDateChange={this.handleDateChange}
-            />
-          </Tab>
-          <Tab title="Payments">
-            <Dimmer
-              active={this.state.requestStatus !== Status.FillingForm}
-              loader
-            >
+        {this.state.requestStatus === Status.Idle && (
+          <Button
+            className="float-right"
+            link
+            onClick={(e: any) => {
+              e.preventDefault();
+              getShippingLabelFile({
+                ...this.state,
+                activeQuoteNo: this.props.activeQuoteNo,
+              });
+            }}
+          >
+            Shipping label <Icon prefix="fe" name="download" />
+          </Button>
+        )}
+        {this.state.FabricAppForm && (
+          <Button
+            className="float-right"
+            link
+            onClick={(e: any) => {
+              e.preventDefault();
+              new AppFormExport(this.state).save();
+            }}
+          >
+            Fabric Application Form <Icon prefix="fe" name="download" />
+          </Button>
+        )}
+        {this.state.requestStatus !== Status.Idle && (
+          <Notification status={this.state.requestStatus} />
+        )}
+        <form onSubmit={this.handleCert.bind(this)}>
+          <TabbedCard initialTab="Basic Info">
+            <Tab title="Basic Info">
+              <BasicInfo
+                {...this.state}
+                handleChange={this.handleChange}
+                asSelectable={this.asSelectable}
+                handleSelectChange={this.handleSelectChange}
+                handlePreTreatment1Change={this.handlePreTreatment1Change}
+                setState={this.setState.bind(this)}
+              ></BasicInfo>
+            </Tab>
+            <Tab title="Dates">
+              <Dates
+                calendarEventName={`${this.state.serialNumber}_${this.state.testingCompany}`}
+                pausedUntil={this.state.pausedUntil}
+                requestStatus={this.state.requestStatus}
+                readyOn={this.state.readyOn}
+                sentOn={this.state.sentOn}
+                receivedOn={this.state.receivedOn}
+                startedOn={this.state.startedOn}
+                testFinishedOnPlanDate={this.state.testFinishedOnPlanDate}
+                testFinishedOnRealDate={this.state.testFinishedOnRealDate}
+                certReceivedOnPlanDate={this.state.certReceivedOnPlanDate}
+                certReceivedOnRealDate={this.state.certReceivedOnRealDate}
+                stage={this.state.stage}
+                handleDateChange={this.handleDateChange}
+              />
+            </Tab>
+            <Tab title="Payments">
               <Payments />
-            </Dimmer>
-          </Tab>
-          {renderStandards.call(this)}
-          <Tab title="Fabric Application Form">
-            <Dimmer
-              active={this.state.requestStatus !== Status.FillingForm}
-              loader
-            >
+            </Tab>
+            {renderStandards.call(this)}
+            <Tab title="Fabric Application Form">
               <FabricApplicationForm
                 baseState={this.state.FabricAppForm}
                 updateParent={(FabricAppForm: any) => {
                   this.setState({ FabricAppForm });
                 }}
               />
-            </Dimmer>
-          </Tab>
-          <Tab title="Comments & News">
-            <CommentsNews
-              comments={this.state.comments}
-              news={this.state.news}
-              handleChange={this.handleChange}
-              requestStatus={this.state.requestStatus}
-            />
-          </Tab>
-          <Tab title="Files">
-            <FileManagement />
-          </Tab>
-        </TabbedCard>
-        <div className="d-flex justify-content-around">
-          <button type="submit" className="col-2 btn btn-primary">
-            Save changes
-          </button>
-          <GoBackOrHomeButton />
-        </div>
-      </form>
-    </div>
-  );
+            </Tab>
+            <Tab title="Comments & News">
+              <CommentsNews
+                comments={this.state.comments}
+                news={this.state.news}
+                handleChange={this.handleChange}
+              />
+            </Tab>
+            <Tab title="Files">
+              <FileManagement />
+            </Tab>
+          </TabbedCard>
+          <div className="d-flex justify-content-around">
+            <button type="submit" className="col-2 btn btn-primary">
+              Save changes
+            </button>
+            <GoBackOrHomeButton />
+          </div>
+        </form>
+      </div>
+    );
+  };
   updateAttachedFiles = () =>
     B24.getAttachedFiles(this.props.taskId).then((r: []) => {
       this.setState({ attachedFiles: r });

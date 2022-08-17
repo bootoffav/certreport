@@ -1,4 +1,3 @@
-import { Dimmer } from 'tabler-react';
 import dayjs from 'dayjs';
 import { PickDate } from '../FormFields';
 import { Status } from 'components/Notification/Notification';
@@ -44,7 +43,7 @@ function Dates(props: DatesProps) {
 
   const repeatedStages = stages[1].options.map((stage: any) => stage.label);
   return (
-    <Dimmer active={props.requestStatus !== Status.FillingForm} loader>
+    <>
       <div className="d-flex justify-content-center m-2">
         <PickDate
           date={props.pausedUntil}
@@ -162,7 +161,7 @@ function Dates(props: DatesProps) {
         />
       </div>
       {repeatedStages.includes(props.stage) && <RepeatDates />}
-    </Dimmer>
+    </>
   );
 }
 

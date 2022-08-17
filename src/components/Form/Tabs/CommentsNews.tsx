@@ -1,22 +1,14 @@
-import { Dimmer } from 'tabler-react';
-import { Status } from 'components/Notification/Notification';
 import { BaseInput } from '../FormFields';
 
 interface CommentsNewsProps {
   news: string;
   comments: string;
   handleChange: any;
-  requestStatus: Status;
 }
 
-function CommentsNews({
-  news,
-  comments,
-  handleChange,
-  requestStatus,
-}: CommentsNewsProps) {
+function CommentsNews({ news, comments, handleChange }: CommentsNewsProps) {
   return (
-    <Dimmer active={requestStatus !== Status.FillingForm} loader>
+    <>
       <div className="form-row">
         <BaseInput
           required={false}
@@ -37,7 +29,7 @@ function CommentsNews({
           onChange={handleChange}
         />
       </div>
-    </Dimmer>
+    </>
   );
 }
 
