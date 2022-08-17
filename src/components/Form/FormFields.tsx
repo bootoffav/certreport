@@ -133,15 +133,15 @@ interface ArticleProps {
   handleChange: (a: any) => void;
 }
 
-class Article extends React.Component<ArticleProps> {
-  formatGroupLabel = (data: any) => (
+function Article(props: ArticleProps) {
+  const formatGroupLabel = (data: any) => (
     <div className="Article_groupStyles">
       <span>{data.label}</span>
       <span className="Article_groupBadgeStyles">{data.options.length}</span>
     </div>
   );
 
-  onChange = async ({ value, label }: { value: any; label: any }) => {
+  const onChange = async ({ value, label }: { value: any; label: any }) => {
     const brand_map: {
       [key: number]: string;
     } = {
@@ -150,7 +150,7 @@ class Article extends React.Component<ArticleProps> {
       8572: 'XMS',
     };
 
-    this.props.handleChange({ value, label });
+    props.handleChange({ value, label });
     let { PROPERTY_420, PROPERTY_384, PROPERTY_380, PROPERTY_482, SECTION_ID } =
       await B24.get_product(value);
     const product = `${PROPERTY_420?.value ?? ''}, ${
@@ -159,18 +159,17 @@ class Article extends React.Component<ArticleProps> {
     const code = PROPERTY_380?.value || '';
     const brand = brand_map[SECTION_ID] || '';
     const colour = PROPERTY_482 ? PROPERTY_482.value : '';
-    this.props.handleSlaveChange(product, code, brand, colour);
+    props.handleSlaveChange(product, code, brand, colour);
   };
 
-  render = () => (
+  return (
     <>
       Article
       <Select
-        value={this.props.value}
-        // @ts-ignore
-        onChange={this.onChange}
-        options={this.props.options}
-        formatGroupLabel={this.formatGroupLabel}
+        value={props.value}
+        onChange={onChange}
+        options={props.options}
+        formatGroupLabel={formatGroupLabel}
       />
     </>
   );
