@@ -99,11 +99,6 @@ async function formTaskFields(state: any, taskId?: string) {
         state.testingCompany &&
         `[B]Testing company:[/B] ${state.testingCompany}\n`
       }` +
-      `${
-        state.proformaReceivedDate &&
-        state.proformaNumber &&
-        `[B]Proforma:[/B] ${state.proformaReceivedDate}, ${state.proformaNumber}\n`
-      }` +
       `${state.testReport && `[B]Test report:[/B] ${state.testReport}\n`}` +
       `${state.certificate && `[B]Certificate:[/B] ${state.certificate}\n`}` +
       `${
