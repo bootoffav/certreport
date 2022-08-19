@@ -6,7 +6,7 @@ import { Grid, Icon } from 'tabler-react';
 import { getItemAssociatedTasks } from 'B24/B24';
 import { getTaskParamLabel } from 'Task/Task';
 import './ItemInCertifications.css';
-import { GoBackOrHomeButton } from '../NaviButton';
+import GoBackButton from '../GoBackButton';
 import { pullSpecificFiles } from '../FileManagement/FileManagement';
 import Items from 'Item/Item';
 import { getTaskTotalPriceHelper } from 'helpers';
@@ -111,7 +111,7 @@ function ItemInCertifications() {
       </Grid.Col>
       <Grid.Col width="8" offset="2">
         <div className="d-flex justify-content-center mt-3">
-          <GoBackOrHomeButton />
+          <GoBackButton />
         </div>
       </Grid.Col>
     </>

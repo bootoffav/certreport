@@ -10,7 +10,7 @@ import { emptyState, fabricAppFormInitState } from 'Task/emptyState';
 import type { Payment, TaskState } from 'Task/Task.interface';
 import DB from 'backend/DBManager';
 import { TabbedCard, Button, Icon, Tab } from 'tabler-react';
-import { GoBackOrHomeButton } from '../NaviButton';
+import GoBackButton from '../GoBackButton';
 import Dates from './Tabs/Dates';
 import BasicInfo from './Tabs/BasicInfo/BasicInfo';
 import CommentsNews from './Tabs/CommentsNews';
@@ -308,7 +308,7 @@ class Form extends Component<any> {
             <button type="submit" className="col-2 btn btn-primary">
               Save changes
             </button>
-            <GoBackOrHomeButton />
+            <GoBackButton />
           </div>
         </form>
       </div>
