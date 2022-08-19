@@ -82,7 +82,6 @@ async function formTaskFields(state: any, taskId?: string) {
       `${state.code && `[B]Code:[/B] ${state.code}\n`}` +
       `${state.article && `[B]Article:[/B] ${state.article}\n`}` +
       `${state.colour && `[B]Colour:[/B] ${state.colour}\n`}` +
-      `${state.factory && `[B]Factory:[/B] ${state.factory}\n`}` +
       `${
         state.serialNumber && `[B]Serial number:[/B] ${state.serialNumber}\n`
       }` +

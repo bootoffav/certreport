@@ -180,12 +180,6 @@ class Form extends Component<any> {
               .catch(this.unsuccessfullySubmitted);
           }
         });
-
-      DB.updateInstance(
-        taskId,
-        { factory: this.state.factory },
-        'certification'
-      );
     }
   }
 
@@ -200,7 +194,7 @@ class Form extends Component<any> {
 
   successfullySubmitted = () => {
     this.setState({ requestStatus: Status.Success });
-    setTimeout(() => this.props.navigate(-1), 1000);
+    setTimeout(() => this.props.navigate('/'), 1000);
   };
 
   unsuccessfullySubmitted = (error: unknown) => {

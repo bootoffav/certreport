@@ -17,16 +17,14 @@ function BasicInfo({ setState, ...props }: any) {
     (async function () {
       if (taskId) {
         DB.get(taskId, ['data', 'factory'], 'certification')
-          .then((factory) => {
-            setState({ factory }, () => setFactory(factory));
-          })
-          .catch(() => setFactory(props.factory));
+          .then(setFactory)
+          .catch(() => console.log('factory not found in DB'));
         DB.getFabricAppFormState(taskId).then(({ rem }) => {
           rem && setRem(rem);
         });
       }
     })();
-  }, [taskId, setRem, setFactory, props.factory]); // eslint-disable-line
+  }, [taskId, setRem, setFactory]);
 
   return (
     <>
@@ -271,14 +269,9 @@ function BasicInfo({ setState, ...props }: any) {
           handleChange={({ target }) =>
             setFactory((target as HTMLInputElement).value)
           }
-          onBlur={() => {
-            setState(
-              { factory },
-              () =>
-                taskId &&
-                DB.updateInstance(taskId, { factory }, 'certification')
-            );
-          }}
+          onBlur={() =>
+            taskId && DB.updateInstance(taskId, { factory }, 'certification')
+          }
         />
       </div>
       <div className="d-flex">
@@ -308,12 +301,7 @@ function BasicInfo({ setState, ...props }: any) {
         handleChange={({ target }) =>
           setRem((target as HTMLInputElement).value)
         }
-        onBlur={() => {
-          setState(
-            { rem },
-            () => taskId && DB.updateInstance(taskId, { rem }, 'aitex')
-          );
-        }}
+        onBlur={() => taskId && DB.updateInstance(taskId, { rem }, 'aitex')}
       />
     </>
   );
