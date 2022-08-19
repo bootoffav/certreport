@@ -42,7 +42,7 @@ function Main() {
       activeStandards: main.activeStandards,
       additionalStandardFilterTaskList: main.additionalStandardFilterTaskList,
     }),
-    (left, right) => !isEqual(left, right)
+    (left, right) => isEqual(left, right)
   );
 
   useEffect(() => {
