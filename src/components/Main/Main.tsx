@@ -72,9 +72,8 @@ function Main() {
 
   return (
     <BrowserRouter>
-      <div className="container-fluid">
-        <NavBar />
-        <Routes>
+      <Routes>
+        <Route path="/" element={<NavBar />}>
           <Route
             path="/dashboard"
             element={<Animated children={<Dashboard />} />}
@@ -105,9 +104,9 @@ function Main() {
               />
             }
           />
-          <Route path="*" element={Error404Page} />
-        </Routes>
-      </div>
+        </Route>
+        <Route path="*" element={Error404Page} />
+      </Routes>
     </BrowserRouter>
   );
 }

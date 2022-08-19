@@ -34,7 +34,13 @@ function App() {
   }, [dispatch]);
 
   const updated = useAppSelector(({ main }) => main.updated);
-  return updated ? <Main /> : <AppLoader />;
+  return updated ? (
+    <div className="container-fluid">
+      <Main />
+    </div>
+  ) : (
+    <AppLoader />
+  );
 }
 
 export default App;

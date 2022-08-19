@@ -3,6 +3,7 @@ import { BrandFilter } from '../Filters/BrandFilter';
 import StandardFilter from '../Filters/StandardFilter';
 import DateFilter from '../Filters/DateFilter';
 import TestingCompanyFilter from '../Filters/TestingCompanyFilter';
+import { Outlet } from 'react-router-dom';
 
 const NavBar = () => (
   <>
@@ -25,6 +26,7 @@ const NavBar = () => (
         <StandardFilter />
       </div>
     </div>
+    <Outlet />
   </>
 );
 
