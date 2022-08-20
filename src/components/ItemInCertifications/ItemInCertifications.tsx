@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import Loader from 'react-loader-spinner';
 import { Grid, Icon } from 'tabler-react';
 import { getItemAssociatedTasks } from 'B24/B24';
@@ -158,4 +157,4 @@ function formatColumn(task: any, param: string): any[] | string {
   }
 }
 
-export { ItemInCertifications };
+export default ItemInCertifications;

@@ -2,11 +2,8 @@ import { useEffect, Suspense, lazy } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Error404Page } from 'tabler-react';
 import CertificationList from '../Lists/Certification/CertificationList';
-import ItemList from '../Lists/ItemList/ItemList';
 import Animated from 'components/Animated';
-import ExpiringCerts from '../ExpiringCerts/ExpiringCerts';
 import ErrorBoundary from 'ErrorBoundary';
-import { ItemInCertifications } from '../ItemInCertifications/ItemInCertifications';
 import {
   changeFilteredItems,
   changeFilteredTasks,
@@ -18,6 +15,11 @@ import { isEqual } from 'lodash';
 const NavBar = lazy(() => import('./NavBar'));
 const Dashboard = lazy(() => import('../Dashboard/Dashboard'));
 const Form = lazy(() => import('../Form/Form'));
+const ExpiringCerts = lazy(() => import('../ExpiringCerts/ExpiringCerts'));
+const ItemInCertifications = lazy(
+  () => import('../ItemInCertifications/ItemInCertifications')
+);
+const ItemList = lazy(() => import('../Lists/ItemList/ItemList'));
 
 function Main() {
   const dispatch = useAppDispatch();
