@@ -11,6 +11,7 @@ import {
 import filter from './filter';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { isEqual } from 'lodash';
+import AppLoader from 'components/AppLoader';
 
 const NavBar = lazy(() => import('./NavBar'));
 const Dashboard = lazy(() => import('../Dashboard/Dashboard'));
@@ -75,16 +76,16 @@ function Main() {
 
   return (
     <BrowserRouter>
-      <Suspense>
+      <Suspense fallback={<AppLoader />}>
         <Routes>
           <Route path="/" element={<NavBar />}>
             <Route
-              path="/dashboard"
-              element={<Animated children={<Dashboard />} />}
-            />
-            <Route
               path="/"
               element={<Animated children={<CertificationList />} />}
+            />
+            <Route
+              path="/dashboard"
+              element={<Animated children={<Dashboard />} />}
             />
             <Route
               path="/expiringcerts"
