@@ -47,7 +47,7 @@ const testingCompanies = [
   'CSI-Serico (Italy)',
   'Leitat (Spain)',
   'Satra (UK)',
-  'VTEC Laboratories Inc (USA)',
+  'VTEC (USA)',
 ] as const;
 
 let selectOptions: {
