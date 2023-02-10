@@ -47,6 +47,7 @@ const testingCompanies = [
   'CSI-Serico (Italy)',
   'Leitat (Spain)',
   'Satra (UK)',
+  'UL (USA)',
   'VTEC (USA)',
 ] as const;
 
