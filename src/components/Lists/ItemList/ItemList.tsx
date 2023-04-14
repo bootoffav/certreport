@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import ReactTable, { CellInfo } from 'react-table';
 import ColumnFilter from '../Filters/ColumnFilter';
 import type { ItemType, taskOfItem } from 'Item/Item';
@@ -11,18 +11,17 @@ const columns = [
     // 0
     Header: '#',
     id: 'position',
-    accessor: 'position',
+    Cell: (cell: CellInfo) => cell.page * cell.pageSize + cell.viewIndex + 1,
     width: 40,
   },
   {
     // 1
     Header: 'Item',
     id: 'item',
-    Cell: ({ original }: CellInfo) => (
+    accessor: 'article',
+    Cell: ({ value }: CellInfo) => (
       <Tooltip content="Item's relevant certs" placement="right">
-        <Link to={`/item/${encodeURIComponent(original.article)}/`}>
-          {original.article}
-        </Link>
+        <Link to={`/item/${encodeURIComponent(value)}/`}>{value}</Link>
       </Tooltip>
     ),
     width: 150,
@@ -70,12 +69,8 @@ const columns = [
 ];
 
 function ItemList() {
-  const items = useAppSelector(({ main }) => main.filteredItems);
-  const [visibleTasks, setVisibleTasks] = useState<ItemType[]>();
-
-  useEffect(() => {
-    setVisibleTasks(items);
-  }, [items]);
+  let { filteredItems: items } = useAppSelector(({ main }) => main);
+  const [visibleTasks, setVisibleTasks] = useState<ItemType[]>(items);
 
   return (
     <Grid.Row>
@@ -87,9 +82,6 @@ function ItemList() {
         <ReactTable
           data={visibleTasks}
           columns={columns}
-          resolveData={(data: ItemType[], i = 1) =>
-            data.map((row) => ({ ...row, position: i++ }))
-          }
           className="-highlight table"
           defaultPageSize={20}
         />
