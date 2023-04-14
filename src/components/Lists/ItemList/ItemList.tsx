@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ReactTable, { CellInfo } from 'react-table';
 import ColumnFilter from '../Filters/ColumnFilter';
 import type { ItemType, taskOfItem } from 'Item/Item';
@@ -72,11 +72,15 @@ function ItemList() {
   let { filteredItems: items } = useAppSelector(({ main }) => main);
   const [visibleTasks, setVisibleTasks] = useState<ItemType[]>(items);
 
+  useEffect(() => {
+    setVisibleTasks(items);
+  }, [items]);
+
   return (
     <Grid.Row>
       <Grid.Col>
         <ColumnFilter
-          update={(visibleTasks: any) => setVisibleTasks(visibleTasks)}
+          update={(vT: typeof visibleTasks) => setVisibleTasks(vT)}
           dataType="items"
         />
         <ReactTable
