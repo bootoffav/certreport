@@ -86,7 +86,7 @@
   ],
   "volta": {
     "node": "16.16.0",
-    "yarn": "1.22.19"
+    "yarn": "3.4.1"
   },
   "resolutions": {
     "styled-components": "^5"
