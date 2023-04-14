@@ -23,7 +23,7 @@ function getColumns(totalPrice: number, stage?: string) {
       // 0
       Header: '#',
       sortable: false,
-      Cell: ({ index }: any) => index + 1,
+      Cell: (cell: CellInfo) => cell.page * cell.pageSize + cell.viewIndex + 1,
       width: 35,
     },
     {
