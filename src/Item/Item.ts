@@ -20,7 +20,7 @@ function Items(tasks: any[]): ItemType[] {
   tasks.forEach((t) => {
     if (t.state && t.state.article) {
       let { article, standards, brand, testingCompany } = t.state;
-      standards = standards.split(', ');
+      standards = standards === '' ? [] : standards.split(', ');
 
       // check for existence
       const indexOfItem = items.findIndex((item) => item.article === article);
