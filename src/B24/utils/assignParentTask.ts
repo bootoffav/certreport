@@ -49,6 +49,12 @@ export const parentTasksMap = {
     XMS: 97256,
     base: 97248,
   },
+  2023: {
+    XMF: 114734,
+    XMS: 114736,
+    XMT: 114730,
+    base: 114686,
+  },
 } as const;
 
 function assignParentTask(createdDate?: string, brand?: TaskState['brand']) {
@@ -61,9 +67,7 @@ function assignParentTask(createdDate?: string, brand?: TaskState['brand']) {
     // @ts-ignore
     return taskId === undefined ? parentTasksMap[year].base : taskId; // case when brand has no corresponding task id
   } catch (e) {
-    // @ts-ignore
     return '';
-    // return parentTasksMap[year | currentYear].base;
   }
 }
 
