@@ -6,41 +6,34 @@ interface IColumnFilterProps {
   update: any;
 }
 
-function filter(
-  value: string,
-  dataToFilter: any[],
-  typeOfFilteringData: 'tasks' | 'items'
-) {
-  const valueLowered = value.toLowerCase();
-
-  const filterItems = (item: any) => {
-    const titles = item.tasks.map((task: any) => task.title);
-    return titles.join(', ').toLowerCase().includes(valueLowered);
-  };
-
-  const filterTasks = (task: any) =>
-    task['title'].toLowerCase().includes(valueLowered);
-
-  return typeOfFilteringData === 'items'
-    ? dataToFilter.filter(filterItems)
-    : dataToFilter.filter(filterTasks);
-}
-
 const ColumnFilter = ({ dataType, update }: IColumnFilterProps) => {
   const [searchFor, setSearchFor] = useState('');
   const dataToFilter = useAppSelector(({ main }) =>
     dataType === 'tasks' ? main.filteredTasks : main.filteredItems
   );
 
+  function filter(searchThis: string) {
+    const filterItems = ({ article }: any) => {
+      return article.toLowerCase().includes(searchThis);
+    };
+
+    const filterTasks = (task: any) =>
+      task['title'].toLowerCase().includes(searchThis);
+
+    return dataToFilter.filter(dataType == 'items' ? filterItems : filterTasks);
+  }
+
   return (
     <input
       type="text"
       className="form-control"
-      placeholder="search by title"
+      placeholder={
+        'search by ' + `${dataType == 'items' ? 'item' : 'task name'}`
+      }
       value={searchFor}
-      onChange={({ currentTarget: { value } }) => {
-        const visibleTasks = filter(value, dataToFilter, dataType);
-        setSearchFor(value);
+      onChange={({ currentTarget: { value: searchThis } }) => {
+        const visibleTasks = filter(searchThis.toLowerCase());
+        setSearchFor(searchThis);
         update(visibleTasks);
       }}
     />
