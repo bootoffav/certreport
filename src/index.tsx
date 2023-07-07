@@ -2,6 +2,7 @@ import 'tabler-react/dist/Tabler.css';
 import 'react-table/react-table.css';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import './css/style.css';
+import 'react-datepicker/dist/react-datepicker.css';
 import 'bootstrap';
 import netlifyIdentity from 'netlify-identity-widget';
 import { initApp } from './defaults';
