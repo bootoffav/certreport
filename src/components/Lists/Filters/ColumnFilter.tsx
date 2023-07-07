@@ -20,16 +20,16 @@ const ColumnFilter = ({ dataType, update }: IColumnFilterProps) => {
     const filterTasks = (task: any) =>
       task['title'].toLowerCase().includes(searchThis);
 
-    return dataToFilter.filter(dataType == 'items' ? filterItems : filterTasks);
+    return dataToFilter.filter(
+      dataType === 'items' ? filterItems : filterTasks
+    );
   }
 
   return (
     <input
       type="text"
       className="form-control"
-      placeholder={
-        'search by ' + `${dataType == 'items' ? 'item' : 'task name'}`
-      }
+      placeholder={`search by ${dataType === 'items' ? 'item' : 'task name'}`}
       value={searchFor}
       onChange={({ currentTarget: { value: searchThis } }) => {
         const visibleTasks = filter(searchThis.toLowerCase());
