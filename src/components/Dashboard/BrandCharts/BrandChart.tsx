@@ -130,7 +130,7 @@ function BrandChart({ brand }: BrandChartProps) {
     datasets: [
       {
         label:
-          `${brand} Products ` +
+          `${brand} Certifications` +
           (chartResume !== '' ? `(${chartResume})` : '') +
           `: ${articlesInChartAmount}`,
         data: articlesAmount,
