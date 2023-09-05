@@ -27,7 +27,7 @@ function makeDocDefinition({
         style: 'section',
       },
       {
-        text: 'PPE DEPARTMENT\nAtt. LUCIA BENAVENT',
+        text: 'PPE DEPARTMENT\nAtt. Joan Risueño',
         style: ['section', 'bold'],
       },
       {

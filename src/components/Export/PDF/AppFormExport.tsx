@@ -43,10 +43,10 @@ class AppFormExport {
             'Applicant of report',
             { text: this.state.applicantName, fillColor: '#FFFF08' },
           ],
-          ['Contact Person', { text: 'Vitaly Aliev', fillColor: '#FFFF08' }],
+          ['Contact Person', { text: 'Irina Danilova', fillColor: '#FFFF08' }],
           [
             'Contact email',
-            { text: 'vit@xmtextiles.com', fillColor: '#FFFF08' },
+            { text: 'irina@xmtextiles.com', fillColor: '#FFFF08' },
           ],
         ],
       },

@@ -32,7 +32,7 @@ function BasicInfo({ setState, ...props }: any) {
         <BaseInput
           className="w-50"
           value={props.applicantName}
-          placeholder="SHANGHAI XM GROUP LTD"
+          placeholder="XM TEXTILES POLSKA SP. Z O. O."
           id="applicantName"
           label="Applicant name"
           handleChange={props.handleChange}
