@@ -44,7 +44,7 @@ async function get_products() {
         .then(step);
       start = next;
       productsInSection = productsInSection.concat(result);
-      const delay = async (ms = 600) =>
+      const delay = async (ms = 800) =>
         await new Promise((res) => setTimeout(res, Number(ms)));
       await delay();
     } while (start !== undefined);

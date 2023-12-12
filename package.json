@@ -84,11 +84,11 @@
     ">0.2%",
     "not dead"
   ],
-  "volta": {
-    "node": "16.16.0",
-    "yarn": "3.4.1"
-  },
   "resolutions": {
     "styled-components": "^5"
+  },
+  "volta": {
+    "node": "16.20.2",
+    "yarn": "1.22.19"
   }
 }

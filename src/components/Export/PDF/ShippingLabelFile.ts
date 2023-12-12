@@ -23,7 +23,7 @@ function makeDocDefinition({
         },
       },
       {
-        text: 'Plaza Emilio Sala, nº1\n03801-Alcoy (Alicante)\nESPAÑA',
+        text: 'Carretera de Bañeres & Calle Societat Unió Musical\n03802-Alcoy (Alicante)\nESPAÑA',
         style: 'section',
       },
       {
