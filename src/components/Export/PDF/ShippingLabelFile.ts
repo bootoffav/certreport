@@ -27,7 +27,7 @@ function makeDocDefinition({
         style: 'section',
       },
       {
-        text: 'PPE DEPARTMENT\nAtt. Joan Risueño',
+        text: 'PPE DEPARTMENT\nAtt. Mauro Terol',
         style: ['section', 'bold'],
       },
       {
