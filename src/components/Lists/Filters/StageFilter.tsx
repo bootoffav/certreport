@@ -1,7 +1,7 @@
 import Select from 'react-select';
-import { stages as stagesOptionsDefault } from 'defaults';
-import { useAppSelector, useAppDispatch } from 'store/hooks';
-import { changeStages } from 'store/slices/mainSlice';
+import { stages as stagesOptionsDefault } from '../../../defaults';
+import { useAppSelector, useAppDispatch } from '../../../store/hooks';
+import { changeStages } from '../../../store/slices/mainSlice';
 
 type SelectItem = {
   value?: string;

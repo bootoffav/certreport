@@ -1,4 +1,4 @@
-import { getTaskParamLabel } from 'Task/Task';
+import { getTaskParamLabel } from '../../Task/Task';
 import { Icon } from 'tabler-react';
 
 interface PreTreatment1Props {

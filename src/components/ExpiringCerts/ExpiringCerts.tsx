@@ -4,8 +4,8 @@ import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import type { TaskState } from 'Task/Task.interface';
 import './ExpiringCertsTab.css';
-import DB from 'backend/DBManager';
-import { useAppSelector } from 'store/hooks';
+import DB from '../../backend/DBManager';
+import { useAppSelector } from '../../store/hooks';
 
 export type TabProps = {
   tasks?: TaskState[];
@@ -91,7 +91,9 @@ const TabContent = ({ months, tasks }: TabProps) => {
               </td>
               <td>
                 <a
-                  href={`${process.env.REACT_APP_B24_HOST}/company/personal/user/460/tasks/task/view/${task[0]}/`}
+                  href={`${
+                    import.meta.env.VITE_B24_HOST
+                  }/company/personal/user/460/tasks/task/view/${task[0]}/`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >

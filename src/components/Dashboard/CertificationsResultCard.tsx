@@ -1,8 +1,11 @@
 import { Card } from 'tabler-react';
-import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { TaskState, Payment } from 'Task/Task.interface';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { TaskState, Payment } from '../../Task/Task.interface';
 import './CertificationsResultCard.css';
-import { changeResume, changeTableTasks } from 'store/slices/dashboardSlice';
+import {
+  changeResume,
+  changeTableTasks,
+} from '../../store/slices/dashboardSlice';
 
 type CertificationsResultCardProps = {
   resume: TaskState['resume'] | '' | 'allWithResults';

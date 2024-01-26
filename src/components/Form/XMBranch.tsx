@@ -1,7 +1,7 @@
 import Select from 'react-select';
-import { XMBranchOptions } from 'defaults';
+import { XMBranchOptions } from '../../defaults';
 import { useState, useEffect } from 'react';
-import DB from 'backend/DBManager';
+import DB from '../../backend/DBManager';
 import { useParams } from 'react-router';
 
 function XMBranch() {

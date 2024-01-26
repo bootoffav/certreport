@@ -1,7 +1,7 @@
-import { selectOptions } from 'defaults';
+import { selectOptions } from '../../../../../defaults';
 import Select, { components } from 'react-select';
 import { useEffect, useReducer } from 'react';
-import DB from 'backend/DBManager';
+import DB from '../../../../../backend/DBManager';
 
 function standardsForTitleReducer(state: any, { type, payload }: any) {
   switch (type) {

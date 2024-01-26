@@ -1,4 +1,4 @@
-import DB from 'backend/DBManager';
+import DB from '../../backend/DBManager';
 import { query as q } from 'faunadb';
 import { Payment } from 'Task/Task.interface';
 

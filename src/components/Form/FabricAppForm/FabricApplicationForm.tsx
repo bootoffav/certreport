@@ -8,8 +8,8 @@ import FabricAppFormReducer from './FabricAppFormReducer';
 import { useParams } from 'react-router';
 
 import './FabricApplicationForm.css';
-import DB from 'backend/DBManager';
-import { fabricAppFormInitState } from 'Task/emptyState';
+import DB from '../../../backend/DBManager';
+import { fabricAppFormInitState } from '../../../Task/emptyState';
 
 type FabricAppFormProps = {
   updateParent: any;

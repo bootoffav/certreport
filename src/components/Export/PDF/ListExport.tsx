@@ -86,7 +86,9 @@ class ListExport extends Component<{
             row.push({
               text: tasks[i][acc],
               color: 'blue',
-              link: `${process.env.REACT_APP_B24_HOST}/company/personal/user/${process.env.REACT_APP_B24_USER_ID}/tasks/task/view/${tasks[i].id}/`,
+              link: `${import.meta.env.VITE_B24_HOST}/company/personal/user/${
+                import.meta.env.VITE_B24_USER_ID
+              }/tasks/task/view/${tasks[i].id}/`,
             });
             break;
           case 'state.article':
@@ -102,7 +104,7 @@ class ListExport extends Component<{
                 text: `${file.NAME}`,
                 decoration: 'underline',
                 color: 'blue',
-                link: `${process.env.REACT_APP_B24_HOST}${file.VIEW_URL}`,
+                link: `${import.meta.env.VITE_B24_HOST}${file.VIEW_URL}`,
               }))
             );
             break;

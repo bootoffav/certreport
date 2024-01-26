@@ -1,15 +1,15 @@
-import { useAppSelector, useAppDispatch } from 'store/hooks';
-import Main from 'components/Main/Main';
-import AppLoader from 'components/AppLoader';
-import getTasks from 'workers/dataFetcher';
+import { useAppSelector, useAppDispatch } from '../../store/hooks';
+import Main from '../Main/Main';
+import AppLoader from '../AppLoader';
+import getTasks from '../../workers/dataFetcher';
 import { useEffect } from 'react';
-import Items from 'Item/Item';
+import Items from '../../Item/Item';
 import {
   changeUpdated,
   changeItems,
   changeTasks,
-} from 'store/slices/mainSlice';
-import fetchPayments from 'components/App/fetchPayments';
+} from '../../store/slices/mainSlice';
+import fetchPayments from '../App/fetchPayments';
 
 function App() {
   const dispatch = useAppDispatch();

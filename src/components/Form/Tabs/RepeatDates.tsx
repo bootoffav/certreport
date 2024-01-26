@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
-import DB from 'backend/DBManager';
+import DB from '../../../backend/DBManager';
 import { PickDate } from '../FormFields';
 import { useParams } from 'react-router-dom';
 

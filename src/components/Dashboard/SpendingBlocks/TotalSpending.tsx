@@ -5,8 +5,8 @@ import {
   changeSpendingBlocksTimePeriod,
   IDashboardSlice,
   changeTableTasks,
-} from 'store/slices/dashboardSlice';
-import { useAppDispatch, useAppSelector } from 'store/hooks';
+} from '../../../store/slices/dashboardSlice';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 
 function TotalSpending({
   spendingBlocks,

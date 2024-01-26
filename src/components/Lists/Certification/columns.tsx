@@ -1,7 +1,11 @@
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { Icon } from 'tabler-react';
-import { dateConverter, printStage, getTaskTotalPriceHelper } from 'helpers';
+import {
+  dateConverter,
+  printStage,
+  getTaskTotalPriceHelper,
+} from '../../../helpers';
 import type { CellInfo } from 'react-table';
 
 function sortDates(a: string | undefined, b: string | undefined): number {
@@ -34,7 +38,9 @@ function getColumns(totalPrice: number, stage?: string) {
       width: 48,
       Cell: (props: any) => (
         <a
-          href={`${process.env.REACT_APP_B24_HOST}/company/personal/user/460/tasks/task/view/${props.original.id}/`}
+          href={`${
+            import.meta.env.VITE_B24_HOST
+          }/company/personal/user/460/tasks/task/view/${props.original.id}/`}
           target="_blank"
           rel="noopener noreferrer"
         >

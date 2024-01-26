@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { useAppSelector } from 'store/hooks';
+import { useAppSelector } from '../../../store/hooks';
 import ReactTable from 'react-table';
 import { getColumns } from './columns';
 import StageFilter from '../Filters/StageFilter';
 import ColumnFilter from '../Filters/ColumnFilter';
 import './List.css';
-import { countTotalPrice } from 'helpers';
+import { countTotalPrice } from '../../../helpers';
 import { isEqual } from 'lodash';
 
 function CertificationList() {

@@ -7,10 +7,10 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-import { useAppSelector, useAppDispatch } from 'store/hooks';
+import { useAppSelector, useAppDispatch } from '../../../store/hooks';
 import { Bar } from 'react-chartjs-2';
-import { IInitialState } from 'store/slices/mainSlice';
-import { changeTableTasks } from 'store/slices/dashboardSlice';
+import { IInitialState } from '../../../store/slices/mainSlice';
+import { changeTableTasks } from '../../../store/slices/dashboardSlice';
 
 type BrandChartProps = {
   brand: IInitialState['activeBrands'][number];

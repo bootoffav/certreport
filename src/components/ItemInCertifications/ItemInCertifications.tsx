@@ -2,13 +2,13 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Loader from 'react-loader-spinner';
 import { Grid, Icon } from 'tabler-react';
-import { getItemAssociatedTasks } from 'B24/B24';
-import { getTaskParamLabel } from 'Task/Task';
+import { getItemAssociatedTasks } from '../../B24/B24';
+import { getTaskParamLabel } from '../../Task/Task';
 import './ItemInCertifications.css';
 import GoBackButton from '../GoBackButton';
 import { pullSpecificFiles } from '../FileManagement/FileManagement';
-import Items from 'Item/Item';
-import { getTaskTotalPriceHelper } from 'helpers';
+import Items from '../../Item/Item';
+import { getTaskTotalPriceHelper } from '../../helpers';
 
 const resume: {
   [key: string]: any;
@@ -83,7 +83,9 @@ function ItemInCertifications() {
                     <Link to={`/edit/${task.id}`}>{task.title} </Link>
                     &nbsp;|&nbsp;
                     <a
-                      href={`${process.env.REACT_APP_B24_HOST}/company/personal/user/460/tasks/task/view/${task.id}/`}
+                      href={`${
+                        import.meta.env.VITE_B24_HOST
+                      }/company/personal/user/460/tasks/task/view/${task.id}/`}
                       target="_blank"
                       rel="noreferrer"
                     >
@@ -128,7 +130,7 @@ function formatColumn(task: any, param: string): any[] | string {
       );
       return testReportFiles.map((file) => (
         <div key={file.ATTACHMENT_ID}>
-          <a href={`${process.env.REACT_APP_B24_HOST}${file.DOWNLOAD_URL}`}>
+          <a href={`${import.meta.env.VITE_B24_HOST}${file.DOWNLOAD_URL}`}>
             {file.NAME}
           </a>
         </div>
@@ -141,7 +143,7 @@ function formatColumn(task: any, param: string): any[] | string {
       );
       return certificateFiles.map((file) => (
         <div key={file.ATTACHMENT_ID}>
-          <a href={`${process.env.REACT_APP_B24_HOST}${file.DOWNLOAD_URL}`}>
+          <a href={`${import.meta.env.VITE_B24_HOST}${file.DOWNLOAD_URL}`}>
             {file.NAME}
           </a>
         </div>

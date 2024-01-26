@@ -3,14 +3,14 @@ import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import quarterOfYear from 'dayjs/plugin/quarterOfYear';
 import styles from './SpendingBlocks.module.css';
-import { useAppSelector, useAppDispatch } from 'store/hooks';
-import { TaskState, Payment } from 'Task/Task.interface';
+import { useAppSelector, useAppDispatch } from '../../../store/hooks';
+import { TaskState, Payment } from '../../../Task/Task.interface';
 import TotalSpending from './TotalSpending';
 import {
   changeActiveSpendingBlocksTasks,
   IDashboardSlice,
   changeTableTasks,
-} from 'store/slices/dashboardSlice';
+} from '../../../store/slices/dashboardSlice';
 import { roundToCents } from './SpendingBlocksHelpers';
 
 dayjs.extend(quarterOfYear);

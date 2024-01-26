@@ -43,7 +43,7 @@ function MarkAsSpecificFile(props: any) {
 function FileView(props: FileViewProps) {
   return props.file ? (
     <>
-      <a href={process.env.REACT_APP_B24_HOST + props.file.DOWNLOAD_URL}>
+      <a href={import.meta.env.VITE_B24_HOST + props.file.DOWNLOAD_URL}>
         {' '}
         {props.file.NAME} (
         {(Number(props.file.SIZE) / 1024).toFixed(2).toLocaleString()} Kb)

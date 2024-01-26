@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import Select from 'react-select';
-import { BaseInput, Article, SerialNumber } from 'components/Form/FormFields';
-import { PreTreatment1 } from 'components/Form/PreTreatment1';
-import { selectOptions } from 'defaults';
+import { BaseInput, Article, SerialNumber } from '../../FormFields';
+import { PreTreatment1 } from '../../PreTreatment1';
+import { selectOptions } from '../../../../defaults';
 import { StageSelect } from './StageSelect';
 import StandardSelector from './StandardSelector/StandardSelector';
-import DB from 'backend/DBManager';
+import DB from '../../../../backend/DBManager';
 import { useParams } from 'react-router-dom';
 
 function BasicInfo({ setState, ...props }: any) {

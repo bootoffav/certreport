@@ -1,36 +1,36 @@
 import qs from 'qs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import dayjs from 'dayjs';
-import { dataSeparator } from 'Task/Task';
-import { StateAdapter } from 'StateAdapter';
-import { AppFormExport } from 'components/Export/PDF/AppFormExport';
-import { createShippingLabelFile } from 'components/Export/PDF/ShippingLabelFile';
+import { dataSeparator } from '../Task/Task';
+import { StateAdapter } from '../StateAdapter';
+import { AppFormExport } from '../components/Export/PDF/AppFormExport';
+import { createShippingLabelFile } from '../components/Export/PDF/ShippingLabelFile';
 import { get_products, get_product } from './ProductMethods';
 import {
   detachFileFromTask,
   getAttachedFiles,
   removeFileFromDisk,
 } from './DiskMethods';
-import { rawTaskProcessor } from 'workers/dataFetcher';
+import { rawTaskProcessor } from '../workers/dataFetcher';
 import type { TaskState } from 'Task/Task.interface';
 import assignParentTask from './utils/assignParentTask';
 import formTaskTitle from './utils/formTaskTitle';
-export const creatorId = process.env.REACT_APP_B24_USER_ID;
-export const tag = process.env.REACT_APP_TAG;
-export const responsibleId = process.env.REACT_APP_B24_RESPONSIBLE_ID;
-export const webhookKey = process.env.REACT_APP_B24_WEBHOOK_KEY;
-export const mainUrl = process.env.REACT_APP_B24_MAIN_URL;
+export const creatorId = import.meta.env.VITE_B24_USER_ID;
+export const tag = import.meta.env.VITE_TAG;
+export const responsibleId = import.meta.env.VITE_B24_RESPONSIBLE_ID;
+export const webhookKey = import.meta.env.VITE_B24_WEBHOOK_KEY;
+export const mainUrl = import.meta.env.VITE_B24_MAIN_URL;
 
 dayjs.extend(customParseFormat);
 
-const auditors: string[] = process.env.REACT_APP_B24_AUDITORS
-  ? process.env.REACT_APP_B24_AUDITORS.split(',')
+const auditors: string[] = import.meta.env.VITE_B24_AUDITORS
+  ? import.meta.env.VITE_B24_AUDITORS.split(',')
   : [];
 
 export const defaultParams = {
   CREATED_BY: creatorId,
   GROUP_ID: 21,
-  ACCOMPLICES: process.env.NODE_ENV === 'development' ? [] : [3524],
+  ACCOMPLICES: import.meta.env.NODE_ENV === 'development' ? [] : [3524],
 };
 
 const step = (json: any) => ({

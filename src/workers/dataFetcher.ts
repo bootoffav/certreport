@@ -1,10 +1,10 @@
 import qs from 'qs';
-import { Task } from 'Task/Task';
+import { Task } from '../Task/Task';
 
-const creator_id = process.env.REACT_APP_B24_USER_ID;
-const tag = process.env.REACT_APP_TAG;
-const webhook_key = process.env.REACT_APP_B24_WEBHOOK_KEY;
-const main_url = process.env.REACT_APP_B24_MAIN_URL;
+const creator_id = import.meta.env.VITE_B24_USER_ID;
+const tag = import.meta.env.VITE_TAG;
+const webhook_key = import.meta.env.VITE_B24_WEBHOOK_KEY;
+const main_url = import.meta.env.VITE_B24_MAIN_URL;
 
 let start: number;
 

@@ -1,5 +1,5 @@
 import DatePicker from 'react-datepicker';
-import { dateConverter } from 'helpers';
+import { dateConverter } from '../../..//helpers';
 
 interface PaidProps {
   checked: boolean;

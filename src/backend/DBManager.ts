@@ -1,5 +1,5 @@
 import faunadb, { query as q } from 'faunadb';
-import { emptyState, fabricAppFormInitState } from 'Task/emptyState';
+import { emptyState, fabricAppFormInitState } from '../Task/emptyState';
 import type { IRequirement } from 'components/Form/Tabs/Standards/Requirements';
 import type { TabProps } from 'components/ExpiringCerts/ExpiringCerts';
 
@@ -7,16 +7,16 @@ type CollectionType = 'aitex' | 'payments' | 'certification' | 'standards';
 
 class DB {
   static fdbCollection: CollectionType =
-    (process.env.REACT_APP_FAUNADB_CLASS as CollectionType) || 'aitex';
-  static fdbIndex = process.env.REACT_APP_FAUNADB_INDEX || 'id';
+    (import.meta.env.VITE_FAUNADB_CLASS as CollectionType) || 'aitex';
+  static fdbIndex = import.meta.env.VITE_FAUNADB_INDEX || 'id';
 
   static client() {
-    if (typeof process.env.REACT_APP_FAUNADB_KEY !== 'string') {
+    if (typeof import.meta.env.VITE_FAUNADB_KEY !== 'string') {
       throw new Error('Problem with db key');
     }
 
     return new faunadb.Client({
-      secret: process.env.REACT_APP_FAUNADB_KEY,
+      secret: import.meta.env.VITE_FAUNADB_KEY,
     });
   }
 

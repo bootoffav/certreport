@@ -4,7 +4,7 @@ import ReactTable, { CellInfo } from 'react-table';
 import ColumnFilter from '../Filters/ColumnFilter';
 import type { ItemType, taskOfItem } from 'Item/Item';
 import { Grid, Tooltip } from 'tabler-react';
-import { useAppSelector } from 'store/hooks';
+import { useAppSelector } from '../../../store/hooks';
 
 const columns = [
   {
@@ -53,7 +53,9 @@ const columns = [
             <span key={id}>
               &nbsp;
               <a
-                href={`${process.env.REACT_APP_B24_HOST}/company/personal/user/460/tasks/task/view/${id}/`}
+                href={`${
+                  import.meta.env.VITE_B24_HOST
+                }/company/personal/user/460/tasks/task/view/${id}/`}
                 target="_blank"
                 rel="noopener noreferrer"
               >

@@ -4,11 +4,11 @@ import swal from 'sweetalert';
 import 'react-datepicker/dist/react-datepicker.css';
 import dayjs from 'dayjs';
 import { connect } from 'react-redux';
-import * as B24 from 'B24/B24';
+import * as B24 from '../../B24/B24';
 import Notification, { Status } from '../Notification/Notification';
-import { emptyState, fabricAppFormInitState } from 'Task/emptyState';
-import type { Payment, TaskState } from 'Task/Task.interface';
-import DB from 'backend/DBManager';
+import { emptyState, fabricAppFormInitState } from '../../Task/emptyState';
+import type { Payment, TaskState } from '../../Task/Task.interface';
+import DB from '../../backend/DBManager';
 import { TabbedCard, Button, Icon, Tab } from 'tabler-react';
 import GoBackButton from '../GoBackButton';
 import Dates from './Tabs/Dates';
@@ -22,13 +22,13 @@ import {
   changeActiveQuoteNo,
   changeTotalPrice,
   changeTask,
-} from 'store/slices/mainSlice';
-import { RootState } from 'store/store';
+} from '../../store/slices/mainSlice';
+import { RootState } from '../../store/store';
 import { isEqual } from 'lodash';
 import { AppFormExport } from '../Export/PDF/AppFormExport';
-import { getTaskTotalPriceHelper } from 'helpers';
+import { getTaskTotalPriceHelper } from '../../helpers';
 
-import { FileManagement } from 'components/FileManagement/FileManagement';
+import { FileManagement } from '../../components/FileManagement/FileManagement';
 
 interface IFormState extends TaskState {
   requestStatus: Status;
@@ -214,7 +214,9 @@ class Form extends Component<any> {
       <div className="container mt-2">
         <Button
           RootComponent="a"
-          href={`${process.env.REACT_APP_B24_HOST}/company/personal/user/460/tasks/task/view/${this.props.taskId}/`}
+          href={`${
+            import.meta.env.VITE_B24_HOST
+          }/company/personal/user/460/tasks/task/view/${this.props.taskId}/`}
           target="_blank"
           rel="noopener noreferrer"
           link

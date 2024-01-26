@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Animated from 'components/Animated';
+import Animated from '../../components/Animated';
 export enum Status {
   Idle,
   Loading,

@@ -2,16 +2,16 @@ import { useEffect, Suspense, lazy } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Error404Page } from 'tabler-react';
 import CertificationList from '../Lists/Certification/CertificationList';
-import Animated from 'components/Animated';
-import ErrorBoundary from 'ErrorBoundary';
+import Animated from '../Animated';
+import ErrorBoundary from '../../ErrorBoundary';
 import {
   changeFilteredItems,
   changeFilteredTasks,
-} from 'store/slices/mainSlice';
+} from '../../store/slices/mainSlice';
 import filter from './filter';
-import { useAppDispatch, useAppSelector } from 'store/hooks';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { isEqual } from 'lodash';
-import AppLoader from 'components/AppLoader';
+import AppLoader from '../AppLoader';
 
 const NavBar = lazy(() => import('./NavBar'));
 const Dashboard = lazy(() => import('../Dashboard/Dashboard'));

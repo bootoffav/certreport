@@ -1,17 +1,16 @@
 import qs from 'qs';
 import { Dimmer } from 'tabler-react';
 import { useEffect, useState } from 'react';
-import * as B24 from 'B24/B24';
+import * as B24 from '../../B24/B24';
 import { OtherFilesList } from './OtherFilesList';
 import { UploadFile } from './UploadFile';
-import type { AttachedFile } from 'Task/types';
+import type { AttachedFile } from '../../Task/types';
 import { SpecificFile } from './SpecificFile/SpecificFile';
-import { getAttachedFiles } from 'B24/B24';
 import { useParams } from 'react-router';
 
-const creator_id = process.env.REACT_APP_B24_USER_ID;
-const webhook_key = process.env.REACT_APP_B24_WEBHOOK_KEY;
-const main_url = process.env.REACT_APP_B24_MAIN_URL;
+const creator_id = import.meta.env.VITE_B24_USER_ID;
+const webhook_key = import.meta.env.VITE_B24_WEBHOOK_KEY;
+const main_url = import.meta.env.VITE_B24_MAIN_URL;
 
 const pullSpecificFiles = (
   files: AttachedFile[],
@@ -41,7 +40,7 @@ function FileManagement() {
   useEffect(() => {
     (async () => {
       if (!uploading && taskId) {
-        let files = await getAttachedFiles(taskId);
+        let files = await B24.getAttachedFiles(taskId);
         setFiles(files);
       }
     })();

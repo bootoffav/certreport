@@ -10,7 +10,7 @@ import { Provider } from 'react-redux';
 import store from './store/store';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import App from 'components/App/App';
+import App from './components/App/App';
 
 initApp();
 

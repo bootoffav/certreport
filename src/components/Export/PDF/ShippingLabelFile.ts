@@ -1,4 +1,4 @@
-import { formatArticle } from 'helpers';
+import { formatArticle } from '../../../helpers';
 import { tableLayout, fonts } from './settings';
 import type { TaskState } from 'Task/Task.interface';
 

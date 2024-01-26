@@ -1,5 +1,5 @@
-import { formatArticle, getTaskTotalPriceHelper } from 'helpers';
-import DB from 'backend/DBManager';
+import { formatArticle, getTaskTotalPriceHelper } from '../../helpers';
+import DB from '../../backend/DBManager';
 
 const convertPriceToStr = (price: number) => {
   return (

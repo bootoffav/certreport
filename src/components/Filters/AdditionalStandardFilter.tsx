@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { changeAdditionalStandardFilterList } from 'store/slices/mainSlice';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { changeAdditionalStandardFilterList } from '../../store/slices/mainSlice';
 import Loader from 'react-loader-spinner';
-import DB from 'backend/DBManager';
-import { standardParamMap } from 'defaults';
+import DB from '../../backend/DBManager';
+import { standardParamMap } from '../../defaults';
 import { shallowEqual } from 'react-redux';
 
 function AdditionalStandardFilter() {

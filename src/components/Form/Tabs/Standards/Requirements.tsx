@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
-import { localizePrice } from 'helpers';
-import DB from 'backend/DBManager';
+import { localizePrice } from '../../../../helpers';
+import DB from '../../../../backend/DBManager';
 import { StandardContext } from './Standards';
 import { CostChanger } from './CostChanger';
 

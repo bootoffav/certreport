@@ -1,5 +1,8 @@
-import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { changeActiveStandards, IInitialState } from 'store/slices/mainSlice';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import {
+  changeActiveStandards,
+  IInitialState,
+} from '../../store/slices/mainSlice';
 import AdditionalStandardFilter from './AdditionalStandardFilter';
 
 function StandardFilter() {

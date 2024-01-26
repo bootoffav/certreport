@@ -1,8 +1,8 @@
-import { useAppDispatch, useAppSelector } from 'store/hooks';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import {
   changeActiveTestingCompanies,
   IInitialState,
-} from 'store/slices/mainSlice';
+} from '../../store/slices/mainSlice';
 
 function TestingCompanyFilter() {
   const dispatch = useAppDispatch();

@@ -1,11 +1,11 @@
 import dayjs from 'dayjs';
 import { PickDate } from '../FormFields';
-import { Status } from 'components/Notification/Notification';
-import { stages } from 'defaults';
-import DB from 'backend/DBManager';
-import type { Stage, TaskState } from 'Task/Task.interface';
+import { Status } from '../../../components/Notification/Notification';
+import { stages } from '../../../defaults';
+import DB from '../../../backend/DBManager';
+import type { Stage, TaskState } from '../../../Task/Task.interface';
 import { useEffect, useState } from 'react';
-import { addEvent, deleteEvent } from 'B24/CalendarMethods';
+import { addEvent, deleteEvent } from '../../../B24/CalendarMethods';
 import { useParams } from 'react-router-dom';
 import RepeatDates from './RepeatDates';
 
@@ -141,7 +141,11 @@ function Dates(props: DatesProps) {
             const newCalendarExpirationEventId = await addEvent({
               section: 680,
               date: expirationDate,
-              description: `${process.env.REACT_APP_B24_HOST}/company/personal/user/${process.env.REACT_APP_B24_USER_ID}/tasks/task/view/${taskId}/`,
+              description: `${
+                import.meta.env.VITE_B24_HOST
+              }/company/personal/user/${
+                import.meta.env.VITE_B24_USER_ID
+              }/tasks/task/view/${taskId}/`,
               name: `Expiration of ${props.calendarEventName}`,
             })
               .then((res) => res.json())

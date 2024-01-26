@@ -2,15 +2,15 @@ import { Icon } from 'tabler-react';
 import { useCallback } from 'react';
 import dayjs from 'dayjs';
 import { Price, Paid, QuoteNo, BaseInput } from './FormFields';
-import type { Payment } from 'Task/Task.interface';
-import { localizePrice } from 'helpers';
-import DB from 'backend/DBManager';
-import { useAppDispatch, useAppSelector } from 'store/hooks';
+import type { Payment } from '../../Task/Task.interface';
+import { localizePrice } from '../../helpers';
+import DB from '../../backend/DBManager';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import {
   changeActiveQuoteNo,
   changeTotalPrice,
   changePaymentsOfTask,
-} from 'store/slices/mainSlice';
+} from '../../store/slices/mainSlice';
 import XMBranch from './XMBranch';
 import { useParams } from 'react-router';
 

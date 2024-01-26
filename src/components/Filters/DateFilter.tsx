@@ -1,6 +1,6 @@
 import DatePicker from 'react-datepicker';
-import { changeStartDate, changeEndDate } from 'store/slices/mainSlice';
-import { useAppDispatch, useAppSelector } from 'store/hooks';
+import { changeStartDate, changeEndDate } from '../../store/slices/mainSlice';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 
 // function PreDefinedDates() {
 //   const periods = ['1 year', '6 months', '3 months', '1 month'] as const;

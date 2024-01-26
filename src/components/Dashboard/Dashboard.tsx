@@ -2,9 +2,9 @@ import { Grid } from 'tabler-react';
 import BrandChart from './BrandCharts/BrandChart';
 import SpendingBlocks from './SpendingBlocks/SpendingBlocks';
 import CertificationsResultCard from './CertificationsResultCard';
-import { useAppSelector } from 'store/hooks';
+import { useAppSelector } from '../../store/hooks';
 import ReactTable from 'react-table';
-import { countTotalPrice } from 'helpers';
+import { countTotalPrice } from '../../helpers';
 import { getColumns } from '../Lists/Certification/columns';
 import { isEqual } from 'lodash';
 
