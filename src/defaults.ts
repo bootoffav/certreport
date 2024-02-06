@@ -46,6 +46,7 @@ const testingCompanies = [
   'CENTROCOT (Italy)',
   'CSI-Serico (Italy)',
   'Leitat (Spain)',
+  'RISE( Sweden)',
   'Satra (UK)',
   'UL (USA)',
   'VTEC (USA)',

@@ -42,7 +42,7 @@
   },
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
-    "start": "vite",
+    "dev": "vite",
     "test": "jest",
     "build": "vite build",
     "serve": "vite preview"
