@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "typeRoots": ["./types", "./node_modules/@types"],
+    "typeRoots": ["./types", "./node_modules/@types", "./node_modules"],
     "target": "ESNext",
     "allowJs": true,
     "skipLibCheck": true,
@@ -21,6 +21,7 @@
     "downlevelIteration": true,
     "isolatedModules": true,
     "baseUrl": "src",
+    "types": ["vite/client"],
     "lib": ["dom", "dom.iterable", "ESNext", "WebWorker"]
   },
   "include": ["src"],

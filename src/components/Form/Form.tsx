@@ -147,6 +147,7 @@ class Form extends Component<any> {
               ...this.state,
               activeQuoteNo: this.props.activeQuoteNo,
               totalPrice: this.props.totalPrice,
+              factory: this.props.factory,
             },
             this.props.taskId
           )
@@ -156,6 +157,7 @@ class Form extends Component<any> {
             ...this.state,
             activeQuoteNo: this.props.activeQuoteNo,
             totalPrice: this.props.totalPrice,
+            factory: this.props.factory,
           }).catch(this.unsuccessfullySubmitted);
 
       // update in redux
@@ -323,11 +325,17 @@ class Form extends Component<any> {
 }
 
 export default withRouter(
-  connect(({ main }: RootState) => ({ allTasks: main.allTasks }), {
-    changeTask,
-    changeActiveQuoteNo,
-    changeTotalPrice,
-  })(Form)
+  connect(
+    ({ main, form }: RootState) => ({
+      allTasks: main.allTasks,
+      factory: form.factory,
+    }),
+    {
+      changeTask,
+      changeActiveQuoteNo,
+      changeTotalPrice,
+    }
+  )(Form)
 );
 
 export function withRouter(Children: any) {

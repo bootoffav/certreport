@@ -7,24 +7,34 @@ import { StageSelect } from './StageSelect';
 import StandardSelector from './StandardSelector/StandardSelector';
 import DB from '../../../../backend/DBManager';
 import { useParams } from 'react-router-dom';
+import { changeFactory } from '../../../../store/slices/formSlice';
+import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 
 function BasicInfo({ setState, ...props }: any) {
-  const [factory, setFactory] = useState('');
+  const factory = useAppSelector(({ form }) => form.factory);
+  const dispatch = useAppDispatch();
   const [rem, setRem] = useState('');
   const { taskId } = useParams<{ taskId?: string }>();
 
   useEffect(() => {
     (async function () {
       if (taskId) {
-        DB.get(taskId, ['data', 'factory'], 'certification')
-          .then(setFactory)
-          .catch(() => console.log('factory not found in DB'));
+        try {
+          const factory = await DB.get(
+            taskId,
+            ['data', 'factory'],
+            'certification'
+          );
+          dispatch(changeFactory(factory));
+        } catch (e) {
+          console.log('factory not found in DB');
+        }
         DB.getFabricAppFormState(taskId).then(({ rem }) => {
           rem && setRem(rem);
         });
       }
     })();
-  }, [taskId, setRem, setFactory]);
+  }, [taskId, setRem]);
 
   return (
     <>
@@ -267,7 +277,7 @@ function BasicInfo({ setState, ...props }: any) {
           label="Factory"
           required={false}
           handleChange={({ target }) =>
-            setFactory((target as HTMLInputElement).value)
+            dispatch(changeFactory((target as HTMLInputElement).value))
           }
           onBlur={() =>
             taskId && DB.updateInstance(taskId, { factory }, 'certification')
