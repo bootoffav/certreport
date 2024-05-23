@@ -12,6 +12,12 @@ it('assigns correct parent task id', function () {
   expect(assignParentTask('2021-09-09', 'XMG')).toBe(71596); // use base year 2021
   expect(assignParentTask('2020-06-09', 'XMT')).toBeDefined();
 
+  // 2024 check
+  expect(assignParentTask('2024-07-05', 'XMT')).toBe(127857);
+  expect(assignParentTask('2024-07-05', 'XMS')).toBe(127863);
+  expect(assignParentTask('2024-07-05', 'XMF')).toBe(127861);
+  expect(assignParentTask('2024-07-05', 'XMG')).toBe(127855); // check for base task
+
   // none existent cases
   expect(assignParentTask('2011-11-03', 'XMT')).toBe('');
   const currentYear = new Date().getFullYear();

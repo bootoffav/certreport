@@ -55,6 +55,12 @@ export const parentTasksMap = {
     XMT: 114730,
     base: 114686,
   },
+  2024: {
+    XMF: 127861,
+    XMS: 127863,
+    XMT: 127857,
+    base: 127855,
+  },
 } as const;
 
 function assignParentTask(createdDate?: string, brand?: TaskState['brand']) {
