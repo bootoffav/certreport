@@ -30,7 +30,8 @@ const auditors: string[] = import.meta.env.VITE_B24_AUDITORS
 export const defaultParams = {
   CREATED_BY: creatorId,
   GROUP_ID: 21,
-  ACCOMPLICES: import.meta.env.NODE_ENV === 'development' ? [] : [3524],
+  // ACCOMPLICES: import.meta.env.NODE_ENV === 'development' ? [] : [3524],
+  ACCOMPLICES: tag === 'certification' ? [3524] : [],
 };
 
 const step = (json: any) => ({

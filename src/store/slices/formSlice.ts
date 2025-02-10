@@ -5,12 +5,10 @@ export interface FormSlice {
   factory: TaskState['factory'];
 }
 
-const initialState: FormSlice = {
-  factory: '',
-};
+const initialState: FormSlice = { factory: '' };
 
 const formSlice = createSlice({
-  name: 'dashboard',
+  name: 'form',
   initialState,
   reducers: {
     changeFactory: (

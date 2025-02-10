@@ -23,6 +23,7 @@ import {
   changeTotalPrice,
   changeTask,
 } from '../../store/slices/mainSlice';
+import { changeFactory } from '../../store/slices/formSlice';
 import { RootState } from '../../store/store';
 import { isEqual } from 'lodash';
 import { AppFormExport } from '../Export/PDF/AppFormExport';
@@ -94,6 +95,10 @@ class Form extends Component<any> {
         FabricAppForm: { ...fabricAppFormInitState },
       });
     }
+  }
+
+  componentWillUnmount(): void {
+    this.props.changeFactory('');
   }
 
   handleDateChange = (date: Date | null, prop: string): void =>
@@ -178,6 +183,13 @@ class Form extends Component<any> {
               proformaInvoiceNo2: this.state.proformaInvoiceNo2,
               ...this.state.FabricAppForm,
             })
+              .then(() => {
+                DB.updateInstance(
+                  taskId,
+                  { factory: this.props.factory },
+                  'certification'
+                );
+              })
               .then(this.successfullySubmitted)
               .catch(this.unsuccessfullySubmitted);
           }
@@ -334,6 +346,7 @@ export default withRouter(
       changeTask,
       changeActiveQuoteNo,
       changeTotalPrice,
+      changeFactory,
     }
   )(Form)
 );

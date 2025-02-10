@@ -18,7 +18,7 @@ function BasicInfo({ setState, ...props }: any) {
 
   useEffect(() => {
     (async function () {
-      if (taskId) {
+      if (taskId && !factory) {
         try {
           const factory = await DB.get(
             taskId,
@@ -29,6 +29,13 @@ function BasicInfo({ setState, ...props }: any) {
         } catch (e) {
           console.log('factory not found in DB');
         }
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async function () {
+      if (taskId) {
         DB.getFabricAppFormState(taskId).then(({ rem }) => {
           rem && setRem(rem);
         });
@@ -278,9 +285,6 @@ function BasicInfo({ setState, ...props }: any) {
           required={false}
           handleChange={({ target }) =>
             dispatch(changeFactory((target as HTMLInputElement).value))
-          }
-          onBlur={() =>
-            taskId && DB.updateInstance(taskId, { factory }, 'certification')
           }
         />
       </div>
