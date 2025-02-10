@@ -23,9 +23,10 @@ export const mainUrl = import.meta.env.VITE_B24_MAIN_URL;
 
 dayjs.extend(customParseFormat);
 
-const auditors: string[] = import.meta.env.VITE_B24_AUDITORS
-  ? import.meta.env.VITE_B24_AUDITORS.split(',')
-  : [];
+const auditors: string[] =
+  tag === 'certification' // import.meta.env.VITE_B24_AUDITORS
+    ? import.meta.env.VITE_B24_AUDITORS.split(',')
+    : [];
 
 export const defaultParams = {
   CREATED_BY: creatorId,
