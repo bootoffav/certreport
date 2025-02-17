@@ -49,6 +49,7 @@ const testingCompanies = [
   'RISE( Sweden)',
   'Satra (UK)',
   'SGS (China)',
+  'TÜV (Germany)',
   'UL (USA)',
   'VTEC (USA)',
 ] as const;
