@@ -1,25 +1,28 @@
-import DB from '../../backend/DBManager';
-import { query as q } from 'faunadb';
 import { Payment } from 'Task/Task.interface';
+import { createClient } from '@supabase/supabase-js';
 
-const fetchPayments = async (): Promise<Record<number, Payment[]>> =>
-  DB.client()
-    .query<{ data: any }>(
-      q.Map(
-        q.Paginate(q.Documents(q.Collection('payments')), {
-          size: 100000, // max for faunadb for a single query
-        }),
-        q.Lambda('payment', q.Get(q.Var('payment')))
-      )
-    )
-    .then(({ data }: any) =>
-      data.reduce(
-        (payments: Record<number, Payment[]>, { ref: { id }, data }: any) => {
-          payments[id] = data.payments;
-          return payments;
-        },
-        {}
-      )
-    );
+type PaymentDBType = {
+  data: {
+    id: number;
+    branches: string[];
+    payments: any[];
+  };
+};
+
+// @ts-ignore
+const fetchPayments = async (): Promise<Record<number, Payment[]>> => {
+  const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+  const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_KEY;
+  const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+  const { data, error } = await supabase.from('payments').select(`data`);
+
+  return data !== null
+    ? (data as PaymentDBType[]).reduce((acc, { data: { payments, id } }) => {
+        // @ts-ignore
+        acc[id] = payments;
+        return acc;
+      }, {})
+    : [];
+};
 
 export default fetchPayments;
