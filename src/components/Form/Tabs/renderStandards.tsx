@@ -7,7 +7,7 @@ function renderStandards() {
     <Tab title="Standards">
       <Standards
         initStandards={this.state.standards.split(', ')}
-        taskId={this.task_id || ''}
+        taskId={this.props.taskId || ''}
         setState={this.setState.bind(this)}
       />
       <PreTreatment1

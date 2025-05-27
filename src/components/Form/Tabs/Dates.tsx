@@ -33,7 +33,7 @@ function Dates(props: DatesProps) {
 
   useEffect(() => {
     taskId &&
-      DB.get(taskId, ['data'], 'certification').then(
+      DB.get(taskId, 'certification').then(
         ({ expirationDate, calendarExpirationEventId }) => {
           setExpirationDate(expirationDate);
           setCalendarExpirationEventId(calendarExpirationEventId);

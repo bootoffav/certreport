@@ -137,6 +137,7 @@ class Form extends Component<any> {
 
   async handleCert(e: React.SyntheticEvent) {
     e.preventDefault();
+
     const OK = await swal({
       title: 'Are you sure?',
       icon: 'info',
@@ -167,33 +168,38 @@ class Form extends Component<any> {
 
       // update in redux
       const task = await B24.getTask(taskId);
-      this.props.changeTask({ id: taskId, task });
+      task.state.payments = this.state.payments;
+      this.props.changeTask({
+        id: taskId,
+        task,
+      });
 
-      // update in FaunaDB
-      DB.createInstance(taskId, this.state.FabricAppForm)
+      // update in DB
+      Promise.all([
+        DB.updateInstance(this.props.taskId, {
+          rem: this.state.rem,
+          quoteNo1: this.state.quoteNo1,
+          quoteNo2: this.state.quoteNo2,
+          activeQuoteNo: this.state.activeQuoteNo,
+          proformaInvoiceNo1: this.state.proformaInvoiceNo1,
+          proformaInvoiceNo2: this.state.proformaInvoiceNo2,
+          ...this.state.FabricAppForm,
+        }),
+        DB.updateInstance(
+          this.props.taskId,
+          this.props.factory,
+          'certification',
+          'factory'
+        ),
+        DB.updateInstance(
+          this.props.taskId,
+          this.state.payments,
+          'payments',
+          'payments'
+        ),
+      ])
         .then(this.successfullySubmitted)
-        .catch((error: any) => {
-          if (error.message === 'instance already exists') {
-            DB.updateInstance(taskId, {
-              rem: this.state.rem,
-              quoteNo1: this.state.quoteNo1,
-              quoteNo2: this.state.quoteNo2,
-              activeQuoteNo: this.state.activeQuoteNo,
-              proformaInvoiceNo1: this.state.proformaInvoiceNo1,
-              proformaInvoiceNo2: this.state.proformaInvoiceNo2,
-              ...this.state.FabricAppForm,
-            })
-              .then(() => {
-                DB.updateInstance(
-                  taskId,
-                  { factory: this.props.factory },
-                  'certification'
-                );
-              })
-              .then(this.successfullySubmitted)
-              .catch(this.unsuccessfullySubmitted);
-          }
-        });
+        .catch(this.unsuccessfullySubmitted);
     }
   }
 
@@ -208,7 +214,7 @@ class Form extends Component<any> {
 
   successfullySubmitted = () => {
     this.setState({ requestStatus: Status.Success });
-    setTimeout(() => this.props.navigate('/'), 1000);
+    setTimeout(() => this.props.navigate('/'), 4000);
   };
 
   unsuccessfullySubmitted = (error: unknown) => {

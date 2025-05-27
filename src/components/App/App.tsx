@@ -21,6 +21,7 @@ function App() {
             ...task,
             state: {
               ...task.state,
+              // @ts-ignore
               payments: payments[task.id] || [],
             },
           }));

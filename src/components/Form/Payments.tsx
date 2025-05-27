@@ -1,10 +1,9 @@
 import { Icon } from 'tabler-react';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import dayjs from 'dayjs';
 import { Price, Paid, QuoteNo, BaseInput } from './FormFields';
 import type { Payment } from '../../Task/Task.interface';
 import { localizePrice } from '../../helpers';
-import DB from '../../backend/DBManager';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import {
   changeActiveQuoteNo,
@@ -157,8 +156,6 @@ function Payments() {
                 payments: newPayments,
               })
             );
-            taskId &&
-              DB.updateInstance(taskId, { payments: newPayments }, 'payments');
           }}
         />
       </div>
@@ -170,8 +167,13 @@ function Payments() {
       onBlur={(e) => {
         setTimeout(() => {
           dispatch(changeTotalPrice(getTotalPrice()));
-          DB.updateInstance(taskId, { payments }, 'payments');
-        }, 1000);
+          dispatch(
+            changePaymentsOfTask({
+              taskId,
+              payments,
+            })
+          );
+        });
       }}
     >
       <XMBranch />

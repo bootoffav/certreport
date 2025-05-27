@@ -21,29 +21,23 @@ function RepeatDates() {
 
   useEffect(() => {
     taskId &&
-      DB.get(taskId, ['data', 'repeatDates'], 'certification').then(
-        setRepeatDates
+      DB.get(taskId, 'certification', 'repeatDates').then(({ repeatDates }) =>
+        setRepeatDates(repeatDates)
       );
   }, [taskId]);
 
   const dateChanger = (field: keyof IRepeatDates & string, date: Date) => {
     const newDate = date ? (dayjs(date).format('YYYY-MM-DD') as ISODate) : null;
-    // 1. change UI state
-    setRepeatDates((state) => ({
-      ...state,
-      [field]: newDate,
-    }));
+    setRepeatDates((state) => {
+      const repeatDates = {
+        ...state,
+        [field]: newDate,
+      };
 
-    // 2. change value in DB
-    DB.updateInstance(
-      taskId as string,
-      {
-        repeatDates: {
-          [field]: newDate,
-        },
-      },
-      'certification'
-    );
+      DB.updateInstance(taskId as string, { repeatDates }, 'certification');
+
+      return repeatDates;
+    });
   };
 
   return (

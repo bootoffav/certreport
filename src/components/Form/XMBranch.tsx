@@ -13,7 +13,9 @@ function XMBranch() {
 
   useEffect(() => {
     taskId &&
-      DB.get(taskId, ['data', 'branches'], 'payments').then(setBranches);
+      DB.get(taskId, 'payments', 'branches').then(({ branches }) => {
+        setBranches(branches ?? []);
+      });
   }, [taskId]);
 
   return (
@@ -27,14 +29,7 @@ function XMBranch() {
         isMulti
         value={branches.map((b) => ({ value: b, label: b }))}
         onBlur={() => {
-          taskId &&
-            DB.updateInstance(
-              taskId,
-              {
-                branches,
-              },
-              'payments'
-            );
+          taskId && DB.updateInstance(taskId, branches, 'payments', 'branches');
         }}
         onChange={(chosenOptions) =>
           setBranches(chosenOptions.map(({ value }) => value))

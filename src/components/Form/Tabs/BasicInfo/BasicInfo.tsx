@@ -20,10 +20,8 @@ function BasicInfo({ setState, ...props }: any) {
     (async function () {
       if (taskId && !factory) {
         try {
-          const factory = await DB.get(
-            taskId,
-            ['data', 'factory'],
-            'certification'
+          const factory = await DB.get(taskId, 'certification', 'factory').then(
+            ({ factory }) => factory
           );
           dispatch(changeFactory(factory));
         } catch (e) {
@@ -315,7 +313,7 @@ function BasicInfo({ setState, ...props }: any) {
         handleChange={({ target }) =>
           setRem((target as HTMLInputElement).value)
         }
-        onBlur={() => taskId && DB.updateInstance(taskId, { rem }, 'aitex')}
+        onBlur={() => taskId && DB.updateInstance(taskId, { rem })}
       />
     </>
   );

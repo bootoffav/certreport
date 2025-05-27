@@ -4,7 +4,6 @@ import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import './css/style.css';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'bootstrap';
-import netlifyIdentity from 'netlify-identity-widget';
 import { initApp } from './defaults';
 import { Provider } from 'react-redux';
 import store from './store/store';
@@ -14,13 +13,7 @@ import App from './components/App/App';
 
 initApp();
 
-netlifyIdentity.init();
-netlifyIdentity.on('login', () => {
-  netlifyIdentity.close();
-  run();
-});
-
-netlifyIdentity.currentUser() ? run() : netlifyIdentity.open('login');
+run();
 
 function run() {
   createRoot(document.getElementById('app')!).render(

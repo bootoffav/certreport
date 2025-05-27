@@ -51,7 +51,7 @@ function StandardSelector(props: StandardSelectorProps) {
 
   useEffect(() => {
     if (props.taskId) {
-      DB.get(props.taskId, ['data', 'standardsForTitle'], 'certification')
+      DB.get(props.taskId, 'certification', 'standardsForTitle')
         .then((initState) => {
           dispatch({ payload: initState });
         })
@@ -74,8 +74,9 @@ function StandardSelector(props: StandardSelectorProps) {
       onBlur={() => {
         DB.updateInstance(
           props.taskId,
-          { standardsForTitle: standardsForTitleState },
-          'certification'
+          standardsForTitleState,
+          'certification',
+          'standardsForTitle'
         );
       }}
       // @ts-ignore

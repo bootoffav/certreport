@@ -1,4 +1,3 @@
-import faunadb, { query as q } from 'faunadb';
 import { emptyState, fabricAppFormInitState } from '../Task/emptyState';
 import type { IRequirement } from 'components/Form/Tabs/Standards/Requirements';
 import type { TabProps } from 'components/ExpiringCerts/ExpiringCerts';
@@ -10,76 +9,53 @@ class DB {
     (import.meta.env.VITE_FAUNADB_CLASS as CollectionType) || 'aitex';
   static fdbIndex = import.meta.env.VITE_FAUNADB_INDEX || 'id';
 
-  static client() {
-    if (typeof import.meta.env.VITE_FAUNADB_KEY !== 'string') {
-      throw new Error('Problem with db key');
-    }
-
-    return new faunadb.Client({
-      secret: import.meta.env.VITE_FAUNADB_KEY,
-    });
-  }
-
   static genericGet(taskId: string, propertyToGet: string[]) {
-    return DB.client()
-      .query(
-        q.Select(
-          ['data', ...propertyToGet],
-          q.Get(q.Ref(q.Collection(this.fdbCollection), taskId))
-        )
+    return DB.get(taskId, this.fdbCollection)
+      .then((data) =>
+        propertyToGet.reduce((acc, prop) => {
+          // @ts-ignore
+          acc[prop] = data[prop];
+          return acc;
+        }, {})
       )
       .catch((e) => ({}));
   }
 
-  static async queryIndex(index: string): Promise<string[]> {
-    return await DB.client()
-      .query(
-        q.Map(
-          q.Paginate(
-            q.Union(
-              q.Match(q.Index(index), 'fail'),
-              q.Match(q.Index(index), 'pass'),
-              q.Match(q.Index(index), 'partly')
-            )
-          ),
-          q.Lambda('standard', q.Get(q.Var('standard')))
-        )
-      )
-      .then(({ data }: any) => data.map(({ ref }: any) => ref.id))
-      .catch(() => []);
-  }
+  // static async queryIndex(index: string): Promise<string[]> {
+  //   return await DB.client()
+  //     .query(
+  //       q.Map(
+  //         q.Paginate(
+  //           q.Union(
+  //             q.Match(q.Index(index), 'fail'),
+  //             q.Match(q.Index(index), 'pass'),
+  //             q.Match(q.Index(index), 'partly')
+  //           )
+  //         ),
+  //         q.Lambda('standard', q.Get(q.Var('standard')))
+  //       )
+  //     )
+  //     .then(({ data }: any) => data.map(({ ref }: any) => ref.id))
+  //     .catch(() => []);
+  // }
 
   static async getRequirementsForStandard(
     standard: string
   ): Promise<IRequirement[]> {
-    return await DB.client().query(
-      q.Select(
-        'data',
-        q.Map(
-          q.Paginate(q.Match(q.Index('standard_name'), standard)),
-          q.Lambda('standard', q.Get(q.Var('standard')))
-        )
-      )
+    return await fetch(`https://certreport:3100/standards/${standard}`).then(
+      (r) => r.json()
     );
   }
 
-  static async get(
-    ref: string,
-    path: string[],
-    fdbCollection = this.fdbCollection
-  ): Promise<any> {
-    return await DB.client().query(
-      q.Select(path, q.Get(q.Ref(q.Collection(fdbCollection), ref)))
-    );
+  static get(id: string, collection: CollectionType, path?: string) {
+    return fetch(`https://certreport:3100/${collection}/${id}`, {
+      method: 'POST',
+      body: JSON.stringify({ path }),
+    }).then((r) => r.json());
   }
 
   static async getFabricAppFormState(taskId: string) {
-    const data = await DB.client()
-      .query(q.Select(['data'], q.Get(q.Ref(q.Collection('aitex'), taskId))))
-      .then((res: any) => res)
-      .catch((error) => ({
-        ...emptyState.FabricAppForm,
-      }));
+    const data = await DB.get(taskId, 'aitex');
     const props = Object.getOwnPropertyNames(data);
 
     if (!props.includes('testRequirement'))
@@ -91,95 +67,78 @@ class DB {
     return data;
   }
 
-  static async createInstance(
-    taskId: string,
-    state: any,
-    fdbCollection: CollectionType = this.fdbCollection
-  ) {
-    return DB.client().query(
-      q.Create(q.Ref(q.Collection(fdbCollection), taskId), {
-        data: {
-          ...state,
-        },
-      })
-    );
-  }
-
   static updateInstance(
     taskId: string,
     state: any,
-    fdbCollection: CollectionType = 'aitex'
+    collection: CollectionType = 'aitex',
+    path?: string
   ) {
-    return DB.client()
-      .query(
-        q.Update(q.Ref(q.Collection(fdbCollection), taskId), {
-          data: { ...state },
-        })
-      )
-      .catch(({ message }) => {
-        message === 'instance not found' &&
-          DB.createInstance(taskId, state, fdbCollection);
-      });
+    const payload = { path, state };
+    return fetch(`https://certreport:3100/${collection}/${taskId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
   }
 
-  static getExpiringCerts(months: TabProps['months']) {
-    if (months === 0) {
-      // expired certs case
-      return DB.client().query(
-        q.Filter(
-          q.Filter(
-            q.Paginate(q.Match('expirationDate')),
-            q.Lambda(['ref', 'date'], q.Not(q.IsNull(q.Var('date'))))
-          ),
-          q.Lambda(
-            ['ref', 'date'],
-            q.LT(
-              q.TimeDiff(q.ToDate(q.Now()), q.Date(q.Var('date')), 'days'),
-              months // expired yesterday or futher on
-            )
-          )
-        )
-      );
-    }
+  // static getExpiringCerts(months: TabProps['months']) {
+  //   if (months === 0) {
+  //     // expired certs case
+  //     return DB.client().query(
+  //       q.Filter(
+  //         q.Filter(
+  //           q.Paginate(q.Match('expirationDate')),
+  //           q.Lambda(['ref', 'date'], q.Not(q.IsNull(q.Var('date'))))
+  //         ),
+  //         q.Lambda(
+  //           ['ref', 'date'],
+  //           q.LT(
+  //             q.TimeDiff(q.ToDate(q.Now()), q.Date(q.Var('date')), 'days'),
+  //             months // expired yesterday or futher on
+  //           )
+  //         )
+  //       )
+  //     );
+  //   }
 
-    const expirationTimeWindowMap = new Map([
-      [12, 180],
-      [6, 90],
-      [3, 30],
-      [1, 0],
-    ]); // [months, minimal days in range]
+  expirationTimeWindowMap = new Map([
+    [12, 180],
+    [6, 90],
+    [3, 30],
+    [1, 0],
+  ]); // [months, minimal days in range]
 
-    return DB.client().query(
-      q.Filter(
-        q.Filter(
-          q.Filter(
-            q.Paginate(q.Match('expirationDate')),
-            q.Lambda(['ref', 'date'], q.Not(q.IsNull(q.Var('date'))))
-          ),
-          q.Lambda(
-            ['ref', 'date'],
-            q.GTE(
-              q.TimeDiff(q.ToDate(q.Now()), q.Date(q.Var('date')), 'days'),
-              0
-            )
-          )
-        ),
-        q.Lambda(
-          ['ref', 'date'],
-          q.And(
-            q.LTE(
-              q.TimeDiff(q.ToDate(q.Now()), q.Date(q.Var('date')), 'days'),
-              months * 30 // 6 months in days
-            ),
-            q.GTE(
-              q.TimeDiff(q.ToDate(q.Now()), q.Date(q.Var('date')), 'days'),
-              expirationTimeWindowMap.get(months) as Number
-            )
-          )
-        )
-      )
-    );
-  }
+  //   return DB.client().query(
+  //     q.Filter(
+  //       q.Filter(
+  //         q.Filter(
+  //           q.Paginate(q.Match('expirationDate')),
+  //           q.Lambda(['ref', 'date'], q.Not(q.IsNull(q.Var('date'))))
+  //         ),
+  //         q.Lambda(
+  //           ['ref', 'date'],
+  //           q.GTE(
+  //             q.TimeDiff(q.ToDate(q.Now()), q.Date(q.Var('date')), 'days'),
+  //             0
+  //           )
+  //         )
+  //       ),
+  //       q.Lambda(
+  //         ['ref', 'date'],
+  //         q.And(
+  //           q.LTE(
+  //             q.TimeDiff(q.ToDate(q.Now()), q.Date(q.Var('date')), 'days'),
+  //             months * 30 // 6 months in days
+  //           ),
+  //           q.GTE(
+  //             q.TimeDiff(q.ToDate(q.Now()), q.Date(q.Var('date')), 'days'),
+  //             expirationTimeWindowMap.get(months) as Number
+  //           )
+  //         )
+  //       )
+  //     )
+  //   );
+  // }
 }
 
 export default DB;

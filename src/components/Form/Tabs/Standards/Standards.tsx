@@ -22,15 +22,15 @@ function Standards(props: StandardsProps) {
   let setStandards: any;
   const initSt: any = {};
   for (let st of props.initStandards) {
-    initSt[st] = {};
+    initSt[st] = { price: '' };
   }
   [standards, setStandards] = useState(initSt);
   const [totalPrice, setTotalPrice] = useState<number | ''>('');
 
   useEffect(() => {
     props.taskId &&
-      DB.genericGet(props.taskId, ['standards']).then((newSt) => {
-        setStandards((state: any) => ({ ...state, ...newSt }));
+      DB.genericGet(props.taskId, ['standards']).then(({ standards }: any) => {
+        setStandards((state: any) => ({ ...state, ...standards }));
       });
   }, [props.taskId, setStandards]);
 
@@ -43,45 +43,39 @@ function Standards(props: StandardsProps) {
   }
 
   const updateStandardPrice = ({ standard, price }: any) => {
-    DB.updateInstance(props.taskId, {
-      standards: {
-        [standard]: {
-          price,
-        },
-      },
-    });
-
     // update locally
     setStandards((state: any) => {
-      const newState = { ...state };
-      newState[standard].price = price;
-      return newState;
+      const standards = { ...state };
+      standards[standard].price = price;
+
+      // update in DB
+      DB.updateInstance(props.taskId, {
+        standards,
+      });
+
+      return standards;
     });
   };
 
   const updateStandardResult = ({ standard, result, reset }: any) => {
-    // update in DB
-    DB.updateInstance(props.taskId, {
-      standards: {
-        [standard]: {
-          result: reset ? null : result,
-        },
-      },
-    });
-
     // update locally
     setStandards((state: any) => {
-      const newState = {
+      const standards = {
         ...state,
         [standard]: {
           ...state[standard],
         },
       };
       reset
-        ? delete newState[standard].result
-        : (newState[standard].result = result);
+        ? delete standards[standard].result
+        : (standards[standard].result = result);
 
-      return newState;
+      // update in DB
+      DB.updateInstance(props.taskId, {
+        standards,
+      });
+
+      return standards;
     });
   };
 
@@ -124,10 +118,10 @@ function Standards(props: StandardsProps) {
               </div>
               <div className="col-3">
                 <Price
-                  value={standards[standard].price}
+                  value={standards[standard].price || ''}
                   label=""
-                  handleChange={(e: any) => {
-                    updateStandardPrice({ standard, price: +e.target.value });
+                  handleChange={(price: any) => {
+                    updateStandardPrice({ standard, price });
                   }}
                 />
               </div>

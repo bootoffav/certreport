@@ -91,7 +91,8 @@ const fetchTaskIdsFromDB = async (
   const taskList: string[] = await indexes.reduce(
     async (list: any, index) => [
       ...(await list),
-      ...(await DB.queryIndex(index)),
+      // fix asap
+      // ...(await DB.queryIndex(index)),
     ],
     Promise.resolve([])
   );

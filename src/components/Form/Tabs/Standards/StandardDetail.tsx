@@ -40,7 +40,7 @@ function StandardDetail(props: StandardDetailProps) {
 
   useEffect(() => {
     (async function () {
-      setDetails(await DB.get(props.taskId, ['data', dbField], 'aitex'));
+      setDetails(await DB.get(props.taskId, 'aitex', dbField));
     })();
   }, [props.taskId, setDetails, props.name, dbField]);
 

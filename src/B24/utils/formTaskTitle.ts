@@ -44,8 +44,8 @@ async function formStandardsPart(standards: any, taskId?: string) {
       // get standards from DB
       const standardsForTitle = await DB.get(
         taskId,
-        ['data', 'standardsForTitle'],
-        'certification'
+        'certification',
+        'standardsForTitle'
       );
       // only truthy properties goes into title
       return Object.entries(standardsForTitle)

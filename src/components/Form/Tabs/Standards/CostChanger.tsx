@@ -30,7 +30,7 @@ function CostChanger(props: PriceChangerProps) {
             type="button"
             onClick={() => {
               setIsChanging(false);
-              DB.updateInstance(props.refInDb, { cost }, 'standards');
+              DB.updateInstance(props.refInDb, cost, 'standards', 'cost');
               props.updater(cost);
             }}
           >
