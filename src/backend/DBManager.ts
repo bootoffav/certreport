@@ -42,16 +42,19 @@ class DB {
   static async getRequirementsForStandard(
     standard: string
   ): Promise<IRequirement[]> {
-    return await fetch(`https://certreport:3100/standards/${standard}`).then(
-      (r) => r.json()
-    );
+    return await fetch(
+      `https://${window.location.hostname}:3100/standards/${standard}`
+    ).then((r) => r.json());
   }
 
   static get(id: string, collection: CollectionType, path?: string) {
-    return fetch(`https://certreport:3100/${collection}/${id}`, {
-      method: 'POST',
-      body: JSON.stringify({ path }),
-    }).then((r) => r.json());
+    return fetch(
+      `https://${window.location.hostname}:3100/${collection}/${id}`,
+      {
+        method: 'POST',
+        body: JSON.stringify({ path }),
+      }
+    ).then((r) => r.json());
   }
 
   static async getFabricAppFormState(taskId: string) {
@@ -74,11 +77,14 @@ class DB {
     path?: string
   ) {
     const payload = { path, state };
-    return fetch(`https://certreport:3100/${collection}/${taskId}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
+    return fetch(
+      `https://${window.location.hostname}:3100/${collection}/${taskId}`,
+      {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      }
+    );
   }
 
   // static getExpiringCerts(months: TabProps['months']) {

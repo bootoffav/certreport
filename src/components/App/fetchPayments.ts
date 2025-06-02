@@ -7,7 +7,7 @@ type PaymentDBType = {
 };
 
 const fetchPayments = async () => {
-  return await fetch('https://certreport:3100/payments', {})
+  return await fetch(`https://${window.location.hostname}:3100/payments`, {})
     .then((r) => r.json())
     .then((data: PaymentDBType[]) => {
       return (data as PaymentDBType[]).reduce((acc, { payments, id }) => {
