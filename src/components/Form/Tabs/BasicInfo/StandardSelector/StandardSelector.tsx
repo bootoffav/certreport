@@ -49,11 +49,12 @@ function StandardSelector(props: StandardSelectorProps) {
     {}
   );
 
+  console.log(standardsForTitleState);
   useEffect(() => {
     if (props.taskId) {
       DB.get(props.taskId, 'certification', 'standardsForTitle')
-        .then((initState) => {
-          dispatch({ payload: initState });
+        .then(({ standardsForTitle }) => {
+          dispatch({ payload: standardsForTitle });
         })
         // backup in case no data in DB yet
         .catch(() => {

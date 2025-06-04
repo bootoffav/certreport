@@ -42,7 +42,7 @@ async function formStandardsPart(standards: any, taskId?: string) {
   try {
     if (taskId) {
       // get standards from DB
-      const standardsForTitle = await DB.get(
+      const { standardsForTitle } = await DB.get(
         taskId,
         'certification',
         'standardsForTitle'
