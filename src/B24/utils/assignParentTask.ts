@@ -69,6 +69,8 @@ export const parentTasksMap = {
   },
   2026: {
     XMT: 153921,
+    XMF: 153925,
+    XMS: 153927,
   },
 } as const;
 
